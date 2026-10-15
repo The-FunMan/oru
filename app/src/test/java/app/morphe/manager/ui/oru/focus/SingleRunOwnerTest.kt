@@ -112,11 +112,13 @@ class SingleRunOwnerTest {
 
     private fun newOwner(
         scope: CoroutineScope = CoroutineScope(Dispatchers.Unconfined),
+        notifier: RunReadyNotifier = RunReadyNotifier { _, _ -> },
         factory: (Patcher.ViewModelParams) -> SingleRunPatcher = { throw UnsupportedOperationException() },
     ) = SingleRunOwner(
         runs = activeRunTracker,
         filesDir = tempDir,
         patcherFactory = factory,
+        readyNotifier = notifier,
         scope = scope,
     )
 
@@ -272,7 +274,8 @@ class SingleRunOwnerTest {
         assertEquals(0.9f, signed.progress, PROGRESS_TOLERANCE)
         assertEquals(OruRunStatus.Working, owner.runStatus.value)
 
-        // Done releases the accessory, so the tracker holds nothing after the run's last value
+        // With the result on screen, Done releases the accessory: the Focus shows the result itself
+        owner.setResultOnScreen(true)
         finishSuccessfully(fakePatcher)
 
         assertEquals(OruRunStatus.Done, owner.runStatus.value)
@@ -403,6 +406,56 @@ class SingleRunOwnerTest {
         assertNull(owner.currentRun.value)
         assertNull(owner.install.value)
         assertNull(owner.runStatus.value)
+        assertNull(activeRunTracker.run.value)
+    }
+
+    @Test
+    fun `a finished run that nothing shows stays as ready and is announced once`() = runBlocking {
+        val announced = mutableListOf<Pair<String, String>>()
+        val fakePatcher = FakeSingleRunPatcher(patchesProgress = 8 to 8)
+        val owner = newOwner(notifier = { key, label -> announced += key to label }) { fakePatcher }
+
+        val pkg = "com.example.ready"
+        owner.getOrStartRun(pkg, testItem(pkg), testParams(pkg))
+        finishSuccessfully(fakePatcher)
+
+        assertEquals(OruRunStatus.Done, owner.runStatus.value)
+        val ready = activeRunTracker.run.value
+        assertNotNull(ready)
+        assertTrue(ready.ready)
+        assertEquals(pkg, ready.packageKey)
+        assertEquals(listOf(pkg to "App $pkg"), announced)
+        // Nothing is installed by finishing: the install waits for the user
+        assertNull(owner.install.value)
+    }
+
+    @Test
+    fun `a finished run whose result is on screen is not announced`() = runBlocking {
+        val announced = mutableListOf<Pair<String, String>>()
+        val fakePatcher = FakeSingleRunPatcher(patchesProgress = 8 to 8)
+        val owner = newOwner(notifier = { key, label -> announced += key to label }) { fakePatcher }
+
+        val pkg = "com.example.shown"
+        owner.getOrStartRun(pkg, testItem(pkg), testParams(pkg))
+        owner.setResultOnScreen(true)
+        finishSuccessfully(fakePatcher)
+
+        assertNull(activeRunTracker.run.value)
+        assertTrue(announced.isEmpty())
+    }
+
+    @Test
+    fun `beginInstall takes the ready accessory off, since the install is in the Focus`() = runBlocking {
+        val fakePatcher = FakeSingleRunPatcher(patchesProgress = 8 to 8)
+        val owner = newOwner { fakePatcher }
+
+        val pkg = "com.example.begin"
+        owner.getOrStartRun(pkg, testItem(pkg), testParams(pkg))
+        finishSuccessfully(fakePatcher)
+        assertNotNull(activeRunTracker.run.value)
+
+        owner.beginInstall(picked = null) { coordinator(FakeExecutor()) }
+
         assertNull(activeRunTracker.run.value)
     }
 

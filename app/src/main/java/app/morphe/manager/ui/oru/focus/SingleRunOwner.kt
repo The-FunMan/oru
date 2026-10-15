@@ -47,6 +47,14 @@ interface SingleRunPatcher {
 }
 
 /**
+ * Posts the notice that a finished run waits to be installed, for a run whose result is not on screen. Tapping it
+ * opens the Focus of the run, where the install is. See [OruRunReadyNotifier].
+ */
+fun interface RunReadyNotifier {
+    fun readyToInstall(packageKey: String, label: String)
+}
+
+/**
  * An active run owned at application scope. A plain class: a run is the object the owner holds, so two runs of
  * the same app are told apart by identity, not by their fields.
  */
@@ -109,8 +117,20 @@ class SingleRunOwner(
             parametersOf(params, SavedStateHandle())
         }
     },
+    private val readyNotifier: RunReadyNotifier = RunReadyNotifier { _, _ -> },
     private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate),
 ) : KoinComponent {
+
+    /** Whether the result of the run is on screen, as the Focus run layout reports it (see [setResultOnScreen]). */
+    private var resultVisible = false
+
+    /**
+     * Records whether the result of the run is on screen. A finished run whose result is not on screen is announced: the
+     * accessory stays as ready and the notifier posts the notice.
+     */
+    fun setResultOnScreen(shown: Boolean) {
+        resultVisible = shown
+    }
 
     private val _currentRun = MutableStateFlow<SingleRun?>(null)
     val currentRun: StateFlow<SingleRun?> = _currentRun.asStateFlow()
@@ -292,9 +312,30 @@ class SingleRunOwner(
             }.collect { status ->
                 if (_currentRun.value !== run) return@collect
                 _runStatus.value = status
-                if (status != OruRunStatus.Working) {
-                    runs.clear(this@SingleRunOwner)
-                    markRunFinished()
+                when {
+                    status == OruRunStatus.Working -> Unit
+                    // Finished while nothing shows the result: the install waits for the user, who is told about it
+                    status == OruRunStatus.Done && !resultVisible && installPhase() == InstallPhase.NONE -> {
+                        markRunFinished()
+                        val (done, total) = run.patcher.patchesProgress
+                        runs.publish(
+                            owner = this@SingleRunOwner,
+                            run = ActiveRun(
+                                packageKey = run.packageKey,
+                                packageName = run.item.packageName,
+                                label = run.item.displayName,
+                                progress = 1f,
+                                done = done,
+                                total = total,
+                                ready = true,
+                            )
+                        )
+                        readyNotifier.readyToInstall(run.packageKey, run.item.displayName)
+                    }
+                    else -> {
+                        runs.clear(this@SingleRunOwner)
+                        markRunFinished()
+                    }
                 }
             }
         }
@@ -314,6 +355,8 @@ class SingleRunOwner(
         val run = _currentRun.value ?: return false
         if (installRequested) return false
         installRequested = true
+        // The install is shown in the Focus from here on, so the Home accessory (a run, or one waiting) is taken off
+        runs.clear(this)
         installJob = scope.launch {
             val coordinator = make()
             if (_currentRun.value !== run) return@launch

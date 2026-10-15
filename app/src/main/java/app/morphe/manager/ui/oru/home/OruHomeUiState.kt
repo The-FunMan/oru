@@ -122,6 +122,7 @@ data class OruHomeUiState(
  * The run the accessory above the island shows: the app a batch run is patching now, or the app of a single-app run.
  * [progress] is 0 to 1, or null while it is not known; [done] and [total] count the patches of the app.
  * [focusKey] is the Focus of a single-app run, which the accessory opens; null for a batch run, which opens the batch.
+ * [ready] is a finished single-app run waiting to be installed; the accessory says so.
  */
 @Immutable
 data class OruHomeRun(
@@ -132,6 +133,7 @@ data class OruHomeRun(
     val done: Int,
     val total: Int,
     val focusKey: String?,
+    val ready: Boolean = false,
 )
 
 /** What the presenter reads from the Home view model. A null [items] means the list is not loaded. */

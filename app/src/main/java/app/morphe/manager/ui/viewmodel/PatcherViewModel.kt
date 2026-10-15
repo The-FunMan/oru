@@ -991,6 +991,8 @@ class PatcherViewModel(
             patchSources = patchSourcesForLog,
             onStageFraction = patchRun::onStageFraction,
             packageKey = input.focusKey ?: input.targetPackageName ?: packageName,
+            // The Oru owner announces a finished run itself (SingleRunOwner), with the same notice and a tap to its Focus
+            announceCompletion = !BuildConfig.ORU_UX,
         )
     }
 

@@ -635,9 +635,15 @@ fun OruRunAccessory(
     total: Int,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    /** A finished run waiting to be installed: the accessory names that, and a tap opens the install. */
+    ready: Boolean = false,
     icon: @Composable () -> Unit = { OruIslandAppPlaceholder() },
 ) {
-    val description = stringResource(R.string.oru_island_run_description, appName, done, total)
+    val description = if (ready) {
+        stringResource(R.string.oru_island_run_ready_description, appName)
+    } else {
+        stringResource(R.string.oru_island_run_description, appName, done, total)
+    }
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -654,7 +660,11 @@ fun OruRunAccessory(
             verticalArrangement = Arrangement.spacedBy(2.dp),
         ) {
             Text(
-                text = stringResource(R.string.oru_island_run_title, appName),
+                text = if (ready) {
+                    stringResource(R.string.oru_island_run_ready_title, appName)
+                } else {
+                    stringResource(R.string.oru_island_run_title, appName)
+                },
                 style = MaterialTheme.typography.labelLarge,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onSurface,
@@ -662,7 +672,11 @@ fun OruRunAccessory(
                 overflow = TextOverflow.Ellipsis,
             )
             Text(
-                text = stringResource(R.string.oru_island_run_progress, done, total),
+                text = if (ready) {
+                    stringResource(R.string.oru_island_run_ready_hint)
+                } else {
+                    stringResource(R.string.oru_island_run_progress, done, total)
+                },
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 1,

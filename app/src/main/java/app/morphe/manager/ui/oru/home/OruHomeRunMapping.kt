@@ -25,5 +25,6 @@ fun oruSingleHomeRunOf(active: ActiveRun?, packageInfoOf: (String) -> PackageInf
         done = active.done,
         total = active.total,
         focusKey = active.packageKey,
+        ready = active.ready,
     )
 }

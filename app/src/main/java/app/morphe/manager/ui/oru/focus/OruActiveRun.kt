@@ -10,15 +10,16 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 /**
- * The single-app run in progress, for the run accessory on Home. It is published by the Focus that owns the run
- * (see [OruFocusViewModel.attachRun]) while the run works. A run that has an outcome is taken off, because the
- * Focus shows the result itself.
+ * The single-app run in progress, for the run accessory on Home. The owner publishes it while the run works. A run
+ * that has an outcome is taken off, because the Focus shows the result itself, except a finished run that nothing
+ * shows: that one stays as [ready] until its install is begun or the run is released.
  *
  * @param packageKey the Focus the run belongs to, which is `HomeAppItem.id` and the key of `OruFocus`.
  * @param packageName the package of that install, for the icon's tint and shape.
  * @param label the app's label as the card shows it, before `oruAppName` takes the brand word off.
  * @param progress 0 to 1 across the whole run.
  * @param done patches applied so far, out of [total].
+ * @param ready the run finished and waits to be installed; the accessory says so and opens the install.
  */
 data class ActiveRun(
     val packageKey: String,
@@ -27,6 +28,7 @@ data class ActiveRun(
     val progress: Float,
     val done: Int,
     val total: Int,
+    val ready: Boolean = false,
 )
 
 /**

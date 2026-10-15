@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -94,6 +95,11 @@ internal fun OruFocusRunRoute(
     }
     val currentPatcher = patcher ?: return
     LaunchedEffect(currentPatcher) { vm.attachRun(currentPatcher, item) }
+    // This layout is the result on screen while it is composed. A run that finishes without it is announced (SingleRunOwner)
+    DisposableEffect(singleRunOwner) {
+        singleRunOwner.setResultOnScreen(true)
+        onDispose { singleRunOwner.setResultOnScreen(false) }
+    }
 
     val scope = rememberCoroutineScope()
     val context = LocalContext.current

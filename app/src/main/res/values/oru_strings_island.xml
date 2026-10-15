@@ -12,4 +12,8 @@
     <string name="oru_island_run_title">Patching %1$s</string>
     <string name="oru_island_run_progress">%1$d of %2$d</string>
     <string name="oru_island_run_description">Patching %1$s, %2$d of %3$d</string>
+    <!-- Run accessory of a finished run that waits to be installed: a tap opens the install -->
+    <string name="oru_island_run_ready_title">%1$s is ready to install</string>
+    <string name="oru_island_run_ready_hint">Tap to install</string>
+    <string name="oru_island_run_ready_description">%1$s is ready to install. Tap to install.</string>
 </resources>

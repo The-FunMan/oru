@@ -6,6 +6,7 @@
 package app.morphe.manager.di
 
 import app.morphe.manager.ui.oru.focus.ActiveRunTracker
+import app.morphe.manager.ui.oru.focus.OruRunReadyNotifier
 import app.morphe.manager.ui.oru.focus.SingleRunOwner
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
@@ -15,5 +16,5 @@ import org.koin.dsl.module
  */
 val oruModule = module {
     singleOf(::ActiveRunTracker)
-    single { SingleRunOwner(app = get(), runs = get()) }
+    single { SingleRunOwner(app = get(), runs = get(), readyNotifier = OruRunReadyNotifier(app = get())) }
 }

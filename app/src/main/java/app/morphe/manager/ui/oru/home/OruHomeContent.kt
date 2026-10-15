@@ -310,6 +310,7 @@ fun OruHomeContent(
                             done = run.done,
                             total = run.total,
                             onClick = onRunClick,
+                            ready = run.ready,
                             icon = {
                                 OruAppTile(
                                     source = OruTileSource(name = run.appName, packageInfo = run.packageInfo),
