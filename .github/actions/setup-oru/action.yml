@@ -33,7 +33,43 @@ runs:
     - name: Install SDK packages
       if: inputs.native == 'true'
       shell: bash
-      run: sdkmanager "platforms;android-37" "build-tools;36.0.0" "ndk;28.2.13676358" "cmake;3.22.1"
+      run: |
+        sdk_root="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}"
+        if [ -z "$sdk_root" ]; then
+          echo "::error::ANDROID_HOME and ANDROID_SDK_ROOT are both unset" >&2
+          exit 1
+        fi
+
+        # The command line tools are not on PATH in this job: take sdkmanager from PATH if it is
+        # there, otherwise the newest cmdline-tools/<version>/bin under the SDK root.
+        sdkmanager=""
+        if found=$(command -v sdkmanager); then
+          sdkmanager=$found
+        else
+          for root in "$sdk_root" "${ANDROID_SDK_ROOT:-}"; do
+            [ -n "$root" ] || continue
+            candidate=$(printf '%s\n' "$root"/cmdline-tools/*/bin/sdkmanager | sort -V | tail -n 1)
+            if [ -x "$candidate" ]; then
+              sdkmanager=$candidate
+              break
+            fi
+          done
+        fi
+        if [ -z "$sdkmanager" ]; then
+          echo "::error::sdkmanager not found on PATH or under $sdk_root/cmdline-tools" >&2
+          ls -la "$sdk_root/cmdline-tools" >&2 || echo "$sdk_root/cmdline-tools does not exist" >&2
+          exit 1
+        fi
+        echo "Using $sdkmanager"
+
+        # Accept the licences non-interactively. yes gets SIGPIPE once sdkmanager exits, which
+        # pipefail would report as a failure, so pipefail is off for this one pipeline only.
+        (
+          set +o pipefail
+          yes | "$sdkmanager" --sdk_root="$sdk_root" --licenses >/dev/null
+        )
+
+        "$sdkmanager" --sdk_root="$sdk_root" "platforms;android-37" "build-tools;36.0.0" "ndk;28.2.13676358" "cmake;3.22.1"
 
     - name: Add Rust Android targets
       if: inputs.native == 'true'
