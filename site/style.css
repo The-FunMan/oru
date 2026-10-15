@@ -649,7 +649,7 @@ p:last-child {
   display: none;
 }
 
-.is-pinned .story {
+.story.is-pinned {
   height: calc(var(--vh) * 4.2);
 }
 
