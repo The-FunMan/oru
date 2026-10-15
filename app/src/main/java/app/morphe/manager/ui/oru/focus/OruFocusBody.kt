@@ -200,7 +200,15 @@ internal fun OruFocusShell(
                                     notice = notice,
                                     appName = appName,
                                     expert = expert,
-                                    onAct = { action -> vm.act(action, item) },
+                                    onAct = { action ->
+                                        if (action == OruFocusAction.UseAnother) {
+                                            // "Use another file" opens the picker, as "Use a file" does, instead of starting the APK choice again
+                                            vm.useAnotherFileTapped()
+                                            openFilePicker()
+                                        } else {
+                                            vm.act(action, item)
+                                        }
+                                    },
                                 )
                             }
                         }

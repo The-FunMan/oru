@@ -327,6 +327,12 @@ class OruFocusViewModel(private val deps: OruFocusDeps) : ViewModel() {
         home.showApkAvailabilityDialog = false
     }
 
+    /**
+     * "Use another file" on a notice: the notice is dismissed and the picker opens (the caller launches it). The flow
+     * the file is for is kept, so the picked file is handled as the same app's file.
+     */
+    fun useAnotherFileTapped() = dismissValidation()
+
     /** "Choose the file": the wait ends and the system picker opens (the caller launches it). */
     fun chooseFileTapped() {
         home.showFilePickerPromptDialog = false
