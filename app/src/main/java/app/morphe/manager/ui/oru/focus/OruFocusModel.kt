@@ -6,6 +6,14 @@
 package app.morphe.manager.ui.oru.focus
 
 import app.morphe.manager.ui.oru.components.OruTone
+import app.morphe.manager.ui.oru.home.OruHomeCardStatus
+
+/**
+ * Whether the Focus reads the app as installed, from the status the Home card gives it (see `OruHomePresenter.statusOf`).
+ * The Focus and the card read the same installed-package state, so they never disagree about an app Oru just installed.
+ */
+internal fun oruFocusShowsInstalled(status: OruHomeCardStatus): Boolean =
+    status == OruHomeCardStatus.Installed || status == OruHomeCardStatus.PatchedElsewhere
 
 /** Which step of the APK hand-off the Focus shows before a file is chosen. */
 enum class OruChooseStage {

@@ -57,6 +57,7 @@ import app.morphe.manager.ui.oru.components.OruNoticeAction
 import app.morphe.manager.ui.oru.components.OruTileSource
 import app.morphe.manager.ui.oru.components.OruTone
 import app.morphe.manager.ui.oru.components.oruGlassShape
+import app.morphe.manager.ui.oru.home.OruHomePresenter
 import app.morphe.manager.ui.oru.home.oruAppName
 import app.morphe.manager.ui.oru.nav.oruArriveCascade
 import app.morphe.manager.ui.oru.nav.oruArriveFromBottom
@@ -286,9 +287,11 @@ private fun focusLine(
     when (state) {
         OruFocusState.Checking -> stringResource(R.string.oru_focus_checking)
         is OruFocusState.Choose -> if (state.stage == OruChooseStage.Pick) {
-            // A patched copy this manager did not make is the app on the phone, so its version is the line to read
+            // An installed app, whichever way it was installed, is the app on the phone, so its version is the line to read.
+            // The status is the Home card's, so the Focus does not say "Needs" for an app Home shows as installed.
             // The source is named by the Setup line, not here: the headline says what the APK has to be
-            if (item.installedPatchedPackage != null) {
+            val installedStatus = OruHomePresenter.statusOf(item, handedOff = false, supportedVersions = null)
+            if (oruFocusShowsInstalled(installedStatus)) {
                 stringResource(R.string.oru_focus_installed_line, item.version)
             } else {
                 needsLine(oruAppName(item.packageName, item.displayName), home, sources)
