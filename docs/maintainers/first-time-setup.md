@@ -94,7 +94,7 @@ The build resolves the `app.morphe` artifacts from `https://maven.pkg.github.com
 ## 7. Local machine
 
 - [ ] JDK 21. CI uses Temurin 21 (`.github/actions/setup-oru/action.yml`).
-- [ ] Android SDK with: platform 37 (`platforms;android-37`), build-tools 36.0.0 (`build-tools;36.0.0`, used by `verify-apk.sh`), NDK 28.2.13676358 (`ndk;28.2.13676358`), CMake 3.22.1 (`cmake;3.22.1`). The package names are the ones in `setup-oru`. Install them with `sdkmanager`.
+- [ ] Android SDK with: platform 37.0 (`platforms;android-37.0`), build-tools 36.0.0 (`build-tools;36.0.0`, used by `verify-apk.sh`), NDK 28.2.13676358 (`ndk;28.2.13676358`), CMake 3.22.1 (`cmake;3.22.1`). The package names are the ones in `setup-oru`. Install them with `sdkmanager`.
 - [ ] `ANDROID_HOME` points at the SDK. `verify-apk.sh` requires it.
 - [ ] Rust with the Android targets the native crates need:
 

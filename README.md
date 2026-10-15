@@ -99,7 +99,7 @@ Oru does not contact `api.morphe.software` or any other service of the Morphe pr
 Requirements:
 
 - JDK 21.
-- Android SDK with platform 37, the compile SDK in `app/build.gradle.kts`.
+- Android SDK with platform 37.0 (`platforms;android-37.0`), the compile SDK in `app/build.gradle.kts`.
 - For the native code: a Rust toolchain with the Android targets, and the Android NDK. CI uses NDK 28.2.13676358. Without `cargo`, the build logs a warning and leaves the native libraries out, and the patcher then runs on the JVM. Release workflows reject an APK without them.
 - Gradle resolves dependencies from Maven Central, Google, JitPack and a GitHub Packages repository. The GitHub Packages repository reads with a token that has `read:packages`, from `gpr.key` in `local.properties` or from `GITHUB_TOKEN`.
 
