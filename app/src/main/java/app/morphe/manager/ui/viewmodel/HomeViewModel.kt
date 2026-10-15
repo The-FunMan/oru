@@ -2853,9 +2853,9 @@ class HomeViewModel(
             val bytesCopied = context.contentResolver.openInputStream(uri)?.use { input ->
                 tempFile.outputStream().use { output -> input.copyTo(output) }
             }
-            if (bytesCopied == null || bytesCopied == 0L) {
+            apkCopyRejection(bytesCopied)?.let { rejection ->
                 tempFile.delete()
-                return@withContext ApkLoadResult.Unreadable
+                return@withContext rejection
             }
 
             // A split archive is read through its base module, deleted after the call, so the icon is read in it
@@ -2899,11 +2899,22 @@ class HomeViewModel(
     }
 }
 
+/**
+ * What a copy of the picked file says before it is parsed. A provider that gives no stream could not be read, which is
+ * the one case the battery hint is for. A file that was read and came out empty is not an APK, as a text file renamed
+ * to .apk is not. Null when the copy has bytes to parse.
+ */
+internal fun apkCopyRejection(bytesCopied: Long?): ApkLoadResult? = when (bytesCopied) {
+    null -> ApkLoadResult.Unreadable
+    0L -> ApkLoadResult.NotAnApk
+    else -> null
+}
+
 /** Result of attempting to load a local APK file. */
-private sealed interface ApkLoadResult {
+internal sealed interface ApkLoadResult {
     /** File was read and parsed successfully, with the app's icon where it carries one. */
     data class Success(val app: SelectedApp.Local, val icon: Drawable?) : ApkLoadResult
-    /** File could not be read - provider returned null stream or zero bytes. */
+    /** The provider gave no stream for the file, so it could not be read. */
     data object Unreadable : ApkLoadResult
     /** File was read but is not a valid APK/split archive. */
     data object NotAnApk : ApkLoadResult
