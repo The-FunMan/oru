@@ -155,8 +155,9 @@ data class OruInstallState(
  * Caller contract (the Focus screen):
  * - Call [start] when the Done phase appears. It plans, seeds the executor for the picker or the
  *   fallback, and starts an automatic install.
- * - Call [refresh] whenever the executor's state changes (`InstallViewModel.installState`), and on resume
- *   (the notification or Shizuku and install-permission settings may have changed).
+ * - Call [refresh] whenever the executor's state changes (`InstallViewModel.installState`).
+ * - Call [resumed] when the screen resumes. The install-permission settings may have changed there, so it
+ *   replans, and an automatic install that the permission gate held back starts.
  * - The picker is Oru's. Do not render `InstallerFlowDialogs` for the same ViewModel on this screen.
  * - [pickInstaller] only feeds the choice back into the plan. [install] runs it, through
  *   `proceedWithSelectedInstaller` when a choice was picked, so the picked installer is honoured.
@@ -262,6 +263,9 @@ class OruInstallCoordinator(
         val plan = _state.value.plan
         if (plan !is InstallStep.ShowInstall && plan !is InstallStep.AutoInstall) return
         val automatic = plan is InstallStep.AutoInstall
+        // The automatic start runs once. Two replans can both reach it (the resume and the gate tap); the check and
+        // the flag are set with no suspension between them, so only the first one starts the install
+        if (automatic && autoStartSpent) return
         // Any start ends the automatic one, so when this run ends the screen asks for a tap
         autoStartSpent = true
         runAutomatic = automatic
@@ -322,10 +326,23 @@ class OruInstallCoordinator(
         refresh()
     }
 
-    /** The user saw the install unknown apps explanation and is sent to the system setting. */
+    /**
+     * Replans after the screen resumed, and after the user came back from the install unknown apps setting. An
+     * automatic install that the permission gate held back starts now, so the screen never waits on a tap
+     * that does not exist. A plain install (one tap) stays on its Install button.
+     */
+    suspend fun resumed() {
+        refresh()
+        if (_state.value.plan is InstallStep.AutoInstall) install()
+    }
+
+    /**
+     * The user saw the install unknown apps explanation and is sent to the system setting. The permission is
+     * re-checked as [resumed] does, so a grant that is already in place starts the held install.
+     */
     suspend fun onPermissionExplained() {
         permissionExplained = true
-        refresh()
+        resumed()
     }
 
     /** "Open Shizuku" on an unavailable installer. */
@@ -362,9 +379,9 @@ class OruInstallCoordinator(
         autoStartSpent = true
         executor.stopWaiting()
         if (executor.execution == OruExecution.Running) executor.resetExecution()
-        // A stop is not a decline, so no notice follows it
+        // The install did not finish, so the plan says so next to its Install button, as after a decline
         lastExecution = executor.execution
-        declined = false
+        declined = true
         refresh()
     }
 

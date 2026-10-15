@@ -375,14 +375,94 @@ class OruInstallCoordinatorTest {
     }
 
     @Test
-    fun stopIsNotReportedAsADecline() = runBlocking {
+    fun stopIsReportedLikeADeclineSoTheNoticeShows() = runBlocking {
         val executor = FakeExecutor(execution = OruExecution.Running)
         val sut = coordinator(executor = executor)
 
         sut.refresh()
         sut.stopWaiting()
 
-        assertTrue(sut.state.value.ui.let { it is OruInstallUi.Plan && !it.declined })
+        assertTrue(sut.state.value.ui.let { it is OruInstallUi.Plan && it.declined })
+    }
+
+    @Test
+    fun heldAutomaticInstallStartsWhenThePermissionIsGrantedOnResume() = runBlocking {
+        val packages = FakePackages(silent = true, permission = false)
+        val executor = FakeExecutor()
+        val sut = coordinator(
+            readings = FakeInstallerReadings(autoInstall = true),
+            packages = packages,
+            executor = executor,
+        )
+
+        sut.start()
+        assertEquals(InstallStep.NeedsPermission(explainFirst = true), sut.state.value.plan)
+        assertTrue(executor.calls.isEmpty())
+
+        // The gate tap alone grants nothing: the user is still in the setting
+        sut.onPermissionExplained()
+        assertEquals(InstallStep.NeedsPermission(explainFirst = false), sut.state.value.plan)
+        assertTrue(executor.calls.isEmpty())
+
+        // The user came back with the permission allowed: the held install starts, with no tap
+        packages.permission = true
+        sut.resumed()
+
+        assertEquals(listOf("startInstall:true"), executor.calls)
+        assertEquals(OruInstallUi.Installing(automatic = true, installerLabel = "system"), sut.state.value.ui)
+    }
+
+    @Test
+    fun gateTapStartsTheHeldInstallWhenThePermissionAlreadyAllowsIt() = runBlocking {
+        val packages = FakePackages(silent = true, permission = false)
+        val executor = FakeExecutor()
+        val sut = coordinator(
+            readings = FakeInstallerReadings(autoInstall = true),
+            packages = packages,
+            executor = executor,
+        )
+
+        sut.start()
+        // Allowed since the screen was drawn: the tap re-checks the permission and does not wait for a return
+        packages.permission = true
+        sut.onPermissionExplained()
+
+        assertEquals(listOf("startInstall:true"), executor.calls)
+    }
+
+    @Test
+    fun heldAutomaticInstallStartsOnceWhenTwoReplansReachIt() = runBlocking {
+        val packages = FakePackages(silent = true, permission = false)
+        val executor = FakeExecutor()
+        val sut = coordinator(
+            readings = FakeInstallerReadings(autoInstall = true),
+            packages = packages,
+            executor = executor,
+        )
+
+        sut.start()
+        packages.permission = true
+        sut.resumed()
+        sut.resumed()
+
+        assertEquals(listOf("startInstall:true"), executor.calls)
+    }
+
+    @Test
+    fun plainInstallAfterThePermissionWaitsForTheTap() = runBlocking {
+        val packages = FakePackages(silent = false, permission = false)
+        val executor = FakeExecutor()
+        val sut = coordinator(packages = packages, executor = executor)
+
+        sut.start()
+        packages.permission = true
+        sut.resumed()
+
+        assertEquals(
+            InstallStep.ShowInstall(InstallerChoice.SYSTEM, silent = false, fallbackFrom = null),
+            sut.state.value.plan
+        )
+        assertTrue(executor.calls.isEmpty())
     }
 
     @Test

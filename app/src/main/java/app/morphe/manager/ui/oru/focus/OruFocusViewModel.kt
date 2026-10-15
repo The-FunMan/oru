@@ -624,7 +624,7 @@ class OruFocusViewModel(private val deps: OruFocusDeps) : ViewModel() {
     /** Replans the install after the screen resumed (permissions or the notification may have changed). */
     fun refreshInstall() {
         refreshMetered()
-        viewModelScope.launch { installer?.refresh() }
+        viewModelScope.launch { installer?.resumed() }
     }
 
     private companion object {
