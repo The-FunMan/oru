@@ -32,10 +32,10 @@ Oru is an Android app. It is not a ROM hack or a game.
 
 ## Why Oru
 
-- **Simple and Expert.** Simple uses the recommended patches. Expert mode, turned on under Advanced in Settings, lets you choose patches and their options.
-- **Patch sources you choose.** Each app uses the sources you leave on for it. Oru warns you when patches come from more than one source.
+- **Simple and Expert.** In Simple, each app shows one sentence and one button. The Simple and Expert switch is on the bottom bar of the Home screen. Expert lets you choose the version, patches, options, installer and patch channel for each app.
+- **One patch source per app.** You choose it in Expert mode. Adding a source never changes the apps you already set up.
 - **One progress for the whole run.** A run shows the real stages and real counts, not invented progress.
-- **Your APK, selected in the app.** Pick an app installed on this device, or select an APK file you already have.
+- **Your APK, selected in the app.** Pick an app installed on this device, or use an APK file you already have. Oru uses its own file list when All files access is allowed, and Android's picker when it is not.
 - **Everything on the device.** Patching runs on the phone. Oru has no accounts and no analytics, and it does not upload your APK files.
 
 ## Install
@@ -55,16 +55,16 @@ Oru also checks for new releases of itself when it starts. When you choose to up
 ## How patching works
 
 1. Choose an app installed on this device, or select an APK file you already have.
-2. Choose a version. Oru shows the versions the patch sources cover and marks the recommended one.
-3. If you need the file, use Get APK. It opens the APKMirror page for that version in your browser. Oru does not download the APK for you.
-4. Choose patches. Oru uses the recommended set. With Expert mode turned on in Settings, under Advanced, you can choose patches and their options.
-5. Oru patches the APK on the device, signs it with a keystore that is created on this device at the first patch, and installs it through the installer you chose, when Android or that installer allows.
+2. Choose a version. Oru picks the newest version the patches support and marks it Recommended. In Expert mode you can pick another one, which changes the APKMirror link.
+3. If you need the file, choose Find on APKMirror. It opens the APKMirror page for that version in your browser. Oru does not download the APK for you. Back in Oru, choose Use a file and select the file.
+4. Choose patches. Simple uses the recommended set. In Expert mode, switched on from the bottom bar of the Home screen, you can choose patches and their options.
+5. Oru patches the APK on the device, signs it with a signing key that is created on this device at the first patch, and installs it through the installer you chose (Settings, Advanced, Installing), when Android or that installer allows.
 
-A patched app is signed with a different key than the stock app, so Android does not install it over the stock app. Oru can remove the stock app first. You confirm that, or you turn on the Shizuku auto-uninstall option. Uninstalling an app deletes its data. Back up anything you need before you patch.
+A patched app is signed with a different key than the stock app, so Android does not install it over the stock app. Oru can remove the stock app first. You confirm that, or with Shizuku you can turn on Uninstall the original after installing in Settings, Advanced, Installing. Uninstalling an app deletes its data. Back up anything you need before you patch.
 
 ## Patch sources
 
-Oru runs patch bundles. The default source is the patch bundle of the Morphe project, published at [MorpheApp/morphe-patches](https://github.com/MorpheApp/morphe-patches). Oru downloads it from GitHub when it loads sources. The bundle is not part of this repository or of the APK.
+Oru runs patch bundles. The default source is the patch bundle of the Morphe project, published at [MorpheApp/morphe-patches](https://github.com/MorpheApp/morphe-patches). Oru downloads it from GitHub when it loads sources. The bundle is not part of this repository or of the APK. You manage sources in Settings, Advanced, Sources.
 
 You can add more sources: a GitHub or GitLab repository, a bundle at an https address, or a local `.mpp` file. Each bundle is made and licensed by its authors. Oru does not review or vouch for the patches in a bundle.
 
@@ -74,13 +74,13 @@ You can add more sources: a GitHub or GitLab repository, a bundle at an https ad
 - Shizuku is optional. When Shizuku is running and Oru is allowed to use it, Oru can install without showing the system prompt.
 - Root is optional. When the device is rooted and you grant root access, Oru can install through root.
 - Free storage for the original APK copy, the patched output and the app data. Check the size of the app you want to patch first.
-- Oru declares the permissions it needs: internet access, installing and removing apps, notifications, and all-files storage access, which it uses to read files you select.
+- Oru declares the permissions it needs: internet access, installing and removing apps, notifications, and all-files storage access, which Oru asks for when you choose a file in the app.
 
 ## Principles
 
 - **Opinionated defaults.** Oru picks the sensible path. A few switches remain for people who need them, such as pre-release channels.
 - **Simple.** Home lists your apps. Each app has one screen. A run shows the real stages and real counts, not invented progress.
-- **Your APK, your device.** Oru never downloads a stock app APK, and it does not upload APK files. It keeps copies of the original APKs it patches in its own storage. For a version you choose, Get APK opens the APKMirror page in your browser. You download the file and select it in Oru.
+- **Your APK, your device.** Oru never downloads a stock app APK, and it does not upload APK files. It keeps copies of the original APKs it patches in its own storage. For a version you choose, Find on APKMirror opens the APKMirror page in your browser. You download the file and select it in Oru.
 - **No unmeasured claims.** Oru does not claim speed gains that have not been measured.
 - **Upstream patches.** Oru runs the patch bundles as their authors publish them. It does not change them.
 
@@ -102,7 +102,7 @@ Oru has no accounts. It does not send analytics or crash reports, and it does no
 - `gitlab.com`: the version and changelog files of GitLab patch sources you add.
 - The https address of any other patch source you add, including its picture file.
 
-Get APK and the other links in the app open in your browser. Oru does not fetch the APKMirror page itself.
+Find on APKMirror and the other links in the app open in your browser. Oru does not fetch the APKMirror page itself.
 
 Oru does not contact `api.morphe.software` or any other service of the Morphe project, and it does not fetch the list of blocked patch sources. GitHub and the other hosts see your IP address and the requests, as with any web request.
 
@@ -168,7 +168,7 @@ Oru is a modified version of Morphe Manager (https://github.com/MorpheApp/morphe
 
 - Oru keeps its data in the app's own storage on the device: your app list, patch choices and settings, the signing keystore, copies of the original APKs, and the patched APKs.
 - Oru does not upload any of this data. Apart from the requests listed in Network use, nothing leaves the device unless you send it yourself.
-- Exports that you start, the keystore, the settings and the debug log, are saved to your Downloads folder. The keystore export contains your signing key, so keep it private. The settings export includes your GitHub token only if you turn on the option for that.
+- Exports that you start, the keystore, the settings and the debug log, are saved where you choose, through Android's save dialog. The keystore export contains your signing key, so keep it private. The settings export includes your GitHub token only if you turn on the option for that.
 - The debug log can contain names and file paths. Read it before you share it.
 - Oru requires no account, and it has no analytics.
 
