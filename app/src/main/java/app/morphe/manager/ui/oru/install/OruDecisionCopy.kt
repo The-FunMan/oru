@@ -103,7 +103,7 @@ object OruDecisionCopy {
         }
 
     private fun installLine(step: InstallStep.ShowInstall): Int = when {
-        step.silent -> R.string.oru_install_with_silent   // "Installs with %1$s, without a prompt."
+        step.silent -> R.string.oru_install_with_silent   // "Oru starts the install with %1$s. Android may still ask you to confirm."
         step.installer == InstallerChoice.SYSTEM -> R.string.oru_install_with_system
         else -> R.string.oru_install_with_android
     }

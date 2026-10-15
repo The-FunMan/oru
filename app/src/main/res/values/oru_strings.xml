@@ -183,7 +183,7 @@
     <string name="oru_action_done">Done</string>
     <string name="oru_action_update_install">Update</string>
     <string name="oru_install_automatic">Installing automatically</string>
-    <string name="oru_install_with_silent">Installs with %1$s, without a prompt.</string>
+    <string name="oru_install_with_silent">Oru starts the install with %1$s. Android may still ask you to confirm.</string>
     <string name="oru_install_with_android">Android asks you to confirm the install.</string>
     <string name="oru_install_waiting">Waiting for Android</string>
     <string name="oru_install_almost">Almost there</string>
