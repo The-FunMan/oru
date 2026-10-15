@@ -5,44 +5,67 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Oru: patch Android apps on your own phone</title>
   <meta name="description" content="Oru patches Android apps on your own phone. It takes an APK you supply, applies patch bundles on the device, signs the result and installs it.">
-  <meta name="theme-color" content="#101219" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#0E1017" media="(prefers-color-scheme: dark)">
   <meta name="theme-color" content="#FBF8F3" media="(prefers-color-scheme: light)">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style.css">
+  <script>
+    /* Apply a saved theme choice before the first paint. */
+    (function () {
+      try {
+        var saved = localStorage.getItem("oru-theme");
+        if (saved === "light" || saved === "dark") {
+          document.documentElement.setAttribute("data-theme", saved);
+        }
+      } catch (e) {}
+    })();
+  </script>
 </head>
-<body>
+<body id="top">
+  <div class="field" aria-hidden="true">
+    <span class="orb orb-1"></span>
+    <span class="orb orb-2"></span>
+    <span class="orb orb-3"></span>
+  </div>
+
   <a class="skip-link" href="#main">Skip to content</a>
 
-  <header class="site-header">
-    <div class="wrap">
-      <a class="brand" href="./">
+  <header class="nav-wrap">
+    <nav class="nav glass" aria-label="Page sections">
+      <a class="brand" href="#top" aria-label="Oru, back to the top">
         <svg class="mark" viewBox="-30 -30 60 60" aria-hidden="true" focusable="false">
           <path d="M 16.79 -11.76 A 20.5 20.5 0 1 1 -8.66 -18.58" fill="none" stroke="currentColor" stroke-width="9.61" stroke-linecap="round"/>
           <circle cx="9.62" cy="-18.10" r="6" fill="#FFB59A"/>
         </svg>
-        <span class="wordmark">oru</span>
+        <span class="wordmark" aria-hidden="true">oru</span>
       </a>
-      <nav class="site-nav" aria-label="On this page">
-        <ul>
-          <li><a href="#how-it-works">How it works</a></li>
-          <li><a href="#principles">Principles</a></li>
-          <li><a href="#requirements">Requirements</a></li>
-          <li><a href="#independent">Independent project</a></li>
-        </ul>
-      </nav>
-    </div>
+      <ul class="nav-links">
+        <li><a href="#story">How it works</a></li>
+        <li class="optional"><a href="#independent">Independent project</a></li>
+        <li><a href="#requirements">Requirements</a></li>
+      </ul>
+      <button class="theme-toggle" type="button" id="theme-toggle" aria-label="Switch between light and dark theme">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+          <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/>
+        </svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" focusable="false">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
+        </svg>
+      </button>
+    </nav>
   </header>
 
   <main id="main">
-    <div class="wrap">
 
-      <section class="hero" aria-labelledby="hero-title">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
         <div class="lockup">
           <svg class="mark" viewBox="-30 -30 60 60" aria-hidden="true" focusable="false">
             <path d="M 16.79 -11.76 A 20.5 20.5 0 1 1 -8.66 -18.58" fill="none" stroke="currentColor" stroke-width="9.61" stroke-linecap="round"/>
             <circle cx="9.62" cy="-18.10" r="6" fill="#FFB59A"/>
           </svg>
-          <span class="wordmark">oru</span>
+          <span class="wordmark" aria-hidden="true">oru</span>
         </div>
 
         <h1 id="hero-title">Patch Android apps on your own phone.</h1>
@@ -50,67 +73,119 @@
         <p class="lede">Oru runs patch bundles on an APK you supply, signs the result on your device and installs it.</p>
 
         <div class="actions">
-          <a class="button primary" href="https://github.com/The-FunMan/oru/releases/latest">Download the latest release</a>
-          <a class="button" href="https://github.com/The-FunMan/oru">Source code</a>
+          <a class="btn btn-primary" href="https://github.com/The-FunMan/oru/releases/latest">Download the latest release</a>
+          <a class="btn glass" href="https://github.com/The-FunMan/oru">Source code</a>
         </div>
-      </section>
+      </div>
 
-      <section class="section" id="how-it-works" aria-labelledby="how-it-works-title">
-        <div class="prose">
-          <h2 id="how-it-works-title">How it works</h2>
-          <ol>
-            <li><strong>Choose an app or APK.</strong> Pick an app installed on this device, or select an APK file you already have.</li>
-            <li><strong>Get the version Oru asks for.</strong> Oru shows which versions the selected patch bundle supports and marks the recommended one. If you need the file, Get APK opens its APKMirror page. Oru does not download it for you.</li>
-            <li><strong>Choose patches.</strong> Simple mode uses the recommended set. Expert mode lets you pick patches and their options.</li>
-            <li><strong>Oru patches, signs and installs.</strong> Patching runs on the device. The signing key stays on this device. The app installs when your installer allows it.</li>
-          </ol>
-          <p>A patched app is signed with a different key than the stock app, so Android does not install it over the stock app. Oru can remove the stock app first if you allow it. Removing the stock app deletes its data, so back up anything you need before you patch.</p>
+      <div class="device hero-device">
+        <div class="screen">
+          <img src="assets/shots/run-start.webp" width="540" height="1135" alt="Oru run screen at the start of a patch run. The progress hexagon is nearly empty, and the steps Loading patches and Read APK file are done.">
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="section" id="principles" aria-labelledby="principles-title">
-        <div class="prose">
-          <h2 id="principles-title">Principles</h2>
-          <ul class="principles">
-            <li>
-              <strong>Your APK, your device.</strong>
-              Oru never downloads a stock APK, and it does not store or share APK files. Get APK opens the APKMirror page in your browser. You download the file and select it in Oru.
-            </li>
-            <li>
-              <strong>Simple by default, Expert when you want control.</strong>
-              Oru picks the sensible path. A few switches remain for people who need them, such as pre-release channels.
-            </li>
-            <li>
-              <strong>Open source under GPLv3.</strong>
-              The source code is public on GitHub. Oru is licensed under the GNU General Public License v3.0, with the additional terms in NOTICE.
-            </li>
+    <section class="story" id="story" aria-label="How a run works">
+      <div class="stage">
+
+        <div class="device live-device" aria-hidden="true">
+          <div class="screen">
+            <img src="assets/shots/run-start.webp" width="540" height="1135" loading="lazy" decoding="async" style="--a: -1; --b: 0.2" alt="Oru run screen at the start of a patch run, with the progress hexagon nearly empty.">
+            <img src="assets/shots/run-writing.webp" width="540" height="1135" loading="lazy" decoding="async" style="--a: 0.14; --b: 0.5" alt="Oru run screen while the patched app is written. The hexagon is about half full, under the line Writing the patched app.">
+            <img src="assets/shots/run-installing.webp" width="540" height="1135" loading="lazy" decoding="async" style="--a: 0.44; --b: 0.62" alt="Oru run screen during the install. The hexagon is nearly full with a small gap, under the heading Installing, with a Stop button.">
+            <img src="assets/shots/run-installed.webp" width="540" height="1135" loading="lazy" decoding="async" style="--a: 0.56; --b: 0.78" alt="Oru run screen after the install. A complete green hexagon with a check mark, labelled Installed.">
+            <img src="assets/shots/settings.webp" width="540" height="1135" loading="lazy" decoding="async" style="--a: 0.72; --b: 2" alt="Oru Settings sheet with a Frosted or Clear style choice, an Animations switch, a Language row, an update switch, Free up space and Signing key under Storage and backup, and About and Advanced rows.">
+          </div>
+        </div>
+
+        <ol class="scenes">
+          <li class="scene" style="--a: -1; --b: 0.26">
+            <figure class="static-shot">
+              <div class="device">
+                <div class="screen">
+                  <img src="assets/shots/run-start.webp" width="540" height="1135" loading="lazy" decoding="async" alt="Oru run screen at the start of a patch run. The progress hexagon is nearly empty, and the steps Loading patches and Read APK file are done.">
+                </div>
+              </div>
+            </figure>
+            <div class="card glass">
+              <p class="kicker">1 of 4</p>
+              <h2>One progress, start to finish</h2>
+              <p>The hexagon fills across the whole run, from the first step to the last. It shows the check only when the app is installed.</p>
+            </div>
+          </li>
+
+          <li class="scene" style="--a: 0.24; --b: 0.5">
+            <figure class="static-shot">
+              <div class="device">
+                <div class="screen">
+                  <img src="assets/shots/run-writing.webp" width="540" height="1135" loading="lazy" decoding="async" alt="Oru run screen while the patched app is written. The hexagon is about half full, under the line Writing the patched app.">
+                </div>
+              </div>
+            </figure>
+            <div class="card glass">
+              <p class="kicker">2 of 4</p>
+              <h2>Patching happens on your phone</h2>
+              <p>The patch bundles run on the device. Oru does not upload your APK files, and the file you choose stays yours.</p>
+            </div>
+          </li>
+
+          <li class="scene" style="--a: 0.48; --b: 0.76">
+            <figure class="static-shot">
+              <div class="device">
+                <div class="screen">
+                  <img src="assets/shots/run-installed.webp" width="540" height="1135" loading="lazy" decoding="async" alt="Oru run screen after the install. A complete green hexagon with a check mark, labelled Installed.">
+                </div>
+              </div>
+            </figure>
+            <div class="card glass">
+              <p class="kicker">3 of 4</p>
+              <h2>Signed here, installed here</h2>
+              <p>A signing key is created on the device at the first patch. Android's installer asks you to confirm the install. When Shizuku is running and allowed, Oru can install without that prompt.</p>
+            </div>
+          </li>
+
+          <li class="scene" style="--a: 0.74; --b: 2">
+            <figure class="static-shot">
+              <div class="device">
+                <div class="screen">
+                  <img src="assets/shots/settings.webp" width="540" height="1135" loading="lazy" decoding="async" alt="Oru Settings sheet with a Frosted or Clear style choice, an Animations switch, a Language row, an update switch, Free up space and Signing key under Storage and backup, and About and Advanced rows.">
+                </div>
+              </div>
+            </figure>
+            <div class="card glass">
+              <p class="kicker">4 of 4</p>
+              <h2>Simple or Expert</h2>
+              <p>Simple uses the recommended patches. Expert mode, switched on under Advanced in Settings, lets you choose the patches and their options. Oru warns you when patches come from more than one source.</p>
+            </div>
+          </li>
+        </ol>
+
+      </div>
+    </section>
+
+    <div class="wrap">
+
+      <section class="block" id="independent" aria-labelledby="independent-title">
+        <div class="panel glass">
+          <h2 id="independent-title">Independent project</h2>
+          <p>Oru is a modified version of <a href="https://github.com/MorpheApp/morphe-manager">Morphe Manager</a>, which is built on <a href="https://github.com/ReVanced/revanced-manager">ReVanced Manager</a> and <a href="https://github.com/Jman-Github/Universal-ReVanced-Manager">Universal ReVanced Manager</a>. Thanks go to the Morphe and ReVanced contributors and to the authors of every patch bundle.</p>
+          <p>Oru is not made, endorsed or supported by Morphe, ReVanced, Google or the makers of any app that Oru can patch. Patch bundles are the work of their authors. Oru does not provide, host or distribute apps, APKs or patches.</p>
+          <p>Patching an app can change how it behaves and may break it. Patching may also go against the terms of service of that app. You are responsible for the apps you patch and for the APK files you use.</p>
+          <ul class="panel-links">
+            <li><a href="https://github.com/The-FunMan/oru#disclaimers">Disclaimers in the README</a></li>
+            <li><a href="https://github.com/The-FunMan/oru/blob/HEAD/NOTICE">NOTICE</a></li>
           </ul>
         </div>
       </section>
 
-      <section class="section" id="requirements" aria-labelledby="requirements-title">
-        <div class="prose">
+      <section class="block" id="requirements" aria-labelledby="requirements-title">
+        <div class="panel glass">
           <h2 id="requirements-title">Requirements</h2>
-          <ul>
+          <ul class="requirements">
             <li>Android 8.0 (API 26) or newer.</li>
-            <li>Shizuku is optional. When Shizuku is running, Oru can install without showing the system prompt.</li>
+            <li>Shizuku is optional. When Shizuku is running and Oru is allowed to use it, Oru can install without showing the system prompt.</li>
             <li>Free storage for the APK you supply and for the patched output. Check the size of the app you want to patch first.</li>
           </ul>
-        </div>
-      </section>
-
-      <section class="section" id="independent" aria-labelledby="independent-title">
-        <div class="prose">
-          <div class="notice">
-            <h2 id="independent-title">Independent project</h2>
-            <p>Oru is a modified version of <a href="https://github.com/MorpheApp/morphe-manager">Morphe Manager</a>, which is built on <a href="https://github.com/ReVanced/revanced-manager">ReVanced Manager</a> and <a href="https://github.com/Jman-Github/Universal-ReVanced-Manager">Universal ReVanced Manager</a>. Thanks go to the Morphe and ReVanced contributors and to the authors of every patch bundle.</p>
-            <p>Oru is not made, endorsed or supported by Morphe, ReVanced, Google or the makers of any app that Oru can patch. Patch bundles are the work of their authors. Oru does not provide, host or distribute apps, APKs or patches.</p>
-            <p>Patching an app can change how it behaves and may break it. Patching may also go against the terms of service of that app. You are responsible for the apps you patch and for the APK files you use.</p>
-            <ul class="note-links">
-              <li><a href="https://github.com/The-FunMan/oru#disclaimers">Disclaimers in the README</a></li>
-              <li><a href="https://github.com/The-FunMan/oru/blob/HEAD/NOTICE">NOTICE</a></li>
-            </ul>
-          </div>
         </div>
       </section>
 
@@ -120,6 +195,8 @@
   <footer class="site-footer">
     <div class="wrap">
       <ul>
+        <li><a href="https://github.com/The-FunMan/oru/releases/latest">Latest release</a></li>
+        <li><a href="https://github.com/The-FunMan/oru">Source code</a></li>
         <li><a href="https://github.com/The-FunMan/oru/blob/HEAD/LICENSE">GPLv3 license</a></li>
         <li><a href="https://github.com/The-FunMan/oru/blob/HEAD/SECURITY.md">Security</a></li>
       </ul>
@@ -127,5 +204,64 @@
       <p>No account needed.</p>
     </div>
   </footer>
+
+  <script>
+    /* Theme toggle. The choice is saved when browser storage allows it. */
+    (function () {
+      var root = document.documentElement;
+      var toggle = document.getElementById("theme-toggle");
+
+      function isDark() {
+        var forced = root.getAttribute("data-theme");
+        if (forced) return forced === "dark";
+        return window.matchMedia("(prefers-color-scheme: dark)").matches;
+      }
+
+      toggle.addEventListener("click", function () {
+        var next = isDark() ? "light" : "dark";
+        root.setAttribute("data-theme", next);
+        try {
+          localStorage.setItem("oru-theme", next);
+        } catch (e) {}
+      });
+
+      /* Scroll story. One value, --p (0 to 1), drives the sticky phone and captions.
+         Without this script, or with reduced motion, the scenes stay stacked. */
+      var story = document.getElementById("story");
+      var stage = story.querySelector(".stage");
+      var motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+      var canPin = window.CSS && CSS.supports && CSS.supports("width", "clamp(1px, 2px, 3px)");
+      if (!canPin) return;
+
+      var queued = false;
+
+      function update() {
+        queued = false;
+        var range = story.offsetHeight - window.innerHeight;
+        var top = story.getBoundingClientRect().top;
+        var p = range > 0 ? Math.min(1, Math.max(0, -top / range)) : 0;
+        stage.style.setProperty("--p", p.toFixed(4));
+      }
+
+      function request() {
+        if (!queued) {
+          queued = true;
+          window.requestAnimationFrame(update);
+        }
+      }
+
+      function setPinned(on) {
+        story.classList.toggle("is-pinned", on);
+        if (on) update();
+      }
+
+      setPinned(!motion.matches);
+      window.addEventListener("scroll", request, { passive: true });
+      window.addEventListener("resize", request);
+      if (motion.addEventListener) {
+        motion.addEventListener("change", function () { setPinned(!motion.matches); });
+      }
+    })();
+  </script>
 </body>
 </html>
