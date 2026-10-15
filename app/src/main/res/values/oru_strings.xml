@@ -228,9 +228,6 @@
     <string name="oru_memory_action_lower">Lower to %1$d MB</string>
     <string name="oru_memory_at_minimum">Android stopped patching at %1$d MB, the lowest limit this phone allows. Choose fewer patches in Expert mode and try again.</string>
     <string name="oru_heap_exhausted">The patcher ran out of its %1$d MB heap. A lower limit cannot fix that, so choose fewer patches in Expert mode and try again.</string>
-    <string name="oru_battery_title">Let patching finish</string>
-    <string name="oru_battery_body">Some phones stop the patcher when Oru is in the background. Let Oru run without battery limits so patching can finish.</string>
-    <string name="oru_battery_allow">Allow</string>
 
     <!-- Settings sheet -->
     <string name="oru_settings_title">Settings</string>

@@ -25,7 +25,8 @@
 Uninstalling will permanently erase all app data"</string>
     <string name="patcher_incompatible_patcher_description">The source &lt;b&gt;%1$s&lt;/b&gt; requires patcher &lt;b&gt;%2$s&lt;/b&gt; or newer. Update Oru to use it</string>
     <string name="patcher_storage_permission_description_api30">One or more patch options point to paths Oru cannot read. Grant storage access and tap the button then patching will start automatically</string>
-    <string name="battery_optimization_dialog_description">Some devices may stop the patcher when the app is minimized. Allow Oru to run without battery restrictions to ensure patching completes reliably</string>
+    <string name="battery_optimization_dialog_title">Let patching finish</string>
+    <string name="battery_optimization_dialog_description">Some phones stop the patcher when Oru is in the background. Let Oru run without battery limits so patching can finish.</string>
     <string name="uninstall_app_unverified">Left in place: Oru could not verify that the installed app is the build it patched</string>
     <string name="launch_app_unverified">Oru could not verify that the installed app is the build it patched</string>
     <string name="settings_advanced_updates_manager_prereleases_description">Early access to new Oru versions</string>
