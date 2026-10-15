@@ -301,4 +301,100 @@ class OruInstallCoordinatorTest {
         assertTrue(sut.state.value.plan is InstallStep.ShowInstall)
         assertTrue(sut.state.value.ui is OruInstallUi.Plan)
     }
+
+    @Test
+    fun declinedAutomaticInstallLeavesInstallingForAPlanWithInstall() = runBlocking {
+        val readings = FakeInstallerReadings(autoInstall = true)
+        val packages = FakePackages(silent = true)
+        val executor = FakeExecutor()
+        val sut = coordinator(readings = readings, packages = packages, executor = executor)
+
+        sut.start()
+        assertEquals(OruInstallUi.Installing(automatic = true, installerLabel = "system"), sut.state.value.ui)
+        assertEquals(listOf("startInstall:true"), executor.calls)
+
+        // Android's dialog is declined and the ViewModel goes back to Ready
+        executor.execution = OruExecution.Running
+        sut.refresh()
+        executor.execution = OruExecution.Idle
+        sut.refresh()
+
+        val ui = sut.state.value.ui
+        assertTrue(ui is OruInstallUi.Plan && ui.declined, "the plan says the install was cancelled: $ui")
+        assertTrue(sut.state.value.plan is InstallStep.ShowInstall)
+        // The auto start is not repeated; the tap starts the install again
+        sut.install()
+        assertEquals(listOf("startInstall:true", "startInstall:false"), executor.calls)
+    }
+
+    @Test
+    fun declinedTapInstallShowsTheNoticeAndTheRunIsPlainInstalling() = runBlocking {
+        val executor = FakeExecutor()
+        val sut = coordinator(executor = executor)
+
+        sut.refresh()
+        sut.install()
+        executor.execution = OruExecution.Running
+        sut.refresh()
+        assertEquals(OruInstallUi.Installing(automatic = false, installerLabel = "system"), sut.state.value.ui)
+
+        executor.execution = OruExecution.Idle
+        sut.refresh()
+        assertTrue(sut.state.value.ui.let { it is OruInstallUi.Plan && it.declined })
+    }
+
+    @Test
+    fun stoppingWhileTheAutomaticStartIsIdleAsksForATap() = runBlocking {
+        val readings = FakeInstallerReadings(autoInstall = true)
+        val executor = FakeExecutor()
+        val sut = coordinator(readings = readings, packages = FakePackages(silent = true), executor = executor)
+
+        sut.refresh()
+        assertEquals(OruInstallUi.Installing(automatic = true, installerLabel = "system"), sut.state.value.ui)
+
+        // The executor has nothing to stop, so the stop must still end the screen's wait
+        sut.stopWaiting()
+
+        assertEquals(listOf("stopWaiting"), executor.calls)
+        assertTrue(sut.state.value.plan is InstallStep.ShowInstall)
+        assertTrue(sut.state.value.ui is OruInstallUi.Plan)
+    }
+
+    @Test
+    fun stopWithADeadExecutorStillResetsTheScreen() = runBlocking {
+        val executor = FakeExecutor(execution = OruExecution.Running).apply { stopIgnored = true }
+        val sut = coordinator(executor = executor)
+
+        sut.refresh()
+        assertTrue(sut.state.value.ui is OruInstallUi.Installing)
+
+        sut.stopWaiting()
+
+        assertEquals(listOf("stopWaiting", "resetExecution"), executor.calls)
+        assertTrue(sut.state.value.ui is OruInstallUi.Plan)
+    }
+
+    @Test
+    fun stopIsNotReportedAsADecline() = runBlocking {
+        val executor = FakeExecutor(execution = OruExecution.Running)
+        val sut = coordinator(executor = executor)
+
+        sut.refresh()
+        sut.stopWaiting()
+
+        assertTrue(sut.state.value.ui.let { it is OruInstallUi.Plan && !it.declined })
+    }
+
+    @Test
+    fun stopKeepsThePatchedApkForTheRetry() = runBlocking {
+        val executor = FakeExecutor(execution = OruExecution.Running)
+        val sut = coordinator(executor = executor)
+
+        sut.refresh()
+        sut.stopWaiting()
+        sut.install()
+
+        assertEquals(listOf("stopWaiting", "startInstall:false"), executor.calls)
+        assertEquals(testRequest().outputFile, executor.lastRequest?.outputFile)
+    }
 }

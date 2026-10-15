@@ -23,6 +23,9 @@
     <string name="oru_unavailable_shizuku_not_running">Shizuku is not running. Start it and try again.</string>
     <string name="oru_unavailable_root">Oru does not have root access. Grant it, then try again.</string>
 
+    <!-- The install ended without installing: declined, cancelled or aborted in the system dialog -->
+    <string name="oru_install_declined">The install was cancelled. Tap Install to try again.</string>
+
     <!-- Installer picker -->
     <string name="oru_install_pick_body">Choose the installer for this install.</string>
     <string name="oru_install_plan_checking">Checking the install</string>

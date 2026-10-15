@@ -189,6 +189,18 @@ class OruInstallCoordinator(
     private var seeded = false
     private var decisionOpen = false
 
+    /** The automatic start is used up by the first install this screen starts, so a later plan asks for a tap. */
+    private var autoStartSpent = false
+
+    /** The run in progress was started without a tap (the automatic start). */
+    private var runAutomatic = false
+
+    /** The executor's state at the last replan, to see a run end. Null before the first replan. */
+    private var lastExecution: OruExecution? = null
+
+    /** The last run ended without installing, and no run has started since. */
+    private var declined = false
+
     /** Plans once and starts whatever the plan says starts without a tap. */
     suspend fun start() {
         refresh()
@@ -205,23 +217,33 @@ class OruInstallCoordinator(
         val input = readInput()
         val plan = OruInstallPlanner.plan(input)
         val options = installers.pickerOptions()
-        val ui = OruInstallScreenMapper.map(
-            plan = plan,
-            execution = executor.execution,
-            options = options,
-            labelFor = installers::labelFor,
-        )
         val conflict = plan is InstallStep.ConflictNeedsUninstall
         val installPackage = request.installPackageName
+        val installedLabel = if (conflict) {
+            packages.installedLabel(installPackage)?.let { oruAppName(installPackage, it) }
+        } else {
+            null
+        }
+        // Read last: nothing suspends from here to the state write, so the screen never keeps an outcome the executor left
+        val execution = executor.execution
+        when {
+            execution == OruExecution.Running -> declined = false
+            lastExecution == OruExecution.Running && execution == OruExecution.Idle -> declined = true
+        }
+        lastExecution = execution
+        val ui = OruInstallScreenMapper.map(
+            plan = plan,
+            execution = execution,
+            options = options,
+            labelFor = installers::labelFor,
+            automatic = runAutomatic,
+            declined = declined,
+        )
         _state.value = OruInstallState(
             plan = plan,
             ui = ui,
             decisionOpen = decisionOpen && conflict,
-            installedLabel = if (conflict) {
-                packages.installedLabel(installPackage)?.let { oruAppName(installPackage, it) }
-            } else {
-                null
-            },
+            installedLabel = installedLabel,
         )
     }
 
@@ -239,11 +261,15 @@ class OruInstallCoordinator(
         if (executor.execution == OruExecution.Running || executor.execution is OruExecution.Installed) return
         val plan = _state.value.plan
         if (plan !is InstallStep.ShowInstall && plan !is InstallStep.AutoInstall) return
+        val automatic = plan is InstallStep.AutoInstall
+        // Any start ends the automatic one, so when this run ends the screen asks for a tap
+        autoStartSpent = true
+        runAutomatic = automatic
         val chosen = picked
         if (chosen != null) {
             executor.startWithPicked(chosen.token)
         } else {
-            executor.startInstall(request, autoUninstallOnConflict = plan is InstallStep.AutoInstall)
+            executor.startInstall(request, autoUninstallOnConflict = automatic)
         }
     }
 
@@ -266,6 +292,7 @@ class OruInstallCoordinator(
     suspend fun confirmUninstall() {
         if (_state.value.plan !is InstallStep.ConflictNeedsUninstall) return
         decisionOpen = false
+        runAutomatic = false
         executor.uninstallAndInstall(request.installPackageName)
         refresh()
     }
@@ -283,6 +310,7 @@ class OruInstallCoordinator(
         if (!plan.canIgnoreSignatureMismatch) return
         signatureBypassed = true
         decisionOpen = false
+        runAutomatic = false
         executor.installIgnoringSignatureMismatch()
         refresh()
     }
@@ -314,6 +342,7 @@ class OruInstallCoordinator(
 
     /** "Install with Android" on an unavailable installer. The user chose the system installer. */
     suspend fun installWithAndroid() {
+        runAutomatic = false
         executor.installWithAndroid()
         refresh()
     }
@@ -326,10 +355,16 @@ class OruInstallCoordinator(
 
     /**
      * The user stopped waiting on the install or the uninstall. The executor cancels the wait, abandons an
-     * unfinished session and keeps the APK, so the screen is back at the plan and Try again works.
+     * unfinished session and keeps the APK, so the screen is back at the plan and Install works again. Where the
+     * executor does not leave the running state, the coordinator resets it, so the screen never stays on Installing.
      */
     suspend fun stopWaiting() {
+        autoStartSpent = true
         executor.stopWaiting()
+        if (executor.execution == OruExecution.Running) executor.resetExecution()
+        // A stop is not a decline, so no notice follows it
+        lastExecution = executor.execution
+        declined = false
         refresh()
     }
 
@@ -368,7 +403,7 @@ class OruInstallCoordinator(
             deviceRooted = installers.deviceRooted(),
             rootModeChosen = rootModeChosen,
             customInstallerAvailable = installers.customInstallerAvailable(chosenToken),
-            autoInstallPref = installers.autoInstallPref(),
+            autoInstallPref = installers.autoInstallPref() && !autoStartSpent,
             promptInstallerPref = installers.promptInstallerPref(),
             autoUninstallPref = installers.autoUninstallPref(),
             silentUpdateAllowed = packages.silentUpdateAllowed(request.installPackageName),

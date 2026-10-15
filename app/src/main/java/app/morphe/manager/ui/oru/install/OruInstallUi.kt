@@ -53,7 +53,9 @@ sealed interface OruInstallUi {
         /** The label of the preferred installer that was missing, when the step fell back to another. */
         val fallbackLabel: String?,
         /** Rows for the picker. Only used by [InstallStep.AskInstaller]. */
-        val options: List<OruInstallerOption>
+        val options: List<OruInstallerOption>,
+        /** The install was started and ended without installing (declined, cancelled or aborted by Android). */
+        val declined: Boolean = false,
     ) : OruInstallUi
 
     /** Running. [automatic] is true when the install started without a tap. */
@@ -72,12 +74,16 @@ object OruInstallScreenMapper {
     /**
      * [plan] is null until the planner has run. An [InstallStep.AutoInstall] shows the short automatic
      * state (no Install button) while the executor is still idle, because the coordinator starts it.
+     * [automatic] is true for a run the coordinator started without a tap; [declined] is true when the
+     * last run ended without installing, so the plan says so next to its Install button.
      */
     fun map(
         plan: InstallStep?,
         execution: OruExecution,
         options: List<OruInstallerOption>,
-        labelFor: (InstallerChoice) -> String?
+        labelFor: (InstallerChoice) -> String?,
+        automatic: Boolean = false,
+        declined: Boolean = false,
     ): OruInstallUi {
         val installer = installerOf(plan)
         val label = installer?.let(labelFor)
@@ -85,7 +91,7 @@ object OruInstallScreenMapper {
             is OruExecution.Installed -> OruInstallUi.Installed(installerLabel = label)
             is OruExecution.Failed -> OruInstallUi.Failed(execution.message)
             OruExecution.Running -> OruInstallUi.Installing(
-                automatic = plan is InstallStep.AutoInstall,
+                automatic = automatic || plan is InstallStep.AutoInstall,
                 installerLabel = label
             )
             OruExecution.Idle, OruExecution.Conflict -> when (plan) {
@@ -95,7 +101,8 @@ object OruInstallScreenMapper {
                     step = plan,
                     installerLabel = label,
                     fallbackLabel = (plan as? InstallStep.ShowInstall)?.fallbackFrom?.let(labelFor),
-                    options = options
+                    options = options,
+                    declined = declined,
                 )
             }
         }

@@ -342,6 +342,13 @@ private fun PlanBody(
                 modifier = modifier,
                 extra = {
                     DoneFacts(facts)
+                    if (ui.declined) {
+                        OruNotice(
+                            text = stringResource(R.string.oru_install_declined),
+                            tone = OruTone.Neutral,
+                            actions = emptyList<OruNoticeAction>(),
+                        )
+                    }
                     if (installLine != null) InstallerLine(installLine)
                     if (fallbackLine != null) InstallerHint(fallbackLine)
                 },

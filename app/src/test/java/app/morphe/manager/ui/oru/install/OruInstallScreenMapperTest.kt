@@ -54,6 +54,23 @@ class OruInstallScreenMapperTest {
     }
 
     @Test
+    fun declinedPlanKeepsTheInstallAndSaysSo() {
+        val ui = OruInstallScreenMapper.map(show, OruExecution.Idle, emptyList(), labels, declined = true)
+        assertEquals(
+            OruInstallUi.Plan(step = show, installerLabel = "Android", fallbackLabel = null, options = emptyList(), declined = true),
+            ui
+        )
+    }
+
+    @Test
+    fun automaticRunIsAutomaticEvenAfterItsPlanAsksForATap() {
+        assertEquals(
+            OruInstallUi.Installing(automatic = true, installerLabel = "Android"),
+            OruInstallScreenMapper.map(show, OruExecution.Running, emptyList(), labels, automatic = true)
+        )
+    }
+
+    @Test
     fun runningShowsInstallingWithoutAutomaticUnlessItStartedAutomatically() {
         assertEquals(
             OruInstallUi.Installing(automatic = false, installerLabel = "Android"),

@@ -70,8 +70,15 @@ internal class FakeExecutor(
 
     val calls = mutableListOf<String>()
 
+    /** The request of the last install start, so a test can check the patched APK is the one retried. */
+    var lastRequest: OruInstallRequest? = null
+
+    /** When true, [stopWaiting] leaves the execution as it is, as a ViewModel that no longer holds the install does. */
+    var stopIgnored = false
+
     override fun startInstall(request: OruInstallRequest, autoUninstallOnConflict: Boolean) {
         calls += "startInstall:$autoUninstallOnConflict"
+        lastRequest = request
     }
 
     override fun startWithPicked(token: String) {
@@ -115,7 +122,7 @@ internal class FakeExecutor(
 
     override fun stopWaiting() {
         calls += "stopWaiting"
-        execution = OruExecution.Idle
+        if (!stopIgnored) execution = OruExecution.Idle
     }
 }
 

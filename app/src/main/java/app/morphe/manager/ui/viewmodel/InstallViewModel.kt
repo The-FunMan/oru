@@ -456,6 +456,7 @@ class InstallViewModel : ViewModel(), KoinComponent {
                 InstallResult.Success
             } else {
                 // User dismissed the dialog and the installed APK does not match the patched APK.
+                Log.i(InstallWaitPolicy.LOG_TAG, "step=install-aborted package=$targetPackageName")
                 installState = InstallState.Ready
                 return
             }
@@ -565,6 +566,7 @@ class InstallViewModel : ViewModel(), KoinComponent {
         val result = try {
             sessionInstaller.installShizukuAsPlayStore(outputFile, targetPackageName)
         } catch (_: InstallCancelledException) {
+            Log.i(InstallWaitPolicy.LOG_TAG, "step=install-aborted package=$targetPackageName")
             installState = InstallState.Ready
             return
         }
@@ -614,6 +616,7 @@ class InstallViewModel : ViewModel(), KoinComponent {
         val result = try {
             sessionInstaller.installShizuku(outputFile, targetPackageName)
         } catch (_: InstallCancelledException) {
+            Log.i(InstallWaitPolicy.LOG_TAG, "step=install-aborted package=$targetPackageName")
             installState = InstallState.Ready
             return
         }
@@ -1335,13 +1338,21 @@ class InstallViewModel : ViewModel(), KoinComponent {
 
     /**
      * The user stopped waiting on the install or the uninstall. The running step is cancelled, which abandons an
-     * unfinished Shizuku session and removes the status receivers. The APK stays pending, so a retry installs it.
+     * unfinished Shizuku session and removes the status receivers. The external installer and the intent fallback
+     * are watched by timers, which are stopped too so a late outcome does not reach the screen. The APK stays
+     * pending, so a retry installs it.
      */
     fun stopWaiting() {
         if (installState !is InstallState.Installing) return
         Log.i(InstallWaitPolicy.LOG_TAG, "step=stop-waiting")
         activeWork?.cancel()
         activeWork = null
+        externalInstallTimeoutJob?.cancel()
+        externalInstallTimeoutJob = null
+        pendingExternalInstall?.let(installerManager::cleanup)
+        pendingExternalInstall = null
+        pendingIntentFallbackPackage = null
+        pendingIntentFallbackInstallType = InstallType.DEFAULT
         installState = InstallState.Ready
         selectedInstallerToken = null
     }

@@ -6,6 +6,8 @@
 package app.morphe.manager.ui.oru.install
 
 import android.app.Application
+import android.util.Log
+import app.morphe.manager.domain.installer.InstallWaitPolicy
 import app.morphe.manager.domain.installer.InstallerManager
 import app.morphe.manager.domain.installer.RootInstaller
 import app.morphe.manager.domain.installer.SessionInstaller
@@ -181,6 +183,11 @@ class ViewModelOruInstallExecutor(
     }
 
     override fun stopWaiting() {
+        // The state the ViewModel holds when the stop lands: a stop on anything but Installing does nothing there
+        Log.i(
+            InstallWaitPolicy.LOG_TAG,
+            "step=stop-waiting-ui installing=${viewModel.installState is InstallViewModel.InstallState.Installing}"
+        )
         viewModel.stopWaiting()
     }
 }
