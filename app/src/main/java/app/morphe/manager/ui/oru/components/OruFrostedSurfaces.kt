@@ -122,7 +122,10 @@ fun OruFrostedSheet(
         enabled = visible,
         onBack = onDismiss,
     )
-    val rootModifier = modifier.fillMaxSize().let { root -> if (settle != null) root.oruTapSettle(settle) else root }
+    // Only while the sheet or its scrim shows: a full-screen pointer input that stays composed takes every tap away
+    // from the screen under a closed sheet
+    val takesInput = visible || scrimAlpha > 0f
+    val rootModifier = modifier.fillMaxSize().let { root -> if (settle != null && takesInput) root.oruTapSettle(settle) else root }
     BoxWithConstraints(modifier = rootModifier) {
         val maxSheetHeight = maxHeight * SheetHeightShare
         // Composed only while it shows, so a hidden scrim takes no taps; drawn at the alpha of the fade
