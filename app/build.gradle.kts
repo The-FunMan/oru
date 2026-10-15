@@ -166,6 +166,7 @@ val translationTags = translations.joinToString(prefix = "{", postfix = "}") { (
 android {
     namespace = "app.morphe.manager"
     compileSdk = 37
+    ndkVersion = "28.2.13676358"   // the version .github/actions/setup-oru installs
 
     defaultConfig {
         applicationId = "app.morphe.manager"
