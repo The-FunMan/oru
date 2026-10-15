@@ -349,13 +349,14 @@ class SingleRunOwner(
         if (status != OruRunStatus.Working) finishRun()
     }
 
-    /** Explicitly cancels the active run. */
+    /**
+     * Cancels the active run and releases it. The worker is cancelled, and the patcher is destroyed, which removes its
+     * temporary input and output. Nothing is installed.
+     */
     fun cancelRun() {
         val run = _currentRun.value ?: return
         run.patcher.cancelPatching()
-        _runStatus.value = OruRunStatus.Cancelled
-        runs.clear(this)
-        markRunFinished()
+        finishRun()
     }
 
     /** Releases the run: stops its tracking and install, clears the accessory and the stop flag, and destroys the patcher. */

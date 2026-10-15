@@ -54,6 +54,7 @@ import app.morphe.manager.ui.oru.components.OruProgressHold
 import app.morphe.manager.ui.oru.components.OruRollingCount
 import app.morphe.manager.ui.oru.components.LocalOruAppTint
 import app.morphe.manager.ui.oru.components.OruStageRail
+import app.morphe.manager.ui.oru.components.OruTapGate
 import app.morphe.manager.ui.oru.components.OruSwapText
 import app.morphe.manager.ui.oru.components.OruStageUi as ComponentStageUi
 import app.morphe.manager.ui.oru.components.OruTileSource
@@ -122,6 +123,9 @@ fun OruRunContent(
     // The percentage of this run never steps back: a retry that starts over holds the figure it had reached
     val hold = remember(runKey) { OruProgressHold() }
     val shownProgress = hold.show(run.progress)
+    // The Cancel button is where the Patch button was, so a second tap of a double tap on Patch lands here as the run
+    // layout appears. Taps are ignored for a moment after the layout is shown (see OruTapGate).
+    val cancelGate = remember(runKey) { OruTapGate().apply { arm() } }
 
     Column(modifier = modifier.fillMaxSize()) {
         Column(
@@ -214,7 +218,7 @@ fun OruRunContent(
             OruFrostedDock(frost = OruSurfaceFill.Solid) {
                 OruOutlinedButton(
                     text = stringResource(R.string.oru_action_cancel),
-                    onClick = { confirmCancel = true },
+                    onClick = { if (cancelGate.accept()) confirmCancel = true },
                     modifier = Modifier.weight(1f),
                 )
             }

@@ -17,17 +17,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.morphe.manager.R
-import app.morphe.manager.ui.oru.components.OruDecisionDialog
-import app.morphe.manager.ui.oru.components.OruDialogAction
 import app.morphe.manager.ui.oru.components.OruTileSource
-import app.morphe.manager.ui.oru.components.OruTone
 import app.morphe.manager.ui.oru.home.oruAppName
 import app.morphe.manager.ui.oru.install.InstallStep
 import app.morphe.manager.ui.oru.install.OruInstallActions
@@ -99,8 +95,6 @@ internal fun OruFocusRunRoute(
     val currentPatcher = patcher ?: return
     LaunchedEffect(currentPatcher) { vm.attachRun(currentPatcher, item) }
 
-    var cancelAsked by rememberSaveable { mutableStateOf(false) }
-
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val succeeded by currentPatcher.patcherSucceeded.collectAsStateWithLifecycle()
@@ -166,9 +160,8 @@ internal fun OruFocusRunRoute(
                 usage = usage,
                 facts = null,
                 runKey = currentPatcher.patchRun,
-                onCancel = {
-                    cancelAsked = true
-                },
+                // OruRunContent asks for the confirm itself and calls this only once the user confirms
+                onCancel = { vm.cancelRun(currentPatcher) },
                 modifier = Modifier.fillMaxSize(),
             )
 
@@ -234,25 +227,6 @@ internal fun OruFocusRunRoute(
             }
         }
 
-        if (cancelAsked && runState.hero == OruHeroState.WORKING) {
-            OruDecisionDialog(
-                title = stringResource(R.string.oru_run_cancel_title),
-                body = stringResource(R.string.oru_run_cancel_body),
-                primary = OruDialogAction(
-                    label = stringResource(R.string.oru_run_cancel_go),
-                    onClick = {
-                        cancelAsked = false
-                        vm.cancelRun(currentPatcher)
-                    },
-                ),
-                secondary = OruDialogAction(
-                    label = stringResource(R.string.oru_run_keep_patching),
-                    onClick = { cancelAsked = false },
-                ),
-                tone = OruTone.Error,
-                onDismiss = { cancelAsked = false },
-            )
-        }
     }
 
     // The patcher holds the start on these until they are answered (PatcherScreen shows the same ones)

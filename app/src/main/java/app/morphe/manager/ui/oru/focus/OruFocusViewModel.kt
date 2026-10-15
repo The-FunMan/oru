@@ -485,10 +485,14 @@ class OruFocusViewModel(private val deps: OruFocusDeps) : ViewModel() {
         }
     }
 
-    /** Asks the worker to stop. The outcome arrives as [OruRunStatus.Cancelled]. */
+    /**
+     * The user confirmed the cancel: the worker stops, the run is released (its temporary files go with it, and no
+     * install is begun), and the Focus returns to Ready with the APK still held.
+     */
     fun cancelRun(patcher: PatcherViewModel) {
         patcher.cancelPatching()
         singleRunOwner?.cancelRun()
+        closeRun()
     }
 
     private fun onRunStatus(status: OruRunStatus, patcher: PatcherViewModel, generation: Int) {

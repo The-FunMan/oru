@@ -378,7 +378,7 @@ class SingleRunOwnerTest {
         owner.cancelRun()
 
         assertTrue(fake1.cancelCalled)
-        assertEquals(OruRunStatus.Cancelled, owner.runStatus.value)
+        assertNull(owner.runStatus.value)
         assertFalse(owner.isActive)
         assertNull(activeRunTracker.run.value)
 
@@ -387,6 +387,23 @@ class SingleRunOwnerTest {
 
         assertTrue(owner.isActive)
         assertEquals(pkg2, owner.activePackageKey)
+    }
+
+    @Test
+    fun `cancelRun releases the run and destroys its patcher, with no install begun`() = runBlocking {
+        val fakePatcher = FakeSingleRunPatcher()
+        val owner = newOwner { fakePatcher }
+
+        val pkg = "com.example.cancel"
+        owner.getOrStartRun(pkg, testItem(pkg), testParams(pkg))
+        owner.cancelRun()
+
+        assertTrue(fakePatcher.cancelCalled)
+        assertTrue(fakePatcher.destroyCalled)
+        assertNull(owner.currentRun.value)
+        assertNull(owner.install.value)
+        assertNull(owner.runStatus.value)
+        assertNull(activeRunTracker.run.value)
     }
 
     @Test
