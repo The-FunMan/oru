@@ -9,76 +9,114 @@
 }
 
 /* ------------------------------------------------------------------ */
-/* Theme tokens. Light values are the default.                         */
+/* Tokens. Light values are the default. Spacing steps: 8, 16, 24,    */
+/* 32, 48, 64, 96 px. Contrast figures are in the commit notes.       */
 /* ------------------------------------------------------------------ */
 
 :root {
   color-scheme: light;
-  --bg: #FBF8F3;
-  --ink: #1B1D26;
-  --ink-muted: #4B5165;
+  --bg: #F7F4EE;
+  --ink: #161A2A;
+  --ink-muted: #3F4659;
   --accent: #4650C4;
   --accent-ink: #FBF8F3;
-  --accent-glow: rgba(70, 80, 196, 0.35);
+  --accent-hi: #353EA8;
+  --accent-glow: rgba(70, 80, 196, 0.34);
   --focus: #3A44B8;
-  --glass-fill: rgba(255, 255, 255, 0.6);
-  --glass-solid: #F8F5EF;
-  --glass-edge-hi: rgba(255, 255, 255, 0.98);
-  --glass-edge-lo: rgba(104, 112, 156, 0.26);
+  /* Glass: white tint over colour, bright rim, a thin inner ring, chroma fringes. */
+  --glass-fill: rgba(255, 255, 255, 0.5);
+  --glass-solid: #F6F3EE;
+  --glass-rim-hi: rgba(255, 255, 255, 1);
+  --glass-rim-hover: rgba(255, 255, 255, 1);
+  --glass-rim-lo: rgba(255, 255, 255, 0.28);
   --glass-inner: rgba(255, 255, 255, 0.95);
-  --glass-shadow: rgba(52, 60, 110, 0.2);
-  --orb-1: #B3BBFF;
-  --orb-2: #FFCDB7;
-  --orb-3: #9DBBF2;
-  --orb-opacity: 0.62;
+  --glass-ring: rgba(255, 255, 255, 0.7);
+  --glass-sheen: rgba(255, 255, 255, 0.9);
+  --glass-shadow: rgba(110, 100, 200, 0.3);
+  --glass-shadow-tint: rgba(120, 110, 255, 0.34);
+  --fringe-warm: rgba(255, 150, 100, 0.85);
+  --fringe-cool: rgba(90, 185, 255, 0.8);
+  --phone-glow: rgba(150, 140, 255, 0.45);
+  --noise-op: 0.035;
+  --blob-op: 0.8;
+  --blob-1: #8E9BFF;
+  --blob-2: #C89BFF;
+  --blob-3: #FFB08A;
+  --blob-4: #FF8DB0;
+  --blob-5: #7CD6FF;
   --vh: 100vh;
-  /* Phone width: fits the viewport height and the page width. */
-  --dw: min(calc((var(--vh) - 96px) / 2.03), 58vw, 360px);
+  /* Story phone: fits the height and the width. */
+  --dw: min(calc((var(--vh) - 96px) / 2.03), 58vw, 340px);
   --hd: calc(var(--dw) * 2.03);
+  /* Hero phone: the room left under the copy, between 220 and 340 px wide. */
+  --hw: min(clamp(220px, calc(var(--vh) - 430px), 340px), 80vw);
+  --hh: calc(var(--hw) * 2.03);
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
-    --bg: #0E1017;
-    --ink: #EEF0F7;
-    --ink-muted: #C4C9DB;
-    --accent: #8F98FF;
-    --accent-ink: #0E1017;
-    --accent-glow: rgba(143, 152, 255, 0.3);
-    --focus: #B2B9FF;
-    --glass-fill: rgba(22, 25, 38, 0.5);
-    --glass-solid: #1A1E2C;
-    --glass-edge-hi: rgba(255, 255, 255, 0.5);
-    --glass-edge-lo: rgba(255, 255, 255, 0.05);
-    --glass-inner: rgba(255, 255, 255, 0.14);
-    --glass-shadow: rgba(0, 0, 0, 0.6);
-    --orb-1: #8F98FF;
-    --orb-2: #FFB59A;
-    --orb-3: #24408F;
-    --orb-opacity: 0.3;
+    --bg: #171C30;
+    --ink: #EEF1FF;
+    --ink-muted: #C9D0EA;
+    --accent: #AEB6FF;
+    --accent-ink: #171C30;
+    --accent-hi: #CDD2FF;
+    --accent-glow: rgba(150, 160, 255, 0.4);
+    --focus: #CDD2FF;
+    --glass-fill: rgba(38, 45, 88, 0.82);
+    --glass-solid: #262D58;
+    --glass-rim-hi: rgba(255, 255, 255, 0.72);
+    --glass-rim-hover: rgba(255, 255, 255, 0.95);
+    --glass-rim-lo: rgba(255, 255, 255, 0.1);
+    --glass-inner: rgba(255, 255, 255, 0.22);
+    --glass-ring: rgba(255, 255, 255, 0.12);
+    --glass-sheen: rgba(255, 255, 255, 0.16);
+    --glass-shadow: rgba(4, 6, 18, 0.55);
+    --glass-shadow-tint: rgba(10, 14, 40, 0.5);
+    --fringe-warm: rgba(255, 190, 150, 0.28);
+    --fringe-cool: rgba(150, 200, 255, 0.3);
+    --phone-glow: rgba(160, 170, 255, 0.5);
+    --noise-op: 0.045;
+    --blob-op: 0.7;
+    --blob-1: #A3ABFF;
+    --blob-2: #C4A6FF;
+    --blob-3: #FFC4A8;
+    --blob-4: #FFA3B5;
+    --blob-5: #8EDDF5;
   }
 }
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --bg: #0E1017;
-  --ink: #EEF0F7;
-  --ink-muted: #C4C9DB;
-  --accent: #8F98FF;
-  --accent-ink: #0E1017;
-  --accent-glow: rgba(143, 152, 255, 0.3);
-  --focus: #B2B9FF;
-  --glass-fill: rgba(22, 25, 38, 0.5);
-  --glass-solid: #1A1E2C;
-  --glass-edge-hi: rgba(255, 255, 255, 0.5);
-  --glass-edge-lo: rgba(255, 255, 255, 0.05);
-  --glass-inner: rgba(255, 255, 255, 0.14);
-  --glass-shadow: rgba(0, 0, 0, 0.6);
-  --orb-1: #8F98FF;
-  --orb-2: #FFB59A;
-  --orb-3: #24408F;
-  --orb-opacity: 0.3;
+  --bg: #171C30;
+  --ink: #EEF1FF;
+  --ink-muted: #C9D0EA;
+  --accent: #AEB6FF;
+  --accent-ink: #171C30;
+  --accent-hi: #CDD2FF;
+  --accent-glow: rgba(150, 160, 255, 0.4);
+  --focus: #CDD2FF;
+  --glass-fill: rgba(38, 45, 88, 0.82);
+  --glass-solid: #262D58;
+  --glass-rim-hi: rgba(255, 255, 255, 0.72);
+  --glass-rim-hover: rgba(255, 255, 255, 0.95);
+  --glass-rim-lo: rgba(255, 255, 255, 0.1);
+  --glass-inner: rgba(255, 255, 255, 0.22);
+  --glass-ring: rgba(255, 255, 255, 0.12);
+  --glass-sheen: rgba(255, 255, 255, 0.16);
+  --glass-shadow: rgba(4, 6, 18, 0.55);
+  --glass-shadow-tint: rgba(10, 14, 40, 0.5);
+  --fringe-warm: rgba(255, 190, 150, 0.28);
+  --fringe-cool: rgba(150, 200, 255, 0.3);
+  --phone-glow: rgba(160, 170, 255, 0.5);
+  --noise-op: 0.045;
+  --blob-op: 0.7;
+  --blob-1: #A3ABFF;
+  --blob-2: #C4A6FF;
+  --blob-3: #FFC4A8;
+  --blob-4: #FFA3B5;
+  --blob-5: #8EDDF5;
 }
 
 @supports (height: 100svh) {
@@ -103,18 +141,13 @@ html {
   scroll-behavior: smooth;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-}
-
 body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  font-size: 1rem;
+  font-size: 1.0625rem;
+  font-weight: 400;
   line-height: 1.6;
   overflow-wrap: break-word;
   -webkit-font-smoothing: antialiased;
@@ -152,7 +185,7 @@ h2 {
 }
 
 h1 {
-  font-size: clamp(2.1rem, 1.4rem + 3.2vw, 3.6rem);
+  font-size: min(clamp(2.1rem, 1.2rem + 2.4vw, 3.6rem), 6.2vh);
   line-height: 1.08;
   letter-spacing: -0.025em;
   font-weight: 700;
@@ -167,7 +200,7 @@ h2 {
 }
 
 p {
-  margin: 0 0 0.9rem;
+  margin: 0 0 16px;
 }
 
 p:last-child {
@@ -176,10 +209,10 @@ p:last-child {
 
 .skip-link {
   position: absolute;
-  left: 1rem;
-  top: 0.75rem;
+  left: 16px;
+  top: 8px;
   z-index: 50;
-  padding: 0.5rem 0.9rem;
+  padding: 8px 16px;
   border-radius: 10px;
   background: var(--glass-solid);
   color: var(--ink);
@@ -219,7 +252,9 @@ p:last-child {
 }
 
 /* ------------------------------------------------------------------ */
-/* Background: three drifting orbs over a flat base                    */
+/* Background: five colour blobs and three glass lenses, drifting     */
+/* behind the content (transform only), with a fine noise overlay     */
+/* that breaks up banding on weak panels.                              */
 /* ------------------------------------------------------------------ */
 
 .field {
@@ -231,36 +266,131 @@ p:last-child {
   background: var(--bg);
 }
 
-.orb {
+.blob {
   position: absolute;
+  border-radius: 50%;
+  opacity: var(--blob-op);
+  will-change: transform;
+  animation: drift 30s ease-in-out infinite alternate;
+}
+
+.b1 {
   width: 62vmax;
   height: 62vmax;
-  border-radius: 50%;
-  opacity: var(--orb-opacity);
+  top: -30vmax;
+  left: -24vmax;
+  background: radial-gradient(closest-side, var(--blob-1), transparent);
+  animation-duration: 26s;
+}
+
+.b2 {
+  width: 58vmax;
+  height: 58vmax;
+  top: 20vh;
+  right: -26vmax;
+  background: radial-gradient(closest-side, var(--blob-2), transparent);
+  animation-duration: 33s;
+  animation-delay: -9s;
+}
+
+.b3 {
+  width: 60vmax;
+  height: 60vmax;
+  bottom: -34vmax;
+  left: -8vw;
+  background: radial-gradient(closest-side, var(--blob-3), transparent);
+  animation-duration: 38s;
+  animation-delay: -15s;
+}
+
+.b4 {
+  width: 42vmax;
+  height: 42vmax;
+  top: -16vmax;
+  right: -12vmax;
+  background: radial-gradient(closest-side, var(--blob-4), transparent);
+  animation-duration: 29s;
+  animation-delay: -4s;
+}
+
+.b5 {
+  width: 46vmax;
+  height: 46vmax;
+  top: 56vh;
+  left: -18vmax;
+  background: radial-gradient(closest-side, var(--blob-5), transparent);
+  animation-duration: 41s;
+  animation-delay: -21s;
+}
+
+/* Glass lenses: smaller, sharper, lit shapes that sit behind the panels
+   so the blur and the refraction at their edges are visible. */
+.lens {
+  position: absolute;
+  opacity: 0.9;
   will-change: transform;
-  animation: drift 28s ease-in-out infinite alternate;
+  animation: drift 34s ease-in-out infinite alternate;
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -6px 14px rgba(255, 255, 255, 0.18),
+    0 18px 40px -18px rgba(40, 30, 110, 0.35);
 }
 
-.orb-1 {
-  top: -20vmax;
-  left: -16vmax;
-  background: radial-gradient(closest-side, var(--orb-1), transparent);
-}
-
-.orb-2 {
-  top: 28vh;
-  right: -22vmax;
-  background: radial-gradient(closest-side, var(--orb-2), transparent);
+.lens-1 {
+  width: 26vmax;
+  height: 18vmax;
+  top: 26vh;
+  left: 2vw;
+  border-radius: 46% 54% 58% 42% / 52% 44% 56% 48%;
+  background: linear-gradient(150deg, rgba(255, 150, 190, 0.9), rgba(255, 190, 140, 0.6) 55%, rgba(255, 255, 255, 0.2));
   animation-duration: 34s;
+}
+
+.lens-2 {
+  width: 20vmax;
+  height: 24vmax;
+  top: 44vh;
+  right: 4vw;
+  border-radius: 60% 40% 44% 56% / 46% 58% 42% 54%;
+  background: linear-gradient(200deg, rgba(120, 220, 255, 0.85), rgba(150, 160, 255, 0.55) 60%, rgba(255, 255, 255, 0.2));
+  animation-duration: 39s;
   animation-delay: -12s;
 }
 
-.orb-3 {
-  bottom: -26vmax;
-  left: 18vw;
-  background: radial-gradient(closest-side, var(--orb-3), transparent);
-  animation-duration: 40s;
+.lens-3 {
+  width: 14vmax;
+  height: 14vmax;
+  bottom: 14vh;
+  left: 34vw;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.85), rgba(200, 160, 255, 0.55) 45%, rgba(160, 200, 255, 0.2) 80%);
+  animation-duration: 31s;
   animation-delay: -6s;
+}
+
+/* Fine noise: a tiled SVG turbulence as a data URI, soft-light blended. */
+.field::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: var(--noise-op);
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%27http%3A//www.w3.org/2000/svg%27 width=%27180%27 height=%27180%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.85%27 numOctaves=%272%27 stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23n)%27/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  pointer-events: none;
+}
+
+/* Narrow screens: keep the lenses out from behind the hero copy. */
+@media (max-width: 719px) {
+  .lens-1 {
+    top: auto;
+    bottom: 8vh;
+    left: -6vw;
+  }
+
+  .lens-2 {
+    top: 66vh;
+  }
 }
 
 @keyframes drift {
@@ -268,31 +398,63 @@ p:last-child {
     transform: translate3d(0, 0, 0) scale(1);
   }
   to {
-    transform: translate3d(6vw, 5vh, 0) scale(1.08);
+    transform: translate3d(4vw, -3vh, 0) scale(1.08);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .orb {
+  .blob,
+  .lens {
     animation: none;
   }
 }
 
 /* ------------------------------------------------------------------ */
-/* Liquid glass surfaces                                               */
+/* Liquid glass, one family for the nav, cards, buttons and panels.   */
+/* A tinted fill over the blur, a bright rim that is strongest at the */
+/* top left, a thin inner ring, a top highlight, a sheen, a very      */
+/* subtle warm and cool fringe, and a shadow tinted by what is behind. */
 /* ------------------------------------------------------------------ */
 
 .glass {
+  position: relative;
   background:
     linear-gradient(var(--glass-fill), var(--glass-fill)) padding-box,
-    linear-gradient(150deg, var(--glass-edge-hi) 0%, var(--glass-edge-lo) 45%, var(--glass-edge-lo) 70%, var(--glass-edge-hi) 100%) border-box;
+    linear-gradient(135deg, var(--glass-rim-hi) 0%, var(--glass-rim-lo) 38%, var(--glass-rim-lo) 62%, var(--glass-rim-hi) 100%) border-box;
   border: 1px solid transparent;
-  -webkit-backdrop-filter: blur(22px) saturate(170%);
-  backdrop-filter: blur(22px) saturate(170%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(24px) saturate(180%);
   box-shadow:
     inset 0 1px 0 var(--glass-inner),
-    0 34px 70px -34px var(--glass-shadow),
-    0 8px 18px -12px var(--glass-shadow);
+    inset 0 0 0 1px var(--glass-ring),
+    inset 1px 0 0 var(--fringe-warm),
+    inset -1px 0 0 var(--fringe-cool),
+    0 32px 64px -30px var(--glass-shadow),
+    0 14px 32px -16px var(--glass-shadow-tint);
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.glass:hover {
+  --glass-rim-hi: var(--glass-rim-hover);
+}
+
+.glass:active {
+  --glass-rim-hi: var(--glass-rim-hover);
+  transform: scale(0.995);
+}
+
+.glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(135deg, var(--glass-sheen) 0%, rgba(255, 255, 255, 0) 34%);
+  opacity: 0.5;
+}
+
+.glass > * {
+  position: relative;
 }
 
 /* Browsers without backdrop-filter get an opaque tint with the same edges. */
@@ -300,7 +462,7 @@ p:last-child {
   .glass {
     background:
       linear-gradient(var(--glass-solid), var(--glass-solid)) padding-box,
-      linear-gradient(150deg, var(--glass-edge-hi) 0%, var(--glass-edge-lo) 45%, var(--glass-edge-lo) 70%, var(--glass-edge-hi) 100%) border-box;
+      linear-gradient(135deg, var(--glass-rim-hi) 0%, var(--glass-rim-lo) 38%, var(--glass-rim-lo) 62%, var(--glass-rim-hi) 100%) border-box;
   }
 }
 
@@ -311,12 +473,12 @@ p:last-child {
 .nav-wrap {
   position: fixed;
   z-index: 20;
-  top: 14px;
+  top: 16px;
   left: 0;
   right: 0;
   display: flex;
   justify-content: center;
-  padding-inline: 12px;
+  padding-inline: 16px;
   pointer-events: none;
 }
 
@@ -327,7 +489,7 @@ p:last-child {
   justify-content: space-between;
   gap: 8px 16px;
   width: min(100%, 680px);
-  padding: 7px 7px 7px 14px;
+  padding: 8px 8px 8px 16px;
   border-radius: 999px;
 }
 
@@ -340,34 +502,55 @@ p:last-child {
 }
 
 .brand .mark {
-  width: 1.45rem;
-  height: 1.45rem;
+  width: 24px;
+  height: 24px;
 }
 
 .brand .wordmark {
   font-size: 1.6rem;
-  margin-top: 0.1em;
+  margin-top: 2px;
 }
 
 .nav-links {
   display: flex;
   flex-wrap: nowrap;
-  gap: 4px 14px;
+  gap: 4px 16px;
   margin: 0;
   padding: 0;
   list-style: none;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
 }
 
 .nav-links a {
+  position: relative;
   color: var(--ink-muted);
   text-decoration: none;
   white-space: nowrap;
+  padding-block: 4px;
+  transition: color 0.2s ease;
 }
 
-.nav-links a:hover {
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease;
+}
+
+.nav-links a:hover,
+.nav-links a:focus-visible {
   color: var(--ink);
-  text-decoration: underline;
+}
+
+.nav-links a:hover::after {
+  transform: scaleX(1);
 }
 
 .theme-toggle {
@@ -382,15 +565,25 @@ p:last-child {
   background: transparent;
   color: var(--ink);
   cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 .theme-toggle:hover {
   background: var(--glass-inner);
 }
 
+.theme-toggle:active {
+  transform: scale(0.92);
+}
+
 .theme-toggle svg {
   width: 20px;
   height: 20px;
+  transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.theme-toggle:hover svg {
+  transform: rotate(-20deg);
 }
 
 .icon-sun {
@@ -420,13 +613,13 @@ p:last-child {
 
 @media (max-width: 479px) {
   .nav {
-    gap: 6px 10px;
+    gap: 8px 8px;
     padding-left: 12px;
   }
 
   .nav-links {
-    gap: 4px 10px;
-    font-size: 0.82rem;
+    gap: 4px 12px;
+    font-size: 0.85rem;
   }
 
   .nav-links .optional {
@@ -452,20 +645,24 @@ p:last-child {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 3rem;
-  padding: 0.6rem 1.4rem;
+  min-height: 48px;
+  padding: 12px 24px;
   border-radius: 999px;
   font: inherit;
   font-weight: 600;
   text-align: center;
   text-decoration: none;
   color: var(--ink);
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.25s ease, background-color 0.2s ease;
 }
 
 .btn:hover {
-  transform: translateY(-1px);
+  transform: translateY(-2px);
   text-decoration: none;
+}
+
+.btn:active {
+  transform: translateY(0) scale(0.98);
 }
 
 .btn-primary {
@@ -473,23 +670,38 @@ p:last-child {
   border: 1px solid transparent;
   color: var(--accent-ink);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
     0 16px 34px -14px var(--accent-glow);
 }
 
 .btn-primary:hover {
   color: var(--accent-ink);
+  background: var(--accent-hi);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    0 22px 40px -14px var(--accent-glow);
+}
+
+.btn-glass:hover {
+  box-shadow:
+    inset 0 1px 0 var(--glass-inner),
+    inset 0 0 0 1px var(--glass-ring),
+    0 22px 44px -22px var(--glass-shadow-tint);
 }
 
 /* ------------------------------------------------------------------ */
-/* Hero                                                                */
+/* Hero: copy at the top, then the phone rising from the bottom edge  */
+/* below the buttons. The phone starts under the copy, so it cannot   */
+/* overlap the buttons at any height.                                  */
 /* ------------------------------------------------------------------ */
 
 .hero {
   position: relative;
   min-height: var(--vh);
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
-  padding-top: 104px;
+  padding-top: clamp(88px, 12vh, 104px);
 }
 
 .hero-copy {
@@ -507,25 +719,25 @@ p:last-child {
 .lockup {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  margin-bottom: 1.5rem;
+  gap: 16px;
+  margin-bottom: 16px;
 }
 
 .lockup .mark {
-  width: 3.4rem;
-  height: 3.4rem;
+  width: min(3.2rem, 6.4vh);
+  height: min(3.2rem, 6.4vh);
 }
 
 .lockup .wordmark {
-  font-size: clamp(3rem, 2.4rem + 3vw, 4.4rem);
+  font-size: min(clamp(3rem, 2.4rem + 3vw, 4.4rem), 9vh);
   margin-top: 0.12em;
 }
 
 .lede {
   max-width: 36ch;
-  margin: 1.1rem 0 0;
+  margin: 16px 0 0;
   font-size: clamp(1.05rem, 1rem + 0.35vw, 1.2rem);
-  line-height: 1.5;
+  line-height: 1.6;
   color: var(--ink-muted);
 }
 
@@ -533,42 +745,67 @@ p:last-child {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0.75rem;
-  margin-top: 2rem;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.hero-stage {
+  position: relative;
+  isolation: isolate;
+  flex: 1 1 0;
+  min-height: 0;
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow: visible;
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 128px), transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 128px), transparent 100%);
+}
+
+/* A soft coloured light behind the phone. */
+.hero-stage::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  top: 8%;
+  width: 100%;
+  height: 80%;
+  background: radial-gradient(closest-side, var(--phone-glow), transparent);
+  pointer-events: none;
 }
 
 .hero .hero-device {
-  position: absolute;
-  z-index: 0;
-  left: 50%;
-  top: calc(100% - var(--hd) * 0.5);
-  transform: translateX(-50%);
-  -webkit-mask-image: linear-gradient(to bottom, #000 30%, transparent 50%);
-  mask-image: linear-gradient(to bottom, #000 30%, transparent 50%);
+  width: var(--hw);
+  flex: none;
 }
 
 /* ------------------------------------------------------------------ */
-/* Device: a generic phone frame. No brand, no logo.                  */
+/* Device: a generic phone with a metallic rim and a glass reflection. */
+/* No brand, no logo.                                                  */
 /* ------------------------------------------------------------------ */
 
 .device {
   position: relative;
   width: var(--dw);
-  padding: calc(var(--dw) * 0.034);
-  border-radius: calc(var(--dw) * 0.15);
-  background: linear-gradient(150deg, #454B5C 0%, #15171F 26%, #0B0C11 70%, #2A2E3C 100%);
+  padding: calc(var(--dw) * 0.032);
+  border-radius: calc(var(--dw) * 0.155);
+  background:
+    linear-gradient(125deg, rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0) 30%),
+    linear-gradient(160deg, #8A90A6 0%, #2B3040 12%, #0E1017 44%, #1A1E2A 76%, #6A7189 100%);
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.22),
-    inset 0 1px 0 rgba(255, 255, 255, 0.35),
-    0 44px 80px -30px rgba(0, 0, 0, 0.7),
-    0 16px 34px -16px rgba(0, 0, 0, 0.5);
+    inset 0 0 0 1px rgba(255, 255, 255, 0.34),
+    inset 0 0 0 calc(var(--dw) * 0.018) rgba(0, 0, 0, 0.6),
+    inset 0 calc(var(--dw) * 0.01) 0 rgba(255, 255, 255, 0.3),
+    0 calc(var(--dw) * 0.12) calc(var(--dw) * 0.3) calc(var(--dw) * -0.08) rgba(0, 0, 0, 0.6);
 }
 
 /* Camera island */
 .device::after {
   content: "";
   position: absolute;
-  z-index: 2;
+  z-index: 4;
   top: calc(var(--dw) * 0.045);
   left: 50%;
   width: calc(var(--dw) * 0.25);
@@ -584,6 +821,7 @@ p:last-child {
   aspect-ratio: 540 / 1135;
   border-radius: calc(var(--dw) * 0.12);
   background: #0C0D12;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
 .screen img {
@@ -595,6 +833,17 @@ p:last-child {
   object-position: top;
 }
 
+/* Reflection sweep across the glass. --sw is set from --p while pinned. */
+.screen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(105deg, rgba(255, 255, 255, 0) 36%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0) 64%);
+  transform: translateX(calc(var(--sw, 0) * 1%));
+}
+
 /* ------------------------------------------------------------------ */
 /* Story. Stacked by default; pinned only when JavaScript runs and    */
 /* reduced motion is not requested. Scroll sets --p (0..1).           */
@@ -602,6 +851,7 @@ p:last-child {
 
 .story {
   position: relative;
+  isolation: isolate;
 }
 
 .scenes {
@@ -613,8 +863,8 @@ p:last-child {
 .scene {
   display: grid;
   justify-items: center;
-  gap: 28px;
-  padding-block: clamp(48px, 9vw, 96px);
+  gap: 32px;
+  padding-block: 48px;
 }
 
 .static-shot {
@@ -624,12 +874,12 @@ p:last-child {
 
 .card {
   width: min(100%, 520px);
-  padding: clamp(20px, 3vw, 30px);
+  padding: 24px 32px 32px;
   border-radius: 28px;
 }
 
 .card h2 {
-  margin-bottom: 0.6rem;
+  margin-bottom: 8px;
 }
 
 .card p {
@@ -637,8 +887,8 @@ p:last-child {
 }
 
 .kicker {
-  margin: 0 0 0.5rem;
-  font-size: 0.78rem;
+  margin: 0 0 8px;
+  font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -668,9 +918,24 @@ p:last-child {
   );
   /* Lift: 0 at the start (phone half cut), 1 once the phone has risen. */
   --r: clamp(0, calc(var(--p) * 8), 1);
+  /* Reflection position, from -60 to +60 across the scroll. */
+  --sw: calc((var(--p) - 0.5) * 120);
   --sway: 9vw;
   --tf: calc(var(--vh) - var(--hd) - 16px);
   --th: calc(var(--vh) - var(--hd) * 0.5);
+}
+
+/* Soft light behind the story phone. */
+.is-pinned .stage::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  top: 30%;
+  width: 100%;
+  height: 70%;
+  background: radial-gradient(closest-side, var(--phone-glow), transparent);
+  pointer-events: none;
 }
 
 .is-pinned .live-device {
@@ -718,7 +983,7 @@ p:last-child {
   position: absolute;
   left: 16px;
   right: 16px;
-  top: 84px;
+  top: 88px;
   display: block;
   padding: 0;
   opacity: min(
@@ -743,6 +1008,10 @@ p:last-child {
     left: 66%;
   }
 
+  .is-pinned .stage::before {
+    left: 66%;
+  }
+
   .is-pinned .scene {
     left: 7vw;
     right: auto;
@@ -757,16 +1026,26 @@ p:last-child {
 /* ------------------------------------------------------------------ */
 
 .block {
-  padding-block: clamp(56px, 10vw, 110px);
+  padding-block: 64px;
+}
+
+.wrap > .block:first-child {
+  padding-top: 48px;
 }
 
 .panel {
-  padding: clamp(24px, 4vw, 44px);
+  padding: 32px;
   border-radius: 32px;
 }
 
+@media (min-width: 720px) {
+  .panel {
+    padding: 48px;
+  }
+}
+
 .panel > * + * {
-  margin-top: 1rem;
+  margin-top: 16px;
 }
 
 .panel p {
@@ -777,33 +1056,37 @@ p:last-child {
 .panel-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem 1.25rem;
+  gap: 8px 24px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
+.panel-links a {
+  font-weight: 600;
+}
+
 .requirements {
   margin: 0;
-  padding-left: 1.2rem;
+  padding-left: 20px;
   color: var(--ink-muted);
 }
 
 .requirements li + li {
-  margin-top: 0.6rem;
+  margin-top: 8px;
 }
 
 .site-footer {
-  padding-block: 2.5rem 3rem;
+  padding-block: 48px 64px;
   color: var(--ink-muted);
-  font-size: 0.9rem;
+  font-size: 0.95rem;
 }
 
 .site-footer ul {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem 1.25rem;
-  margin: 0 0 1rem;
+  gap: 8px 24px;
+  margin: 0 0 16px;
   padding: 0;
   list-style: none;
 }
@@ -813,7 +1096,7 @@ p:last-child {
 }
 
 .site-footer p {
-  margin: 0 0 0.45rem;
+  margin: 0 0 8px;
 }
 
 /* ------------------------------------------------------------------ */
