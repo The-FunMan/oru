@@ -6,6 +6,7 @@
 package app.morphe.manager.ui.oru.focus
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -28,8 +29,8 @@ import app.morphe.manager.ui.oru.theme.OruGroupShape
 import app.morphe.manager.ui.viewmodel.HomeViewModel
 
 /**
- * The one line of the Expert Focus that says how the app is set up: source, channel, version, patches and installer
- * (see oruSetupSummary). Its Edit action opens the Setup sheet, which holds every control the line stands for.
+ * The summary of the Expert Focus that says how the app is set up: source, channel, version, patches and installer, in
+ * two lines (see oruSetupSummary). Its Edit action opens the Setup sheet, which holds every control the lines stand for.
  */
 @Composable
 internal fun OruFocusRows(
@@ -39,7 +40,7 @@ internal fun OruFocusRows(
     modifier: Modifier = Modifier,
 ) {
     val sheets = LocalOruExpertSheets.current
-    val summary = oruSetupSummary(rememberOruSetup(vm, home, item))
+    val lines = oruSetupSummary(rememberOruSetup(vm, home, item))
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -52,12 +53,18 @@ internal fun OruFocusRows(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        Text(
-            text = summary,
+        Column(
             modifier = Modifier.weight(1f).padding(end = SummaryGap),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
+            verticalArrangement = Arrangement.spacedBy(SummaryLineGap),
+        ) {
+            lines.forEach { line ->
+                Text(
+                    text = line,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
         TextButton(onClick = { sheets?.open(OruExpertSheet.Setup) }) {
             Text(stringResource(R.string.oru_action_edit))
         }
@@ -68,3 +75,4 @@ private val SummaryStart = 16.dp
 private val SummaryEnd = 8.dp
 private val SummaryVertical = 8.dp
 private val SummaryGap = 8.dp
+private val SummaryLineGap = 2.dp

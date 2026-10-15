@@ -140,23 +140,35 @@ internal fun rememberOruSetup(vm: OruFocusViewModel, home: HomeViewModel, item: 
     )
 }
 
-/** The summary line: the parts of [setup] as text, joined with a middle dot. */
+/**
+ * The summary as two lines: the source and channel, then the version, patches and installer. Each line joins its parts
+ * with a middle dot. A line with no parts is left out, so the list may hold one line or none.
+ */
 @Composable
-internal fun oruSetupSummary(setup: OruSetup): String = oruSetupParts(setup).map { part ->
-    when (part) {
-        is OruSetupPart.Source -> part.patchVersion
-            ?.let { stringResource(R.string.oru_focus_source_row_value, part.label, it) }
-            ?: part.label
-        is OruSetupPart.Channel -> when (val summary = part.summary) {
-            OruChannelSummary.Stable -> stringResource(R.string.oru_focus_channel_stable)
-            OruChannelSummary.PreRelease -> stringResource(R.string.oru_focus_channel_prerelease)
-            is OruChannelSummary.Mixed -> stringResource(R.string.oru_focus_channel_mixed, summary.preRelease, summary.sources)
-        }
-        is OruSetupPart.AppVersion -> part.version
-        is OruSetupPart.Patches -> stringResource(R.string.oru_focus_summary_patches, part.selected, part.total)
-        is OruSetupPart.Installer -> part.label
+internal fun oruSetupSummary(setup: OruSetup): List<String> {
+    val (sourceParts, detailParts) = oruSetupParts(setup).partition { part ->
+        part is OruSetupPart.Source || part is OruSetupPart.Channel
     }
-}.joinToString(separator = SummarySeparator)
+    val sourceLine = sourceParts.map { part -> oruSetupPartText(part) }.joinToString(separator = SummarySeparator)
+    val detailLine = detailParts.map { part -> oruSetupPartText(part) }.joinToString(separator = SummarySeparator)
+    return listOf(sourceLine, detailLine).filter { it.isNotEmpty() }
+}
+
+/** One part of the summary as text. */
+@Composable
+private fun oruSetupPartText(part: OruSetupPart): String = when (part) {
+    is OruSetupPart.Source -> part.patchVersion
+        ?.let { stringResource(R.string.oru_focus_source_row_value, part.label, it) }
+        ?: part.label
+    is OruSetupPart.Channel -> when (val summary = part.summary) {
+        OruChannelSummary.Stable -> stringResource(R.string.oru_focus_channel_stable)
+        OruChannelSummary.PreRelease -> stringResource(R.string.oru_focus_channel_prerelease)
+        is OruChannelSummary.Mixed -> stringResource(R.string.oru_focus_channel_mixed, summary.preRelease, summary.sources)
+    }
+    is OruSetupPart.AppVersion -> part.version
+    is OruSetupPart.Patches -> stringResource(R.string.oru_focus_summary_patches, part.selected, part.total)
+    is OruSetupPart.Installer -> part.label
+}
 
 /**
  * The Setup sheet of the Expert Focus: every setting of the app in one place, in the order Version, Source, Channel,
