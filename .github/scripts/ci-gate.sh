@@ -65,7 +65,11 @@ if [ "$mode" != dispatch ]; then
 fi
 
 missing_android() {
-  report | grep -q "^android	missing$"
+  # The report is read into a variable first: grep -q can exit before report has written every line, and with
+  # pipefail that would make report look failed (SIGPIPE) and so not missing.
+  local table
+  table=$(report)
+  grep -qxF $'android\tmissing' <<<"$table"
 }
 
 if missing_android; then
