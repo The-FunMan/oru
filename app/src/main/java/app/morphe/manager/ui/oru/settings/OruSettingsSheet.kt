@@ -43,7 +43,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -64,6 +66,9 @@ import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.morphe.manager.R
 import app.morphe.manager.ui.oru.components.OruFrostedSheet
@@ -131,11 +136,24 @@ fun OruSettingsSheet(
     // The Install with list of Advanced, nested over this sheet
     var showInstaller by rememberSaveable { mutableStateOf(false) }
 
+    // Whether Android shows Oru's notifications. It is read again on resume, since the permission can change in the
+    // system settings that the notifications helper opens
+    var notificationsAllowed by remember { mutableStateOf(hasNotificationPermission(context)) }
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner, context) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) notificationsAllowed = hasNotificationPermission(context)
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
+
     // Turning on background updates asks for the notification permission first
     var pendingKeepUpdated by remember { mutableStateOf(false) }
     val notificationPermission = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { granted ->
+        notificationsAllowed = granted
         if (pendingKeepUpdated) {
             pendingKeepUpdated = false
             // A refused permission leaves the switch off, since updates could not be shown anyway
@@ -242,6 +260,7 @@ fun OruSettingsSheet(
                             events = events,
                             onActivate = { row, on -> activate(row, on) },
                             onOpen = { row -> openRow(row) },
+                            notificationsOff = !notificationsAllowed,
                         )
                     }
                 }
@@ -348,6 +367,7 @@ private fun SettingsSection(
     events: OruSettingsEvents,
     onActivate: (OruSettingsRowUi, Boolean) -> Unit,
     onOpen: (OruSettingsRowUi) -> Unit,
+    notificationsOff: Boolean,
 ) {
     val name = stringResource(sectionNameRes(section.section))
     val reduced = rememberOruReducedMotion()
@@ -386,6 +406,7 @@ private fun SettingsSection(
                         events = events,
                         onToggle = { onActivate(row, it) },
                         onOpen = { onOpen(row) },
+                        notificationsOff = notificationsOff,
                     )
                 }
             }
@@ -400,9 +421,17 @@ private fun SettingsRowItem(
     events: OruSettingsEvents,
     onToggle: (Boolean) -> Unit,
     onOpen: () -> Unit,
+    notificationsOff: Boolean,
 ) {
     val title = stringResource(titleRes(row.id))
-    val supporting = supportingText(row)
+    // Updates are on but Android will not show their notifications: the helper says so, and the action leads to the setting
+    val notificationsBlocked = notificationsOff && row.id == OruSettingsRowId.KEEP_APPS_UPDATED &&
+        (row.value as? OruSettingsValue.Toggle)?.on == true
+    val supporting = if (notificationsBlocked) {
+        stringResource(R.string.oru_settings_notifications_off)
+    } else {
+        supportingText(row)
+    }
 
     when (val value = row.value) {
         is OruSettingsValue.Theme -> ChoiceRow(label = title) {
@@ -417,12 +446,15 @@ private fun SettingsRowItem(
                 onGlassStyleChange = { events.onGlassStyleSelected(it) },
             )
         }
-        is OruSettingsValue.Toggle -> OruSettingsRow(
-            title = title,
-            supporting = supporting,
-            control = OruRowControl.Switch(value.on),
-            onClick = { onToggle(!value.on) },
-        )
+        is OruSettingsValue.Toggle -> Column(modifier = Modifier.fillMaxWidth()) {
+            OruSettingsRow(
+                title = title,
+                supporting = supporting,
+                control = OruRowControl.Switch(value.on),
+                onClick = { onToggle(!value.on) },
+            )
+            if (notificationsBlocked) NotificationSettingsAction()
+        }
         is OruSettingsValue.Text -> OruSettingsRow(
             title = title,
             supporting = supporting,
@@ -436,6 +468,22 @@ private fun SettingsRowItem(
             control = OruRowControl.Chevron,
             onClick = onOpen,
         )
+    }
+}
+
+/** Opens Oru's notification setting, under the updates row when Android will not show notifications for Oru. */
+@Composable
+private fun NotificationSettingsAction() {
+    val context = LocalContext.current
+    TextButton(
+        onClick = {
+            context.startActivity(
+                Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                    .putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName),
+            )
+        },
+    ) {
+        Text(text = stringResource(R.string.oru_action_open_settings))
     }
 }
 
