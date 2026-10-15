@@ -1,37 +1,42 @@
-# Oru
+<div align="center">
 
-Oru patches Android apps on your own device. It takes an APK you already have, runs patch bundles on the phone, and installs the patched app.
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="site/assets/mark-dark.svg">
+  <img src="site/assets/mark-light.svg" width="96" alt="Oru mark">
+</picture>
 
-Oru is an Android app. It is not a ROM hack or a game.
+# oru
+
+Patch Android apps on your own device.
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 [![Latest release](https://img.shields.io/github/v/release/The-FunMan/oru)](https://github.com/The-FunMan/oru/releases/latest)
 [![CI](https://github.com/The-FunMan/oru/actions/workflows/ci.yml/badge.svg?branch=dev)](https://github.com/The-FunMan/oru/actions/workflows/ci.yml)
 
-## What Oru is and is not
+Project page: <https://the-funman.github.io/oru/>
 
-- Oru is an independent project. It is a general tool that runs patch bundles on the device, and the bundles are the ones you choose.
-- Oru does not provide, host or distribute any app, APK or patch for a specific third-party app. The default patch source is the upstream bundle, which Oru downloads from GitHub.
-- Which apps can be patched depends only on the patch sources you choose.
-- Oru is not a YouTube patcher, and it is not a Morphe or ReVanced product.
-- Oru contains no code or assets of Google's or YouTube's apps. It uses Google's Android libraries as they are published.
+</div>
 
-## Principles
+Oru patches Android apps on your own device. It takes an APK you already have, runs patch bundles on the phone, and installs the patched app.
 
-- **Opinionated defaults.** Oru picks the sensible path. A few switches remain for people who need them, such as pre-release channels.
-- **Simple.** Home lists your apps. Each app has one screen. A run shows the real stages and real counts, not invented progress.
-- **Your APK, your device.** Oru never downloads a stock app APK, and it does not upload APK files. It keeps copies of the original APKs it patches in its own storage. For a version you choose, Get APK opens the APKMirror page in your browser. You download the file and select it in Oru.
-- **No unmeasured claims.** Oru does not claim speed gains that have not been measured.
-- **Upstream patches.** Oru runs the patch bundles as their authors publish them. It does not change them.
+Oru is an Android app. It is not a ROM hack or a game.
 
-## Relationship to Morphe
+<div align="center">
 
-Oru is built on Morphe Manager, which is open source under the GNU General Public License version 3 with the additional terms in [NOTICE](NOTICE). Morphe Manager is built on ReVanced Manager and Universal ReVanced Manager. Oru keeps their credits and the notices in [NOTICE](NOTICE).
+<img src="site/assets/shots/run-start.webp" width="200" alt="Oru run screen at the start of a patch run, with the progress hexagon nearly empty.">
+<img src="site/assets/shots/run-writing.webp" width="200" alt="Oru run screen while the patched app is written, with the hexagon about half full.">
+<img src="site/assets/shots/run-installed.webp" width="200" alt="Oru run screen after the install, with a complete green hexagon and a check mark.">
+<img src="site/assets/shots/settings.webp" width="200" alt="Oru Settings sheet with style, animation, update, storage and signing key rows.">
 
-- Oru is not made, endorsed or supported by the Morphe project.
-- The name Morphe is not used for Oru's own identity. Oru has its own name, package name and artwork. The name Morphe appears in the credits, the licence texts, and the names of the image files that the custom branding options read.
-- Report problems with Oru in this repository, not to the upstream projects.
-- Patches are the work of their authors. The default patch source is the bundle of the Morphe project, and each bundle is made by its own authors.
+</div>
+
+## Why Oru
+
+- **Simple and Expert.** Simple uses the recommended patches. Expert mode, turned on under Advanced in Settings, lets you choose patches and their options.
+- **Patch sources you choose.** Each app uses the sources you leave on for it. Oru warns you when patches come from more than one source.
+- **One progress for the whole run.** A run shows the real stages and real counts, not invented progress.
+- **Your APK, selected in the app.** Pick an app installed on this device, or select an APK file you already have.
+- **Everything on the device.** Patching runs on the phone. Oru has no accounts and no analytics, and it does not upload your APK files.
 
 ## Install
 
@@ -46,14 +51,6 @@ The release workflows check the signing certificate before they publish. The cer
 To receive new releases automatically, add `https://github.com/The-FunMan/oru` to [Obtainium](https://github.com/ImranR98/Obtainium) and let it track GitHub releases. Turn on pre-releases only if you want development builds.
 
 Oru also checks for new releases of itself when it starts. When you choose to update, it downloads the release APK from GitHub, checks it against `SHA256SUMS.txt` and the installed signature, and then asks Android to install it.
-
-## Requirements
-
-- Android 8.0 (API 26) or newer.
-- Shizuku is optional. When Shizuku is running and Oru is allowed to use it, Oru can install without showing the system prompt.
-- Root is optional. When the device is rooted and you grant root access, Oru can install through root.
-- Free storage for the original APK copy, the patched output and the app data. Check the size of the app you want to patch first.
-- Oru declares the permissions it needs: internet access, installing and removing apps, notifications, and all-files storage access, which it uses to read files you select.
 
 ## How patching works
 
@@ -71,7 +68,30 @@ Oru runs patch bundles. The default source is the patch bundle of the Morphe pro
 
 You can add more sources: a GitHub or GitLab repository, a bundle at an https address, or a local `.mpp` file. Each bundle is made and licensed by its authors. Oru does not review or vouch for the patches in a bundle.
 
-## Network use
+## Requirements
+
+- Android 8.0 (API 26) or newer.
+- Shizuku is optional. When Shizuku is running and Oru is allowed to use it, Oru can install without showing the system prompt.
+- Root is optional. When the device is rooted and you grant root access, Oru can install through root.
+- Free storage for the original APK copy, the patched output and the app data. Check the size of the app you want to patch first.
+- Oru declares the permissions it needs: internet access, installing and removing apps, notifications, and all-files storage access, which it uses to read files you select.
+
+## Principles
+
+- **Opinionated defaults.** Oru picks the sensible path. A few switches remain for people who need them, such as pre-release channels.
+- **Simple.** Home lists your apps. Each app has one screen. A run shows the real stages and real counts, not invented progress.
+- **Your APK, your device.** Oru never downloads a stock app APK, and it does not upload APK files. It keeps copies of the original APKs it patches in its own storage. For a version you choose, Get APK opens the APKMirror page in your browser. You download the file and select it in Oru.
+- **No unmeasured claims.** Oru does not claim speed gains that have not been measured.
+- **Upstream patches.** Oru runs the patch bundles as their authors publish them. It does not change them.
+
+## Contributing
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md) first. Open an issue before a feature pull request, and send pull requests to `dev`. Report security problems through the private advisory form in the Security tab, not in public issues. See [SECURITY.md](SECURITY.md).
+
+Maintainers: the release and maintenance checklists are in [docs/maintainers/RUNBOOK.md](docs/maintainers/RUNBOOK.md).
+
+<details>
+<summary><b>Network use</b></summary>
 
 Oru has no accounts. It does not send analytics or crash reports, and it does not receive push messages. In the Oru build, it contacts only these hosts:
 
@@ -86,15 +106,10 @@ Get APK and the other links in the app open in your browser. Oru does not fetch 
 
 Oru does not contact `api.morphe.software` or any other service of the Morphe project, and it does not fetch the list of blocked patch sources. GitHub and the other hosts see your IP address and the requests, as with any web request.
 
-## Privacy
+</details>
 
-- Oru keeps its data in the app's own storage on the device: your app list, patch choices and settings, the signing keystore, copies of the original APKs, and the patched APKs.
-- Oru does not upload any of this data. Apart from the requests listed in Network use, nothing leaves the device unless you send it yourself.
-- Exports that you start, the keystore, the settings and the debug log, are saved to your Downloads folder. The keystore export contains your signing key, so keep it private. The settings export includes your GitHub token only if you turn on the option for that.
-- The debug log can contain names and file paths. Read it before you share it.
-- Oru requires no account, and it has no analytics.
-
-## Building from source
+<details>
+<summary><b>Building from source</b></summary>
 
 Requirements:
 
@@ -111,15 +126,31 @@ export GITHUB_TOKEN=<token with read:packages>   # only if Gradle asks for it
 
 On Windows, use `gradlew.bat`. A release build (`assembleOruRelease`) needs your own signing key at `app/keystore.jks` and the variables `KEYSTORE_PASSWORD`, `KEYSTORE_ENTRY_ALIAS` and `KEYSTORE_ENTRY_PASSWORD`, described in `app/build.gradle.kts`. Without the key, release tasks stop with an error. For local testing, pass `-PsignAsDebug` to sign with the debug key.
 
-## Contributing
+</details>
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md) first. Open an issue before a feature pull request, and send pull requests to `dev`. Report security problems through the private advisory form in the Security tab, not in public issues. See [SECURITY.md](SECURITY.md).
-
-Maintainers: the release and maintenance checklists are in [docs/maintainers/RUNBOOK.md](docs/maintainers/RUNBOOK.md).
-
-## Translations
+<details>
+<summary><b>Translations</b></summary>
 
 Oru uses the English strings in `app/src/main/res/values/strings.xml`, with the Oru overrides in `app/src/oru/res/`. Translations that are in the repository are used as they are. Corrections go through pull requests to the `values-*` folders.
+
+</details>
+
+## What Oru is and is not
+
+- Oru is an independent project. It is a general tool that runs patch bundles on the device, and the bundles are the ones you choose.
+- Oru does not provide, host or distribute any app, APK or patch for a specific third-party app. The default patch source is the upstream bundle, which Oru downloads from GitHub.
+- Which apps can be patched depends only on the patch sources you choose.
+- Oru is not a patcher for any one app, and it is not a Morphe or ReVanced product.
+- Oru contains no code or assets of the apps it can patch. It uses Google's Android libraries as they are published.
+
+## Relationship to Morphe
+
+Oru is built on Morphe Manager, which is open source under the GNU General Public License version 3 with the additional terms in [NOTICE](NOTICE). Morphe Manager is built on ReVanced Manager and Universal ReVanced Manager. Oru keeps their credits and the notices in [NOTICE](NOTICE).
+
+- Oru is not made, endorsed or supported by the Morphe project.
+- The name Morphe is not used for Oru's own identity. Oru has its own name, package name and artwork. The name Morphe appears in the credits, the licence texts, and the names of the image files that the custom branding options read.
+- Report problems with Oru in this repository, not to the upstream projects.
+- Patches are the work of their authors. The default patch source is the bundle of the Morphe project, and each bundle is made by its own authors.
 
 ## Credits
 
@@ -132,6 +163,14 @@ Oru is a modified version of Morphe Manager (https://github.com/MorpheApp/morphe
 - Patching an app can change how it behaves and may break it. Patching may also go against the terms of service of that app. You are responsible for the apps you patch, for the APK files you use, and for how you use the result. Use only files you are entitled to use.
 - Oru does not, by itself, bypass any protection of an app, and it never downloads a stock APK. Any change to an app comes from the patch bundle you choose to run.
 - Oru is provided as is, without warranty of any kind, as described in sections 15 and 16 of the GPLv3.
+
+## Privacy
+
+- Oru keeps its data in the app's own storage on the device: your app list, patch choices and settings, the signing keystore, copies of the original APKs, and the patched APKs.
+- Oru does not upload any of this data. Apart from the requests listed in Network use, nothing leaves the device unless you send it yourself.
+- Exports that you start, the keystore, the settings and the debug log, are saved to your Downloads folder. The keystore export contains your signing key, so keep it private. The settings export includes your GitHub token only if you turn on the option for that.
+- The debug log can contain names and file paths. Read it before you share it.
+- Oru requires no account, and it has no analytics.
 
 ## License
 

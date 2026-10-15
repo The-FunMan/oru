@@ -164,3 +164,22 @@ Read this before doing it. The signing key is part of the identity that Android 
 - **When:** right after each stable release is published.
 - **Steps:** bump `app/gradle.properties` on `dev` to the next version. The details are in `release-stable.md` ("After a stable release is published").
 - **Verify:** a dev push builds. Until the bump, `next-dev-version.sh` fails with "tag vX.Y.Z already exists".
+
+## 15. Screenshots for the README and the site
+
+- **When:** when the app's screens change, or when a new screenshot is added to `site/assets/shots/`.
+- **Who:** the owner.
+- **Rules:**
+  - Crop the status bar. Keep the screen content only.
+  - No third-party app names, package names, logos or app icons, accounts, email addresses, device names, notifications or file names that reveal a specific third-party app.
+  - No patch names that reveal a specific third-party app.
+  - Check each image visually before it is committed. Metadata is not enough.
+  - Prefer the run, install and settings screens.
+  - Keep each image under 60 KB as WebP.
+- **Steps:** export the screen as PNG, then produce the WebP with the commands below. Use the same width (540 px), so the page and the README keep the same proportions.
+  1. Crop the status bar, for example `ffmpeg -i in.png -vf "crop=iw:ih-H:0:H" crop.png`, where `H` is the status bar height in pixels.
+  2. Scale to 540 px wide, keeping the aspect ratio: `ffmpeg -i crop.png -vf "scale=540:-1:flags=lanczos" scaled.png`.
+  3. Encode as WebP at a quality that stays under 60 KB: `ffmpeg -i scaled.png -c:v libwebp -quality 80 out.webp`. Lower the quality if the file is larger.
+  4. Check the result by opening it, then add it to `site/assets/shots/` and update the alt text in `site/index.html` and `README.md`.
+- **Verify:** `bash scripts/check-site.sh` passes, and each image is under 60 KB.
+- **Time:** 15 to 30 minutes for a new set.
