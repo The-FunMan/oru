@@ -630,7 +630,7 @@ private fun OruHomeCard.benefitText(): String = when {
 /** The one sentence of Simple. The APK sentence names the app and the version the APK has to be. */
 @Composable
 private fun OruHomeCard.sentenceText(): String = when (status.simpleSentence()) {
-    OruHomeSentence.Checking -> stringResource(R.string.oru_chip_checking)
+    OruHomeSentence.Checking -> stringResource(R.string.oru_state_checking_phone)
     OruHomeSentence.NotChecked -> stringResource(R.string.oru_simple_status_not_checked)
     OruHomeSentence.NeedsApk -> version?.let { stringResource(R.string.oru_simple_status_needs, item.displayName, it) }
         ?: stringResource(R.string.oru_simple_status_needs_plain, item.displayName)
