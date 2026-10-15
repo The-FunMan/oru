@@ -47,7 +47,7 @@
 
     <!-- Focus rows -->
     <string name="oru_focus_channel_mixed">%1$d of %2$d on pre-release</string>
-    <string name="oru_focus_repatch">Re-patch from the saved copy</string>
+    <string name="oru_focus_repatch">Patch again from saved copy</string>
     <string name="oru_focus_repatch_value">Starts from the APK saved after your last patch</string>
     <string name="oru_action_close">Close</string>
 </resources>

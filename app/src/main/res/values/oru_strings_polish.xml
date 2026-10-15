@@ -6,6 +6,6 @@
 <resources>
     <string name="oru_focus_dock_find_short">Find APK</string>
     <string name="oru_focus_dock_open_again">Open again</string>
-    <string name="oru_focus_dock_saved">Patch saved copy</string>
+    <string name="oru_focus_dock_saved">Patch from saved copy</string>
     <string name="oru_focus_dock_installed">Use installed app</string>
 </resources>

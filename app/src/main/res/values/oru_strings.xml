@@ -52,8 +52,8 @@
     <string name="oru_hint_return_download">Download the file, then come back here.</string>
 
     <!-- Home card actions -->
-    <string name="oru_action_get_apk">Get APK</string>
-    <string name="oru_action_find_apkmirror">Find on APKMirror</string>
+    <string name="oru_action_get_apk">Find APK</string>
+    <string name="oru_action_find_apkmirror">Find APK</string>
     <string name="oru_action_use_file">Use a file</string>
     <string name="oru_action_choose_file">Choose the file</string>
     <string name="oru_action_open_apkmirror_again">Open APKMirror again</string>
