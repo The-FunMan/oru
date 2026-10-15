@@ -365,7 +365,10 @@ private fun IslandBody(
     } else {
         stringResource(R.string.oru_island_expanded)
     }
-    val choose: (OruIslandTab) -> Unit = { tab ->
+    // A double tap on a section would open it and then reach the screen it opened; the second tap is ignored here
+    val tapGate = remember { OruTapGate() }
+    val choose: (OruIslandTab) -> Unit = choose@{ tab ->
+        if (!tapGate.accept()) return@choose
         val wasCollapsed = state.collapsed
         if (wasCollapsed) state.expand()
         // The collapse or the expansion is the tick; a choice made while open gets its own

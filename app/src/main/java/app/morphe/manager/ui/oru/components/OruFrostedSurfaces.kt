@@ -103,6 +103,8 @@ fun OruFrostedSheet(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
     fill: OruSurfaceFill = rememberOruSurfaceFill(),
+    /** Takes the input of the whole sheet, scrim included, while it is closed (see [oruTapSettle]). */
+    settle: OruTapGate? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     val scheme = MaterialTheme.colorScheme
@@ -120,7 +122,8 @@ fun OruFrostedSheet(
         enabled = visible,
         onBack = onDismiss,
     )
-    BoxWithConstraints(modifier = modifier.fillMaxSize()) {
+    val rootModifier = modifier.fillMaxSize().let { root -> if (settle != null) root.oruTapSettle(settle) else root }
+    BoxWithConstraints(modifier = rootModifier) {
         val maxSheetHeight = maxHeight * SheetHeightShare
         // Composed only while it shows, so a hidden scrim takes no taps; drawn at the alpha of the fade
         if (visible || scrimAlpha > 0f) {

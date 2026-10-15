@@ -5,6 +5,11 @@
 
 package app.morphe.manager.ui.oru.components
 
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.awaitPointerEventScope
+import androidx.compose.ui.input.pointer.pointerInput
+
 /**
  * Takes one tap and ignores the taps that follow it within [windowMs], so a double tap on a navigation control or on
  * a button that sits where another one was does not act twice. A rejected tap does not start a window of its own.
@@ -25,12 +30,16 @@ class OruTapGate(
         lastAt = clock()
     }
 
+    /** Whether the gate is open now, without taking a tap. */
+    fun isOpen(): Boolean {
+        val last = lastAt ?: return true
+        return clock() - last >= windowMs
+    }
+
     /** Whether a tap is taken now. A taken tap starts the next window. */
     fun accept(): Boolean {
-        val now = clock()
-        val last = lastAt
-        if (last != null && now - last < windowMs) return false
-        lastAt = now
+        if (!isOpen()) return false
+        lastAt = clock()
         return true
     }
 
@@ -39,5 +48,18 @@ class OruTapGate(
         const val DEFAULT_WINDOW_MS = 400L
 
         private const val NANOS_PER_MILLI = 1_000_000L
+    }
+}
+
+/**
+ * Takes the pointer input away while [gate] is closed: the taps that a double tap sends into a screen as it opens do not
+ * reach its controls, or the scrim that dismisses it. It consumes in the initial pass, before the controls see the events.
+ */
+fun Modifier.oruTapSettle(gate: OruTapGate): Modifier = pointerInput(gate) {
+    awaitPointerEventScope {
+        while (true) {
+            val event = awaitPointerEvent(PointerEventPass.Initial)
+            if (!gate.isOpen()) event.changes.forEach { it.consume() }
+        }
     }
 }

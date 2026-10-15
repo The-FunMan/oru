@@ -67,6 +67,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.morphe.manager.R
 import app.morphe.manager.ui.oru.components.OruFrostedSheet
+import app.morphe.manager.ui.oru.components.OruTapGate
 import app.morphe.manager.ui.oru.components.OruGlassToggle
 import app.morphe.manager.ui.oru.components.OruRowControl
 import app.morphe.manager.ui.oru.components.OruSectionLabel
@@ -117,10 +118,13 @@ fun OruSettingsSheet(
     var page by rememberSaveable { mutableStateOf(OruSettingsPages.startPage(open)) }
     var advancedGroup by rememberSaveable { mutableStateOf(open.advancedGroup) }
     var wasVisible by remember { mutableStateOf(visible) }
+    // The taps a double tap on the island sends as the sheet opens are not taken by its rows (see OruFrostedSheet)
+    val settleGate = remember { OruTapGate() }
     // Taken in the composition that opens the sheet, not in an effect after it: the first frame already shows that page
     if (visible && !wasVisible) {
         page = OruSettingsPages.startPage(open)
         advancedGroup = open.advancedGroup
+        settleGate.arm()
     }
     wasVisible = visible
 
@@ -176,7 +180,7 @@ fun OruSettingsSheet(
         }
     }
 
-    OruFrostedSheet(visible = visible, onDismiss = onDismiss) {
+    OruFrostedSheet(visible = visible, onDismiss = onDismiss, settle = settleGate) {
         // Advanced has its own back: the chevron and the back gesture return to the list, and only the list dismisses
         BackHandler(enabled = OruSettingsPages.handlesBack(page)) {
             OruSettingsPages.back(page)?.let { page = it }

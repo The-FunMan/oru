@@ -53,6 +53,19 @@ class OruTapGateTest {
     }
 
     @Test
+    fun `isOpen reports the window without taking a tap`() {
+        val clock = ManualClock()
+        val gate = gate(clock)
+        assertTrue(gate.isOpen())
+        assertTrue(gate.accept())
+        clock.now = 200L
+        assertFalse(gate.isOpen())
+        clock.now = 400L
+        assertTrue(gate.isOpen())
+        assertTrue(gate.accept())
+    }
+
+    @Test
     fun `a screen armed when it appears ignores the taps in its first moments`() {
         val clock = ManualClock(now = 1_000L)
         val gate = gate(clock)
