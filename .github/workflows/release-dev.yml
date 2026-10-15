@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: read
+  packages: read   # the Morphe library comes from GitHub Packages, which wants a token even for public reads
 
 concurrency:
   group: release-dev
@@ -23,6 +24,8 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 75
     environment: dev-release  # only this job can read the key
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
     outputs:
       tag: ${{ steps.version.outputs.tag }}
       skip: ${{ steps.version.outputs.skip }}

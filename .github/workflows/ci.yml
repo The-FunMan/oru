@@ -10,6 +10,7 @@ on:
 
 permissions:
   contents: read
+  packages: read   # the Morphe library comes from GitHub Packages, which wants a token even for public reads
 
 concurrency:
   group: ci-${{ github.event.pull_request.number || github.ref }}
@@ -19,6 +20,8 @@ jobs:
   android:
     runs-on: ubuntu-24.04
     timeout-minutes: 75
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
