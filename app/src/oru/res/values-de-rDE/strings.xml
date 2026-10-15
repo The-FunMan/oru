@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="adaptive_icon_guide_png_body">Ein Logo auf transparentem Hintergrund funktioniert am besten, wobei die Hintergrundfarbe unten gewählt wird. Ein Bild ohne Transparenz füllt stattdessen das gesamte Symbol aus, und die Design- und Benachrichtigungssymbole behalten dann das Oru-Logo.</string>
+    <string name="adaptive_icon_no_transparency_warning">Dieses Bild hat keine transparenten Pixel, daher behalten die Design- und Benachrichtigungssymbole das Oru-Logo</string>
+    <string name="battery_optimization_dialog_description">Auf einigen Geräten wird das Patchen unterbrochen, sobald die App minimiert wird. Erlaube Oru, ohne Akkuoptimierung im Hintergrund zu laufen, um sicherzustellen, dass der Vorgang zuverlässig abgeschlossen wird</string>
+    <string name="deep_link_add_source_message">Möchtest du diese Patch-Quelle zu Oru hinzufügen?</string>
+    <string name="external_batch_patch_description">%s möchte Oru Apps patchen und installieren</string>
+    <string name="home_apk_helper_description">Oru wird die untenstehende Hilfs-App bitten, die ursprüngliche APK herunterzuladen und die Datei zurückzugeben</string>
+    <string name="home_apk_helper_installed_unavailable">Oru konnte die installierte App nicht verwenden</string>
+    <string name="home_apk_helper_warning">Fahren Sie nur fort, wenn Sie dieser Hilfs-App vertrauen. Oru überprüft das Paket, die Version und die Signatur der empfangenen Datei, bevor sie gepatcht wird</string>
+    <string name="home_apk_helper_warning_unverified">Fahren Sie nur fort, wenn Sie dieser Hilfs-App vertrauen. Oru kann die Signatur dieser APK nicht überprüfen, sodass eine geänderte Datei nicht erkannt würde</string>
+    <string name="home_app_filter_not_patched_description">Apps, die du noch nicht in Oru gepatcht hast</string>
+    <string name="home_app_filter_patched_description">Apps, die du mit Oru gepatcht oder gespeichert hast</string>
+    <string name="home_app_filter_uninstalled_description">Apps, die mit Oru gepatcht wurden und nicht mehr auf diesem Gerät vorhanden sind</string>
+    <string name="home_app_info_app_deleted_description">Diese App wurde außerhalb von Oru deinstalliert. Repatchen Sie sie, um die Funktionalität wiederherzustellen</string>
+    <string name="home_app_info_install_unverified">Oru kann nicht bestätigen, dass die installierte App die Version ist, die gepatcht wurde. Patchen Sie sie erneut oder installieren Sie sie aus der gespeicherten APK neu, um die Funktionen wiederherzustellen</string>
+    <string name="home_app_info_not_patched_description">Eine ungepatchte Version dieser App ist installiert. Oru hat immer noch seinen vorherigen Patch-Datensatz</string>
+    <string name="home_download_instructions_download_button_toast_6">Sie sind jetzt ein offizieller Oru Button Tester 🏅</string>
+    <string name="home_download_instructions_step2_search_note">Oru kann nicht für diese Websites bürgen. Überspringen Sie diejenigen, die statt einer APK-Datei einen eigenen App-Store anbieten.</string>
+    <string name="home_download_instructions_step4">Nachdem der Download abgeschlossen ist, kehren Sie zu Oru zurück</string>
+    <string name="home_download_instructions_step4_mount">Nach der Installation der originalen APK, kehren Sie zu Oru zurück</string>
+    <string name="home_held_back_title">Eine Patch-Quelle hat Oru zum Absturz gebracht</string>
+    <string name="home_outdated_manager_title">Oru ist veraltet</string>
+    <string name="home_update_available">Update für Oru verfügbar</string>
+    <string name="installer_shizuku_error_permission">Die Shizuku-Berechtigung fehlt. Erteilen Sie Oru die Berechtigung und versuchen Sie es erneut.</string>
+    <string name="installer_status_shizuku_permission">Erlauben Sie Oru von der Shizuku-App die Berechtigung.</string>
+    <string name="installing_manager_update_hint">Oru wird geschlossen, um das Update abzuschließen.</string>
+    <string name="launch_app_unverified">Oru konnte nicht überprüfen, dass die installierte App der von ihm gepatchte Build ist</string>
+    <string name="notification_bundle_update_text_unversioned">Tippen Sie, um Oru zu öffnen und zu aktualisieren</string>
+    <string name="notification_channel_manager_updates">Oru-Updates</string>
+    <string name="notification_channel_manager_updates_description">Benachrichtigungen über neue Oru-Versionen</string>
+    <string name="notification_channel_patcher_description">Wird angezeigt, während Oru eine App im Hintergrund patcht</string>
+    <string name="notification_mount_replaced_text">v%1$s hat die gepatchte v%2$s ersetzt. Öffne Oru, um sie wiederherzustellen</string>
+    <string name="notification_permission_dialog_description">Oru benötigt die Berechtigung für Benachrichtigungen, um Sie zu benachrichtigen, wenn Updates im Hintergrund verfügbar sind</string>
+    <string name="onboarding_settings_desc">Passen Sie Oru an: Aussehen, erweiterte Optionen und Systemtools</string>
+    <string name="patcher_incompatible_patcher_description">Die Quelle &lt;b&gt;%1$s&lt;/b&gt; erfordert Patcher &lt;b&gt;%2$s&lt;/b&gt; oder neuer. Aktualisiere Oru, um sie zu verwenden</string>
+    <string name="patcher_installed_conflict_body">"Oru signiert gepatchte Apps mit seinem eigenen Zertifikat, welches sich von dem des Originals unterscheidet. Unter Android muss die vorhandene Version entfernt werden, bevor die gepatchte App installiert werden kann.
+
+Durch die Deinstallation werden alle App-Daten dauerhaft gelöscht"</string>
+    <string name="patcher_storage_permission_description_api30">Eine oder mehrere Patch-Optionen verweisen auf Pfade, die Oru nicht lesen kann. Erlaube den Speicherzugriff und tippe auf die Schaltfläche, dann beginnt das Patchen automatisch</string>
+    <string name="patcher_storage_permission_hint">Tipp: Verschiebe Dateien nach /Android/data/app.oru.manager/files/ - keine zusätzlichen Berechtigungen erforderlich</string>
+    <string name="root_mount_module_unmount_warning">Wenn KernelSU standardmäßig das Modul \"Aushängen\" aktiviert hat, öffnen Sie KernelSU &gt; Superuser &gt; die App, die Sie gemountet haben &gt; Profil &gt; Benutzerdefiniert und deaktivieren Sie das Modul \"Aushängen\". Andernfalls kann die gemountete gepatchte APK nicht wirksam werden, auch wenn Oru sie als gemountet anzeigt.</string>
+    <string name="settings_advanced_expert_mode_description">Aktiviert komplexe Oru-Patch-Einstellungen und Anpassungsoptionen</string>
+    <string name="settings_advanced_github_pat_export_include_supporting">Fügt diesen PAT zu den exportierten Oru-Einstellungen hinzu</string>
+    <string name="settings_advanced_patch_options_custom_branding_custom_icon_instruction">"Ordner mit Bildern, die als benutzerdefiniertes Icon verwendet werden sollen.
+
+Der Ordner muss einen oder mehrere der folgenden Ordner enthalten, abhängig von der DPI des Geräts:
+- mipmap-mdpi
+- mipmap-hdpi
+- mipmap-xhdpi
+- mipmap-xxhdpi
+- mipmap-xxxhdpi
+
+Jeder der Ordner muss alle folgenden Dateien enthalten:
+morphe_adaptive_background_custom.png
+morphe_adaptive_foreground_custom.png
+
+Die Bildgrößen müssen wie folgt sein:
+- mipmap-mdpi: 108x108 px
+- mipmap-hdpi: 162x162 px
+- mipmap-xhdpi: 216x216 px
+- mipmap-xxhdpi: 324x324 px
+- mipmap-xxxhdpi: 432x432 px
+
+Optional enthält der Pfad einen 'drawable'-Ordner mit einer monochromen Icon-Datei:
+morphe_adaptive_monochrome_custom.xml
+
+Optional enthält der Pfad ein Benachrichtigungsicon in einem der folgenden Formate:
+- XML-Vektor-Drawable im 'drawable'-Ordner:
+  morphe_notification_icon_custom.xml
+- PNG-Rasterbilder in 'drawable-dpi'-Ordnern:
+  drawable-mdpi/morphe_notification_icon_custom.png (24x24 px)
+  drawable-hdpi/morphe_notification_icon_custom.png (36x36 px)
+  drawable-xhdpi/morphe_notification_icon_custom.png (48x48 px)
+  drawable-xxhdpi/morphe_notification_icon_custom.png (72x72 px)
+  drawable-xxxhdpi/morphe_notification_icon_custom.png (96x96 px)"</string>
+    <string name="settings_advanced_patch_options_custom_header_instruction">"Ordner mit Bildern für ein benutzerdefiniertes Header-Logo.
+
+Der Ordner muss einen oder mehrere der folgenden Ordner enthalten, je nach DPI des Geräts:
+- drawable-hdpi
+- drawable-xhdpi
+- drawable-xxhdpi
+- drawable-xxxhdpi
+
+Jeder der Ordner muss alle folgenden Dateien enthalten:
+morphe_header_custom_light.png
+morphe_header_custom_dark.png
+
+Die Bildgrößen müssen wie folgt sein:
+- drawable-hdpi: 194x72 px
+- drawable-xhdpi: 258x96 px
+- drawable-xxhdpi: 387x144 px
+- drawable-xxxhdpi: 512x192 px"</string>
+    <string name="settings_advanced_updates_allow_metered_description">Ermöglicht das Herunterladen von Oru- und Patch-Updates über mobile Daten</string>
+    <string name="settings_advanced_updates_manager_prereleases_description">Früher Zugang zu neuen Oru-Versionen</string>
+    <string name="settings_advanced_updates_prerelease_warning_message">"Vorabversionen von Oru befinden sich noch in der Entwicklung und können instabil sein.
+
+Patches sind nicht betroffen: Aktivieren Sie Vorab-Patches für jede Quelle in der Liste der Patch-Quellen"</string>
+    <string name="settings_appearance_app_icon_selector_description">Wie Oru auf deinem Startbildschirm und in der App-Schublade aussieht.</string>
+    <string name="settings_auto_uninstall_warning_message">Wenn Android während der automatischen Shizuku-Installation einen Signaturkonflikt meldet, deinstalliert Oru die vorhandene App, bevor die gepatchte APK installiert wird.</string>
+    <string name="settings_system_apk_download_helper_warning">Die APK stammt von der Hilfs-App, also vertraue nur Apps, die du kennst. Oru prüft weiterhin das Paket, die Version und die Signatur jeder Datei, bevor sie gepatcht wird.</string>
+    <string name="settings_system_custom_file_picker_description">Durchsuchen Sie den Speicher mit dem integrierten Dateiauswahldialog von Oru anstelle der systemspezifischen Standardeinstellung</string>
+    <string name="settings_system_export_manager_settings_fail">Exportieren der Oru-Einstellungen fehlgeschlagen: %s</string>
+    <string name="settings_system_export_manager_settings_success">Oru-Einstellungen exportiert</string>
+    <string name="settings_system_import_manager_settings_description">Sichert und stellt Ihre Oru-Einstellungen wieder her</string>
+    <string name="settings_system_import_manager_settings_fail">Importieren der Oru-Einstellungen fehlgeschlagen: %s</string>
+    <string name="settings_system_import_manager_settings_mode_title">Oru-Einstellungen importieren</string>
+    <string name="settings_system_import_manager_settings_success">Oru-Einstellungen importiert</string>
+    <string name="settings_system_morphe_settings">Oru Einstellungen</string>
+    <string name="settings_system_process_runtime_heap_limit_ignored">Dieses Gerät hat das Speicherlimit beim letzten Lauf ignoriert, daher kann das Patchen möglicherweise auf die Ausführung innerhalb von Oru zurückgreifen.</string>
+    <string name="settings_system_signing_key_dialog_description">Jede App, die Oru patcht, ist mit diesem Schlüssel signiert. Bewahre eine Kopie auf: Ohne ihn können gepatchte Apps nur aktualisiert werden, nachdem sie deinstalliert wurden.</string>
+    <string name="settings_system_signing_key_missing">Oru erstellt einen bei deinem ersten Patch.</string>
+    <string name="settings_system_storage_open_app_info_description">Verwalten oder löschen Sie alle Oru-Daten über die Systemeinstellungen</string>
+    <string name="sources_dialog_community_notice_message">"Community-Patchquellen werden von ihren eigenen Autoren erstellt und gepflegt. Oru überprüft oder verifiziert Drittanbieter-Patches nicht und ist nicht verantwortlich für deren Inhalt oder dafür, was sie auf Ihrem Gerät bewirken.
+Alles, was Sie von dieser Website hinzufügen, geschieht auf eigenes Risiko"</string>
+    <string name="sources_management_held_back_hint">Diese Quelle hat Oru beim Laden zum Absturz gebracht und wird daher übersprungen. Aktualisiere sie oder importiere sie erneut, um es noch einmal zu versuchen.</string>
+    <string name="sources_management_outdated_manager_badge">Oru aktualisieren</string>
+    <string name="sources_management_outdated_manager_hint">Diese Quelle ist für Patcher %1$s erstellt, aber Oru %2$s enthält Patcher %3$s. Aktualisieren Sie Oru, um diese zu verwenden.</string>
+    <string name="tour_prompt_desc">Möchten Sie eine kurze Tour durch die wichtigsten Funktionen von Oru machen?</string>
+    <string name="uninstall_app_unverified">An Ort und Stelle belassen: Oru konnte nicht überprüfen, dass die installierte App der von ihm gepatchte Build ist</string>
+</resources>

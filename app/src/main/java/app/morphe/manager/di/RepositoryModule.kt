@@ -14,6 +14,7 @@ import app.morphe.manager.data.platform.Filesystem
 import app.morphe.manager.data.platform.NetworkInfo
 import app.morphe.manager.domain.repository.*
 import app.morphe.manager.domain.worker.WorkerRepository
+import app.morphe.manager.network.api.OruUpdateSource
 import app.morphe.manager.network.api.MorpheAPI
 import app.morphe.manager.util.AppDataResolver
 import org.koin.core.module.dsl.createdAtStart
@@ -22,6 +23,7 @@ import org.koin.dsl.module
 
 val repositoryModule = module {
     singleOf(::MorpheAPI)
+    singleOf(::OruUpdateSource)
     singleOf(::Filesystem) {
         createdAtStart()
     }

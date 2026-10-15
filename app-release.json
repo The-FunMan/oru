@@ -1,7 +1,0 @@
-{
-  "created_at": "2026-10-14T23:12:19",
-  "description": "# [1.36.0-dev.3](https://github.com/MorpheApp/morphe-manager/compare/v1.36.0-dev.2...v1.36.0-dev.3) (2026-10-14)\n\n\n### Bug Fixes\n\n* Choose the apps of a source by their checks alone and say why a patched app stays ([ba12b80](https://github.com/MorpheApp/morphe-manager/commit/ba12b8067dbcb603443fe19c9eff808fc97f1078))\n* Play the completion sound at the level of other notifications, and only when asked for ([45282df](https://github.com/MorpheApp/morphe-manager/commit/45282df0ee877d71e9352d884658ca544d46d2ba))\n* Show the picture a patch source ships rather than its owner's avatar ([2fcfb7e](https://github.com/MorpheApp/morphe-manager/commit/2fcfb7ee90761fecaf7abd5d1a049c6579178fd7))\n\n\n### Features\n\n* Mark app updates on the home screen icon, telling a newer version from newer patches ([770e50e](https://github.com/MorpheApp/morphe-manager/commit/770e50ef1d134ae844705de5f974a5e0383bba5f))\n\n\n### Performance Improvements\n\n* Keep the avatars of patch sources on disk so they show at once after a restart ([be01dc7](https://github.com/MorpheApp/morphe-manager/commit/be01dc7867ad81a91d28144bc4e6d743e93b7b9d))",
-  "download_url": "https://github.com/MorpheApp/morphe-manager/releases/download/v1.36.0-dev.3/morphe-manager-1.36.0-dev.3.apk",
-  "signature_download_url": "https://github.com/MorpheApp/morphe-manager/releases/download/v1.36.0-dev.3/morphe-manager-1.36.0-dev.3.apk.asc",
-  "version": "1.36.0-dev.3"
-}

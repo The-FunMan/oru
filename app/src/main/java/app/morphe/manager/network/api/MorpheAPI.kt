@@ -12,6 +12,7 @@ package app.morphe.manager.network.api
 
 import android.util.Log
 import app.morphe.manager.BuildConfig
+import app.morphe.manager.domain.manager.OruEndpoints
 import app.morphe.manager.domain.manager.PreferencesManager
 import app.morphe.manager.network.dto.*
 import app.morphe.manager.network.service.HttpService
@@ -229,6 +230,10 @@ class MorpheAPI(
      * wrapping it in another retry layer here would only multiply the attempts.
      */
     private suspend inline fun <reified T> apiRequest(route: String): APIResponse<T> {
+        // Oru never calls Morphe's API. The refusal is a failure, so callers treat it like an outage
+        if (!OruEndpoints.current.projectApiEnabled) {
+            return APIResponse.Failure(APIFailure(IllegalStateException("Morphe API is off in this build"), null))
+        }
         val url = "$MORPHE_API_URL/v2/${route.trimStart('/')}"
         return client.request { url(url) }
     }
@@ -440,6 +445,9 @@ class MorpheAPI(
      * already announced but still uploading is treated as if it did not exist yet.
      */
     suspend fun getAppUpdate(): MorpheAsset? {
+        // Morphe's manager APK would replace a build of another brand. Oru updates from its own feed
+        // (OruUpdateSource, routed by ManagerUpdateRepository), so this never answers for it
+        if (!BuildConfig.UPSTREAM_SERVICES) return null
         val usePrereleases = prefs.useManagerPrereleases.get()
         val currentWeight = versionWeight(BuildConfig.VERSION_NAME.removePrefix("v"))
         val branch = if (usePrereleases) "dev" else "main"
@@ -535,12 +543,14 @@ class MorpheAPI(
      * Source priority: static JSON → Morphe API (fallback).
      */
     suspend fun getPatchesUpdate(usePrerelease: Boolean): APIResponse<MorpheAsset> {
-        return if (USE_PATCHES_DIRECT_JSON) {
-            getPatchesFromJson(usePrerelease).fallbackTo {
-                Log.w(tag, "Patches JSON unavailable, falling back to Morphe API")
-                getPatchesFromApi(usePrerelease)
-            }
-        } else {
+        if (!USE_PATCHES_DIRECT_JSON) return getPatchesFromApi(usePrerelease)
+
+        val fromJson = getPatchesFromJson(usePrerelease)
+        // Oru has no Morphe API to fall back to, so the bundle's JSON answer stands on its own
+        if (!OruEndpoints.current.projectApiEnabled) return fromJson
+
+        return fromJson.fallbackTo {
+            Log.w(tag, "Patches JSON unavailable, falling back to Morphe API")
             getPatchesFromApi(usePrerelease)
         }
     }
@@ -577,6 +587,9 @@ class MorpheAPI(
 
     /** Fetches and parses the manager's CHANGELOG.md from the appropriate branch. */
     suspend fun fetchManagerChangelog(forDevBranch: Boolean = isDevBuild): List<ChangelogEntry> {
+        // ORU: the changelog of the manager is Morphe's file, which a Oru build does not read. Its
+        // update dialog shows the notes of the release it offers instead
+        if (!BuildConfig.UPSTREAM_SERVICES) return emptyList()
         val branch = if (forDevBranch) "dev" else "main"
         return fetchChangelogFromRepo(managerConfig, branch, "CHANGELOG.md")
     }

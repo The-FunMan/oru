@@ -1,1 +1,11 @@
 blank_issues_enabled: false
+contact_links:
+  - name: Report a security problem
+    url: https://github.com/The-FunMan/oru/security/advisories/new
+    about: Report vulnerabilities privately. Do not open a public issue for them.
+  - name: A patch fails or is wrong
+    url: https://github.com/MorpheApp/morphe-patches/issues
+    about: Patch bundles are made by their own authors. Report a failing patch to the bundle that ships it.
+  - name: Documentation and how-to questions
+    url: https://github.com/The-FunMan/oru/blob/dev/README.md
+    about: Read the README first. Questions that the README does not answer can be opened as an issue labelled question.

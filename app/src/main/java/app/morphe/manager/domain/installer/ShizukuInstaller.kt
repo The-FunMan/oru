@@ -24,17 +24,18 @@ import android.os.Bundle
 import android.os.IBinder
 import android.os.Process
 import android.os.RemoteException
+import androidx.core.content.pm.PackageInfoCompat
+import android.util.Log
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.withTimeoutOrNull
 import rikka.shizuku.Shizuku
 import rikka.shizuku.ShizukuBinderWrapper
 import rikka.shizuku.SystemServiceHelper
 import java.io.File
 import java.io.IOException
-import java.lang.reflect.Constructor
-import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
 /**
@@ -54,34 +55,43 @@ class ShizukuInstaller(private val app: Application) {
      * An [IntentSender] paired with the [OperationResult] the intent delivered to it completes,
      * which is the only way the system reports the outcome of a session.
      */
-    private class PendingOperation {
+    private class PendingOperation(onUserAction: (Intent) -> Unit) {
         val result = CompletableDeferred<OperationResult>()
         val intentSender: IntentSender = IntentSenderCompat.create { intent ->
-            result.complete(
-                OperationResult(
-                    status = intent.getIntExtra(
-                        PackageInstaller.EXTRA_STATUS,
-                        PackageInstaller.STATUS_FAILURE
-                    ),
-                    message = intent.getStringExtra(PackageInstaller.EXTRA_STATUS_MESSAGE)
+            val status = intent.getIntExtra(PackageInstaller.EXTRA_STATUS, PackageInstaller.STATUS_FAILURE)
+            Log.d(InstallWaitPolicy.LOG_TAG, "step=shizuku-status status=$status")
+            if (status == PackageInstaller.STATUS_PENDING_USER_ACTION) {
+                // The system waits for a confirmation; the status that follows is the real outcome, so keep waiting
+                onUserAction(intent)
+            } else {
+                result.complete(
+                    OperationResult(
+                        status = status,
+                        message = intent.getStringExtra(PackageInstaller.EXTRA_STATUS_MESSAGE)
+                    )
                 )
-            )
+            }
         }
     }
 
     /**
      * Silently installs [sourceFile] via Shizuku/Sui. Suspends until the installation completes.
      *
+     * If no status arrives within [InstallWaitPolicy.INSTALL_STATUS_LIMIT_MS] after the commit, the package
+     * manager decides: a matching installed version code is a success, anything else a timeout failure.
+     *
      * @param sourceFile The APK file to install.
      * @param expectedPackage The expected package name of the APK, used to configure the session.
      * @param installerPackageNameOverride Optional package name to report as the installer.
+     * @param onUserAction Shows the confirmation the system asks for; the install keeps waiting for its result.
      * @throws InstallerOperationException if the installation fails or is aborted.
      */
     @SuppressLint("RequestInstallPackagesPolicy")
     suspend fun install(
         sourceFile: File,
         expectedPackage: String,
-        installerPackageNameOverride: String? = null
+        installerPackageNameOverride: String? = null,
+        onUserAction: (Intent) -> Unit = {}
     ): OperationResult = withContext(Dispatchers.IO) {
         val packageInstaller = obtainPackageInstaller()
         val packageInstallerWrapper = packageInstaller.asPackageInstaller(installerPackageNameOverride)
@@ -99,21 +109,37 @@ class ShizukuInstaller(private val app: Application) {
             ShizukuBinderWrapper(packageInstaller.openSession(sessionId).asBinder())
         )
         val session = PackageInstallerCompat.createSession(sessionBinder)
+        // Set once the system holds the session (committed, or its result arrived). Cancelling the wait before
+        // that abandons the session, so a Stop never leaves a half-written session behind
         var completed = false
 
         try {
+            Log.d(InstallWaitPolicy.LOG_TAG, "step=shizuku-write package=$expectedPackage session=$sessionId")
             sourceFile.inputStream().use { input ->
                 session.openWrite(BASE_APK_NAME, 0, sourceFile.length()).use { output ->
-                    input.copyTo(output)
+                    input.copyApkTo(output)
                     session.fsync(output)
                 }
             }
 
-            val operation = PendingOperation()
+            val operation = PendingOperation(onUserAction)
+            Log.d(InstallWaitPolicy.LOG_TAG, "step=shizuku-commit package=$expectedPackage session=$sessionId")
             session.commit(operation.intentSender)
-            val result = withTimeout(INSTALL_RESULT_TIMEOUT) { operation.result.await() }
+            val result = withTimeoutOrNull(InstallWaitPolicy.INSTALL_STATUS_LIMIT_MS) { operation.result.await() }
+            if (result == null) {
+                // The commit is with the system now; abandoning it could cancel an install that is still going
+                completed = true
+                val landed = installedVersionMatches(expectedPackage, sourceFile)
+                Log.w(InstallWaitPolicy.LOG_TAG, "step=shizuku-status-timeout package=$expectedPackage landed=$landed")
+                return@withContext if (landed) {
+                    OperationResult(PackageInstaller.STATUS_SUCCESS, null)
+                } else {
+                    OperationResult(PackageInstaller.STATUS_FAILURE, "Timed out waiting for the install result")
+                }
+            }
             // Set before the status check - a delivered failure leaves nothing to abandon
             completed = true
+            Log.d(InstallWaitPolicy.LOG_TAG, "step=shizuku-result package=$expectedPackage status=${result.status}")
             result.requireSuccess()
         } finally {
             if (!completed) {
@@ -128,12 +154,26 @@ class ShizukuInstaller(private val app: Application) {
      *
      * @throws InstallerOperationException if the uninstall fails or is aborted.
      */
-    suspend fun uninstall(packageName: String): OperationResult = withContext(Dispatchers.IO) {
+    suspend fun uninstall(
+        packageName: String,
+        onUserAction: (Intent) -> Unit = {}
+    ): OperationResult = withContext(Dispatchers.IO) {
         val packageInstallerWrapper = obtainPackageInstaller().asPackageInstaller()
-        val operation = PendingOperation()
+        val operation = PendingOperation(onUserAction)
 
+        Log.d(InstallWaitPolicy.LOG_TAG, "step=shizuku-uninstall package=$packageName")
         packageInstallerWrapper.uninstall(packageName, operation.intentSender)
         withTimeout(UNINSTALL_RESULT_TIMEOUT) { operation.result.await() }.requireSuccess()
+    }
+
+    /** Whether [packageName] is installed at the version code [apk] carries. Read off the package manager. */
+    private fun installedVersionMatches(packageName: String, apk: File): Boolean {
+        val installed = runCatching { app.packageManager.getPackageInfo(packageName, 0) }.getOrNull()
+        val archive = app.packageManager.getPackageArchiveInfo(apk.path, 0)
+        return InstallWaitPolicy.installLanded(
+            installedVersionCode = installed?.let { PackageInfoCompat.getLongVersionCode(it) },
+            archiveVersionCode = archive?.let { PackageInfoCompat.getLongVersionCode(it) }
+        )
     }
 
     /** Returns this result, or throws [InstallerOperationException] when the operation failed. */
@@ -195,7 +235,6 @@ class ShizukuInstaller(private val app: Application) {
     companion object {
         private const val SHELL_PACKAGE = "com.android.shell"
         private const val BASE_APK_NAME = "base.apk"
-        private val INSTALL_RESULT_TIMEOUT = 5.minutes
         private val UNINSTALL_RESULT_TIMEOUT = 30.seconds
     }
 }
@@ -220,43 +259,37 @@ private object PackageInstallerCompat {
         installerAttributionTag: String?,
         userId: Int
     ): PackageInstaller {
-        return try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                PackageInstaller::class.java
-                    .getDeclaredConstructor(
-                        IPackageInstaller::class.java,
-                        String::class.java,
-                        String::class.java,
-                        Int::class.javaPrimitiveType
-                    )
-                    .apply { isAccessible = true }
-                    .newInstance(remote, installerPackageName, installerAttributionTag, userId)
-            } else {
-                PackageInstaller::class.java
-                    .getDeclaredConstructor(
-                        IPackageInstaller::class.java,
-                        String::class.java,
-                        Int::class.javaPrimitiveType
-                    )
-                    .apply { isAccessible = true }
-                    .newInstance(remote, installerPackageName, userId)
-            }
-        } catch (error: ReflectiveOperationException) {
-            throw RuntimeException(error)
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            newHiddenInstance(
+                PackageInstaller::class.java,
+                arrayOf(
+                    IPackageInstaller::class.java,
+                    String::class.java,
+                    String::class.java,
+                    Int::class.javaPrimitiveType!!
+                ),
+                remote, installerPackageName, installerAttributionTag, userId
+            )
+        } else {
+            newHiddenInstance(
+                PackageInstaller::class.java,
+                arrayOf(
+                    IPackageInstaller::class.java,
+                    String::class.java,
+                    Int::class.javaPrimitiveType!!
+                ),
+                remote, installerPackageName, userId
+            )
         }
     }
 
     /** Constructs a [PackageInstaller.Session] wrapping the given [remote] session binder. */
-    fun createSession(remote: IPackageInstallerSession): PackageInstaller.Session {
-        return try {
-            PackageInstaller.Session::class.java
-                .getDeclaredConstructor(IPackageInstallerSession::class.java)
-                .apply { isAccessible = true }
-                .newInstance(remote)
-        } catch (error: ReflectiveOperationException) {
-            throw RuntimeException(error)
-        }
-    }
+    fun createSession(remote: IPackageInstallerSession): PackageInstaller.Session =
+        newHiddenInstance(
+            PackageInstaller.Session::class.java,
+            arrayOf(IPackageInstallerSession::class.java),
+            remote
+        )
 
     /**
      * Sets [INSTALL_REPLACE_EXISTING] on the internal installFlags field of
@@ -264,16 +297,51 @@ private object PackageInstallerCompat {
      * replace an existing package - without this flag the system may return
      * [PackageInstaller.STATUS_FAILURE_CONFLICT] even when signatures match.
      */
-    @SuppressLint("DiscouragedPrivateApi")
-    @Suppress("SoonBlockedPrivateApi", "PrivateApi")
     fun applyFlags(params: PackageInstaller.SessionParams) {
-        runCatching {
-            val field = PackageInstaller.SessionParams::class.java.getDeclaredField("installFlags")
-            field.isAccessible = true
-            field.setInt(params, field.getInt(params) or INSTALL_REPLACE_EXISTING)
+        // A fresh install works without the flag, so a missing field must not take the whole Shizuku path down
+        try {
+            setHiddenInstallFlag(params, INSTALL_REPLACE_EXISTING)
+        } catch (e: HiddenApiException) {
+            Log.w("ShizukuInstaller", "Updating an installed app may fail: ${e.message}")
         }
     }
 
+}
+
+/**
+ * Raised when a hidden system member this installer relies on is missing on the running Android
+ * build, or refuses to be used. The message names the class, constructor or field involved.
+ */
+class HiddenApiException(message: String, cause: Throwable? = null) : IllegalStateException(message, cause)
+
+/** Calls the hidden constructor [owner]([parameterTypes]) with [args], naming the one that is missing. */
+internal fun <T : Any> newHiddenInstance(
+    owner: Class<T>,
+    parameterTypes: Array<Class<*>>,
+    vararg args: Any?
+): T {
+    val signature = "${owner.name}(${parameterTypes.joinToString { it.name }})"
+    val constructor = try {
+        owner.getDeclaredConstructor(*parameterTypes).apply { isAccessible = true }
+    } catch (error: NoSuchMethodException) {
+        throw HiddenApiException("$signature is not available on this Android build", error)
+    }
+    return try {
+        constructor.newInstance(*args)
+    } catch (error: ReflectiveOperationException) {
+        throw HiddenApiException("Calling $signature failed", error)
+    }
+}
+
+/** Adds [flag] to the hidden installFlags field of [params], naming the field if it is missing. */
+internal fun setHiddenInstallFlag(params: Any, flag: Int) {
+    val owner = params.javaClass
+    val field = try {
+        owner.getDeclaredField("installFlags").apply { isAccessible = true }
+    } catch (error: NoSuchFieldException) {
+        throw HiddenApiException("${owner.name}.installFlags is not available on this Android build", error)
+    }
+    field.setInt(params, field.getInt(params) or flag)
 }
 
 /**
@@ -312,12 +380,10 @@ private object IntentSenderCompat {
                 intent?.let(callback)
             }
         }
-        return try {
-            val ctor: Constructor<IntentSender> = IntentSender::class.java.getDeclaredConstructor(android.content.IIntentSender::class.java)
-            ctor.isAccessible = true
-            ctor.newInstance(binder)
-        } catch (error: ReflectiveOperationException) {
-            throw RuntimeException(error)
-        }
+        return newHiddenInstance(
+            IntentSender::class.java,
+            arrayOf(android.content.IIntentSender::class.java),
+            binder
+        )
     }
 }

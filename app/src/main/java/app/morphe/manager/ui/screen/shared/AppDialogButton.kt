@@ -129,9 +129,8 @@ private fun DialogButton(
     val colors = resolveButtonColors(isDestructive, filled)
     val interactionSource = remember { MutableInteractionSource() }
 
-    // A floor rather than a fixed height, so a large font grows the button instead of clipping its label
     val buttonModifier = modifier
-        .heightIn(min = Defaults.DialogButtonHeight)
+        .height(Defaults.DialogButtonHeight)
         .pressScale(
             interactionSource = interactionSource,
             enabled = enabled,

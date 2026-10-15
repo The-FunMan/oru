@@ -23,4 +23,7 @@ oneway interface IPatcherEvents {
     void heapLimit(int megabytes);
     // The patching process has ended. The exceptionStackTrace is null if it finished successfully
     void finished(String exceptionStackTrace);
+    // Fraction [0, 1] of a stage that reports its own progress, named by its StepId. Appended last so the
+    // transaction codes of the methods above do not change
+    void stageFraction(String stage, float fraction);
 }

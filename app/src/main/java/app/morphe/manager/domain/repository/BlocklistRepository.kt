@@ -6,6 +6,7 @@
 package app.morphe.manager.domain.repository
 
 import android.util.Log
+import app.morphe.manager.domain.manager.OruEndpoints
 import app.morphe.manager.domain.manager.PreferencesManager
 import app.morphe.manager.util.BLOCKED_SOURCES_URL
 import app.morphe.manager.util.tag
@@ -35,8 +36,14 @@ class BlocklistRepository(
         _entries.value = decode(prefs.blocklistCache.get())
     }
 
-    /** Keeps the previous value on failure so offline callers keep working. */
+    /**
+     * Keeps the previous value on failure so offline callers keep working.
+     *
+     * Oru does not fetch the list, which lives on Morphe's API. Nothing is cached there either,
+     * so no source is blocked in that flavour.
+     */
     suspend fun refresh() {
+        if (!OruEndpoints.current.projectApiEnabled) return
         val response: BlocklistResponse = try {
             http.get(BLOCKED_SOURCES_URL).body()
         } catch (e: Exception) {

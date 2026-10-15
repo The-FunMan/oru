@@ -1,0 +1,17 @@
+{
+  "uniqueId": "com.github.BenjaminHalko.compose-icons:font-awesome",
+  "name": "Font Awesome icons for Compose",
+  "developers": [
+    {
+      "name": "BenjaminHalko"
+    }
+  ],
+  "website": "https://github.com/BenjaminHalko/compose-icons",
+  "scm": {
+    "connection": "scm:git:https://github.com/BenjaminHalko/compose-icons.git",
+    "url": "https://github.com/BenjaminHalko/compose-icons"
+  },
+  "licenses": [
+    "MIT"
+  ]
+}

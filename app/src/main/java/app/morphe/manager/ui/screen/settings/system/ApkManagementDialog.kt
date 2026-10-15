@@ -5,7 +5,10 @@
 
 package app.morphe.manager.ui.screen.settings.system
 
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageInfo
+import android.net.Uri
 import android.view.HapticFeedbackConstants
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -35,6 +38,7 @@ import app.morphe.manager.data.room.apps.installed.InstalledApp
 import app.morphe.manager.data.room.apps.original.OriginalApk
 import app.morphe.manager.domain.apk.InstalledPatchState
 import app.morphe.manager.domain.apk.LocalApkSources
+import app.morphe.manager.domain.installer.InstallerFileProvider
 import app.morphe.manager.domain.installer.InstallerManager
 import app.morphe.manager.domain.installer.UninstallCancelledException
 import app.morphe.manager.domain.manager.PreferencesManager
@@ -407,7 +411,19 @@ private fun PatchedApksContent(
         actions = ApkListActions(
             onShare = { item ->
                 item.file?.let { file ->
-                    scope.launch { context.shareApks(listOf(file)) }
+                    scope.launch {
+                        val uri = withContext(Dispatchers.IO) {
+                            InstallerFileProvider.getUriForFile(context, file)
+                        }
+                        val intent = Intent(Intent.ACTION_SEND).apply {
+                            type = APK_MIMETYPE
+                            putExtra(Intent.EXTRA_STREAM, uri)
+                            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                        }
+                        try {
+                            context.startActivity(Intent.createChooser(intent, null))
+                        } catch (_: android.content.ActivityNotFoundException) { }
+                    }
                 }
             },
             onExport = { item ->
@@ -638,7 +654,19 @@ private fun OriginalApksContent(
         actions = ApkListActions(
             onShare = { item ->
                 item.file?.let { file ->
-                    scope.launch { context.shareApks(listOf(file)) }
+                    scope.launch {
+                        val uri = withContext(Dispatchers.IO) {
+                            InstallerFileProvider.getUriForFile(context, file)
+                        }
+                        val intent = Intent(Intent.ACTION_SEND).apply {
+                            type = APK_MIMETYPE
+                            putExtra(Intent.EXTRA_STREAM, uri)
+                            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                        }
+                        try {
+                            context.startActivity(Intent.createChooser(intent, null))
+                        } catch (_: android.content.ActivityNotFoundException) { }
+                    }
                 }
             },
             onExport = { item ->
@@ -822,7 +850,7 @@ private fun ApkManagementDialogContent(
                                         label = shareLabel,
                                         onClick = {
                                             scope.launch {
-                                                context.shareApks(selectedFiles)
+                                                shareApkFiles(context, selectedFiles)
                                             }
                                         }
                                     )
@@ -1242,3 +1270,30 @@ private fun apkCountItem(count: Int, totalSize: Long) = ConfirmItem(
     text = pluralStringResource(R.plurals.settings_system_apks_count, count, count.toString()),
     detail = LocalContext.current.formatBytes(totalSize)
 )
+
+private suspend fun shareApkFiles(context: Context, files: List<File>) {
+    val existingFiles = files.filter { it.exists() }
+    if (existingFiles.isEmpty()) return
+
+    val uris = withContext(Dispatchers.IO) {
+        existingFiles.map { InstallerFileProvider.getUriForFile(context, it) }
+    }
+
+    val intent = if (uris.size == 1) {
+        Intent(Intent.ACTION_SEND).apply {
+            type = APK_MIMETYPE
+            putExtra(Intent.EXTRA_STREAM, uris.first())
+        }
+    } else {
+        Intent(Intent.ACTION_SEND_MULTIPLE).apply {
+            type = APK_MIMETYPE
+            putParcelableArrayListExtra(Intent.EXTRA_STREAM, ArrayList<Uri>(uris))
+        }
+    }.apply {
+        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    }
+
+    try {
+        context.startActivity(Intent.createChooser(intent, null))
+    } catch (_: android.content.ActivityNotFoundException) { }
+}

@@ -20,7 +20,8 @@ abstract class Logger {
     fun trace(msg: String) = log(LogLevel.TRACE, msg)
     fun info(msg: String) = log(LogLevel.INFO, msg)
     fun warn(msg: String) = log(LogLevel.WARN, msg)
-    fun error(msg: String) = log(LogLevel.ERROR, msg)
+    fun error(msg: String, tr: Throwable? = null) =
+        log(LogLevel.ERROR, if (tr == null) msg else "$msg\n${tr.stackTraceToString()}")
 
     val handler = object : Handler() {
         override fun publish(record: LogRecord) {
@@ -28,7 +29,7 @@ abstract class Logger {
 
             when (record.level) {
                 Level.INFO -> info(msg)
-                Level.SEVERE -> error(msg)
+                Level.SEVERE -> error(msg, record.thrown)
                 Level.WARNING -> warn(msg)
                 else -> trace(msg)
             }

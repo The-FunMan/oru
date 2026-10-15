@@ -171,8 +171,7 @@ class StorageStatsRepository(
         return cacheDir.listFiles()?.filter { entry ->
             entry.name != HTTP_CACHE_DIR &&
                 entry.name != InstallerFileProvider.SHARE_DIR &&
-                entry != filesystem.homeCardCacheDir &&
-                entry != filesystem.avatarCacheDir
+                entry != filesystem.homeCardCacheDir
         } ?: emptyList()
     }
 

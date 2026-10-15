@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Oru: patch Android apps on your own phone</title>
+  <meta name="description" content="Oru patches Android apps on your own phone. It takes an APK you supply, applies patch bundles on the device, signs the result and installs it.">
+  <meta name="theme-color" content="#101219" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#FBF8F3" media="(prefers-color-scheme: light)">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="./">
+        <svg class="mark" viewBox="-30 -30 60 60" aria-hidden="true" focusable="false">
+          <path d="M 16.79 -11.76 A 20.5 20.5 0 1 1 -8.66 -18.58" fill="none" stroke="currentColor" stroke-width="9.61" stroke-linecap="round"/>
+          <circle cx="9.62" cy="-18.10" r="6" fill="#FFB59A"/>
+        </svg>
+        <span class="wordmark">oru</span>
+      </a>
+      <nav class="site-nav" aria-label="On this page">
+        <ul>
+          <li><a href="#how-it-works">How it works</a></li>
+          <li><a href="#principles">Principles</a></li>
+          <li><a href="#requirements">Requirements</a></li>
+          <li><a href="#independent">Independent project</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="wrap">
+
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="lockup">
+          <svg class="mark" viewBox="-30 -30 60 60" aria-hidden="true" focusable="false">
+            <path d="M 16.79 -11.76 A 20.5 20.5 0 1 1 -8.66 -18.58" fill="none" stroke="currentColor" stroke-width="9.61" stroke-linecap="round"/>
+            <circle cx="9.62" cy="-18.10" r="6" fill="#FFB59A"/>
+          </svg>
+          <span class="wordmark">oru</span>
+        </div>
+
+        <h1 id="hero-title">Patch Android apps on your own phone.</h1>
+
+        <p class="lede">Oru runs patch bundles on an APK you supply, signs the result on your device and installs it.</p>
+
+        <div class="actions">
+          <a class="button primary" href="https://github.com/The-FunMan/oru/releases/latest">Download the latest release</a>
+          <a class="button" href="https://github.com/The-FunMan/oru">Source code</a>
+        </div>
+      </section>
+
+      <section class="section" id="how-it-works" aria-labelledby="how-it-works-title">
+        <div class="prose">
+          <h2 id="how-it-works-title">How it works</h2>
+          <ol>
+            <li><strong>Choose an app or APK.</strong> Pick an app installed on this device, or select an APK file you already have.</li>
+            <li><strong>Get the version Oru asks for.</strong> Oru shows which versions the selected patch bundle supports and marks the recommended one. If you need the file, Get APK opens its APKMirror page. Oru does not download it for you.</li>
+            <li><strong>Choose patches.</strong> Simple mode uses the recommended set. Expert mode lets you pick patches and their options.</li>
+            <li><strong>Oru patches, signs and installs.</strong> Patching runs on the device. The signing key stays on this device. The app installs when your installer allows it.</li>
+          </ol>
+          <p>A patched app is signed with a different key than the stock app, so Android does not install it over the stock app. Oru can remove the stock app first if you allow it. Removing the stock app deletes its data, so back up anything you need before you patch.</p>
+        </div>
+      </section>
+
+      <section class="section" id="principles" aria-labelledby="principles-title">
+        <div class="prose">
+          <h2 id="principles-title">Principles</h2>
+          <ul class="principles">
+            <li>
+              <strong>Your APK, your device.</strong>
+              Oru never downloads a stock APK, and it does not store or share APK files. Get APK opens the APKMirror page in your browser. You download the file and select it in Oru.
+            </li>
+            <li>
+              <strong>Simple by default, Expert when you want control.</strong>
+              Oru picks the sensible path. A few switches remain for people who need them, such as pre-release channels.
+            </li>
+            <li>
+              <strong>Open source under GPLv3.</strong>
+              The source code is public on GitHub. Oru is licensed under the GNU General Public License v3.0, with the additional terms in NOTICE.
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section" id="requirements" aria-labelledby="requirements-title">
+        <div class="prose">
+          <h2 id="requirements-title">Requirements</h2>
+          <ul>
+            <li>Android 8.0 (API 26) or newer.</li>
+            <li>Shizuku is optional. When Shizuku is running, Oru can install without showing the system prompt.</li>
+            <li>Free storage for the APK you supply and for the patched output. Check the size of the app you want to patch first.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section" id="independent" aria-labelledby="independent-title">
+        <div class="prose">
+          <div class="notice">
+            <h2 id="independent-title">Independent project</h2>
+            <p>Oru is a modified version of <a href="https://github.com/MorpheApp/morphe-manager">Morphe Manager</a>, which is built on <a href="https://github.com/ReVanced/revanced-manager">ReVanced Manager</a> and <a href="https://github.com/Jman-Github/Universal-ReVanced-Manager">Universal ReVanced Manager</a>. Thanks go to the Morphe and ReVanced contributors and to the authors of every patch bundle.</p>
+            <p>Oru is not made, endorsed or supported by Morphe, ReVanced, Google or the makers of any app that Oru can patch. Patch bundles are the work of their authors. Oru does not provide, host or distribute apps, APKs or patches.</p>
+            <p>Patching an app can change how it behaves and may break it. Patching may also go against the terms of service of that app. You are responsible for the apps you patch and for the APK files you use.</p>
+            <ul class="note-links">
+              <li><a href="https://github.com/The-FunMan/oru#disclaimers">Disclaimers in the README</a></li>
+              <li><a href="https://github.com/The-FunMan/oru/blob/HEAD/NOTICE">NOTICE</a></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <ul>
+        <li><a href="https://github.com/The-FunMan/oru/blob/HEAD/LICENSE">GPLv3 license</a></li>
+        <li><a href="https://github.com/The-FunMan/oru/blob/HEAD/SECURITY.md">Security</a></li>
+      </ul>
+      <p>The wordmark uses a subset of Yuji Boku (<a href="assets/FONT-LICENSE.txt">SIL OFL 1.1</a>).</p>
+      <p>No account needed.</p>
+    </div>
+  </footer>
+</body>
+</html>

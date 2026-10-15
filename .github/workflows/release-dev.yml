@@ -1,0 +1,97 @@
+name: Dev prerelease
+
+on:
+  push:
+    branches: [dev]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-dev
+  cancel-in-progress: false   # tag numbers never race
+
+jobs:
+  gate:
+    if: github.repository == 'The-FunMan/oru'
+    uses: ./.github/workflows/ci.yml
+
+  build:
+    if: github.repository == 'The-FunMan/oru'
+    needs: gate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    environment: dev-release  # only this job can read the key
+    outputs:
+      tag: ${{ steps.version.outputs.tag }}
+      skip: ${{ steps.version.outputs.skip }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Build from the dev branch only
+        env:
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          [ "$REF_NAME" = dev ] || { echo "dev releases are built from the dev branch, not $REF_NAME" >&2; exit 1; }
+      - id: version              # sets tag, version and skip; writes dist/RELEASE_NOTES.md
+        run: .github/scripts/next-dev-version.sh
+      - uses: ./.github/actions/setup-oru
+        if: steps.version.outputs.skip == 'false'
+      - name: Decode signing key (removed at the end)
+        if: steps.version.outputs.skip == 'false'
+        env:
+          KEYSTORE_B64: ${{ secrets.KEYSTORE_B64 }}
+        run: (umask 077; printf '%s' "$KEYSTORE_B64" | base64 -d > app/keystore.jks)
+      - name: Build Oru release
+        if: steps.version.outputs.skip == 'false'
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEYSTORE_ENTRY_ALIAS: ${{ secrets.KEYSTORE_ENTRY_ALIAS }}
+          KEYSTORE_ENTRY_PASSWORD: ${{ secrets.KEYSTORE_ENTRY_PASSWORD }}
+          ORU_RELEASE_CERT_SHA256: ${{ vars.ORU_RELEASE_CERT_SHA256 }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          sed -i "s/^version *=.*/version = ${VERSION}/" app/gradle.properties   # runner copy only, never committed
+          ./gradlew :app:assembleOruRelease --stacktrace
+          .github/scripts/verify-apk.sh --release app/build/outputs/apk/oru/release/*.apk
+          cp app/build/outputs/apk/oru/release/*.apk "dist/oru-${VERSION}.apk"
+          (cd dist && sha256sum "oru-${VERSION}.apk" > SHA256SUMS.txt)
+      - name: Remove signing key
+        if: always()
+        run: rm -f app/keystore.jks
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: steps.version.outputs.skip == 'false'
+        with:
+          name: dist
+          path: dist/
+          retention-days: 3
+          if-no-files-found: error
+
+  publish:
+    if: github.repository == 'The-FunMan/oru' && needs.build.outputs.skip == 'false'
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:              # write scopes only here, after the build; no secrets
+      contents: write
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: dist
+          path: dist
+      - uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: 'dist/oru-*.apk'
+      - name: Create prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ needs.build.outputs.tag }}
+        run: |
+          gh release create "$TAG" dist/oru-*.apk dist/SHA256SUMS.txt \
+            --target "$GITHUB_SHA" --prerelease --title "Oru ${TAG#v} (dev)" \
+            --notes-file dist/RELEASE_NOTES.md

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Debug-only overlay for the oru flavor. Declares the component gallery so it can be started with
+  adb shell am start. It has no launcher entry, so it never shows in the app drawer.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+        <activity
+            android:name="app.morphe.manager.ui.oru.components.OruGalleryActivity"
+            android:exported="true"
+            android:label="Oru gallery" />
+    </application>
+
+</manifest>

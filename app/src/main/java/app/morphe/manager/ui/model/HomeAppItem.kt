@@ -41,7 +41,12 @@ data class HomeAppItem(
     val patchCount: Int,
     val isClone: Boolean,
     /** What tells the card from another app of the same name, see [withNameSuffixes]. */
-    val nameSuffix: String? = null
+    val nameSuffix: String? = null,
+    /**
+     * The package a patched copy of the app is installed under, when the app itself is not on the phone and
+     * this manager did not make that copy, so it keeps no record of it. The card's [packageInfo] is that copy's.
+     */
+    val installedPatchedPackage: String? = null,
 ) {
     val hasSavedCopy: Boolean get() = savedApkFile != null
 
@@ -63,8 +68,8 @@ data class HomeAppItem(
     val showsVersionBadge: Boolean get() = versionStatus?.isBehind == true && isSettledInstall
 
     /**
-     * Whether the card is marked for a rebuild: newer patches, a newer supported app version, or
-     * both. Only what the mark says: rebuilding at a version the sources still cover returns the
+     * Whether the card carries a rebuild badge: newer patches, a newer supported app version, or
+     * both. Only what the badge says: rebuilding at a version the sources still cover returns the
      * install as it went in, so queueing and sorting stay with [showsUpdateBadge] alone.
      */
     val showsRebuildBadge: Boolean get() = showsUpdateBadge || showsVersionBadge

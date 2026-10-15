@@ -42,6 +42,7 @@ import java.io.OutputStream
 import java.nio.ByteBuffer
 import java.nio.channels.FileChannel
 import java.nio.file.StandardOpenOption
+import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicLong
 import kotlin.math.abs
 import kotlin.random.Random
@@ -59,6 +60,9 @@ class HttpService(
     val json: Json,
     val http: HttpClient
 ) {
+    /** Shared by the redirect probes. Like [http], it lives as long as this service. */
+    private val noRedirectClient: HttpClient by lazy { newNoRedirectClient() }
+
     /**
      * Executes an HTTP request and deserializes the response body to [T].
      *
@@ -178,8 +182,8 @@ class HttpService(
      *
      * Workflow:
      * 1. Probe the server with HEAD (+ fallback GET Range: bytes=0-0) to check range support.
-     * 2. If ranges are supported and the file is large enough, split into [threads] equal chunks
-     *    and download each concurrently.
+     * 2. If ranges are supported and the file is large enough, download it as a queue of ranges
+     *    pulled by [threads] concurrent workers.
      * 3. Otherwise, fall back to a single-connection [streamTo].
      *
      * Progress is reported via [onProgress] as (bytesDownloaded, totalBytes?).
@@ -223,8 +227,8 @@ class HttpService(
     }
 
     /**
-     * Downloads [totalSize] bytes into [saveLocation] using [threads] concurrent coroutines,
-     * each fetching a disjoint byte range.
+     * Downloads [totalSize] bytes into [saveLocation] using [threads] concurrent coroutines.
+     * Each takes disjoint byte ranges from a shared queue until none are left.
      *
      * Uses a single [FileChannel] so every coroutine can write to its own region via absolute
      * position — no seek/write race condition that existed with per-chunk RandomAccessFile.
@@ -267,51 +271,58 @@ class HttpService(
                 }
             }
 
-            val chunkSize = totalSize / threads
-            val ranges = (0 until threads).map { i ->
-                val start = i * chunkSize
-                val end = if (i == threads - 1) totalSize - 1 else (start + chunkSize - 1)
-                start to end
-            }
+            suspend fun downloadRange(start: Long, end: Long, buf: ByteArray) {
+                // Held across attempts so a dropped connection resumes mid-range instead of
+                // refetching bytes that are already on disk and counting them twice
+                var position = start
 
-            ranges.map { (start, end) ->
-                async(Dispatchers.IO) {
-                    // Held across attempts so a dropped connection resumes mid-chunk instead of
-                    // refetching bytes that are already on disk and counting them twice
-                    var position = start
+                runWithRetry("downloadRange[$start-$end]", host) {
+                    // A previous attempt may have finished the range before failing elsewhere
+                    if (position > end) return@runWithRetry
 
-                    runWithRetry("downloadRange[$start-$end]", host) {
-                        // A previous attempt may have finished the chunk before failing elsewhere
-                        if (position > end) return@runWithRetry
+                    runWith429Retry("downloadRange[$start-$end]") {
+                        http.prepareGet {
+                            header(HttpHeaders.Range, "bytes=$position-$end")
+                            builder()
+                        }.execute { response ->
+                            when (response.status) {
+                                HttpStatusCode.TooManyRequests ->
+                                    throw TooManyRequestsException(response.retryAfterMillis())
 
-                        runWith429Retry("downloadRange[$start-$end]") {
-                            http.prepareGet {
-                                header(HttpHeaders.Range, "bytes=$position-$end")
-                                builder()
-                            }.execute { response ->
-                                when (response.status) {
-                                    HttpStatusCode.TooManyRequests ->
-                                        throw TooManyRequestsException(response.retryAfterMillis())
+                                HttpStatusCode.PartialContent -> {
+                                    val channel: ByteReadChannel = response.body()
 
-                                    HttpStatusCode.PartialContent -> {
-                                        val channel: ByteReadChannel = response.body()
-                                        val buf = ByteArray(DEFAULT_BUFFER_SIZE)
-
-                                        while (!channel.isClosedForRead) {
-                                            val read = channel.readAvailable(buf)
-                                            if (read <= 0) continue
-                                            // Write directly at chunk offset, no global seek needed
-                                            fileChannel.write(ByteBuffer.wrap(buf, 0, read), position)
-                                            position += read
-                                            totalRead.addAndGet(read.toLong())
-                                            reportProgress()
-                                        }
+                                    while (!channel.isClosedForRead) {
+                                        val read = channel.readAvailable(buf)
+                                        if (read <= 0) continue
+                                        // Write directly at the range offset, no global seek needed
+                                        fileChannel.write(ByteBuffer.wrap(buf, 0, read), position)
+                                        position += read
+                                        totalRead.addAndGet(read.toLong())
+                                        reportProgress()
                                     }
-
-                                    else -> throw HttpException(response.status)
                                 }
+
+                                else -> throw HttpException(response.status)
                             }
                         }
+                    }
+                }
+            }
+
+            // Workers take the next range from one shared index, so a slow range delays only the
+            // worker holding it and the rest of the file keeps flowing through the others
+            val rangeCount = ((totalSize + DOWNLOAD_RANGE_SIZE - 1) / DOWNLOAD_RANGE_SIZE).toInt()
+            val nextRange = AtomicInteger(0)
+
+            (0 until minOf(threads, rangeCount)).map {
+                async(Dispatchers.IO) {
+                    val buf = ByteArray(RANGE_BUFFER_SIZE)
+                    while (true) {
+                        val index = nextRange.getAndIncrement()
+                        if (index >= rangeCount) break
+                        val start = index * DOWNLOAD_RANGE_SIZE
+                        downloadRange(start, minOf(start + DOWNLOAD_RANGE_SIZE, totalSize) - 1, buf)
                     }
                 }
             }.awaitAll()
@@ -566,8 +577,8 @@ class HttpService(
     /**
      * Returns where [url] redirects, without following it, or null if it did not redirect.
      *
-     * Uses a throwaway client rather than the shared one because the latter negotiates content:
-     * its JSON Accept header is appended to whatever the caller sets, and an endpoint that serves
+     * Uses a client that does not follow redirects, rather than [http], because the latter
+     * negotiates content: its JSON Accept header is appended to whatever the caller sets, and an endpoint that serves
      * either metadata or raw bytes will then pick metadata. Resolving the redirect here yields a
      * pre-signed URL that needs no headers of its own to download.
      */
@@ -575,13 +586,11 @@ class HttpService(
         url: String,
         builder: HttpRequestBuilder.() -> Unit = {}
     ): String? = runCatching {
-        HttpClient { followRedirects = false }.use { client ->
-            client.request {
-                method = HttpMethod.Get
-                url(url)
-                builder()
-            }.headers[HttpHeaders.Location]
-        }
+        noRedirectClient.prepareRequest {
+            method = HttpMethod.Get
+            url(url)
+            builder()
+        }.execute { it.headers[HttpHeaders.Location] }
     }.getOrNull()
 
     /**
@@ -594,22 +603,10 @@ class HttpService(
     suspend fun headRedirect(url: String): String? {
         return runCatching {
             // Ktor follows redirects by default, but we want to find the redirect.
-            val noRedirectClient = HttpClient {
-                followRedirects = false
-            }
-
             noRedirectClient.request {
                 method = HttpMethod.Head
                 url(url)
-            }.headers[HttpHeaders.Location]?.let { location ->
-                if (location.startsWith("http://") || location.startsWith("https://")) {
-                    location
-                } else {
-                    val uri = java.net.URI(url)
-                    val prefix = "${uri.scheme}://${uri.host}"
-                    if (location.startsWith("/")) "$prefix$location" else "$prefix/$location"
-                }
-            }
+            }.headers[HttpHeaders.Location]?.let { resolveRedirectLocation(url, it) }
         }.getOrNull()
     }
 
@@ -620,6 +617,22 @@ class HttpService(
         Exception("HTTP 429 Too Many Requests")
 
     companion object {
+        /** Builds the client behind [resolveRedirect] and [headRedirect]. Tests swap it to count builds. */
+        internal var newNoRedirectClient: () -> HttpClient = { HttpClient { followRedirects = false } }
+
+        /**
+         * Absolute form of a redirect [location] returned for [requestUrl], or null when it would
+         * downgrade an https request to cleartext http, which is never followed.
+         */
+        internal fun resolveRedirectLocation(requestUrl: String, location: String): String? {
+            if (location.startsWith("http://") && requestUrl.startsWith("https://")) return null
+            if (location.startsWith("http://") || location.startsWith("https://")) return location
+            val uri = java.net.URI(requestUrl)
+            val port = if (uri.port == -1) "" else ":${uri.port}"
+            val prefix = "${uri.scheme}://${uri.host}$port"
+            return if (location.startsWith("/")) "$prefix$location" else "$prefix/$location"
+        }
+
         private const val MAX_RETRY_ATTEMPTS = 3
         private const val INITIAL_RETRY_DELAY_MS = 1_000L
         private const val MAX_RETRY_DELAY_MS = 30_000L
@@ -631,6 +644,10 @@ class HttpService(
          */
         private const val PROBE_RETRY_ATTEMPTS = 2
         private const val DEFAULT_DOWNLOAD_THREADS = 5
+        /** Bytes per range in the queue a parallel download pulls from (2 MB, within 1 to 4 MB). */
+        private const val DOWNLOAD_RANGE_SIZE = 2L * 1024 * 1024
+        /** Read buffer per download worker, reused across the ranges that worker takes. */
+        private const val RANGE_BUFFER_SIZE = 256 * 1024
         /** Minimum file size to bother with parallel download (1 MB). */
         private const val MIN_MULTIPART_SIZE = 1024L * 1024L
         /** Minimum bytes between progress callbacks. */

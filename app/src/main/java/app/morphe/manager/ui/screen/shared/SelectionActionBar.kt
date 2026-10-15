@@ -30,6 +30,9 @@ import androidx.compose.ui.unit.dp
 import app.morphe.manager.R
 import app.morphe.manager.ui.theme.ThemeTraitsDefaults
 
+/** Shape of the [MultiSelectShell] surface: rounded where it leaves the bottom edge, like a sheet. */
+private val ShellShape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)
+
 /**
  * Slide-up surface hosting a selection panel or a reorder bar. It sits on the bottom edge of the
  * screen like a sheet, with its content kept clear of the navigation bar, so it is meant for the
@@ -61,12 +64,13 @@ fun MultiSelectShell(
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
-                .predictiveBackSlide(backProgress)
-                .sheetBorder(CardBorder.neutral, SheetShape),
-            shape = SheetShape,
+                .padding(horizontal = Defaults.SheetSideInset)
+                .predictiveBackSlide(backProgress),
+            shape = ShellShape,
             // Drawn like an AppBottomSheet, on the dialogs' background with an edge of its own, so
             // a panel docked over a list reads as the same kind of surface as a sheet
             color = ThemeTraitsDefaults.surfaceColor(MaterialTheme.colorScheme.background),
+            border = CardBorder.neutral,
             shadowElevation = 8.dp
         ) {
             Box(modifier = Modifier.navigationBarsPadding().padding(bottom = 4.dp)) { content() }
@@ -260,65 +264,37 @@ fun PanelActions(actions: List<SelectionAction>, enabled: Boolean = true) {
 
 @Composable
 private fun PanelActionRow(action: SelectionAction, enabled: Boolean) {
+    val alpha = if (enabled) 1f else Defaults.DISABLED_ALPHA
     val accent = action.tone.accentColor()
     // The icon carries the tone; the label only takes it as a warning, so the list reads as one
     // piece with its destructive entries standing out
-    PanelRow(
-        title = action.label,
-        onClick = action.onClick,
-        icon = action.icon,
-        iconTint = accent,
-        titleColor = if (action.tone == ActionTone.Destructive) accent else MaterialTheme.colorScheme.onSurface,
-        enabled = enabled
-    )
-}
-
-/**
- * One row of a panel in a [MultiSelectShell] or an [AppBottomSheet]: [icon] and [title] at the
- * start and [trailing] after it, such as the value the row opens, which takes what the title leaves
- * of the row. Every row of a panel is one of these, so its actions and its settings read as one list.
- */
-@Composable
-fun PanelRow(
-    title: String,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    icon: ImageVector? = null,
-    iconTint: Color = MaterialTheme.colorScheme.onSurfaceVariant,
-    titleColor: Color = MaterialTheme.colorScheme.onSurface,
-    enabled: Boolean = true,
-    trailing: (@Composable RowScope.() -> Unit)? = null
-) {
-    val alpha = if (enabled) 1f else Defaults.DISABLED_ALPHA
+    val textColor = if (action.tone == ActionTone.Destructive) accent else MaterialTheme.colorScheme.onSurface
     Row(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             // Pressed like a menu item, on a rounded plate held off the panel's edge, so the
             // highlight does not run into the border and the corners the panel is drawn with
             .padding(horizontal = PanelActionInset)
             .clip(PanelActionShape)
             .heightIn(min = 48.dp)
-            .clickable(enabled = enabled, role = Role.Button, onClick = onClick)
+            .clickable(enabled = enabled, role = Role.Button, onClick = action.onClick)
             .padding(horizontal = Defaults.ContentPadding - PanelActionInset),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        if (icon != null) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = iconTint.copy(alpha = iconTint.alpha * alpha),
-                modifier = Modifier.size(Defaults.IconSize)
-            )
-        }
+        Icon(
+            imageVector = action.icon,
+            contentDescription = null,
+            tint = accent.copy(alpha = accent.alpha * alpha),
+            modifier = Modifier.size(Defaults.IconSize)
+        )
         // Set like the item rows across the app
         Text(
-            text = title,
+            text = action.label,
             style = MaterialTheme.typography.bodyLarge,
             fontWeight = FontWeight.Medium,
-            color = titleColor.copy(alpha = titleColor.alpha * alpha)
+            color = textColor.copy(alpha = textColor.alpha * alpha)
         )
-        trailing?.invoke(this)
     }
 }
 

@@ -669,13 +669,11 @@ private fun PathWithPresetsOption(
     isDefaultBundle: Boolean,
     onValueChange: (String) -> Unit
 ) {
-    // Folder picker
     val folderPicker = rememberFolderPickerWithPermission { uri ->
         onValueChange(uri.toFilePath())
     }
 
     OptionCard(heading, showDescription = false) {
-        // Dropdown TextField with folder picker and clear button
         AppDialogDropdownTextField(
             value = value,
             onValueChange = onValueChange,

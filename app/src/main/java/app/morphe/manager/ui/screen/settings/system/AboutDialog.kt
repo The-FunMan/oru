@@ -189,6 +189,14 @@ fun AboutDialog(
                 textAlign = TextAlign.Center,
                 lineHeight = 26.sp
             )
+            if (BuildConfig.ORU_UX) {
+                Text(
+                    text = stringResource(R.string.oru_about_independent),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = secondaryColor,
+                    textAlign = TextAlign.Center
+                )
+            }
 
             // Social Links
             Row(

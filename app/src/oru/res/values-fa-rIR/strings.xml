@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="battery_optimization_dialog_description">برخی دستگاه‌ها ممکن است وقتی برنامه کوچک می‌شود، پچر را متوقف کنند. به Oru اجازه دهید بدون محدودیت باتری اجرا شود تا پچ‌کردن با اطمینان کامل شود</string>
+    <string name="deep_link_add_source_message">می‌خواهید این منبع پچ را به Oru اضافه کنید؟</string>
+    <string name="external_batch_patch_description">%s می‌خواهد برنامه‌ها را با Oru پچ و نصب کند</string>
+    <string name="home_apk_helper_description">Oru از برنامهٔ کمکی زیر می‌خواهد APK اصلی را دانلود کرده و فایل را تحویل دهد</string>
+    <string name="home_apk_helper_installed_unavailable">Oru نتوانست از برنامهٔ نصب‌شده استفاده کند</string>
+    <string name="home_apk_helper_warning">فقط در صورتی ادامه دهید که به این برنامهٔ کمکی اعتماد دارید. Oru بسته، نسخه و امضای هر چیزی را که دریافت می‌کند پیش از پچ‌کردن بررسی می‌کند</string>
+    <string name="home_apk_helper_warning_unverified">فقط در صورتی ادامه دهید که به این برنامهٔ کمکی اعتماد دارید. Oru نمی‌تواند امضای این APK را تأیید کند؛ بنابراین فایل تغییریافته شناسایی نمی‌شود</string>
+    <string name="home_app_filter_not_patched_description">برنامه‌هایی که هنوز در Oru پچ نکرده‌اید</string>
+    <string name="home_app_filter_patched_description">برنامه‌هایی که با Oru پچ یا ذخیره کرده‌اید</string>
+    <string name="home_app_filter_uninstalled_description">برنامه‌های پچ‌شده با Oru که دیگر روی این دستگاه نیستند</string>
+    <string name="home_app_info_app_deleted_description">این برنامه خارج از Oru حذف شده است. برای بازگرداندن عملکرد، آن را دوباره پچ کنید</string>
+    <string name="home_app_info_install_unverified">Oru نمی‌تواند تأیید کند برنامهٔ نصب‌شده همان ساختی است که پچ کرده است. برای بازگرداندن عملکردها، آن را دوباره پچ کنید یا از APK ذخیره‌شده دوباره نصب کنید</string>
+    <string name="home_app_info_not_patched_description">نسخهٔ پچ‌نشدهٔ این برنامه نصب است. Oru همچنان سابقهٔ پچ قبلی آن را دارد</string>
+    <string name="home_download_instructions_download_button_toast_6">حالا دیگر رسماً آزمایش‌کنندهٔ دکمه‌های Oru هستید 🏅</string>
+    <string name="home_download_instructions_step2_search_note">Oru این وب‌سایت‌ها را تأیید نمی‌کند. وب‌سایت‌هایی را که به‌جای فایل APK فروشگاه برنامهٔ خودشان را پیشنهاد می‌دهند، نادیده بگیرید</string>
+    <string name="home_download_instructions_step4">پس از پایان دانلود، به Oru بازگردید</string>
+    <string name="home_download_instructions_step4_mount">پس از نصب APK اصلی، به Oru بازگردید</string>
+    <string name="home_held_back_title">یک منبع پچ باعث از کار افتادن Oru شد</string>
+    <string name="home_outdated_manager_title">Oru به‌روز نیست</string>
+    <string name="home_update_available">به‌روزرسانی Oru در دسترس است</string>
+    <string name="installer_shizuku_error_permission">مجوز Shizuku وجود ندارد. به Oru مجوز بدهید و دوباره تلاش کنید</string>
+    <string name="installer_status_shizuku_permission">از برنامهٔ Shizuku به Oru مجوز بدهید</string>
+    <string name="installing_manager_update_hint">Oru برای تکمیل به‌روزرسانی بسته خواهد شد</string>
+    <string name="launch_app_unverified">Oru نتوانست تأیید کند برنامهٔ نصب‌شده همان ساختی است که پچ کرده است</string>
+    <string name="notification_bundle_update_text_unversioned">برای بازکردن Oru و به‌روزرسانی، ضربه بزنید</string>
+    <string name="notification_channel_manager_updates">به‌روزرسانی‌های Oru</string>
+    <string name="notification_channel_manager_updates_description">اعلان‌های مربوط به نسخه‌های جدید Oru</string>
+    <string name="notification_channel_patcher_description">وقتی Oru برنامه‌ای را در پس‌زمینه پچ می‌کند نمایش داده می‌شود</string>
+    <string name="notification_permission_dialog_description">Oru برای اطلاع‌دادن هنگام در دسترس بودن به‌روزرسانی‌ها در پس‌زمینه، به مجوز اعلان نیاز دارد</string>
+    <string name="onboarding_settings_desc">Oru را سفارشی کنید: ظاهر، گزینه‌های پیشرفته و ابزارهای سیستم</string>
+    <string name="patcher_incompatible_patcher_description">منبع &lt;b&gt;%1$s&lt;/b&gt; به وصله‌کننده‌ی &lt;b&gt;%2$s&lt;/b&gt; یا جدیدتر نیاز دارد. برای استفاده از آن، Oru را به‌روزرسانی کنید</string>
+    <string name="patcher_installed_conflict_body">"Oru برنامه‌های پچ‌شده را با گواهی خودش امضا می‌کند که با گواهی اصلی متفاوت است. Android پیش از نصب برنامهٔ پچ‌شده، حذف نسخهٔ موجود را الزامی می‌کند.
+
+حذف برنامه همهٔ داده‌های آن را برای همیشه پاک می‌کند"</string>
+    <string name="patcher_storage_permission_description_api30">یک یا چند گزینهٔ پچ به مسیرهایی اشاره می‌کنند که Oru نمی‌تواند بخواند. دسترسی ذخیره‌سازی را اعطا کنید و دکمه را بزنید؛ سپس پچ‌کردن خودکار شروع می‌شود</string>
+    <string name="patcher_storage_permission_hint">نکته: فایل‌ها را به /Android/data/app.oru.manager/files/ منتقل کنید؛ مجوز اضافی لازم نیست</string>
+    <string name="root_mount_module_unmount_warning">اگر گزینهٔ Unmount modules by default در KernelSU فعال است، به KernelSU &gt; Superuser &gt; برنامه‌ای که مانت کرده‌اید &gt; Profile &gt; Custom بروید و Unmount modules را غیرفعال کنید. در غیر این صورت، APK پچ‌شدهٔ مانت‌شده ممکن است اعمال نشود؛ حتی اگر Oru آن را مانت‌شده نشان دهد</string>
+    <string name="settings_advanced_expert_mode_description">تنظیمات پیچیدهٔ پچ‌کردن Oru و گزینه‌های سفارشی‌سازی را فعال می‌کند</string>
+    <string name="settings_advanced_github_pat_export_include_supporting">این PAT را به تنظیمات خروجی Oru اضافه می‌کند</string>
+    <string name="settings_advanced_patch_options_custom_branding_custom_icon_instruction">"پوشه‌ای با تصاویری که به‌عنوان آیکون سفارشی استفاده می‌شوند.
+
+پوشه باید، بسته به DPI دستگاه، یک یا چند مورد از پوشه‌های زیر را داشته باشد:
+- mipmap-mdpi
+- mipmap-hdpi
+- mipmap-xhdpi
+- mipmap-xxhdpi
+- mipmap-xxxhdpi
+
+هر پوشه باید همهٔ فایل‌های زیر را داشته باشد:
+morphe_adaptive_background_custom.png
+morphe_adaptive_foreground_custom.png
+
+ابعاد تصویر باید به این صورت باشد:
+- mipmap-mdpi: 108x108 px
+- mipmap-hdpi: 162x162 px
+- mipmap-xhdpi: 216x216 px
+- mipmap-xxhdpi: 324x324 px
+- mipmap-xxxhdpi: 432x432 px
+
+در صورت تمایل، مسیر می‌تواند پوشهٔ «drawable» را با یک فایل آیکون تک‌رنگ داشته باشد:
+morphe_adaptive_monochrome_custom.xml
+
+همچنین مسیر می‌تواند در یکی از قالب‌های زیر آیکون اعلان داشته باشد:
+- وکتور XML در «drawable»:
+  morphe_notification_icon_custom.xml
+- تصاویر شطرنجی PNG در پوشه‌های «drawable-dpi»:
+  drawable-mdpi/morphe_notification_icon_custom.png (24x24 px)
+  drawable-hdpi/morphe_notification_icon_custom.png (36x36 px)
+  drawable-xhdpi/morphe_notification_icon_custom.png (48x48 px)
+  drawable-xxhdpi/morphe_notification_icon_custom.png (72x72 px)
+  drawable-xxxhdpi/morphe_notification_icon_custom.png (96x96 px)"</string>
+    <string name="settings_advanced_patch_options_custom_header_instruction">"پوشه‌ای با تصاویری که به‌عنوان لوگوی سربرگ سفارشی استفاده می‌شوند.
+
+پوشه باید، بسته به DPI دستگاه، یک یا چند مورد از پوشه‌های زیر را داشته باشد:
+- drawable-hdpi
+- drawable-xhdpi
+- drawable-xxhdpi
+- drawable-xxxhdpi
+
+هر پوشه باید همهٔ فایل‌های زیر را داشته باشد:
+morphe_header_custom_light.png
+morphe_header_custom_dark.png
+
+ابعاد تصویر باید به این صورت باشد:
+- drawable-hdpi: 194x72 px
+- drawable-xhdpi: 258x96 px
+- drawable-xxhdpi: 387x144 px
+- drawable-xxxhdpi: 512x192 px"</string>
+    <string name="settings_advanced_updates_allow_metered_description">اجازه می‌دهد Oru و به‌روزرسانی‌های پچ از طریق دادهٔ تلفن همراه دانلود شوند</string>
+    <string name="settings_advanced_updates_manager_prereleases_description">دسترسی زودهنگام به نسخه‌های جدید Oru</string>
+    <string name="settings_advanced_updates_prerelease_warning_message">"نسخه‌های پیش‌انتشار Oru هنوز در حال توسعه‌اند و ممکن است ناپایدار باشند.
+
+پچ‌ها تحت تأثیر قرار نمی‌گیرند: برای هر منبع در فهرست منابع پچ، پچ‌های پیش‌انتشار را فعال کنید"</string>
+    <string name="settings_appearance_app_icon_selector_description">ظاهر Oru در صفحه‌ی اصلی و کشوی برنامه‌ها</string>
+    <string name="settings_auto_uninstall_warning_message">اگر Android هنگام نصب خودکار با Shizuku تداخل امضا گزارش کند، Oru پیش از نصب APK پچ‌شده برنامهٔ موجود را حذف می‌کند</string>
+    <string name="settings_system_apk_download_helper_warning">APK از برنامه‌ی کمکی می‌آید، پس فقط به برنامه‌هایی که می‌شناسید اعتماد کنید. Oru همچنان بسته، نسخه و امضای هر فایل را قبل از وصله‌کردن بررسی می‌کند</string>
+    <string name="settings_system_custom_file_picker_description">به‌جای انتخابگر پیش‌فرض سیستم، ذخیره‌سازی را با انتخابگر فایل داخلی Oru مرور کنید</string>
+    <string name="settings_system_export_manager_settings_fail">خروجی‌گرفتن از تنظیمات Oru ناموفق بود: %s</string>
+    <string name="settings_system_export_manager_settings_success">از تنظیمات Oru خروجی گرفته شد</string>
+    <string name="settings_system_import_manager_settings_description">از تنظیمات Oru پشتیبان می‌گیرد و آن‌ها را بازیابی می‌کند</string>
+    <string name="settings_system_import_manager_settings_fail">واردکردن تنظیمات Oru ناموفق بود: %s</string>
+    <string name="settings_system_import_manager_settings_mode_title">واردکردن تنظیمات Oru</string>
+    <string name="settings_system_import_manager_settings_success">تنظیمات Oru وارد شد</string>
+    <string name="settings_system_morphe_settings">تنظیمات Oru</string>
+    <string name="settings_system_process_runtime_heap_limit_ignored">این دستگاه در آخرین اجرا حد حافظه را نادیده گرفت، بنابراین وصله‌کردن ممکن است به اجرای داخل Oru بازگردد</string>
+    <string name="settings_system_signing_key_dialog_description">هر برنامه‌ای که Oru وصله می‌کند با این کلید امضا می‌شود. یک کپی نگه دارید: بدون آن، برنامه‌های وصله‌شده فقط پس از حذف نصب می‌توانند به‌روزرسانی شوند</string>
+    <string name="settings_system_signing_key_missing">Oru با اولین وصله‌ی شما یکی می‌سازد</string>
+    <string name="settings_system_storage_open_app_info_description">همهٔ داده‌های Oru را از طریق تنظیمات سیستم مدیریت یا پاک کنید</string>
+    <string name="sources_dialog_community_notice_message">"منابع پچ جامعه توسط سازندگان خودشان ایجاد و نگهداری می‌شوند. Oru پچ‌های شخص ثالث را بررسی یا تأیید نمی‌کند و در قبال محتوای آن‌ها یا کاری که روی دستگاه شما انجام می‌دهند مسئول نیست.
+
+هر چیزی را که از این وب‌سایت اضافه می‌کنید، با مسئولیت خودتان استفاده کنید"</string>
+    <string name="sources_management_held_back_hint">این منبع هنگام بارگذاری باعث از کار افتادن Oru شد، بنابراین نادیده گرفته می‌شود. برای تلاش دوباره، آن را به‌روزرسانی یا مجدداً وارد کنید</string>
+    <string name="sources_management_outdated_manager_badge">به‌روزرسانی Oru</string>
+    <string name="sources_management_outdated_manager_hint">این منبع برای پچر %1$s ساخته شده است، اما Oru %2$s شامل پچر %3$s است. برای استفاده از آن، Oru را به‌روز کنید</string>
+    <string name="tour_prompt_desc">می‌خواهید یک تور سریع از ویژگی‌های اصلی Oru داشته باشید؟</string>
+    <string name="uninstall_app_unverified">باقی ماند: Oru نتوانست تأیید کند برنامهٔ نصب‌شده همان ساختی است که پچ کرده است</string>
+</resources>

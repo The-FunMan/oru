@@ -1,0 +1,17 @@
+{
+  "uniqueId": "com.github.Kinutafontfactory:Yuji",
+  "name": "Yuji Boku typeface",
+  "developers": [
+    {
+      "name": "The Yuji Project Authors"
+    }
+  ],
+  "website": "https://github.com/Kinutafontfactory/Yuji",
+  "scm": {
+    "connection": "scm:git:https://github.com/Kinutafontfactory/Yuji.git",
+    "url": "https://github.com/Kinutafontfactory/Yuji"
+  },
+  "licenses": [
+    "OFL-1.1"
+  ]
+}

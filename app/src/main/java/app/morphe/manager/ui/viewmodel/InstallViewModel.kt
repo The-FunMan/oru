@@ -29,7 +29,6 @@ import kotlinx.coroutines.*
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.io.File
-import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
 /** What a running mount install is doing, in the words its button shows. */
@@ -131,6 +130,9 @@ class InstallViewModel : ViewModel(), KoinComponent {
     var mountOperation: MountOperation? by mutableStateOf(null)
         private set
 
+    /** The install or uninstall step the user can stop waiting on (see [stopWaiting]). */
+    private var activeWork: Job? = null
+
     // For external installer monitoring
     private var pendingExternalInstall: InstallerManager.InstallPlan.External? = null
     private var externalInstallTimeoutJob: Job? = null
@@ -218,7 +220,7 @@ class InstallViewModel : ViewModel(), KoinComponent {
         pendingAutoUninstallOnConflict = autoUninstallOnConflict
         pendingAllowSignatureMismatch = allowSignatureMismatch
 
-        viewModelScope.launch {
+        activeWork = viewModelScope.launch {
             // Check if we should prompt for installer selection
             val shouldPrompt = prefs.promptInstallerOnInstall.get()
 
@@ -292,6 +294,10 @@ class InstallViewModel : ViewModel(), KoinComponent {
                 }
 
                 Log.d(TAG, "Resolved plan: ${resolved.plan::class.java.simpleName}")
+                Log.d(
+                    InstallWaitPolicy.LOG_TAG,
+                    "step=resolved package=$targetPackageName plan=${resolved.plan::class.java.simpleName}"
+                )
 
                 // Check if installer is unavailable
                 if (resolved.primaryUnavailable) {
@@ -331,6 +337,9 @@ class InstallViewModel : ViewModel(), KoinComponent {
                 // Execute the installation plan
                 executeInstallPlan(resolved.plan, outputFile, originalPackageName, onPersistApp)
 
+            } catch (e: CancellationException) {
+                // Stopped by the user (stopWaiting): not an install error
+                throw e
             } catch (e: Exception) {
                 Log.e(TAG, "Install failed", e)
                 handleInstallError(
@@ -529,9 +538,7 @@ class InstallViewModel : ViewModel(), KoinComponent {
         val installedFile = pm.getApplicationInfo(targetPackageName)?.sourceDir
             ?.takeIf { it.isNotEmpty() }
             ?.let(::File) ?: return@withContext false
-        val installedHash = installedFile.sha256OrNull() ?: return@withContext false
-        val expectedHash = outputFile.sha256OrNull() ?: return@withContext false
-        installedHash == expectedHash
+        sameFileContent(installedFile, outputFile)
     }
 
     /**
@@ -1142,11 +1149,13 @@ class InstallViewModel : ViewModel(), KoinComponent {
         val originalPkg = pendingOriginalPackageName ?: return
         val callback = pendingPersistCallback ?: return
 
-        viewModelScope.launch {
+        activeWork = viewModelScope.launch {
             installState = InstallState.Installing()
             currentInstallType = InstallType.DEFAULT
             try {
                 performStandardInstall(file, originalPkg, callback)
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
                 Log.e(TAG, "Fallback install failed", e)
                 handleInstallError(
@@ -1190,10 +1199,16 @@ class InstallViewModel : ViewModel(), KoinComponent {
      * the pending install request when [installAfterUninstall] is true.
      */
     fun requestUninstall(packageName: String, installAfterUninstall: Boolean = false) {
-        viewModelScope.launch {
+        activeWork = viewModelScope.launch {
             try {
-                uninstallForPendingInstall(packageName, installAfterUninstall)
+                val removed = uninstallForPendingInstall(packageName, installAfterUninstall)
                 if (installAfterUninstall) {
+                    if (!removed) {
+                        // Still installed: a reinstall would meet the same conflict, so the decision is offered again
+                        Log.w(TAG, "$packageName is still installed after the uninstall, not reinstalling")
+                        installState = signatureConflictState(packageName)
+                        return@launch
+                    }
                     val file = pendingInstallFile
                     val originalPkg = pendingOriginalPackageName
                     val callback = pendingPersistCallback
@@ -1210,9 +1225,11 @@ class InstallViewModel : ViewModel(), KoinComponent {
                     installState = InstallState.Ready
                 }
             } catch (_: UninstallCancelledException) {
-                // User dismissed the dialog - keep current state
-                if (installAfterUninstall) {
-                    installState = signatureConflictState(packageName)
+                // User dismissed the dialog: the install offers the decision again, a plain uninstall is over
+                installState = if (installAfterUninstall) {
+                    signatureConflictState(packageName)
+                } else {
+                    InstallState.Ready
                 }
             }
         }
@@ -1240,31 +1257,27 @@ class InstallViewModel : ViewModel(), KoinComponent {
         )
     }
 
+    /**
+     * Removes [packageName] before a reinstall. Returns whether the package manager no longer lists it. The
+     * uninstall callbacks are only a hint, so the removal is always confirmed by polling the package manager.
+     */
     private suspend fun uninstallForPendingInstall(
         packageName: String,
         installAfterUninstall: Boolean
-    ) {
+    ): Boolean {
+        // Every branch below is a wait the user can stop, so the screen reads as installing until it ends
+        installState = InstallState.Installing()
         if (installAfterUninstall && shouldUseShizukuUninstallForPendingInstall()) {
-            installState = InstallState.Installing()
-            when (val result = sessionInstaller.uninstallShizuku(packageName)) {
-                UninstallResult.Success -> {
-                    if (waitUntilPackageRemoved(packageName)) {
-                        return
-                    }
-                    Log.w(TAG, "Shizuku uninstall reported success but $packageName is still installed")
-                    installState = InstallState.Conflict(packageName)
-                }
-                is UninstallResult.Failure -> {
-                    if (withContext(Dispatchers.IO) { pm.getPackageInfo(packageName) == null }) {
-                        return
-                    }
-                    Log.w(TAG, "Shizuku uninstall failed for $packageName: ${result.message}")
-                    installState = InstallState.Conflict(packageName)
-                }
-            }
+            val result = sessionInstaller.uninstallShizuku(packageName)
+            Log.d(InstallWaitPolicy.LOG_TAG, "step=uninstall-shizuku package=$packageName result=$result")
+            if (waitUntilPackageRemoved(packageName)) return true
+            Log.w(InstallWaitPolicy.LOG_TAG, "step=uninstall-shizuku package=$packageName still listed")
         }
 
         sessionInstaller.uninstall(packageName)
+        val removed = waitUntilPackageRemoved(packageName)
+        Log.d(InstallWaitPolicy.LOG_TAG, "step=uninstall-system package=$packageName removed=$removed")
+        return removed
     }
 
     private suspend fun tryAutoUninstallSignatureConflict(packageName: String): Boolean {
@@ -1288,16 +1301,15 @@ class InstallViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    private suspend fun waitUntilPackageRemoved(packageName: String): Boolean {
-        val timeoutAt = SystemClock.uptimeMillis() + UNINSTALL_VERIFY_TIMEOUT_MS
-        while (SystemClock.uptimeMillis() < timeoutAt) {
-            if (withContext(Dispatchers.IO) { pm.getPackageInfo(packageName) == null }) {
-                return true
-            }
-            delay(UNINSTALL_VERIFY_POLL_MS.milliseconds)
-        }
-        return withContext(Dispatchers.IO) { pm.getPackageInfo(packageName) == null }
-    }
+    /** Polls the package manager until [packageName] is gone, for at most [InstallWaitPolicy.UNINSTALL_POLL_LIMIT_MS]. */
+    private suspend fun waitUntilPackageRemoved(packageName: String): Boolean =
+        InstallWaitPolicy.pollUntil(
+            limitMs = InstallWaitPolicy.UNINSTALL_POLL_LIMIT_MS,
+            intervalMs = InstallWaitPolicy.UNINSTALL_POLL_INTERVAL_MS,
+            now = { SystemClock.uptimeMillis() },
+            sleep = { delay(it) },
+            probe = { withContext(Dispatchers.IO) { pm.getPackageInfo(packageName) == null } },
+        )
 
     private suspend fun shouldUseShizukuUninstallForPendingInstall(): Boolean {
         val token = pendingInstallToken
@@ -1319,6 +1331,19 @@ class InstallViewModel : ViewModel(), KoinComponent {
      */
     fun resetInstallState() {
         installState = InstallState.Ready
+    }
+
+    /**
+     * The user stopped waiting on the install or the uninstall. The running step is cancelled, which abandons an
+     * unfinished Shizuku session and removes the status receivers. The APK stays pending, so a retry installs it.
+     */
+    fun stopWaiting() {
+        if (installState !is InstallState.Installing) return
+        Log.i(InstallWaitPolicy.LOG_TAG, "step=stop-waiting")
+        activeWork?.cancel()
+        activeWork = null
+        installState = InstallState.Ready
+        selectedInstallerToken = null
     }
 
     fun openApp() {
@@ -1402,6 +1427,7 @@ class InstallViewModel : ViewModel(), KoinComponent {
     }
 
     private fun handleInstallError(message: String) {
+        Log.w(InstallWaitPolicy.LOG_TAG, "step=failed message=$message")
         externalInstallTimeoutJob?.cancel()
         selectedInstallerToken = null
         installState = InstallState.Error(message)
@@ -1476,8 +1502,6 @@ class InstallViewModel : ViewModel(), KoinComponent {
     companion object {
         private const val TAG = "Morphe Install"
         private const val EXTERNAL_INSTALL_TIMEOUT_MS = 60_000L
-        private const val UNINSTALL_VERIFY_TIMEOUT_MS = 10_000L
-        private const val UNINSTALL_VERIFY_POLL_MS = 250L
         private val INSTALL_MONITOR_POLL_MS = 1.seconds
         private val STOCK_INSTALL_SETTLE_TIMEOUT = 30.seconds
         private val STOCK_INSTALL_SETTLE_POLL = 1.seconds

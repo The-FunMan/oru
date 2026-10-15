@@ -24,6 +24,7 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.util.Log
 import androidx.annotation.StringRes
+import app.morphe.manager.BuildConfig
 import app.morphe.manager.R
 import app.morphe.manager.data.room.apps.installed.InstallType
 import app.morphe.manager.domain.manager.InstallerPreferenceTokens
@@ -141,7 +142,8 @@ class InstallerManager(
      * silently or through a confirmation the installer knows how to put in front of them.
      */
     suspend fun autoInstallAllowed(targetPackageName: String): Boolean {
-        if (!prefs.autoInstallAfterPatching.get()) return false
+        // Oru has no switch for this and always applies the rule (SETTINGS_IA row 18)
+        if (!BuildConfig.ORU_UX && !prefs.autoInstallAfterPatching.get()) return false
         if (prefs.promptInstallerOnInstall.get()) return false
 
         return when (parseToken(prefs.installerPrimary.get())) {

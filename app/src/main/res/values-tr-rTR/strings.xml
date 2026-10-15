@@ -22,10 +22,6 @@
     <string name="deep_link_add_source_title">Kaynak ekleyin</string>
     <string name="deep_link_add_source_message">Bu yama kaynağını Morphe\'ye eklemek ister misiniz?</string>
     <string name="deep_link_add_source_warning">Yalnızca güvendiğiniz kaynakları ekleyin</string>
-    <!-- Shown under the app a link was opened for -->
-    <string name="deep_link_add_source_only_app">Yalnızca bu uygulama eklendi. Kaynağın uygulama listesinden başka uygulamalar da ekleyebilirsiniz.</string>
-    <!-- Asked when the link names an app of a source that is already added -->
-    <string name="deep_link_add_source_app_back">Bu kaynak zaten eklenmiş. Bu uygulamayı mevcut kaynağa ekle?</string>
     <!-- Home Screen - Update Notifications -->
     <string name="home_update_available">Morphe güncellemesi mevcut</string>
     <string name="home_update_available_subtitle">Yeni sürüm yüklenmeye hazır</string>
@@ -58,9 +54,6 @@
     <string name="home_app_filter_uninstalled_description">Morphe ile yamalanmış ve bu cihazda artık bulunmayan uygulamalar</string>
     <string name="home_app_filter_clones">Klonlar</string>
     <string name="home_app_filter_clones_description">Kendi paket adıyla oluşturulan ve orijinalin yanına kurulan uygulamalar</string>
-    <string name="home_app_grouping_all_apps_description">Her uygulamanın bulunduğu tek bir liste</string>
-    <string name="home_app_grouping_sources_description">Uygulamaları sağlayan yama kaynağının altındaki uygulamalar</string>
-    <string name="home_app_grouping_custom_description">Oluşturduğunuz kategorilerdeki uygulamalar</string>
     <string name="home_app_sort_manual_description">Bir uygulamaya uzun basın, ardından yeniden sıralama düğmesine dokunun</string>
     <string name="home_app_sort_recommended">Önerilen sıra</string>
     <string name="home_app_sort_recommended_description">Önce yüklenen ve sabitlenen uygulamalar</string>
@@ -153,6 +146,7 @@
     <!-- Home Screen - Sources Management -->
     <string name="sources_management_title">Yama kaynakları</string>
     <string name="sources_search">Kaynakları ve yamaları ara</string>
+    <string name="sources_sort_title">Yama kaynaklarını sırala</string>
     <string name="sources_sort_manual">Manuel sıra</string>
     <string name="sources_sort_manual_hint">Yeniden sıralamak için bir kaynağa uzun basın</string>
     <string name="sources_sort_last_updated">Son güncelleme</string>
@@ -164,17 +158,12 @@
     <string name="sources_management_report_issue">Sorun bildir</string>
     <string name="sources_management_failed_to_open_url">URL açılamadı</string>
     <string name="sources_apps">Uygulamalar</string>
-    <string name="sources_apps_description">İşaretli uygulamalar bu kaynaktan gelir. Bir uygulamayı hariç tutmak veya geri getirmek için üzerine dokunun. Yama uygulamadığınız sürece, hiçbir kaynak tarafından sağlanmayan bir uygulama ana ekrandan kaldırılır.</string>
+    <string name="sources_apps_description">Bir uygulamaya dokunarak onu bu kaynaktan hariç tutabilir veya geri getirebilirsiniz; birden fazla seçmek için uzun basın. Bir uygulama, hiçbir kaynak onu getirmediğinde ana ekrandan kaldırılır.</string>
     <string name="sources_apps_brought">Bu kaynağın getirdiği</string>
     <string name="sources_apps_left_out">Bu kaynaktan hariç tutulanlar</string>
+    <string name="sources_apps_leave_out">Hariç tut</string>
+    <string name="sources_apps_leave_out_done">Hariç tutuldu</string>
     <string name="sources_apps_bring_back">Geri getir</string>
-    <!-- Under an app left out of a source that keeps its home screen card because the user has patched it -->
-    <string name="sources_apps_stays_patched">Yamalı haliyle korundu</string>
-    <!-- Marks an app (not a patch) the source started supporting since its app list was last opened -->
-    <string name="sources_apps_new">Yeni</string>
-    <string name="sources_apps_new_apps">Yeni uygulamalar getirin</string>
-    <!-- Under the Bring new apps switch in a source's app list, whichever way it is set. "It" is the patch source -->
-    <string name="sources_apps_new_apps_description">Sonradan eklenen uygulamalar ana ekranda üstte görünür.</string>
     <string name="sources_management_prerelease_toggle">Ön sürüm yamalar</string>
     <string name="sources_management_prerelease_toggle_description">Yeni deneysel sürüm yamalarına erken erişim sağlar</string>
     <string name="sources_prerelease_warning_title">Ön sürüm yamalarını etkinleştir?</string>
@@ -219,6 +208,7 @@
     <string name="sources_dialog_url_invalid">URL, bir GitHub/GitLab deposuna veya .json dosyasına işaret etmelidir</string>
     <string name="sources_dialog_preinstalled">Ön yüklü</string>
     <string name="sources_dialog_community">Topluluk yamaları</string>
+    <string name="sources_dialog_choose_apps">Uygulamaları seç</string>
     <string name="sources_dialog_choose_apps_description">Kaynak yüklendikten sonra, uygulamalarından hangilerinin tutulacağını seçin.</string>
     <!-- Shown before leaving Morphe for the community patches website. The sources listed there are not reviewed by Morphe -->
     <string name="sources_dialog_community_notice_title">Üçüncü taraf yama kaynakları</string>
@@ -573,8 +563,6 @@ En iyi sonuçlar için bu uygulama, &lt;b&gt;tam APK&lt;/b&gt; dosyasını yamal
     <string name="patcher_field_value_stripped">kaldırıldı</string>
     <!-- Value of "Libraries": every library was left in the patched APK -->
     <string name="patcher_field_value_kept">korundu</string>
-    <string name="patcher_tab_logs">Patcher günlükleri</string>
-    <string name="patcher_tab_game">Oyunlar</string>
     <string name="patcher_logs_waiting">Log çıktısı bekleniyor…</string>
     <string name="patcher_logs_lost">Log çıktısı uygulama yeniden başlatıldığında korunmaz</string>
     <string name="patcher_long_step_warning">Bu adım biraz zaman alabilir. Lütfen bekleyin…</string>
@@ -604,7 +592,6 @@ Kaldırma işlemi tüm uygulama verilerini kalıcı olarak silecektir"</string>
     <string name="patcher_install_error_subtitle">Kaldırıp tekrar yüklemeyi deneyin</string>
     <string name="patcher_ready_to_mount_subtitle">Bağlamak için aşağıdaki düğmeye basın</string>
     <string name="patcher_patches_excluded_for_installer">Bu kurulum yöntemi için kullanılamıyor ve hariç tutuldu: %s</string>
-    <string name="patcher_back_to_game_hint">Geri dönmek için %1$s\'e dokunun</string>
     <string name="patcher_storage_permission_dialog_title">Depolama yoluna erişilemiyor</string>
     <string name="patcher_incompatible_patcher_title">Güncelleme gerekiyor</string>
     <string name="patcher_incompatible_patcher_description">&lt;b&gt;%1$s&lt;/b&gt; kaynağı, &lt;b&gt;%2$s&lt;/b&gt; veya daha yeni bir yamalayıcı sürümü gerektiriyor. Bu kaynağı kullanmak için Morphe’yi güncelleyin.</string>
@@ -701,29 +688,6 @@ Kaldırma işlemi tüm uygulama verilerini kalıcı olarak silecektir"</string>
     <string name="package_name">Paket adı</string>
     <string name="failed_to_mount">Bağlanamadı: %s</string>
     <string name="failed_to_unmount">Bağlama kaldırılamadı: %s</string>
-    <!-- Patcher Screen - Mini-games -->
-    <string name="mini_game_score">Puan %s</string>
-    <string name="mini_game_best">En İyi %s</string>
-    <string name="mini_game_new_record">Yeni rekor!</string>
-    <string name="mini_game_game_over">Oyun Bitti</string>
-    <string name="mini_game_try_again">Tekrar Dene</string>
-    <string name="mini_game_paused">Duraklatıldı</string>
-    <string name="mini_game_resume">Devam et</string>
-    <string name="mini_game_restart">Yeniden başla</string>
-    <string name="mini_game_change">Başka bir oyun seç</string>
-    <string name="mini_game_2048_picker_subtitle">Karoları birleştirmek için kaydır</string>
-    <string name="mini_game_flappy_picker_subtitle">Borulardan uçmak için dokun</string>
-    <string name="mini_game_flappy_tap_to_start">Uçmak için dokunun</string>
-    <string name="mini_game_snake_picker_subtitle">Yemek ye, kendine çarpma</string>
-    <string name="mini_game_snake_swipe_to_start">Başlamak için kaydırın</string>
-    <string name="mini_game_dino_picker_subtitle">Kaktüslerin üzerinden atlamak için dokun</string>
-    <string name="mini_game_dino_tap_to_start">Koşmak için dokunun</string>
-    <string name="mini_game_blocks_picker_subtitle">Şekilleri yerleştir, çizgileri temizle</string>
-    <string name="mini_game_blocks_tap_to_start">Döndürmek için dokunun, taşımak için kaydırın, düşürmek için aşağı kaydırın</string>
-    <string name="mini_game_bricks_picker_subtitle">Topu sektir, duvarı yok et</string>
-    <string name="mini_game_bricks_tap_to_start">Nişan almak için sürükle, fırlatmak için dokun</string>
-    <string name="mini_game_miner_picker_subtitle">Açmak için dokunun, işaretlemek için basılı tutun</string>
-    <string name="mini_game_pairs_picker_subtitle">Kartları çevirin, eşleşeni bulun</string>
     <!-- Settings -->
     <string name="appearance">Görünüm</string>
     <string name="advanced">Gelişmiş</string>
@@ -767,7 +731,7 @@ Kaldırma işlemi tüm uygulama verilerini kalıcı olarak silecektir"</string>
     <string name="settings_appearance_pure_black">Saf Siyah</string>
     <string name="settings_appearance_pure_black_description">Gerçek siyah arka plan kullanır</string>
     <string name="settings_appearance_color_accents">Uygulama ve kaynak renkleri</string>
-    <string name="settings_appearance_color_accents_description">Vurgu rengi yerine her bir uygulamanın ve kaynağın kendi rengini kullanır.</string>
+    <string name="settings_appearance_color_accents_description">Her uygulamanın ve kaynağın kendi rengini vurgu rengi yerine kullanır.</string>
     <string name="settings_appearance_outlines">Anahatlar</string>
     <string name="settings_appearance_outlines_description">Kartlar, paneller ve düğmelerin çevresine ince bir kenar çizer</string>
     <!-- Settings - Appearance Tab - Language Selector -->
@@ -785,11 +749,13 @@ Kaldırma işlemi tüm uygulama verilerini kalıcı olarak silecektir"</string>
     <!-- Settings - Appearance Tab - Home Screen Section -->
     <string name="settings_appearance_home_screen">Ana ekran</string>
     <string name="settings_appearance_greeting_phrases">Selamlama cümleleri</string>
-    <string name="settings_appearance_greeting_phrases_subtitle">Bir karşılama mesajı gösterir</string>
+    <string name="settings_appearance_greeting_phrases_subtitle">Ana ekranda bir selamlama mesajı göster</string>
+    <string name="settings_appearance_app_grouping">Uygulama gruplandırma</string>
+    <string name="settings_appearance_app_grouping_description">Uygulamaları kaynağa veya kategoriye göre gruplamak için bir anahtar göster</string>
     <string name="settings_appearance_repatch_notice">Yeniden yama bildirimi</string>
-    <string name="settings_appearance_repatch_notice_description">Yamalanmış uygulamalar yeniden yamalanabilir olduğunda bir başlık gösterir.</string>
+    <string name="settings_appearance_repatch_notice_description">Yamalı uygulamalar yeniden yamanabildiğinde bir afiş göster</string>
     <string name="settings_appearance_sort_button">Sıralama ve filtreleme düğmesi</string>
-    <string name="settings_appearance_sort_button_description">Uygulamaları sıralamak ve filtrelemek için bir düğme gösterir</string>
+    <string name="settings_appearance_sort_button_description">Ana ekranda sıralama ve filtreleme düğmesini göster</string>
     <string name="settings_appearance_app_card_colors">Uygulama kartı renkleri</string>
     <string name="settings_appearance_app_card_colors_default">Varsayılan</string>
     <string name="settings_appearance_app_card_colors_default_description">Her uygulamaya kendi paketinin rengini ver</string>
@@ -845,7 +811,7 @@ Kaldırma işlemi tüm uygulama verilerini kalıcı olarak silecektir"</string>
 
 Yamalar etkilenmez: yamalama kaynakları listesindeki her kaynak için ön sürüm yamalarını etkinleştirin"</string>
     <string name="settings_advanced_updates_allow_metered">Mobil veri güncellemeleri</string>
-    <string name="settings_advanced_updates_allow_metered_description">Morphe ve yama güncellemelerini mobil veri üzerinden indirir.</string>
+    <string name="settings_advanced_updates_allow_metered_description">Morphe ve yama güncellemelerinin mobil veri üzerinden indirilmesine izin verir</string>
     <string name="settings_advanced_updates_background_notifications">Arka plan güncelleme bildirimleri</string>
     <string name="settings_advanced_updates_background_notifications_description">Arka planda düzenli aralıklarla güncellemeleri kontrol edin ve güncellemeler mevcut olduğunda bildirim gönderin</string>
     <string name="settings_advanced_updates_background_notifications_description_fcm">Uygulama kapalıyken bile yeni sürümler için anlık bildirim alın</string>
@@ -860,7 +826,7 @@ Yamalar etkilenmez: yamalama kaynakları listesindeki her kaynak için ön sür�
     <string name="settings_advanced_update_interval_chip_subtitle">Arka plan kontrol sıklığı</string>
     <string name="settings_advanced_update_interval_battery_warning">Bazı cihazlarda arka plan kontrolleri güvenilir şekilde çalışmayabilir. Xiaomi, Huawei, Samsung ve OnePlus gibi üreticiler, pil ömrünü uzatmak için arka plan işlemlerini genellikle agresif şekilde kısıtlarlar</string>
     <string name="settings_advanced_external_batch_patch">Harici tetikleyicilere izin ver</string>
-    <string name="settings_advanced_external_batch_patch_description">Otomasyon uygulamalarının toplu yama işlemlerini başlatmasını sağlar.</string>
+    <string name="settings_advanced_external_batch_patch_description">Otomasyon uygulamalarının bir intent aracılığıyla toplu yama başlatmasına izin verir.</string>
     <string name="external_batch_patch_title">Toplu yamalamayı başlat?</string>
     <string name="external_batch_patch_description">%s, Morphe\'nin uygulamaları yamalamasını ve kurmasını istiyor</string>
     <string name="external_batch_patch_trust_caller">Bu uygulamaya her zaman izin ver</string>
@@ -884,11 +850,11 @@ Yamalar etkilenmez: yamalama kaynakları listesindeki her kaynak için ön sür�
     <!-- Settings - Advanced Tab - Expert settings Section -->
     <string name="settings_advanced_expert">Uzman ayarları</string>
     <string name="settings_advanced_expert_mode">Uzman modu</string>
-    <string name="settings_advanced_expert_mode_description">Gelişmiş yamalama ayarlarının ve yama seçeneklerinin kilidini açar.</string>
+    <string name="settings_advanced_expert_mode_description">Gelişmiş Morphe yama ayarları ve özelleştirme seçeneklerini etkinleştirir</string>
     <string name="settings_advanced_expert_mode_dialog_title">Uzman modu etkinleştirilsin mi?</string>
     <string name="settings_advanced_expert_mode_dialog_message">Uzman modu yamaların nasıl uygulanacağı konusunda daha fazla kontrol sağlar, ancak uzman modunda ayarların yanlış yapılandırılması işlevsiz bir uygulamayla sonuçlanabilir</string>
     <string name="settings_advanced_strip_unused_libs">Cihaz mimarisi için optimize et</string>
-    <string name="settings_advanced_strip_unused_libs_description">Kullanılmayan yerel (native) kütüphaneleri ve APK parçalarını kaldırır.</string>
+    <string name="settings_advanced_strip_unused_libs_description">Kullanılmayan CPU mimarisi kitaplıklarını ve bölünmüş APK modüllerini kaldırır</string>
     <!-- Settings - Advanced Tab - GitHub PAT Settings -->
     <string name="settings_advanced_github_pat_description">Çekme isteği kaynakları için gereklidir</string>
     <string name="settings_advanced_github_pat_configured">Anahtar yapılandırıldı</string>
@@ -1019,13 +985,13 @@ Resim boyutları şu şekilde olmalıdır:
     <string name="installer_play_store_warning_risk">Play Store, değiştirilmiş uygulama için güncelleme sunabilir. Bu güncellemeyi yüklemek, değiştirilmiş APK\'yı orijinal sürümüyle değiştirir ve değişiklikleri kaldırır. Güncelleme yapmanız istenirse, uygulamanın Play Store sayfasındaki üç nokta menüsüne dokunun ve \"Güncellemeleri kapat\" seçeneğini seçin</string>
     <string name="installer_play_store_warning_continue">Anladım, devam et</string>
     <string name="installer_play_store_mode">Play Store olarak mı yüklensin</string>
-    <string name="installer_play_store_mode_description">Google Play Store\'u yükleme kaynağı olarak işaretler</string>
+    <string name="installer_play_store_mode_description">Bu yükleme yöntemi için Google Play Store\'u yükleme kaynağı olarak kaydet</string>
     <string name="settings_prompt_installer_on_install">Yükleyici seçimi istemi</string>
-    <string name="settings_prompt_installer_on_install_description">Her kurulumda hangi yükleyicinin kullanılacağını sorar.</string>
+    <string name="settings_prompt_installer_on_install_description">Yamalanmış bir uygulama her yüklendiğinde yükleyici seçim penceresini gösterir</string>
     <string name="settings_auto_install_with_shizuku">Yamalama sonrası otomatik yükle</string>
     <string name="settings_auto_install_with_shizuku_description">Yamalama tamamlanır tamamlanmaz yamalı APK\'yı yükler.</string>
     <string name="settings_auto_uninstall_with_shizuku">Çakışma durumunda otomatik olarak kaldır</string>
-    <string name="settings_auto_uninstall_with_shizuku_description">İmza çakışması durumunda mevcut uygulamayı kaldırır. Bu işlem uygulama verilerini silebilir.</string>
+    <string name="settings_auto_uninstall_with_shizuku_description">Shizuku ile otomatik yükleme yaparken, Android bir imza çakışması bildirirse mevcut uygulamayı önce kaldırın. Bu, uygulama verilerini kaldırabilir.</string>
     <string name="settings_auto_uninstall_warning_title">Otomatik kaldırmayı etkinleştir?</string>
     <string name="settings_auto_uninstall_warning_message">Android, Shizuku otomatik yüklemesi sırasında bir imza çakışması bildirirse, Morphe yamalı APK\'yı yüklemeden önce mevcut uygulamayı kaldıracaktır.</string>
     <string name="settings_auto_uninstall_warning_risk">Bu, uygulama verilerini kaldırabilir. Yamalı APK, kaldırma işleminden sonra yüklenemezse, önceki uygulama zaten gitmiş olabilir.</string>
@@ -1064,13 +1030,13 @@ Ayrıntılar: %2$s"</string>
     <string name="settings_system_memory_limit_warning">Düşük bellek limiti, daha büyük uygulamaları yamalarken hatalara neden olabilir</string>
     <string name="settings_system_memory_limit_high_warning">Yüksek bir bellek sınırı, bazı cihazlarda yamalamayı çok daha yavaşlatabilir. Yalnızca düşük sınırlarda yamalama başarısız olmaya devam ediyorsa bu sınırı yükseltin.</string>
     <string name="settings_system_process_runtime_enabled_description">%s MB limit</string>
-    <string name="settings_system_process_runtime_disabled_description">Yapılandırmak için dokunun</string>
+    <string name="settings_system_process_runtime_disabled_description">Yapılandırmak için tıklayın</string>
     <string name="settings_system_process_runtime_description_not_available">Bu özellik Android 11 veya daha yüksek bir sürüm gerektirir</string>
     <string name="settings_system_patcher_completion_sound">Tamamlama Sesi</string>
     <string name="settings_system_patcher_completion_sound_description">Yamalama işlemi bittiğinde başarı veya başarısızlık için farklı bir ton çalınır</string>
     <!-- Settings - System Tab - Notifications Section -->
     <string name="settings_system_notifications">Bildirimler</string>
-    <string name="settings_system_notifications_description">Arka plan uyarılarını ve tamamlanma seslerini yapılandırır.</string>
+    <string name="settings_system_notifications_description">Arka plan uyarılarını ve tamamlama seslerini yapılandırın</string>
     <string name="settings_system_notifications_success_sound">Başarı Sesi</string>
     <string name="settings_system_notifications_error_sound">Hata sesi</string>
     <string name="settings_system_notifications_sound_default">Varsayılan</string>
@@ -1082,7 +1048,7 @@ Ayrıntılar: %2$s"</string>
     <!-- Settings - System Tab - Import and Export Section -->
     <string name="settings_system_import_export">İçe &amp; dışa aktar</string>
     <string name="settings_system_signing_key">İmzalama anahtarı</string>
-    <string name="settings_system_signing_key_description">Yamalanmış uygulamaları imzalayan anahtarı yedekler veya geri yükler.</string>
+    <string name="settings_system_signing_key_description">Yamalı uygulamalarınızın imzalandığı anahtarı yedekler ve geri yükler</string>
     <string name="settings_system_signing_key_dialog_description">Morphe tarafından yamalanan her uygulama bu anahtarla imzalanır. Bir kopyasını saklayın: o olmadan, yamalı uygulamalar yalnızca kaldırıldıktan sonra güncellenebilir</string>
     <string name="settings_system_signing_key_missing">Morphe ilk yamanızda bir tane oluşturur</string>
     <string name="settings_system_signing_key_created">%s tarihinde oluşturuldu</string>
@@ -1138,7 +1104,7 @@ Ayrıntılar: %2$s"</string>
     <string name="settings_system_apks_export_zip_failed">Seçili APK\'lerin dışa aktarılması başarısız oldu</string>
     <!-- Settings - System Tab - Storage Management screen -->
     <string name="settings_system_storage_management_title">Depolama yönetimi</string>
-    <string name="settings_system_storage_management_description">Disk kullanımını gösterir ve önbelleğe alınmış dosyaları temizler.</string>
+    <string name="settings_system_storage_management_description">Disk kullanımını gözden geçirin ve önbelleğe alınmış dosyaları temizleyin</string>
     <string name="settings_system_storage_keystore_title">İmzalama anahtar deposu</string>
     <string name="settings_system_storage_app_data_title">Uygulama verileri</string>
     <string name="settings_system_storage_patch_bundles_title">Yama bundle\'ları</string>
@@ -1204,7 +1170,7 @@ Ayrıntılar: %2$s"</string>
     <string name="copy_selection_same_source">Aynı kaynak</string>
     <!-- Settings - System Tab - Custom file picker -->
     <string name="settings_system_custom_file_picker">Özel dosya seçici</string>
-    <string name="settings_system_custom_file_picker_description">Sistem dosya seçicisi yerine Morphe\'nin yerleşik dosya seçicisini kullanır.</string>
+    <string name="settings_system_custom_file_picker_description">Sistem varsayılanı yerine Morphe\'nin yerleşik dosya seçicisini kullanarak depolamaya göz atın</string>
     <!-- Settings - System Tab - APK download helper -->
     <string name="settings_system_apk_download_helper">APK indirme yardımcısı</string>
     <string name="settings_system_apk_download_helper_trusted_count">Güvenilen: %1$d / %2$d</string>
@@ -1255,7 +1221,6 @@ Ayrıntılar: %2$s"</string>
     <string name="no">Hayır</string>
     <string name="all">Hepsi</string>
     <string name="filter">Filtre</string>
-    <string name="group">Grupla</string>
     <string name="reset">Sıfırla</string>
     <string name="reset_all">Tümünü Sıfırla</string>
     <string name="apply">Uygula</string>
@@ -1323,10 +1288,6 @@ Ayrıntılar: %2$s"</string>
     <string name="available">Mevcut</string>
     <string name="continue_">Devam et</string>
     <string name="version">Sürüm</string>
-    <!-- Who made a patch source, as a field label -->
-    <string name="author">Yazar</string>
-    <!-- A file a patch source is added from, as a field label -->
-    <string name="file">Dosya</string>
     <string name="clone">Klonla</string>
     <!-- Button that starts patching the selected app. A verb, as in "patch this app" -->
     <string name="patch">Yamala</string>

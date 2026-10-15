@@ -18,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
+import app.morphe.manager.BuildConfig
 import app.morphe.manager.R
 import app.morphe.manager.ui.screen.shared.*
 import compose.icons.FontAwesomeIcons
@@ -35,6 +36,32 @@ private val currentContributors = listOf(
         name = "Morphe",
         organisation = "MorpheApp",
         url = "https://github.com/MorpheApp/morphe-manager/graphs/contributors"
+    )
+)
+
+private val oruCurrentContributors = listOf(
+    Contributor(
+        name = "Oru",
+        organisation = "The-FunMan",
+        url = "https://github.com/The-FunMan/oru/graphs/contributors"
+    )
+)
+
+private val oruPriorContributors = listOf(
+    Contributor(
+        name = "Morphe",
+        organisation = "MorpheApp",
+        url = "https://github.com/MorpheApp/morphe-manager/graphs/contributors"
+    ),
+    Contributor(
+        name = "URV",
+        organisation = "Jman-Github",
+        url = "https://github.com/Jman-Github/Universal-ReVanced-Manager/graphs/contributors"
+    ),
+    Contributor(
+        name = "ReVanced",
+        organisation = "ReVanced",
+        url = "https://github.com/ReVanced/revanced-manager/graphs/contributors"
     )
 )
 
@@ -79,14 +106,21 @@ fun CreditsDialog(onDismiss: () -> Unit) {
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(Defaults.ContentPadding)
         ) {
+            if (BuildConfig.ORU_UX) {
+                Text(
+                    text = stringResource(R.string.oru_about_independent),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = dialogSecondaryTextColor()
+                )
+            }
             ContributorSection(
                 label = stringResource(R.string.credits_current_development),
-                contributors = currentContributors,
+                contributors = if (BuildConfig.ORU_UX) oruCurrentContributors else currentContributors,
                 onContributorClick = { uriHandler.openUri(it.url) }
             )
             ContributorSection(
                 label = stringResource(R.string.credits_prior_development),
-                contributors = priorContributors,
+                contributors = if (BuildConfig.ORU_UX) oruPriorContributors else priorContributors,
                 onContributorClick = { uriHandler.openUri(it.url) }
             )
             SettingsGroup {

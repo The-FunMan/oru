@@ -6,7 +6,6 @@
 package app.morphe.manager.ui.screen.shared
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -84,7 +83,6 @@ fun ExposedDropdownMenuBoxScope.AppExposedDropdownMenu(
  * the surrounding color, see [LocalAccent], so the current choice shows at a glance.
  *
  * @param selected Whether this entry is the one in effect.
- * @param description Line under [text], such as what the entry in effect does.
  * @param trailing Takes the place of the check, for an entry that shows its state another way.
  */
 @Composable
@@ -93,7 +91,6 @@ fun AppDropdownMenuItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     selected: Boolean = false,
-    description: String? = null,
     leadingIcon: ImageVector? = null,
     trailing: (@Composable () -> Unit)? = null
 ) {
@@ -102,20 +99,11 @@ fun AppDropdownMenuItem(
 
     DropdownMenuItem(
         text = {
-            Column {
-                Text(
-                    text = text,
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal
-                )
-                if (description != null) {
-                    Text(
-                        text = description,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = contentColor.copy(alpha = 0.7f)
-                    )
-                }
-            }
+            Text(
+                text = text,
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal
+            )
         },
         onClick = onClick,
         modifier = modifier

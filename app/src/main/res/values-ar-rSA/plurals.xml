@@ -251,15 +251,6 @@
         <item quantity="many">%s تغييرًا</item>
         <item quantity="other">%s تغيير</item>
     </plurals>
-    <!-- Value of the Apps row on a source card when apps were left out on arrival, for example "3/232 · 2 new". %1$s is the app count, %2$d the new apps -->
-    <plurals name="sources_apps_count_with_new">
-        <item quantity="zero">%1$s · %2$d جديد</item>
-        <item quantity="one">%1$s · %2$d جديد</item>
-        <item quantity="two">%1$s · %2$d جديد</item>
-        <item quantity="few">%1$s · %2$d جديدة</item>
-        <item quantity="many">%1$s · %2$d جديدًا</item>
-        <item quantity="other">%1$s · %2$d جديد</item>
-    </plurals>
     <plurals name="changelog_new_releases">
         <item quantity="zero">%s إصدار جديد</item>
         <item quantity="one">%s إصدار جديد</item>

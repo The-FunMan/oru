@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Oru Focus copy that is not in oru_strings.xml yet. English only (decision D6). Keys that already
+  exist in oru_strings.xml or strings.xml are reused, not repeated here.
+-->
+<resources>
+    <string name="oru_focus_checking">Checking the file</string>
+    <string name="oru_focus_pick_line">Oru needs the APK first. Choose how to get it.</string>
+    <string name="oru_focus_installed_line">Installed version %1$s. Get the APK to patch a newer build.</string>
+    <string name="oru_focus_open_apkmirror">Open APKMirror</string>
+    <string name="oru_focus_use_installed">Use the installed app</string>
+    <string name="oru_focus_needs">Needs %1$s %2$s.</string>
+    <string name="oru_simple_reset">Reset to recommended</string>
+    <string name="oru_simple_reset_done">Back to recommended</string>
+    <string name="oru_notice_unsupported_simple">%1$s %2$s is not supported. Get %3$s.</string>
+    <string name="oru_notice_unsupported_simple_none">%1$s %2$s is not supported.</string>
+    <string name="oru_action_edit">Edit</string>
+    <string name="oru_focus_summary_patches">%1$d of %2$d patches</string>
+    <string name="oru_setup_title">Setup</string>
+    <string name="oru_setup_body">How this app is patched. The next patch uses these settings.</string>
+</resources>

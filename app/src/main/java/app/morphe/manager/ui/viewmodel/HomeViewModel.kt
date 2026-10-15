@@ -30,7 +30,9 @@ import app.morphe.manager.domain.apk.*
 import app.morphe.manager.domain.batch.BatchPatchCoordinator
 import app.morphe.manager.domain.batch.BatchRunState
 import app.morphe.manager.domain.batch.mergeNewlyAdded
+import app.morphe.manager.BuildConfig
 import app.morphe.manager.domain.bundles.*
+import app.morphe.manager.domain.repository.PatchBundleRepository.Companion.DEFAULT_SOURCE_UID
 import app.morphe.manager.domain.installer.InstallerManager
 import app.morphe.manager.domain.installer.RootInstaller
 import app.morphe.manager.domain.installer.UninstallCancelledException
@@ -208,9 +210,11 @@ class HomeViewModel(
         showInstalledAppInfoDialog = null
     }
 
-    // Deep link: pending source to add via confirmation dialog
-    var deepLinkPendingSource by mutableStateOf<MainViewModel.DeepLinkSource?>(null)
+    // Deep link: pending bundle to add via confirmation dialog
+    var deepLinkPendingBundle by mutableStateOf<DeepLinkBundle?>(null)
         private set
+
+    data class DeepLinkBundle(val url: String, val name: String?)
 
     // .mpp file opened from file manager: pending confirmation dialog
     var pendingMppUri by mutableStateOf<Uri?>(null)
@@ -422,6 +426,9 @@ class HomeViewModel(
     var pendingSelectedBundleUid by mutableStateOf<Int?>(null)
         private set
 
+    // The one source the run in progress patches from, set when the Oru flow resolves the app's source. Null otherwise
+    private var oruRunSourceUid: Int? = null
+
     fun dismissSimpleBundleSelectDialog() {
         showSimpleBundleSelectDialog = false
         simpleBundleSelectApp = null
@@ -486,6 +493,11 @@ class HomeViewModel(
     // Bundle data - reactive StateFlows derived directly from bundleInfoFlow
     val compatibleVersionsFlow: StateFlow<Map<String, List<BundledAppTarget>>> =
         versionCatalog.compatibleVersions
+            .stateIn(viewModelScope, SharingStarted.Eagerly, emptyMap())
+
+    /** Every version per package and source, before the sources an app is turned down from are taken out. */
+    val sourceVersionsFlow: StateFlow<Map<String, List<BundledAppTarget>>> =
+        versionCatalog.sourceVersions
             .stateIn(viewModelScope, SharingStarted.Eagerly, emptyMap())
 
     val recommendedVersionsFlow: StateFlow<Map<String, AppTarget>> =
@@ -667,6 +679,12 @@ class HomeViewModel(
     // Callback for starting patch
     var onStartQuickPatch: ((Patcher.ViewModelParams) -> Unit)? = null
 
+    /**
+     * Oru: true while the Oru Focus is mounted. The Focus answers the APK flow of this view model, so the old
+     * Home dialog host stays out of composition while it is, the frames of its transitions included.
+     */
+    var oruFocusMounted by mutableStateOf(false)
+
     init {
         observeManagerUpdate()
         triggerUpdateCheck()
@@ -748,7 +766,7 @@ class HomeViewModel(
             _isRefreshing.value = true
             try {
                 patchBundleRepository.updateCheck()
-                checkForManagerUpdates()
+                checkForManagerUpdates(manual = true)
                 delay(500.milliseconds)
             } finally {
                 _isRefreshing.value = false
@@ -873,11 +891,12 @@ class HomeViewModel(
 
     /**
      * Checks for a manager update. The repository only reports releases whose APK is already
-     * downloadable, so the banner can never point at an asset that is still uploading.
+     * downloadable, so the banner can never point at an asset that is still uploading. [manual]
+     * marks a check the user asked for.
      */
-    suspend fun checkForManagerUpdates() {
+    suspend fun checkForManagerUpdates(manual: Boolean = false) {
         uiSafe(app, R.string.failed_to_check_updates, "Failed to check for updates") {
-            managerUpdateRepository.refresh()
+            managerUpdateRepository.refresh(manual)
         }
     }
 
@@ -944,18 +963,13 @@ class HomeViewModel(
 
     /**
      * Adds a remote source for each of [urls], downloaded together as one update. With
-     * [chooseApps] the app list of each added source opens once its patches have loaded, and with
-     * [onlyApp] each one brings that app alone.
+     * [chooseApps] the app list of each added source opens once its patches have loaded.
      */
-    fun createRemoteSources(
-        urls: List<String>,
-        chooseApps: Boolean = false,
-        onlyApp: String? = null
-    ) = viewModelScope.launch {
+    fun createRemoteSources(urls: List<String>, chooseApps: Boolean = false) = viewModelScope.launch {
         val added = withContext(NonCancellable) {
-            patchBundleRepository.createRemotes(urls, autoUpdate = true, onlyApp = onlyApp)
+            patchBundleRepository.createRemotes(urls, autoUpdate = true)
         }
-        onSourcesAdded(added, chooseApps, onlyApp)
+        onSourcesAdded(added, chooseApps)
     }
 
     /**
@@ -965,32 +979,20 @@ class HomeViewModel(
      * A source only appears among the loaded ones once its patches are in, which is also what the
      * list is built from. The sources load together, so they are taken as each one arrives rather
      * than in turn, and one that never loads holds back none of the others.
-     *
-     * A source added for [onlyApp] has left out its other apps as it loaded, see
-     * [PatchBundleRepository.createRemotes]. They were never offered, so none of them is new to the
-     * user, and a source that turns out not to patch that app at all is added as any other.
      */
-    private suspend fun onSourcesAdded(uids: List<Int>, chooseApps: Boolean, onlyApp: String? = null) {
+    private suspend fun onSourcesAdded(uids: List<Int>, chooseApps: Boolean) {
         if (uids.isEmpty()) return
 
         val pending = uids.toMutableList()
-        val loadedApps = mutableMapOf<Int, Set<String>>()
         withTimeoutOrNull(NEW_SOURCE_LOAD_TIMEOUT) {
             patchBundleRepository.allBundlesInfoFlow.first { info ->
                 pending.removeAll { uid ->
-                    val listed = info[uid]?.listedApps() ?: return@removeAll false
-                    loadedApps[uid] = listed
+                    val loaded = info[uid] ?: return@removeAll false
                     // Universal patches put no app on the home screen, so there would be nothing to list
-                    if (chooseApps && listed.isNotEmpty()) sourceAppsQueue += uid
+                    if (chooseApps && loaded.listedApps().isNotEmpty()) sourceAppsQueue += uid
                     true
                 }
                 pending.isEmpty()
-            }
-        }
-        if (onlyApp != null) withContext(NonCancellable) {
-            loadedApps.forEach { (uid, listed) ->
-                if (onlyApp in listed) sourceMuteRepository.markNewAppsSeen(uid)
-                else sourceMuteRepository.resetForBundle(uid)
             }
         }
         delay(1.5.seconds)
@@ -1055,35 +1057,24 @@ class HomeViewModel(
     }
 
     /**
-     * Called when the app is opened via a deep link containing a source URL.
+     * Called when the app is opened via a deep link containing a bundle URL.
      * Shows a confirmation dialog instead of adding silently.
      */
-    fun handleDeepLinkAddSource(source: MainViewModel.DeepLinkSource) {
+    fun handleDeepLinkAddSource(url: String, name: String?) {
         dismissOpenDialogs()
-        deepLinkPendingSource = source
+        deepLinkPendingBundle = DeepLinkBundle(url = url, name = name)
     }
 
-    /**
-     * User confirmed adding the source from the deep link confirmation dialog.
-     *
-     * A link for one app from a source that is already here only asks for that app, so it is
-     * brought back to the source rather than the source being refused as a duplicate.
-     */
-    fun confirmDeepLinkSource(chooseApps: Boolean) {
-        val source = deepLinkPendingSource ?: return
-        deepLinkPendingSource = null
-        val packageName = source.packageName
-        val existingUid = patchBundleRepository.existingSourceUid(source.url)
-        if (packageName != null && existingUid != null) {
-            viewModelScope.launch { sourceMuteRepository.unmuteApps(existingUid, listOf(packageName)) }
-        } else {
-            createRemoteSources(listOf(source.url), chooseApps, onlyApp = packageName)
-        }
+    /** User confirmed adding the bundle from the deep link confirmation dialog. */
+    fun confirmDeepLinkBundle(chooseApps: Boolean) {
+        val bundle = deepLinkPendingBundle ?: return
+        deepLinkPendingBundle = null
+        createRemoteSources(listOf(bundle.url), chooseApps)
     }
 
     /** User dismissed the deep link confirmation dialog. */
-    fun dismissDeepLinkSource() {
-        deepLinkPendingSource = null
+    fun dismissDeepLinkBundle() {
+        deepLinkPendingBundle = null
     }
 
     /**
@@ -1306,8 +1297,13 @@ class HomeViewModel(
      * @param repatchedPackageName The tracked install to rebuild. Null starts an install of its
      *   own, which is how an app that is already patched gets a second, cloned copy.
      */
-    fun showPatchDialog(packageName: String, repatchedPackageName: String? = null) {
+    fun showPatchDialog(
+        packageName: String,
+        repatchedPackageName: String? = null,
+        preferredSourceUid: Int? = null,
+    ) {
         preparePendingFlow(packageName, repatchedPackageName)
+        preferredSourceUid?.let { preselectSource(packageName, it) }
 
         // Guard: if there is a pending bundle update on metered data, show the outdated-patches
         // dialog before proceeding with the actual APK selection flow.
@@ -1346,7 +1342,8 @@ class HomeViewModel(
 
         // In simple mode: if multiple bundles cover this package, ask the user to pick one
         // before showing the APK selection dialog so the correct recommended version is used
-        if (!isExpertMode() && pendingSelectedBundleUid == null) {
+        // Oru answers the source in its Focus (see preselectSource), so this dialog is the old flavour's only
+        if (!BuildConfig.ORU_UX && !isExpertMode() && pendingSelectedBundleUid == null) {
             val allBundlesForCheck = withContext(Dispatchers.IO) {
                 patchBundleRepository
                     .offeredBundleInfoFlow(packageName, version = null)
@@ -1371,6 +1368,46 @@ class HomeViewModel(
 
         continueApkSelectionFlow(packageName)
     }
+
+    /**
+     * Takes [bundleUid] as the one source [packageName] is patched from, for the flow already prepared: the APK
+     * version is the source's own recommendation, and the version list holds only that source's versions. Oru only,
+     * see [showPatchDialog].
+     */
+    private fun preselectSource(packageName: String, bundleUid: Int) {
+        val targets = sourceVersionsFlow.value[packageName].orEmpty().filter { it.bundleUid == bundleUid }
+        if (targets.isEmpty()) return
+        pendingSelectedBundleUid = bundleUid
+        pendingCompatibleVersions = targets
+        val recommended = targets.recommended()
+        if (recommended != null) {
+            pendingRecommendedVersion = recommended
+            pendingSelectedDownloadVersion = recommended
+        }
+    }
+
+    /**
+     * Oru: the source the Focus picked for the app now in flow. Remembers it for the app, so it is the source the app
+     * is patched from from then on, and the flow in progress follows it (version, APKMirror link).
+     */
+    suspend fun changeSourceForPendingFlow(bundleUid: Int) {
+        val packageName = pendingPackageName ?: return
+        preselectSource(packageName, bundleUid)
+        keepSourceForApp(packageName, bundleUid)
+        if (showDownloadInstructionsDialog) resolveDownloadRedirect()
+    }
+
+    /**
+     * Oru: remembers [bundleUid] as the one source [packageName] is patched from. The other sources that patch the
+     * app are turned down for it, so none of them is offered back by a source added later.
+     */
+    suspend fun keepSourceForApp(packageName: String, bundleUid: Int) {
+        sourceMuteRepository.keepOnly(packageName, bundleUid, getPatchesForPackage(packageName).keys)
+    }
+
+    /** The sources [packageName] is turned down from. Oru reads it to resolve the source the app is patched from. */
+    suspend fun turnedDownSourcesFor(packageName: String): Set<Int> =
+        withContext(Dispatchers.IO) { sourceMuteRepository.getMutedFor(packageName) }
 
     /**
      * Second half of the patch-dialog flow: runs after bundle selection (or immediately when
@@ -1989,14 +2026,38 @@ class HomeViewModel(
             return
         }
 
-        val mutedSources = withContext(Dispatchers.IO) {
+        val turnedDown = withContext(Dispatchers.IO) {
             sourceMuteRepository.getMutedFor(selectedApp.packageName)
         }
+        // Oru patches an app from one source only: the effective one, resolved from the same turned-down set the
+        // Focus picker writes. The other sources are left out of the selection and of the saved selection.
+        val oruSourceUid = if (BuildConfig.ORU_UX) {
+            val facts = availableBundles.map { bundle ->
+                AppSourceFact(
+                    uid = bundle.uid,
+                    name = bundle.name,
+                    isDefault = bundle.uid == DEFAULT_SOURCE_UID,
+                    repositoryPath = null,
+                    patchVersion = null,
+                    patchCount = 0,
+                    recommendedVersion = null,
+                )
+            }
+            AppSourceChoice.effective(facts, turnedDown)?.uid
+        } else {
+            null
+        }
+        oruRunSourceUid = oruSourceUid
+        val mutedSources = if (oruSourceUid != null) emptySet() else turnedDown
         // Every rule below reads this rather than the full list, so a source the app is kept from
         // contributes no defaults, no new-patch badges and no tab
-        val allBundles = availableBundles.withoutMutedSources(mutedSources) { it.uid }
+        val allBundles = if (oruSourceUid != null) {
+            availableBundles.filter { it.uid == oruSourceUid }
+        } else {
+            availableBundles.withoutMutedSources(mutedSources) { it.uid }
+        }
 
-        expertModeAllBundles = availableBundles
+        expertModeAllBundles = if (oruSourceUid != null) allBundles else availableBundles
         expertModeMutedSources = mutedSources
 
         // Spans every source, hidden ones included: what the user saved for a hidden one has to
@@ -2018,7 +2079,7 @@ class HomeViewModel(
 
         if (isExpertMode()) {
             // Expert Mode: Load saved selections and options only for current bundles
-            val currentBundleUids = availableBundles.map { it.uid }.toSet()
+            val currentBundleUids = (if (oruSourceUid != null) allBundles else availableBundles).map { it.uid }.toSet()
 
             // Load selections
             val savedSelections = withContext(Dispatchers.IO) {
@@ -2143,7 +2204,7 @@ class HomeViewModel(
                 // Fall through to expert mode so the user can select and configure patches.
                 // Hidden sources are read here too, for the same reason the expert branch reads
                 // them: the dialog can offer one back, and it has to have something to offer
-                val currentBundleUids = availableBundles.map { it.uid }.toSet()
+                val currentBundleUids = (if (oruSourceUid != null) allBundles else availableBundles).map { it.uid }.toSet()
 
                 val savedSelections = withContext(Dispatchers.IO) {
                     patchSelectionRepository.getAllSelectionsForPackage(configurationKey)
@@ -2186,7 +2247,7 @@ class HomeViewModel(
             }
 
             // Simple mode: if more than one bundle has applicable patches, ask the user which single bundle to use
-            if (bundleWithPatches.size > 1) {
+            if (!BuildConfig.ORU_UX && bundleWithPatches.size > 1) {
                 simpleBundleSelectApp = selectedApp
                 simpleBundleSelectCandidates = bundleWithPatches
                 showSimpleBundleSelectDialog = true
@@ -2247,10 +2308,13 @@ class HomeViewModel(
         // This ensures there is never a gap between the info dialog closing and the next screen appearing
         dismissInstalledAppInfo()
 
+        // Oru runs the one source the app is patched from, whatever else the selection holds
+        val runPatches = oruRunSourceUid?.let { uid -> patches.filterKeys { it == uid } } ?: patches
+
         onStartQuickPatch?.invoke(
             Patcher.ViewModelParams(
                 selectedApp = selectedApp,
-                selectedPatches = patches,
+                selectedPatches = runPatches,
                 options = options,
                 // Handed over before the state below is cleared, since the run has no other way
                 // to learn which install it was started for

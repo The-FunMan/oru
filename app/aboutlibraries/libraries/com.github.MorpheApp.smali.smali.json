@@ -1,0 +1,13 @@
+{
+  "uniqueId": "com.github.MorpheApp.smali:smali",
+  "name": "smali (MorpheApp fork)",
+  "developers": [
+    {
+      "name": "smali contributors"
+    }
+  ],
+  "website": "https://github.com/JesusFreke/smali",
+  "licenses": [
+    "BSD-3-Clause"
+  ]
+}

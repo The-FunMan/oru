@@ -1,0 +1,17 @@
+{
+  "uniqueId": "com.github.pgreze:kotlin-process",
+  "name": "kotlin-process",
+  "developers": [
+    {
+      "name": "pgreze"
+    }
+  ],
+  "website": "https://github.com/pgreze/kotlin-process",
+  "scm": {
+    "connection": "scm:git:https://github.com/pgreze/kotlin-process.git",
+    "url": "https://github.com/pgreze/kotlin-process"
+  },
+  "licenses": [
+    "Apache-2.0"
+  ]
+}

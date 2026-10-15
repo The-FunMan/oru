@@ -55,8 +55,9 @@ import app.morphe.manager.util.requestIgnoreBatteryOptimizations
  */
 private const val ErrorInfoLabelMaxFraction = 0.45f
 
-/** Share of the error dialog's height the diagnostics may take before they scroll. */
-private const val DiagnosticsMaxHeightFraction = 0.5f
+// ORU: the storage hint's folder path is written with the upstream package name. That name is
+// swapped for the package of this build, which is the folder the app really uses.
+private const val UPSTREAM_PACKAGE_NAME = "app.morphe.manager"
 
 /**
  * Shown when a patch bundle requires a newer version of morphe-patcher than the one
@@ -388,7 +389,8 @@ fun UnusableOptionPathsDialog(
             // Show hint so user knows the workaround even if they dismiss
             if (storageAccessCanHelp) {
                 Notice(
-                    text = stringResource(R.string.patcher_storage_permission_hint),
+                    text = stringResource(R.string.patcher_storage_permission_hint)
+                        .replace(UPSTREAM_PACKAGE_NAME, context.packageName),
                     tone = SemanticTone.Warning,
                     icon = Icons.Outlined.FolderOff
                 )
@@ -513,64 +515,50 @@ fun PatcherErrorDialog(
             )
         }
     ) {
-        BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
-            val diagnosticsMaxHeight = maxHeight * DiagnosticsMaxHeightFraction
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(Defaults.ContentPaddingSmall)
-            ) {
-                // Held to part of the room and scrolled within it, so a large font cannot leave the
-                // log, which is what the dialog is opened for, a line or two under it
-                SectionCard(
-                    modifier = Modifier.heightIn(max = diagnosticsMaxHeight),
-                    accentColor = LocalAccent.current
-                ) {
-                    Column {
-                        CardHeader(
-                            title = stringResource(R.string.patcher_error_dialog_diagnostics),
-                            icon = Icons.Outlined.Info
-                        )
-                        val diagnosticsScrollState = rememberScrollState()
-                        Box(
-                            modifier = Modifier
-                                .verticalScrollFade(diagnosticsScrollState)
-                                .verticalScroll(diagnosticsScrollState)
-                        ) {
-                            DiagnosticsContent(diagnostics)
-                        }
-                    }
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(),
+            verticalArrangement = Arrangement.spacedBy(Defaults.ContentPaddingSmall)
+        ) {
+            SectionCard(accentColor = LocalAccent.current) {
+                Column {
+                    CardHeader(
+                        title = stringResource(R.string.patcher_error_dialog_diagnostics),
+                        icon = Icons.Outlined.Info
+                    )
+                    DiagnosticsContent(diagnostics)
                 }
+            }
 
-                // Error log card
-                SectionCard(modifier = Modifier.weight(1f), accentColor = LocalAccent.current) {
-                    Column {
-                        CardHeader(
-                            title = stringResource(R.string.patcher_error_log),
-                            icon = Icons.Outlined.BugReport,
-                            trailing = {
-                                StatusBadge(
-                                    text = stringResource(R.string.patcher_error_technical),
-                                    tone = SemanticTone.Error
-                                )
-                            },
-                            wrapTrailing = true
-                        )
-                        val errorScrollState = rememberScrollState()
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .verticalScrollFade(errorScrollState)
-                                .verticalScroll(errorScrollState)
-                                .padding(horizontal = Defaults.ContentPadding, vertical = 4.dp),
-                        ) {
-                            Text(
-                                text = errorMessage,
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                fontFamily = FontFamily.Monospace,
-                                lineHeight = 16.sp
+            // Error log card
+            SectionCard(modifier = Modifier.weight(1f), accentColor = LocalAccent.current) {
+                Column {
+                    CardHeader(
+                        title = stringResource(R.string.patcher_error_log),
+                        icon = Icons.Outlined.BugReport,
+                        trailing = {
+                            StatusBadge(
+                                text = stringResource(R.string.patcher_error_technical),
+                                tone = SemanticTone.Error
                             )
                         }
+                    )
+                    val errorScrollState = rememberScrollState()
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .verticalScrollFade(errorScrollState)
+                            .verticalScroll(errorScrollState)
+                            .padding(horizontal = Defaults.ContentPadding, vertical = 4.dp),
+                    ) {
+                        Text(
+                            text = errorMessage,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            fontFamily = FontFamily.Monospace,
+                            lineHeight = 16.sp
+                        )
                     }
                 }
             }

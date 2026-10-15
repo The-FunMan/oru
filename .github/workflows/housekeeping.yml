@@ -1,0 +1,90 @@
+name: Housekeeping
+
+on:
+  schedule:
+    - cron: '17 3 * * 1'   # Mondays, 03:17 UTC
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'List what would be deleted and delete nothing'
+        required: true
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: housekeeping
+  cancel-in-progress: false
+
+jobs:
+  prune:
+    if: github.repository == 'The-FunMan/oru'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      actions: write   # deletes runs, artifacts and caches of this repository only
+      contents: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      DRY_RUN: ${{ inputs.dry_run == true }}   # scheduled runs have no inputs, so they delete
+    steps:
+      - name: Delete workflow runs older than 5 days
+        run: |
+          cutoff=$(date -u -d '5 days ago' +%Y-%m-%d)
+          gh api --paginate -X GET "repos/$GH_REPO/actions/runs" \
+            -f status=completed -f "created=<$cutoff" -f per_page=100 \
+            --jq '.workflow_runs[].id' > "$RUNNER_TEMP/runs.txt"
+          failed=0
+          while read -r id; do
+            [ -n "$id" ] || continue
+            if [ "$DRY_RUN" = true ]; then
+              echo "would delete run $id"
+            elif gh api -X DELETE "repos/$GH_REPO/actions/runs/$id" >/dev/null; then
+              echo "deleted run $id"
+            else
+              echo "could not delete run $id" >&2
+              failed=1
+            fi
+          done < "$RUNNER_TEMP/runs.txt"
+          exit "$failed"
+
+      - name: Delete artifacts older than 5 days
+        run: |
+          cutoff=$(date -u -d '5 days ago' +%Y-%m-%dT%H:%M:%SZ)
+          gh api --paginate -X GET "repos/$GH_REPO/actions/artifacts" -f per_page=100 \
+            --jq ".artifacts[] | select(.created_at < \"$cutoff\") | .id" > "$RUNNER_TEMP/artifacts.txt"
+          failed=0
+          while read -r id; do
+            [ -n "$id" ] || continue
+            if [ "$DRY_RUN" = true ]; then
+              echo "would delete artifact $id"
+            elif gh api -X DELETE "repos/$GH_REPO/actions/artifacts/$id" >/dev/null; then
+              echo "deleted artifact $id"
+            else
+              echo "could not delete artifact $id" >&2
+              failed=1
+            fi
+          done < "$RUNNER_TEMP/artifacts.txt"
+          exit "$failed"
+
+      - name: Delete Actions caches older than 5 days
+        run: |
+          cutoff=$(date -u -d '5 days ago' +%Y-%m-%dT%H:%M:%SZ)
+          gh api --paginate -X GET "repos/$GH_REPO/actions/caches" -f per_page=100 \
+            --jq ".actions_caches[] | select(.created_at < \"$cutoff\") | .id" > "$RUNNER_TEMP/caches.txt"
+          failed=0
+          while read -r id; do
+            [ -n "$id" ] || continue
+            if [ "$DRY_RUN" = true ]; then
+              echo "would delete cache $id"
+            elif gh api -X DELETE "repos/$GH_REPO/actions/caches/$id" >/dev/null; then
+              echo "deleted cache $id"
+            else
+              echo "could not delete cache $id" >&2
+              failed=1
+            fi
+          done < "$RUNNER_TEMP/caches.txt"
+          exit "$failed"

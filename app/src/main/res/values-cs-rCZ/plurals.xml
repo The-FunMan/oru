@@ -189,13 +189,6 @@
         <item quantity="many">%s změn</item>
         <item quantity="other">%s změn</item>
     </plurals>
-    <!-- Value of the Apps row on a source card when apps were left out on arrival, for example "3/232 · 2 new". %1$s is the app count, %2$d the new apps -->
-    <plurals name="sources_apps_count_with_new">
-        <item quantity="one">%1$s · %2$d nový</item>
-        <item quantity="few">%1$s · %2$d nové</item>
-        <item quantity="many">%1$s · %2$d nových</item>
-        <item quantity="other">%1$s · %2$d nových</item>
-    </plurals>
     <plurals name="changelog_new_releases">
         <item quantity="one">%s nová verze</item>
         <item quantity="few">%s nové verze</item>

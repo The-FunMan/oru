@@ -1,0 +1,13 @@
+// Writes the patcher test runtime classpath to the file named by -PoruCpOut, so that
+// ProfileRun can be started with plain java (see tools/parity/README.md).
+// Usage, from patcher/:
+//   ./gradlew -I ../tools/parity/print-test-classpath.gradle -PoruCpOut=<file> compileTestKotlin oruPrintTestClasspath
+rootProject { p ->
+    p.afterEvaluate {
+        p.tasks.register('oruPrintTestClasspath') {
+            doLast {
+                new File(p.findProperty('oruCpOut') as String).text = p.sourceSets.test.runtimeClasspath.asPath
+            }
+        }
+    }
+}

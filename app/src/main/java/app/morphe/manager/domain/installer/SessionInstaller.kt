@@ -133,7 +133,7 @@ class SessionInstaller(private val app: Application) {
             withContext(Dispatchers.IO) {
                 installer.openSession(sessionId).use { session ->
                     session.openWrite("base.apk", 0, apkFile.length()).use { out ->
-                        apkFile.inputStream().use { it.copyTo(out) }
+                        apkFile.inputStream().use { it.copyApkTo(out) }
                         session.fsync(out)
                     }
                 }
@@ -317,7 +317,13 @@ class SessionInstaller(private val app: Application) {
         installerPackageName: String?
     ): InstallResult {
         return try {
-            val result = shizukuInstaller.install(apkFile, expectedPackage, installerPackageName)
+            val result = shizukuInstaller.install(
+                apkFile,
+                expectedPackage,
+                installerPackageName,
+                onUserAction = { launchUserConfirmation(it) }
+            )
+            Log.d(InstallWaitPolicy.LOG_TAG, "step=install-done package=$expectedPackage status=${result.status}")
             if (result.status == PackageInstaller.STATUS_SUCCESS) {
                 InstallResult.Success
             } else {
@@ -342,7 +348,8 @@ class SessionInstaller(private val app: Application) {
     suspend fun uninstallShizuku(packageName: String): UninstallResult {
         Log.d(TAG, "uninstallShizuku: $packageName")
         return try {
-            val result = shizukuInstaller.uninstall(packageName)
+            val result = shizukuInstaller.uninstall(packageName, onUserAction = { launchUserConfirmation(it) })
+            Log.d(InstallWaitPolicy.LOG_TAG, "step=uninstall-done package=$packageName status=${result.status}")
             if (result.status == PackageInstaller.STATUS_SUCCESS) {
                 UninstallResult.Success
             } else {

@@ -46,8 +46,7 @@ fun ProcessRuntimeDialog(
     // Clamped because the stored limit may come from an import made on a roomier device
     val sliderState = rememberSliderState(
         value = coerceMemoryLimit(context, currentLimit).toFloat(),
-        steps = (((maxLimit.toDouble() - PROCESS_RUNTIME_MEMORY_MINIMUM)
-                / PROCESS_RUNTIME_MEMORY_STEP - 1)).toInt(),
+        steps = memoryLimitSliderSteps(maxLimit),
         trackRange = PROCESS_RUNTIME_MEMORY_MINIMUM.toFloat()..maxLimit.toFloat()
     )
     val selectedLimit = sliderState.value.roundToInt()
@@ -113,7 +112,7 @@ fun ProcessRuntimeDialog(
                             sliderState.value = it
                             // Saved here rather than from `onValueChangeFinished`, which a track
                             // tap fires in the same pointer event and would persist the pre-tap value
-                            onLimitChange(it.roundToInt())
+                            onLimitChange(snapMemoryLimit(it, maxLimit))
                         },
                         enabled = enabled,
                         modifier = Modifier.fillMaxWidth()

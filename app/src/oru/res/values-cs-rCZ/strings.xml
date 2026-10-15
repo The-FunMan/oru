@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="adaptive_icon_guide_png_body">Nejlépe funguje logo na průhledném pozadí, s barvou pozadí zvolenou níže. Obrázek bez průhlednosti místo toho vyplní celou ikonu a motivové ikony a ikony oznámení si pak ponechají logo Oru.</string>
+    <string name="adaptive_icon_no_transparency_warning">Tento obrázek nemá žádné průhledné pixely, takže motivové ikony a ikony oznámení si ponechají logo Oru</string>
+    <string name="battery_optimization_dialog_description">Na některých zařízeních se může záplata zastavit, když je aplikace minimalizována. Povolte aplikaci Oru, aby běžela bez omezení spotřeby energie, a zajistěte tak spolehlivé dokončení záplatování.</string>
+    <string name="deep_link_add_source_message">Chcete přidat tento zdroj záplaty do Oru?</string>
+    <string name="external_batch_patch_description">%s chce, aby Oru záplatoval a nainstaloval aplikace</string>
+    <string name="home_apk_helper_description">Oru požádá níže uvedenou pomocnou aplikaci o stažení původního APK a vrácení souboru</string>
+    <string name="home_apk_helper_installed_unavailable">Oru nemohl použít nainstalovanou aplikaci</string>
+    <string name="home_apk_helper_warning">Pokračujte pouze v případě, že této pomocné aplikaci důvěřujete. Oru před záplatováním kontroluje balíček, verzi a podpis všeho, co obdrží</string>
+    <string name="home_apk_helper_warning_unverified">Pokračujte pouze v případě, že této pomocné aplikaci důvěřujete. Oru nemůže ověřit podpis tohoto APK, takže upravený soubor by nebyl odhalen</string>
+    <string name="home_app_filter_not_patched_description">Aplikace, které jste v Oru ještě nepatchovali</string>
+    <string name="home_app_filter_patched_description">Aplikace, které jste patchovali nebo uložili pomocí Oru</string>
+    <string name="home_app_filter_uninstalled_description">Aplikace záplatované pomocí Oru, které již nejsou v tomto zařízení</string>
+    <string name="home_app_info_app_deleted_description">Tuto aplikaci bylo odinstalováno mimo Oru. Zápalte ji znovu, abyste obnovili funkčnost</string>
+    <string name="home_app_info_install_unverified">Oru nemůže potvrdit, že nainstalovaná aplikace je verzí, kterou záplatoval. Pro obnovení funkcí ji znovu záplatujte nebo reinstallujte ze saved APK</string>
+    <string name="home_app_info_not_patched_description">Je nainstalována neopatchovaná verze této aplikace. Oru má stále svůj předchozí záznam o záplatě</string>
+    <string name="home_download_instructions_download_button_toast_6">Nyní jste oficiální tester tlačítka Oru 🏅</string>
+    <string name="home_download_instructions_step2_search_note">Oru nemůže ručit za tyto webové stránky. Přeskočte ty, které nabízejí vlastní obchod s aplikacemi namísto souboru APK.</string>
+    <string name="home_download_instructions_step4">Po dokončení stažení se vraťte do Oru</string>
+    <string name="home_download_instructions_step4_mount">Po dokončení instalace původního APK se vraťte do Oru</string>
+    <string name="home_held_back_title">Zdroj patchů způsobil pád Oru</string>
+    <string name="home_outdated_manager_title">Oru je zastaralý</string>
+    <string name="home_update_available">Dostupná aktualizace Oru</string>
+    <string name="installer_shizuku_error_permission">Chybí oprávnění Shizuku. Udělte oprávnění aplikaci Oru a zkuste to znovu</string>
+    <string name="installer_status_shizuku_permission">Povolte aplikaci Oru přístup od aplikace Shizuku</string>
+    <string name="installing_manager_update_hint">Oru se zavře, aby dokončil aktualizaci</string>
+    <string name="launch_app_unverified">Oru nemohl ověřit, že nainstalovaná aplikace je sestavení, které opatchoval.</string>
+    <string name="notification_bundle_update_text_unversioned">Klepněte pro otevření Oru a aktualizaci</string>
+    <string name="notification_channel_manager_updates">Aktualizace Oru</string>
+    <string name="notification_channel_manager_updates_description">Oznámení o nových verzích Oru</string>
+    <string name="notification_channel_patcher_description">Zobrazuje se během záplatování aplikace Oru na pozadí</string>
+    <string name="notification_mount_replaced_text">v%1$s nahradila opatchovanou verzi v%2$s. Otevřete Oru a obnovte ji</string>
+    <string name="notification_permission_dialog_description">Oru potřebuje oprávnění pro oznámení, aby vás upozornila na dostupné aktualizace na pozadí</string>
+    <string name="onboarding_settings_desc">Přizpůsobte si Oru: vzhled, pokročilé možnosti a systémové nástroje.</string>
+    <string name="patcher_incompatible_patcher_description">Zdroj &lt;b&gt;%1$s&lt;/b&gt; vyžaduje patcher &lt;b&gt;%2$s&lt;/b&gt; nebo novější. Aktualizujte Oru, abyste jej mohli použít</string>
+    <string name="patcher_installed_conflict_body">"Oru podepisuje opravené aplikace vlastním certifikátem, který se liší od původního. Android vyžaduje odstranění stávající verze před instalací opravené aplikace.
+
+Odinstalace trvale smaže všechna data aplikace"</string>
+    <string name="patcher_storage_permission_description_api30">Jedna nebo více možností záplaty odkazuje na cesty, které Oru nemůže číst. Udělte oprávnění ke úložišti a klepněte na tlačítko, poté se záplatování spustí automaticky</string>
+    <string name="patcher_storage_permission_hint">Tip: Přesuňte soubory do /Android/data/app.oru.manager/files/ - bez potřeby dalších oprávnění</string>
+    <string name="root_mount_module_unmount_warning">Pokud má KernelSU ve výchozím nastavení povolené odmontování modulů, otevřete KernelSU &gt; Superuser &gt; aplikaci, kterou jste namontovali &gt; Profil &gt; Vlastní a zakažte odmontování modulů. Jinak se namontovaný opravený APK nemusí projevit, i když Oru zobrazuje, že je namontovaný.</string>
+    <string name="settings_advanced_expert_mode_description">Povoluje pokročilé nastavení záplatování a možnosti přizpůsobení aplikace Oru</string>
+    <string name="settings_advanced_github_pat_export_include_supporting">Přidá toto PAT do exportovaných nastavení Oru</string>
+    <string name="settings_advanced_patch_options_custom_branding_custom_icon_instruction">"Složka s obrázky, které se mají použít jako vlastní ikona.
+
+Tato složka musí obsahovat jednu nebo více z následujících složek, v závislosti na DPI zařízení:
+- mipmap-mdpi
+- mipmap-hdpi
+- mipmap-xhdpi
+- mipmap-xxhdpi
+- mipmap-xxxhdpi
+
+Každá ze složek musí obsahovat všechny následující soubory:
+morphe_adaptive_background_custom.png
+morphe_adaptive_foreground_custom.png
+
+Rozměry obrázků musí být následující:
+- mipmap-mdpi: 108x108 px
+- mipmap-hdpi: 162x162 px
+- mipmap-xhdpi: 216x216 px
+- mipmap-xxhdpi: 324x324 px
+- mipmap-xxxhdpi: 432x432 px
+
+Volitelně cesta obsahuje složku 'drawable' se souborem monochromatické ikony:
+morphe_adaptive_monochrome_custom.xml
+
+Volitelně cesta obsahuje ikonu oznámení v jednom z následujících formátů:
+- XML vektorová kresba ve složce 'drawable':
+  morphe_notification_icon_custom.xml
+- PNG rastrové obrázky ve složkách 'drawable-dpi':
+  drawable-mdpi/morphe_notification_icon_custom.png (24x24 px)
+  drawable-hdpi/morphe_notification_icon_custom.png (36x36 px)
+  drawable-xhdpi/morphe_notification_icon_custom.png (48x48 px)
+  drawable-xxhdpi/morphe_notification_icon_custom.png (72x72 px)
+  drawable-xxxhdpi/morphe_notification_icon_custom.png (96x96 px)"</string>
+    <string name="settings_advanced_patch_options_custom_header_instruction">"Složka s obrázky pro použití jako vlastní logo v hlavičce.
+
+Složka musí obsahovat jednu nebo více z následujících složek, v závislosti na DPI zařízení:
+- drawable-hdpi
+- drawable-xhdpi
+- drawable-xxhdpi
+- drawable-xxxhdpi
+
+Každá z těchto složek musí obsahovat všechny následující soubory:
+morphe_header_custom_light.png
+morphe_header_custom_dark.png
+
+Rozměry obrázků musí být následující:
+- drawable-hdpi: 194x72 px
+- drawable-xhdpi: 258x96 px
+- drawable-xxhdpi: 387x144 px
+- drawable-xxxhdpi: 512x192 px"</string>
+    <string name="settings_advanced_updates_allow_metered_description">Umožňuje aplikaci Oru a aktualizacím záplat stahovat data přes mobilní síť</string>
+    <string name="settings_advanced_updates_manager_prereleases_description">Předběžný přístup k novým verzím Oru</string>
+    <string name="settings_advanced_updates_prerelease_warning_message">"Předběžné verze aplikace Oru jsou stále ve vývoji a mohou být nestabilní.
+
+Záplaty tím nejsou ovlivněny: povolte předběžné záplaty pro každý zdroj v seznamu zdrojů záplat."</string>
+    <string name="settings_appearance_app_icon_selector_description">Jak Oru vypadá na vaší domovské obrazovce a v zásuvce aplikací</string>
+    <string name="settings_auto_uninstall_warning_message">Pokud Android během automatické instalace Shizuku nahlásí konflikt podpisů, Oru nejprve odinstaluje existující aplikaci před instalací opraveného APK</string>
+    <string name="settings_system_apk_download_helper_warning">APK pochází z pomocné aplikace, proto důvěřujte pouze aplikacím, které znáte. Oru před patchováním stále kontroluje balíček, verzi a podpis každého souboru.</string>
+    <string name="settings_system_custom_file_picker_description">Procházet úložiště pomocí vestavěného výběru souborů Oru místo výchozího systému.</string>
+    <string name="settings_system_export_manager_settings_fail">Nepodařilo se exportovat nastavení Oru: %s</string>
+    <string name="settings_system_export_manager_settings_success">Nastavení Oru exportována</string>
+    <string name="settings_system_import_manager_settings_description">Zálohuje a obnovuje nastavení aplikace Oru</string>
+    <string name="settings_system_import_manager_settings_fail">Nepodařilo se importovat nastavení Oru: %s</string>
+    <string name="settings_system_import_manager_settings_mode_title">Importovat nastavení Oru</string>
+    <string name="settings_system_import_manager_settings_success">Nastavení Oru importována</string>
+    <string name="settings_system_morphe_settings">Nastavení Oru</string>
+    <string name="settings_system_process_runtime_heap_limit_ignored">Toto zařízení při posledním spuštění ignorovalo limit paměti, takže se patchování může vrátit k běhu uvnitř Oru.</string>
+    <string name="settings_system_signing_key_dialog_description">Každá aplikace, kterou Oru patchuje, je podepsána tímto klíčem. Uschovejte si kopii: bez ní lze patchované aplikace aktualizovat pouze po jejich odinstalování.</string>
+    <string name="settings_system_signing_key_missing">Oru ho vytvoří při vašem prvním patchování.</string>
+    <string name="settings_system_storage_open_app_info_description">Spravujte nebo vymažte všechna data Oru prostřednictvím nastavení systému</string>
+    <string name="sources_dialog_community_notice_message">"Zdroje komunitních oprav jsou vytvářeny a spravovány jejich vlastními autory. Oru nekontroluje ani neověřuje opravy třetích stran a nenese odpovědnost za jejich obsah ani za to, co s vaším zařízením dělají.
+
+Cokoli, co z této webové stránky přidáte, používáte na vlastní riziko."</string>
+    <string name="sources_management_held_back_hint">Tento zdroj při načítání způsobil pád Oru, proto je přeskočen. Aktualizujte jej nebo jej znovu importujte a zkuste to znovu</string>
+    <string name="sources_management_outdated_manager_badge">Aktualizovat Oru</string>
+    <string name="sources_management_outdated_manager_hint">Tento zdroj je vytvořen pro patcher %1$s, ale Oru %2$s obsahuje patcher %3$s. Aktualizujte Oru pro jeho použití</string>
+    <string name="tour_prompt_desc">Chcete si prohlédnout klíčové funkce Oru?</string>
+    <string name="uninstall_app_unverified">Ponecháno na místě: Oru nemohl ověřit, že nainstalovaná aplikace je sestavení, které opatchoval.</string>
+</resources>

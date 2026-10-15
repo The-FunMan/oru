@@ -396,6 +396,20 @@ private fun ByteArray.toHex(): String = joinToString("") { byte -> "%02x".format
 /** SHA-256 fingerprint of an encoded certificate, alike from the platform, apksig or a keystore. */
 fun ByteArray.sha256Fingerprint(): String = MessageDigest.getInstance("SHA-256").digest(this).toHex()
 
+/**
+ * Whether [installed] holds the same bytes as [expected]. Different sizes settle it without reading
+ * either file, so the hash is only computed when the sizes match.
+ */
+fun sameFileContent(
+    installed: File,
+    expected: File,
+    hash: (File) -> String? = File::sha256OrNull
+): Boolean {
+    if (installed.length() != expected.length()) return false
+    val installedHash = hash(installed) ?: return false
+    return installedHash == hash(expected)
+}
+
 fun File.sha256OrNull(): String? = runCatching {
     if (!isFile) return@runCatching null
     val digest = MessageDigest.getInstance("SHA-256")

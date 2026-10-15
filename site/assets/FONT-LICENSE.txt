@@ -1,0 +1,9 @@
+Font file: oru-wordmark.ttf
+
+This file is a subset of Yuji Boku. It contains only the characters o, r, u, O, R and U,
+plus space, hyphen and full stop. The font name is "Yuji Boku Regular", version 3.002.
+
+Copyright 2021 The Yuji Project Authors (https://github.com/Kinutafontfactory/Yuji)
+
+License: SIL Open Font License, Version 1.1
+License text: https://openfontlicense.org

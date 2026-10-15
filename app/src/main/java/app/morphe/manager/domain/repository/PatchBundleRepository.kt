@@ -12,7 +12,6 @@ package app.morphe.manager.domain.repository
 
 import android.app.Application
 import android.content.Context
-import android.database.SQLException
 import android.util.Log
 import androidx.annotation.StringRes
 import app.morphe.manager.BuildConfig
@@ -519,7 +518,7 @@ class PatchBundleRepository(
         val metadata = map.mapNotNull { (bundle, src) ->
             try {
                 src.uid to PatchBundleInfo.Global(
-                    name = src.displayTitle,
+                    name = src.shownTitle,
                     version = bundle.manifestAttributes?.version,
                     uid = src.uid,
                     enabled = src.enabled,
@@ -548,14 +547,6 @@ class PatchBundleRepository(
                 null
             }
         }.toMap()
-
-        // Recorded before the patches are published, so an app a source leaves out never gets a
-        // card first. A failure here costs the leaving out, not the source
-        try {
-            sourceMuteRepository.leaveOutNewApps(metadata)
-        } catch (e: SQLException) {
-            Log.e(tag, "Failed to leave out new apps", e)
-        }
 
         if (failures.isNotEmpty()) {
             dispatchAction("Mark bundles as failed") { state ->
@@ -975,7 +966,7 @@ class PatchBundleRepository(
                 val ready = state as? BundleState.Ready ?: return@dispatchAction state
                 val src = ready.sources[uid] ?: return@dispatchAction state
                 val updated = src.copy(displayName = normalized)
-                val updatedInfo = ready.info[uid]?.copy(name = updated.displayTitle)
+                val updatedInfo = ready.info[uid]?.copy(name = updated.shownTitle)
                 ready.copy(
                     sources = ready.sources.putting(uid, updated),
                     info = if (updatedInfo != null) ready.info.putting(uid, updatedInfo) else ready.info
@@ -1275,12 +1266,9 @@ class PatchBundleRepository(
      * reports as one download rather than one per source. A URL that is invalid, blocked or
      * already added is skipped, with one toast per kind of refusal.
      *
-     * With [onlyApp] each added source leaves out every other app it names, the ones it adds later
-     * included. It is recorded before the download starts, so the others never reach the home screen.
-     *
      * @return The uid of each source added, in the order of [urls].
      */
-    suspend fun createRemotes(urls: List<String>, autoUpdate: Boolean, onlyApp: String? = null): List<Int> {
+    suspend fun createRemotes(urls: List<String>, autoUpdate: Boolean): List<Int> {
         val added = CompletableDeferred<List<Int>>()
         dispatchAction("Add bundles (${urls.size})") { state ->
             val ready = state as? BundleState.Ready
@@ -1314,9 +1302,6 @@ class PatchBundleRepository(
             rejections.forEach { toast(it.messageRes) }
             if (created.isEmpty()) return@dispatchAction state
 
-            onlyApp?.let { app ->
-                created.forEach { sourceMuteRepository.setBringsNewApps(it.uid, false, setOf(app)) }
-            }
             update(*created.toTypedArray(), allowUnsafeNetwork = prefs.allowMeteredUpdates.get())
             ready.copy(sources = ready.sources.mutate { sources -> created.forEach { sources[it.uid] = it } })
         }
@@ -1355,21 +1340,11 @@ class PatchBundleRepository(
      * endpoint, lowercased. The built-in source's endpoint is an API identifier no link reads as,
      * so it is also known by the repository it publishes, in the form [toBlocklistKey] gives.
      */
-    private fun BundleState.Ready.remoteSourceKeys(): Set<String> =
-        sources.values.filterIsInstance<RemotePatchBundle>().flatMapTo(mutableSetOf()) { it.sourceKeys() }
-
-    private fun RemotePatchBundle.sourceKeys(): Set<String> = buildSet {
-        add(endpoint.lowercase(Locale.US))
-        if (this@sourceKeys is APIPatchBundle) toBlocklistKey(normalizeRemoteBundleUrl(SOURCE_REPO_URL))?.let(::add)
-    }
-
-    /** The source [url] would duplicate, by the same rule [createRemotes] turns it down with. */
-    fun existingSourceUid(url: String): Int? {
-        val ready = store.state.value as? BundleState.Ready ?: return null
-        val duplicate = RemoteUrlCheck.Rejected(RemoteSourceRejection.Duplicate)
-        return ready.sources.values.filterIsInstance<RemotePatchBundle>()
-            .firstOrNull { checkRemoteUrl(url, it.sourceKeys()) == duplicate }
-            ?.uid
+    private fun BundleState.Ready.remoteSourceKeys(): Set<String> = buildSet {
+        sources.values.filterIsInstance<RemotePatchBundle>().forEach { source ->
+            add(source.endpoint.lowercase(Locale.US))
+            if (source is APIPatchBundle) toBlocklistKey(normalizeRemoteBundleUrl(SOURCE_REPO_URL))?.let(::add)
+        }
     }
 
     /** Saves and loads a new remote source for [endpoint]. Do not use this outside an action. */
@@ -1414,9 +1389,9 @@ class PatchBundleRepository(
         if (code != null && code in 400..499
             && bundle is JsonPatchBundle && bundle.supportsPrerelease
         ) {
-            toast(R.string.sources_download_endpoint_not_found, bundle.displayTitle)
+            toast(R.string.sources_download_endpoint_not_found, bundle.shownTitle)
         } else {
-            toast(R.string.sources_download_fail_named, bundle.displayTitle)
+            toast(R.string.sources_download_fail_named, bundle.shownTitle)
         }
     }
 
@@ -1464,8 +1439,7 @@ class PatchBundleRepository(
     } catch (_: Exception) { null }
 
     fun normalizeRemoteBundleUrl(input: String): String {
-        // A link is usually pasted without its scheme, and every host here serves https
-        val trimmed = input.trim().let { if ("://" in it) it else "https://$it" }
+        val trimmed = withHttpsScheme(input)
         val parsed = try {
             Url(trimmed)
         } catch (e: Exception) {
@@ -1483,10 +1457,9 @@ class PatchBundleRepository(
 
             // Check if it's a pull request URL
             if (pathSegments.size >= 3 && pathSegments[2] == "pull") {
-                val scheme = if (parsed.protocol.name.equals("https", ignoreCase = true)) "https" else "http"
                 val basePath = "/" + pathSegments.joinToString("/")
                 val query = parsed.encodedQuery.takeIf { it.isNotEmpty() }?.let { "?$it" }.orEmpty()
-                return "$scheme://$host$basePath$query"
+                return "https://$host$basePath$query"
             }
 
             // Transform GitHub repository URL to raw.githubusercontent.com
@@ -2265,13 +2238,20 @@ class PatchBundleRepository(
      * In [ImportMode.Replace] mode this first removes existing custom remote bundles that are
      * absent from [snapshots] (the default source and local bundles are always kept), then adds
      * the missing ones. Triggers a full reload and starts a download job for newly added bundles.
+     *
+     * Added sources start disabled and without auto update, so nothing is fetched until the user
+     * enables them. Returns one reason per snapshot that was skipped because its source is not a
+     * valid https bundle URL.
      */
     suspend fun importCustomBundles(
         snapshots: List<BundleSnapshot>,
         mode: ImportMode = ImportMode.Merge,
-    ) {
+    ): List<String> {
+        val rejected = rejectedSourceReasons(snapshots, ::normalizeRemoteBundleUrl)
+        rejected.forEach { Log.w(tag, "Skipped bundle on import: $it") }
+
         // Empty snapshot in Merge mode is a no-op; in Replace mode it still needs to clear existing customs
-        if (snapshots.isEmpty() && mode == ImportMode.Merge) return
+        if (snapshots.isEmpty() && mode == ImportMode.Merge) return rejected
 
         dispatchAction("Import custom bundles ($mode)") { state ->
             val ready = state as? BundleState.Ready ?: return@dispatchAction state
@@ -2389,9 +2369,8 @@ class PatchBundleRepository(
                 UpdateRequest(
                     allowUnsafeNetwork = prefs.allowMeteredUpdates.get(),
                     target = UpdateTarget(custom = { bundle ->
+                        // Disabled bundles are not fetched; enabling one triggers its first download
                         bundle.uid != DEFAULT_SOURCE_UID &&
-                                // Disabled bundles are not refreshed, but ones that were never
-                                // downloaded still need their initial fetch
                                 (bundle.enabled || bundle.state is PatchBundleSource.State.Missing) &&
                                 snapshots.any { s ->
                                     bundle.endpoint.equals(
@@ -2405,11 +2384,36 @@ class PatchBundleRepository(
 
             newState
         }
+        return rejected
     }
 
     internal companion object {
         const val DEFAULT_SOURCE_UID = 0
         const val LOCAL_IMPORT_STEPS = 2
+
+        /**
+         * A link is usually pasted without its scheme, and every host here serves https. An explicit
+         * scheme must be https: cleartext bundles are never fetched, since their DEX code would be
+         * unauthenticated on the wire.
+         */
+        fun withHttpsScheme(input: String): String {
+            val trimmed = input.trim()
+            if ("://" !in trimmed) return "https://$trimmed"
+            require(trimmed.startsWith("https://", ignoreCase = true)) {
+                "Bundle URL must use https: $trimmed"
+            }
+            return trimmed
+        }
+
+        /** Describes each snapshot whose source [normalize] rejects, so an import can report what it dropped. */
+        fun rejectedSourceReasons(
+            snapshots: List<BundleSnapshot>,
+            normalize: (String) -> String,
+        ): List<String> = snapshots.mapNotNull { snapshot ->
+            runCatching { normalize(snapshot.source) }.exceptionOrNull()?.let { error ->
+                "${snapshot.name}: ${error.message ?: error.javaClass.simpleName}"
+            }
+        }
 
         // Create default entity with sortOrder 0
         fun createDefaultEntity() = PatchBundleEntity(

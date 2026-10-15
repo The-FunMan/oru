@@ -608,7 +608,7 @@ class BatchPatcherViewModel : ViewModel(), KoinComponent, ApkDownloadHelperHost 
         pm.launch(packageName)
     }
 
-    fun start() = coordinator.start()
+    fun start(): BatchStartResult = coordinator.start()
 
     fun cancel() = coordinator.cancel()
 

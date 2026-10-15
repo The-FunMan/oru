@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="adaptive_icon_guide_png_body">पारदर्शी पृष्ठभूमि पर लोगो सबसे अच्छा काम करता है, और पृष्ठभूमि का रंग नीचे चुना जाता है। बिना पारदर्शिता वाली तस्वीर इसके बजाय पूरे आइकन को भर देती है, और थीम वाले और सूचना आइकन तब Oru लोगो को बनाए रखते हैं।</string>
+    <string name="adaptive_icon_no_transparency_warning">इस छवि में कोई पारदर्शी पिक्सेल नहीं है, इसलिए थीम वाले और सूचना आइकन Oru लोगो को बनाए रखते हैं</string>
+    <string name="deep_link_add_source_message">क्या आप इस पैच सोर्स को Oru में जोड़ना चाहते हैं?</string>
+    <string name="external_batch_patch_description">%s चाहता है कि Oru ऐप्स को पैच और इंस्टॉल करे</string>
+    <string name="home_apk_helper_installed_unavailable">Oru इंस्टॉल किए गए ऐप का उपयोग नहीं कर सका</string>
+    <string name="home_app_filter_not_patched_description">वे ऐप जिन्हें आपने अभी तक Oru में पैच नहीं किया है</string>
+    <string name="home_app_filter_patched_description">Oru के साथ आपके द्वारा पैच या सेव किए गए ऐप्स</string>
+    <string name="home_app_filter_uninstalled_description">Oru से पैच किए गए ऐप्स जो अब इस डिवाइस पर नहीं हैं</string>
+    <string name="home_app_info_install_unverified">Oru यह पुष्टि नहीं कर सकता कि स्थापित ऐप वही बिल्ड है जिसे उसने पैच किया था। इसकी क्रियाएँ बहाल करने के लिए इसे दोबारा पैच करें या सहेजे गए APK से पुनः स्थापित करें।</string>
+    <string name="home_app_info_not_patched_description">इस ऐप का एक अनपैच्ड संस्करण स्थापित है। Oru के पास अभी भी उसका पिछला पैच रिकॉर्ड है</string>
+    <string name="home_download_instructions_step2_search_note">Oru इन वेबसाइटों की गारंटी नहीं दे सकता। जो वेबसाइटें APK फ़ाइल के बजाय अपना खुद का ऐप स्टोर पेश करती हैं, उन्हें छोड़ दें</string>
+    <string name="home_held_back_title">एक पैच सोर्स ने Oru को क्रैश कर दिया</string>
+    <string name="home_outdated_manager_title">Oru पुरानी हो गई है</string>
+    <string name="home_update_available">Oru अपडेट उपलब्ध है</string>
+    <string name="installer_shizuku_error_permission">Shizuku अनुमति गुम है। Oru को अनुमति दें और फिर से प्रयास करें</string>
+    <string name="installer_status_shizuku_permission">Oru ऐप से Shizuku की अनुमति दें</string>
+    <string name="installing_manager_update_hint">अपडेट पूरा करने के लिए Oru बंद हो जाएगा</string>
+    <string name="launch_app_unverified">Oru सत्यापित नहीं कर सका कि इंस्टॉल किया गया ऐप वही बिल्ड है जिसे उसने पैच किया था</string>
+    <string name="notification_channel_manager_updates">Oru अपडेट</string>
+    <string name="notification_channel_manager_updates_description">नए Oru रिलीज़ के बारे में सूचनाएँ</string>
+    <string name="notification_mount_replaced_text">v%1$s ने पैच किए गए v%2$s को प्रतिस्थापित कर दिया। इसे पुनर्स्थापित करने के लिए Oru खोलें</string>
+    <string name="onboarding_settings_desc">Oru को अनुकूलित करें: दिखावट, उन्नत विकल्प और सिस्टम उपकरण।</string>
+    <string name="patcher_incompatible_patcher_description">सोर्स &lt;b&gt;%1$s&lt;/b&gt; के लिए पैचर &lt;b&gt;%2$s&lt;/b&gt; या उससे नया वर्शन चाहिए। इसका इस्तेमाल करने के लिए Oru को अपडेट करें।</string>
+    <string name="patcher_installed_conflict_body">"Oru अपने स्वयं के प्रमाणपत्र के साथ पैच्ड ऐप्स पर हस्ताक्षर करता है, जो मूल से अलग है। Android को पैच्ड ऐप को इंस्टॉल करने से पहले मौजूदा संस्करण को हटाने की आवश्यकता होती है।
+
+अनइंस्टॉल करने से सभी ऐप डेटा स्थायी रूप से मिट जाएगा।"</string>
+    <string name="patcher_storage_permission_hint">टिप: फ़ाइलें /Android/data/app.oru.manager/files/ में स्थानांतरित करें - अतिरिक्त पर्मिशन की आवश्यकता नहीं है</string>
+    <string name="root_mount_module_unmount_warning">यदि KernelSU में डिफ़ॉल्ट रूप से अनमाउंट मॉड्यूल सक्षम हैं, तो KernelSU &gt; सुपरयूज़र &gt; वह ऐप जिसे आपने माउंट किया है &gt; प्रोफ़ाइल &gt; कस्टम खोलें और अनमाउंट मॉड्यूल को अक्षम करें। अन्यथा माउंटेड पैच्ड APK प्रभावी नहीं हो सकता है, भले ही Oru इसे माउंटेड दिखाए।</string>
+    <string name="settings_advanced_expert_mode_description">जटिल Oru पैचिंग सेटिंग्स और अनुकूलन विकल्पों को सक्षम करता है।</string>
+    <string name="settings_advanced_patch_options_custom_branding_custom_icon_instruction">"कस्टम आइकन के रूप में उपयोग करने के लिए छवियों के साथ फ़ोल्डर।
+
+फ़ोल्डर में डिवाइस के DPI के आधार पर, एक या अधिक निम्न फ़ोल्डर होने चाहिए:
+- mipmap-mdpi
+- mipmap-hdpi
+- mipmap-xhdpi
+- mipmap-xxhdpi
+- mipmap-xxxhdpi
+
+इनमें से प्रत्येक फ़ोल्डर में निम्न फ़ाइलें होनी चाहिए:
+morphe_adaptive_background_custom.png
+morphe_adaptive_foreground_custom.png
+
+छवि आयाम इस प्रकार होने चाहिए:
+- mipmap-mdpi: 108x108 px
+- mipmap-hdpi: 162x162 px
+- mipmap-xhdpi: 216x216 px
+- mipmap-xxhdpi: 324x324 px
+- mipmap-xxxhdpi: 432x432 px
+
+वैकल्पिक रूप से, पथ में एक 'drawable' फ़ोल्डर होता है जिसमें एक मोनोक्रोम आइकन फ़ाइल होती है:
+morphe_adaptive_monochrome_custom.xml
+
+वैकल्पिक रूप से, पथ में सूचना आइकन निम्नलिखित स्वरूपों में से एक में होता है:
+- 'drawable' में XML वेक्टरdrawable:
+  morphe_notification_icon_custom.xml
+- 'drawable-dpi' फ़ोल्डर में PNG raster छवियां:
+  drawable-mdpi/morphe_notification_icon_custom.png (24x24 px)
+  drawable-hdpi/morphe_notification_icon_custom.png (36x36 px)
+  drawable-xhdpi/morphe_notification_icon_custom.png (48x48 px)
+  drawable-xxhdpi/morphe_notification_icon_custom.png (72x72 px)
+  drawable-xxxhdpi/morphe_notification_icon_custom.png (96x96 px)"</string>
+    <string name="settings_advanced_patch_options_custom_header_instruction">"कस्टम हेडर लोगो के लिए उपयोग किए जाने वाले चित्रों के फोल्डर का पथ
+
+डिवाइस के DPI पर निर्भर करता है, फोल्डर में निम्नलिखित किसी एक या अधिक फ़ोल्डर होनी चाहिए:
+- drawable-hdpi
+- drawable-xhdpi
+- drawable-xxhdpi
+- drawable-xxxhdpi
+
+हर फोल्डर में निम्नलिखित सभी फ़ाइलें होनी चाहिए:
+morphe_header_custom_light.png
+morphe_header_custom_dark.png
+
+फ़ाइलें निम्नलिखित आयामों में होनी चाहिए:
+- drawable-hdpi: 194x72 px
+- drawable-xhdpi: 258x96 px
+- drawable-xxhdpi: 387x144 px
+- drawable-xxxhdpi: 512x192 px"</string>
+    <string name="settings_advanced_updates_allow_metered_description">Oru और पैच अपडेट को मोबाइल डेटा पर डाउनलोड करने की अनुमति देता है।</string>
+    <string name="settings_advanced_updates_manager_prereleases_description">नए Oru संस्करणों तक प्रारंभिक पहुँच</string>
+    <string name="settings_advanced_updates_prerelease_warning_message">"Oru के प्री-रिलीज़ संस्करण अभी विकास में हैं और अस्थिर हो सकते हैं।
+
+पैच स्रोत सूची में प्रत्येक स्रोत के लिए प्री-रिलीज़ पैच सक्षम करें, पैच प्रभावित नहीं होते हैं।"</string>
+    <string name="settings_appearance_app_icon_selector_description">Oru आपकी होम स्क्रीन और ऐप ड्रॉअर में कैसा दिखता है</string>
+    <string name="settings_auto_uninstall_warning_message">यदि Android Shizuku ऑटो-इंस्टॉल के दौरान हस्ताक्षर संघर्ष की रिपोर्ट करता है, तो Oru पैच किए गए APK को इंस्टॉल करने से पहले मौजूदा ऐप को अनइंस्टॉल कर देगा</string>
+    <string name="settings_system_apk_download_helper_warning">APK सहायक ऐप से आता है, इसलिए केवल उन्हीं ऐप पर भरोसा करें जिन्हें आप जानते हैं। Oru फिर भी पैच करने से पहले हर फ़ाइल के पैकेज, संस्करण और हस्ताक्षर की जाँच करता है।</string>
+    <string name="settings_system_import_manager_settings_description">आपकी Oru सेटिंग्स का बैकअप और पुनर्स्थापित करता है।</string>
+    <string name="settings_system_import_manager_settings_mode_title">Oru सेटिंग्स आयात करें</string>
+    <string name="settings_system_process_runtime_heap_limit_ignored">इस डिवाइस ने पिछली बार मेमोरी सीमा को अनदेखा किया, इसलिए पैचिंग Oru के अंदर चलने पर वापस आ सकती है।</string>
+    <string name="settings_system_signing_key_dialog_description">Oru द्वारा पैच किया गया हर ऐप इसी कुंजी से साइन किया जाता है। इसकी एक प्रति सुरक्षित रखें: इसके बिना पैच किए गए ऐप को अपडेट करने के लिए पहले उसे अनइंस्टॉल करना होगा</string>
+    <string name="settings_system_signing_key_missing">Oru आपके पहले पैच के साथ एक बनाता है।</string>
+    <string name="sources_management_held_back_hint">यह स्रोत लोड करते समय Oru को क्रैश कर दिया, इसलिए इसे छोड़ा जा रहा है। पुनः प्रयास करने के लिए इसे अपडेट करें या फिर से आयात करें</string>
+    <string name="sources_management_outdated_manager_badge">Oru को अपडेट करें</string>
+    <string name="sources_management_outdated_manager_hint">यह स्रोत पैचर %1$s के लिए बनाया गया है, लेकिन Oru %2$s में पैचर %3$s शामिल है। इसका उपयोग करने के लिए Oru को अपडेट करें</string>
+    <string name="tour_prompt_desc">क्या आप Oru की मुख्य विशेषताओं का त्वरित दौरा करना चाहेंगे?</string>
+    <string name="uninstall_app_unverified">स्थान पर छोड़ दिया गया: Oru सत्यापित नहीं कर सका कि इंस्टॉल किया गया ऐप वही बिल्ड है जिसे उसने पैच किया था</string>
+</resources>

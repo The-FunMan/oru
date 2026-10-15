@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="adaptive_icon_guide_png_body">Un logo pe fundal transparent funcționează cel mai bine, cu culoarea de fundal selectată mai jos. O imagine fără transparență umple în schimb întreaga pictogramă, iar pictogramele tematice și cele de notificare păstrează atunci logo-ul Oru.</string>
+    <string name="adaptive_icon_no_transparency_warning">Această imagine nu are pixeli transparenți, așa că pictogramele tematice și cele de notificare păstrează logo-ul Oru</string>
+    <string name="battery_optimization_dialog_description">Unele dispozitive pot opri patcher-ul când aplicația este minimizată. Permiteți aplicației Oru să ruleze fără restricții de baterie pentru a asigura finalizarea fiabilă a patch-urilor</string>
+    <string name="deep_link_add_source_message">Dorești să adaugi această sursă de patch la Oru?</string>
+    <string name="external_batch_patch_description">%s dorește ca Oru să aplice patch-uri și să instaleze aplicații</string>
+    <string name="home_apk_helper_description">Oru va solicita aplicației de asistență de mai jos să descarce APK-ul original și să returneze fișierul</string>
+    <string name="home_apk_helper_installed_unavailable">Oru nu a putut utiliza aplicația instalată</string>
+    <string name="home_apk_helper_warning">Continuă numai dacă ai încredere în această aplicație auxiliară. Oru verifică pachetul, versiunea și semnătura oricărui element primit înainte de aplicarea modificărilor</string>
+    <string name="home_apk_helper_warning_unverified">Continuă numai dacă ai încredere în această aplicație auxiliară. Oru nu poate verifica semnătura acestui APK, astfel încât un fișier modificat nu ar fi detectat</string>
+    <string name="home_app_filter_not_patched_description">Aplicațiile pe care nu le-ai patch-uit încă în Oru</string>
+    <string name="home_app_filter_patched_description">Aplicațiile pe care le-ai patch-uit sau salvat cu Oru</string>
+    <string name="home_app_filter_uninstalled_description">Aplicații patch-uite cu Oru care nu mai sunt pe acest dispozitiv</string>
+    <string name="home_app_info_app_deleted_description">Această aplicație a fost dezinstalată în afara Oru. Aplica-o din nou pentru a restabili funcționalitatea</string>
+    <string name="home_app_info_install_unverified">Oru nu poate confirma că aplicația instalată este versiunea pe care a patch-uit-o. Patch-uiește din nou sau reinstaleaz-o din fișierul APK salvat pentru a-i restaura acțiunile</string>
+    <string name="home_app_info_not_patched_description">O versiune necorectată a acestei aplicații este instalată. Oru încă are înregistrarea anterioară a corecțiilor sale.</string>
+    <string name="home_download_instructions_download_button_toast_6">Acum ești un tester oficial Oru 🏅</string>
+    <string name="home_download_instructions_step2_search_note">Oru nu poate garanta pentru aceste site-uri web. Evită-le pe cele care oferă propriul magazin de aplicații în loc de un fișier APK</string>
+    <string name="home_download_instructions_step4">După ce descărcarea se termină, revino la Oru</string>
+    <string name="home_download_instructions_step4_mount">După instalarea APK-ului original, revino la Oru</string>
+    <string name="home_held_back_title">O sursă de patch-uri a cauzat prăbușirea Oru</string>
+    <string name="home_outdated_manager_title">Oru este învechit</string>
+    <string name="home_update_available">Actualizare Oru disponibilă</string>
+    <string name="installer_shizuku_error_permission">Permisiunea Shizuku lipsește. Acordă permisiune aplicației Oru și încearcă din nou.</string>
+    <string name="installer_status_shizuku_permission">Acordă permisiune aplicației Oru din aplicația Shizuku</string>
+    <string name="installing_manager_update_hint">Oru se va închide pentru a finaliza actualizarea</string>
+    <string name="launch_app_unverified">Oru nu a putut verifica că aplicația instalată este build-ul pe care l-a patch-uit</string>
+    <string name="notification_bundle_update_text_unversioned">Apasă pentru a deschide Oru și a actualiza</string>
+    <string name="notification_channel_manager_updates">Actualizări Oru</string>
+    <string name="notification_channel_manager_updates_description">Notificări despre noile lansări Oru</string>
+    <string name="notification_channel_patcher_description">Afișate în timp ce Oru aplică un patch unei aplicații în fundal</string>
+    <string name="notification_mount_replaced_text">v%1$s a înlocuit versiunea patchuită v%2$s. Deschide Oru pentru a o restaura</string>
+    <string name="notification_permission_dialog_description">Oru are nevoie de permisiunea de notificare pentru a te avertiza când sunt disponibile actualizări în fundal</string>
+    <string name="onboarding_settings_desc">Personalizează Oru: aspect, opțiuni avansate și instrumente de sistem</string>
+    <string name="patcher_incompatible_patcher_description">Sursa &lt;b&gt;%1$s&lt;/b&gt; necesită patcher-ul &lt;b&gt;%2$s&lt;/b&gt; sau o versiune mai nouă. Actualizează Oru pentru a o folosi</string>
+    <string name="patcher_installed_conflict_body">"Oru semnează aplicațiile modificate cu propriul certificat, care diferă de cel original. Android necesită eliminarea versiunii existente înainte ca aplicația modificată să poată fi instalată.
+
+Dezinstalarea va șterge definitiv toate datele aplicației."</string>
+    <string name="patcher_storage_permission_description_api30">Una sau mai multe opțiuni de patch indică către căi pe care Oru nu le poate citi. Acordă acces la stocare și atinge butonul, apoi patch-uirea va începe automat</string>
+    <string name="patcher_storage_permission_hint">Sugestie: Mută fișierul în /Android/data/app.oru.manager/files/ - nu sunt necesare alte permisiuni</string>
+    <string name="root_mount_module_unmount_warning">Dacă KernelSU are modulul Deconectare module activat implicit, deschide KernelSU &gt; Superuser &gt; aplicația montată &gt; Profil &gt; Personalizat și dezactivează Deconectare module. Altfel, fișierul APK patch-uit montat s-ar putea să nu aibă efect, chiar dacă Oru îl afișează ca fiind montat</string>
+    <string name="settings_advanced_expert_mode_description">Activează setările complexe de patch-uire Oru și opțiunile de personalizare</string>
+    <string name="settings_advanced_github_pat_export_include_supporting">Adaugă acest PAT la setările Oru exportate</string>
+    <string name="settings_advanced_patch_options_custom_branding_custom_icon_instruction">"Folder cu imagini care să fie utilizate ca pictogramă personalizată.
+
+Folderul trebuie să conțină unul sau mai multe dintre următoarele foldere, în funcție de DPI-ul dispozitivului:
+- mipmap-mdpi
+- mipmap-hdpi
+- mipmap-xhdpi
+- mipmap-xxhdpi
+- mipmap-xxxhdpi
+
+Fiecare dintre foldere trebuie să conțină toate următoarele fișiere:
+morphe_adaptive_background_custom.png
+morphe_adaptive_foreground_custom.png
+
+Dimensiunile imaginii trebuie să fie următoarele:
+- mipmap-mdpi: 108x108 px
+- mipmap-hdpi: 162x162 px
+- mipmap-xhdpi: 216x216 px
+- mipmap-xxhdpi: 324x324 px
+- mipmap-xxxhdpi: 432x432 px
+
+Opțional, calea conține un folder 'drawable' cu un fișier de pictogramă monocrom:
+morphe_adaptive_monochrome_custom.xml
+
+Opțional, calea conține o pictogramă de notificare în unul dintre următoarele formate:
+- Pictogramă vectorială XML în 'drawable':
+  morphe_notification_icon_custom.xml
+- Imagini raster PNG în folderele 'drawable-dpi':
+  drawable-mdpi/morphe_notification_icon_custom.png (24x24 px)
+  drawable-hdpi/morphe_notification_icon_custom.png (36x36 px)
+  drawable-xhdpi/morphe_notification_icon_custom.png (48x48 px)
+  drawable-xxhdpi/morphe_notification_icon_custom.png (72x72 px)
+  drawable-xxxhdpi/morphe_notification_icon_custom.png (96x96 px)"</string>
+    <string name="settings_advanced_patch_options_custom_header_instruction">"Folder cu imagini pentru a fi utilizate ca un logo personalizat.
+
+Folderul trebuie să conțină unul sau mai multe dintre următoarele folderuri, în funcție de DPI-ul dispozitivului:
+- drawable-hdpi
+- drawable-xhdpi
+- drawable-xxhdpi
+- drawable-xxxhdpi
+
+Fiecare dintre folderurile trebuie să conțină toate următoarele fișiere:
+morphe_header_custom_light.png
+morphe_header_custom_dark.png
+
+Dimensiunile imaginilor trebuie să fie următoarele:
+- drawable-hdpi: 194x72 px
+- drawable-xhdpi: 258x96 px
+- drawable-xxhdpi: 387x144 px
+- drawable-xxxhdpi: 512x192 px"</string>
+    <string name="settings_advanced_updates_allow_metered_description">Permite aplicației Oru și actualizărilor de patch-uri să se descarce prin date mobile</string>
+    <string name="settings_advanced_updates_manager_prereleases_description">Acces timpuriu la noile versiuni Oru</string>
+    <string name="settings_advanced_updates_prerelease_warning_message">"Pre-release versions of Oru are still in development and can be unstable.
+
+Patches are not affected: enable pre-release patches for each source in the patch sources list"</string>
+    <string name="settings_appearance_app_icon_selector_description">Cum arată Oru pe ecranul de pornire și în sertarul de aplicații</string>
+    <string name="settings_auto_uninstall_warning_message">Dacă Android raportează un conflict de semnătură în timpul instalării automate Shizuku, Oru va dezinstala aplicația existentă înainte de a instala fișierul APK modificat.</string>
+    <string name="settings_system_apk_download_helper_warning">APK-ul provine de la aplicația de ajutor, așa că ai încredere doar în aplicațiile pe care le cunoști. Oru verifică în continuare pachetul, versiunea și semnătura fiecărui fișier înainte de a aplica patch-ul</string>
+    <string name="settings_system_custom_file_picker_description">Răsfoiește stocarea cu selectorul de fișiere integrat Oru în loc de cel implicit al sistemului</string>
+    <string name="settings_system_export_manager_settings_fail">A eșuat exportarea setărilor Oru: %s</string>
+    <string name="settings_system_export_manager_settings_success">Setările Oru au fost exportate</string>
+    <string name="settings_system_import_manager_settings_description">Realizează copii de rezervă și restaurează setările Oru</string>
+    <string name="settings_system_import_manager_settings_fail">Eșec la importarea setărilor Oru: %s</string>
+    <string name="settings_system_import_manager_settings_mode_title">Importă setări Oru</string>
+    <string name="settings_system_import_manager_settings_success">Setările Oru au fost importate</string>
+    <string name="settings_system_morphe_settings">Setări Oru</string>
+    <string name="settings_system_process_runtime_heap_limit_ignored">Acest dispozitiv a ignorat limita de memorie la ultima rulare, așa că patch-urile ar putea recurge la rularea în interiorul Oru.</string>
+    <string name="settings_system_signing_key_dialog_description">Fiecare aplicație pe care Oru o patch-uiește este semnată cu această cheie. Păstrează o copie: fără ea, aplicațiile patch-uite pot fi actualizate doar după dezinstalarea lor.</string>
+    <string name="settings_system_signing_key_missing">Oru creează una odată cu primul tău patch.</string>
+    <string name="settings_system_storage_open_app_info_description">Gestionează sau șterge toate datele Oru prin setările sistemului</string>
+    <string name="sources_dialog_community_notice_message">"Sursele de patch-uri comunitare sunt create și întreținute de propriii autori. Oru nu verifică sau validează patch-urile terțe și nu este responsabil pentru conținutul lor sau pentru ceea ce fac pe dispozitivul tău.
+
+Orice adaugi de pe acest site este folosit pe propriul risc."</string>
+    <string name="sources_management_held_back_hint">Această sursă a cauzat prăbușirea Oru în timpul încărcării. Actualizați-o sau reimportați-o pentru a încerca din nou.</string>
+    <string name="sources_management_outdated_manager_badge">Actualizează Oru</string>
+    <string name="sources_management_outdated_manager_hint">Această sursă este construită pentru patcherul %1$s, însă Oru %2$s include patcherul %3$s. Actualizează Oru pentru a-l folosi</string>
+    <string name="tour_prompt_desc">Dorești un tur rapid al funcțiilor cheie Oru?</string>
+    <string name="uninstall_app_unverified">Rămas instalat: Oru nu a putut verifica că aplicația instalată este build-ul pe care l-a patch-uit</string>
+</resources>

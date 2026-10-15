@@ -41,24 +41,13 @@ internal fun <K, V> changedMapKeys(previous: Map<K, V>, current: Map<K, V>): Set
     (previous.keys + current.keys).filterTo(mutableSetOf()) { previous[it] != current[it] }
 
 /**
- * The patch update waiting for an installed app: the source carrying it, the version the app
- * was patched with and the one the source is at now. [subject] is null when no changelog
- * narrowed the update down.
+ * The patch update waiting for an installed app: the source carrying it and the version the
+ * app was patched with. [subject] is null when no changelog narrowed the update down.
  */
 data class AppPatchUpdate(
     val bundleUid: Int,
     val patchedWithVersion: String?,
-    val availableVersion: String,
     val subject: ChangelogSubject? = null
-) {
-    /** The source and the version it is at, which an ignored update is remembered by. */
-    val release: String get() = "$bundleUid:$availableVersion"
-}
-
-/** Patch updates split by whether the user turned down the release each one brings. */
-private data class PatchUpdates(
-    val offered: Map<String, AppPatchUpdate>,
-    val ignored: Map<String, AppPatchUpdate>
 )
 
 /**
@@ -71,6 +60,7 @@ data class HomeAppState(
     val sortMode: HomeAppSortMode,
     val categoryState: HomeAppCategoryState,
     val categoryViewMode: HomeAppCategoryViewMode,
+    val showCategoryViewSwitcher: Boolean,
     val sourceGroups: List<HomeAppSourceGroup>
 )
 
@@ -116,6 +106,7 @@ internal data class HomeCards(
 private data class HomeCategoryPrefs(
     val categoryState: HomeAppCategoryState,
     val categoryViewMode: HomeAppCategoryViewMode,
+    val showCategoryViewSwitcher: Boolean,
     val expandedSourceGroups: Set<Int>
 )
 
@@ -143,26 +134,7 @@ class HomeApps(
 ) {
     // Updates available for installed apps, null until the first check lands
     private val _appUpdatesAvailable = MutableStateFlow<Map<String, AppPatchUpdate>?>(null)
-
-    // Split in one pass, so the offered and the ignored updates always come from the same check
-    private val patchUpdates: StateFlow<PatchUpdates?> = combine(
-        _appUpdatesAvailable,
-        homeAppButtonPrefs.ignoredPatchReleases
-    ) { updates, ignoredReleases ->
-        updates?.toList()
-            ?.partition { (packageName, update) -> ignoredReleases[packageName] != update.release }
-            ?.let { (offered, ignored) -> PatchUpdates(offered.toMap(), ignored.toMap()) }
-    }.stateIn(scope, SharingStarted.Eagerly, null)
-
-    /** Updates still offered for installed apps, null until the first check lands. */
-    val appUpdatesAvailable: StateFlow<Map<String, AppPatchUpdate>?> = patchUpdates
-        .map { it?.offered }
-        .stateIn(scope, SharingStarted.Eagerly, null)
-
-    /** Updates the user turned down, kept until their source brings a newer release. */
-    val ignoredAppUpdates: StateFlow<Map<String, AppPatchUpdate>> = patchUpdates
-        .map { it?.ignored.orEmpty() }
-        .stateIn(scope, SharingStarted.Eagerly, emptyMap())
+    val appUpdatesAvailable: StateFlow<Map<String, AppPatchUpdate>?> = _appUpdatesAvailable.asStateFlow()
 
     // Ticker to force homeAppState recomputation after install/uninstall without changing DB state
     private val _appStateTicker = MutableStateFlow(0L)
@@ -371,11 +343,13 @@ class HomeApps(
     private val _homeCategoryPrefsFlow = combine(
         homeAppButtonPrefs.categoryState,
         homeAppButtonPrefs.categoryViewMode,
+        homeAppButtonPrefs.showCategoryViewSwitcher,
         homeAppButtonPrefs.expandedSourceGroups,
-    ) { categoryState, categoryViewMode, expandedSourceGroups ->
+    ) { categoryState, categoryViewMode, showCategoryViewSwitcher, expandedSourceGroups ->
         HomeCategoryPrefs(
             categoryState = categoryState,
             categoryViewMode = categoryViewMode,
+            showCategoryViewSwitcher = showCategoryViewSwitcher,
             expandedSourceGroups = expandedSourceGroups
         )
     }
@@ -419,17 +393,6 @@ class HomeApps(
     fun stopIgnoringSupportedVersion(packageName: String) =
         homeAppButtonPrefs.stopIgnoringVersion(packageName)
 
-    /**
-     * Stops offering [update] for [packageName], leaving the next release of its source to be
-     * offered as usual.
-     */
-    fun ignorePatchUpdate(packageName: String, update: AppPatchUpdate) =
-        homeAppButtonPrefs.ignorePatchRelease(packageName, update.release)
-
-    /** Undoes [ignorePatchUpdate], so the update waiting for [packageName] is offered again. */
-    fun stopIgnoringPatchUpdate(packageName: String) =
-        homeAppButtonPrefs.stopIgnoringPatchRelease(packageName)
-
     private val homeCardCache = HomeCardCache(filesystem.homeCardCacheDir.resolve("cards.json"))
 
     // Read once, shown until the bundles load
@@ -469,7 +432,7 @@ class HomeApps(
                 }
             }
         },
-        appUpdatesAvailable,
+        _appUpdatesAvailable,
         appStateSignal,
     ) { bundle, prefs, installedApps, updates, (_, trackedSnapshots) ->
         HomeInputs(bundle, prefs, installedApps, updates, trackedSnapshots)
@@ -495,6 +458,7 @@ class HomeApps(
         sortMode = sortMode,
         categoryState = categoryPrefs.categoryState,
         categoryViewMode = categoryPrefs.categoryViewMode,
+        showCategoryViewSwitcher = categoryPrefs.showCategoryViewSwitcher,
         sourceGroups = sourceGroups.map { group ->
             group.copy(collapsed = group.collapsible && group.uid !in categoryPrefs.expandedSourceGroups)
         }
@@ -552,6 +516,7 @@ class HomeApps(
 
         // One query for installed packages instead of one per card
         val installedPackages = pm.getInstalledPackages().mapTo(HashSet()) { it.packageName }
+        val patchedNames = patchedPackageNamesByApp(enabledInfo.values.flatMap { it.patches })
 
         suspend fun buildItem(slot: HomeAppSlot): HomeAppItem {
             val packageName = slot.packageName
@@ -563,9 +528,18 @@ class HomeApps(
             val installedData = (installedApp?.currentPackageName ?: slot.id)
                 .takeIf { it in installedPackages }
                 ?.let { appDataResolver.resolveInstalled(it) }
+            // With the app itself gone, a patched copy of it that another manager made still is the app on the phone
+            val patchedElsewhere = if (installedApp == null && installedData == null) {
+                patchedInstallOf(
+                    installedPatchedCopies(packageName, patchedNames[packageName].orEmpty(), installedPackages)
+                )
+            } else {
+                null
+            }
             // The record's patch-time label first, it outlives the artifacts and the bundle
             val displayName = installedApp?.appLabel
                 ?: installedData?.displayName
+                ?: patchedElsewhere?.displayName
                 ?: bundleMeta?.displayName
                 ?: allMetadata[packageName]?.displayName
                 ?: KnownApps.getAppName(packageName)
@@ -607,7 +581,7 @@ class HomeApps(
                 installedPackageInfo = trackedSnapshot?.installedPackageInfo,
                 savedPackageInfo = savedPackageInfo,
                 // A record not judged yet shows its own version rather than the device's
-                untrackedPackageInfo = installedData?.packageInfo.takeIf { installedApp == null }
+                untrackedPackageInfo = (installedData ?: patchedElsewhere)?.packageInfo.takeIf { installedApp == null }
             )
 
             return HomeAppItem(
@@ -621,7 +595,7 @@ class HomeApps(
                 isPinnedByDefault = knownApp?.isPinnedByDefault == true,
                 isInstalledOnDevice = (trackedPresentation?.showsInstalledPackage == true) ||
                         isUninspectedInstall ||
-                        (installedApp == null && installedData != null),
+                        (installedApp == null && (installedData != null || patchedElsewhere != null)),
                 isDeleted = trackedPresentation?.isDeleted == true,
                 isInstallStateNotPatched = trackedPresentation?.isNotPatched == true,
                 isInstallStateUnknown = trackedPresentation?.isUnknown == true,
@@ -636,7 +610,8 @@ class HomeApps(
                     ignoredVersion = ignoredVersions[packageName]
                 ),
                 patchCount = 0,
-                isClone = slot.isClone
+                isClone = slot.isClone,
+                installedPatchedPackage = patchedElsewhere?.packageName,
             )
         }
 
@@ -676,6 +651,17 @@ class HomeApps(
         )
         scope.launch(homeCardCacheWrites) { homeCardCache.write(cards) }
         return cards
+    }
+
+    /**
+     * The data of the first of [copies] the device resolves, or null when none does. [copies] are the installed
+     * patched packages from [installedPatchedCopies], already in the order they are tried.
+     */
+    private suspend fun patchedInstallOf(copies: List<String>): ResolvedAppData? {
+        for (packageName in copies) {
+            appDataResolver.resolveInstalled(packageName)?.let { return it }
+        }
+        return null
     }
 
     /**
@@ -739,7 +725,7 @@ class HomeApps(
                     }
                     val source = sources[info.uid]
                     val avatarUrls = source?.avatarUrls
-                    val sourceName = source?.displayTitle
+                    val sourceName = source?.shownTitle
                         ?.takeUnless { it.isBlank() }
                         ?: info.name.takeUnless { it.isBlank() }
                         ?: "#${info.uid}"
@@ -1048,7 +1034,7 @@ class HomeApps(
                 // No resolvable app name → show badge (can't match scopes).
                 // Bundle lists only this app → show badge (every change is for it).
                 // Known name, nothing in the changelog for the app → no badge.
-                val unscoped = AppPatchUpdate(bundleUid, storedVersion, currentVersion)
+                val unscoped = AppPatchUpdate(bundleUid, storedVersion)
                 if (soleApps[bundleUid] == app.originalPackageName) return@firstNotNullOfOrNull unscoped
                 val source = readableByUid[bundleUid] ?: return@firstNotNullOfOrNull unscoped
                 if (appNames.isEmpty()) return@firstNotNullOfOrNull unscoped
@@ -1066,7 +1052,7 @@ class HomeApps(
                         .minus(app.originalPackageName)
                         .mapNotNullTo(mutableSetOf()) { appMetadata[it]?.displayName }
                 )
-                AppPatchUpdate(bundleUid, storedVersion, currentVersion, subject).takeIf {
+                AppPatchUpdate(bundleUid, storedVersion, subject).takeIf {
                     ChangelogParser.hasChangesFor(
                         entries = entries,
                         installedVersion = storedVersion,

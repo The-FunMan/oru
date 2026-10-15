@@ -17,6 +17,7 @@ import android.util.Log
 import app.morphe.manager.patcher.logger.LogLevel
 import app.morphe.manager.patcher.logger.Logger
 import app.morphe.manager.patcher.util.Abi
+import app.morphe.manager.util.BoundedInputStream
 import app.morphe.manager.patcher.util.NativeLibs
 import com.reandroid.arsc.chunk.xml.AndroidManifestBlock
 import kotlinx.coroutines.Dispatchers
@@ -26,6 +27,10 @@ import java.io.FileInputStream
 import java.io.IOException
 import java.nio.file.Files
 import java.util.Locale
+import java.util.concurrent.Callable
+import java.util.concurrent.ExecutionException
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 import java.util.zip.CRC32
 import java.util.zip.ZipEntry
 import java.util.zip.ZipFile
@@ -95,6 +100,15 @@ object SplitApkPreparer {
 
     // Recognized split archive container extensions
     private val SUPPORTED_EXTENSIONS = setOf("apks", "apkm", "xapk")
+
+    /**
+     * Largest APK module written out of a split archive. The biggest module measured locally is
+     * 236 MB, so 1 GiB leaves room for real apps while still bounding what a crafted entry can write.
+     */
+    private const val MAX_SPLIT_APK_BYTES = 1L shl 30
+
+    // Module copies in flight at once. Each copy holds only a stream buffer, so the peak stays small
+    private const val MAX_PARALLEL_MODULE_COPIES = 3
 
     // Ordered highest → lowest, matching Android's density fallback direction
     private val DENSITY_ORDER = listOf("xxxhdpi", "xxhdpi", "xhdpi", "hdpi", "tvdpi", "mdpi", "ldpi")
@@ -197,7 +211,7 @@ object SplitApkPreparer {
             ZipFile(file).use { zip -> splitModuleEntries(zip).any() }
         }.getOrDefault(false)
 
-    private data class ExtractedModule(val name: String, val file: File)
+    internal data class ExtractedModule(val name: String, val file: File)
 
     // Returns the set of name tokens for the device's primary ABI (the first entry in
     // Build.SUPPORTED_ABIS, which is always the most preferred one)
@@ -397,7 +411,6 @@ object SplitApkPreparer {
         onEvent: ((SplitPreparationEvent) -> Unit)? = null
     ): List<ExtractedModule> =
         runInterruptible(Dispatchers.IO) {
-            val extracted = mutableListOf<ExtractedModule>()
             ZipFile(source).use { zip ->
                 val allEntries = splitModuleEntries(zip).toList()
 
@@ -412,20 +425,60 @@ object SplitApkPreparer {
                 val apkEntries = allEntries.filterNot { it.name in skipped }
 
                 onEvent?.invoke(SplitPreparationEvent.Extracting)
-                apkEntries.forEach { entry ->
-                    val entryName = entry.name.substringAfterLast('/')
-                    val destination = targetDir.resolve(entryName)
-                    destination.parentFile?.mkdirs()
-                    zip.getInputStream(entry).use { input ->
-                        Files.newOutputStream(destination.toPath()).use { output ->
-                            input.copyTo(output)
-                        }
-                    }
-                    extracted += ExtractedModule(destination.name, destination)
+                copySplitModules(zip, apkEntries, targetDir, MAX_PARALLEL_MODULE_COPIES)
+            }
+        }
+
+    /**
+     * Copies [entries] of [zip] into [targetDir] on up to [threads] threads. The result follows the
+     * order of [entries], whatever order the copies finish in. The first failed copy is rethrown
+     * as is, after the remaining copies have stopped.
+     */
+    internal fun copySplitModules(
+        zip: ZipFile,
+        entries: List<ZipEntry>,
+        targetDir: File,
+        threads: Int,
+        onCopyStarted: (String) -> Unit = {}
+    ): List<ExtractedModule> {
+        if (entries.isEmpty()) return emptyList()
+        val pool = Executors.newFixedThreadPool(threads.coerceIn(1, entries.size))
+        try {
+            val copies = entries.map { entry ->
+                pool.submit(Callable { copySplitModule(zip, entry, targetDir, onCopyStarted) })
+            }
+            return copies.map { copy ->
+                try {
+                    copy.get()
+                } catch (e: ExecutionException) {
+                    throw e.cause ?: e
                 }
             }
-            extracted
+        } finally {
+            // Wait for the copies to stop, so the caller can delete the workspace without a copy
+            // recreating a directory under it
+            pool.shutdownNow()
+            pool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS)
         }
+    }
+
+    private fun copySplitModule(
+        zip: ZipFile,
+        entry: ZipEntry,
+        targetDir: File,
+        onCopyStarted: (String) -> Unit
+    ): ExtractedModule {
+        val entryName = entry.name.substringAfterLast('/')
+        val destination = targetDir.resolve(entryName)
+        destination.parentFile?.mkdirs()
+        onCopyStarted(entryName)
+        zip.getInputStream(entry).use { input ->
+            Files.newOutputStream(destination.toPath()).use { output ->
+                BoundedInputStream(input, MAX_SPLIT_APK_BYTES).copyTo(output)
+            }
+        }
+        return ExtractedModule(destination.name, destination)
+    }
 
     /** Result of [prepareIfNeeded]. */
     data class PreparationResult(

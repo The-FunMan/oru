@@ -101,12 +101,13 @@ class InstallerFileProvider : ContentProvider() {
                 .build()
 
         /**
-         * Copies [file] into the share directory as [name] (overwriting if size differs) and
-         * returns a content URI for it. The name is what a receiving app shows for the file.
+         * Copies [file] into the share directory under its original name (overwriting if size
+         * differs) and returns a content URI for it.
          */
-        fun getUriForFile(context: Context, file: File, name: String = file.name): Uri {
+        fun getUriForFile(context: Context, file: File): Uri {
             val shareDir = File(context.cacheDir, SHARE_DIR).also { it.mkdirs() }
-            val dest = File(shareDir, name)
+            val dest = File(shareDir, file.name)
+            pruneShareDir(shareDir, keep = dest)
             // Always copy if size or mtime differs. We stamp dest with the source's mtime
             // after each copy, so dest.lastModified() == file.lastModified() on the next
             // call only if the source hasn't changed — skipping the copy is then safe.
@@ -118,6 +119,17 @@ class InstallerFileProvider : ContentProvider() {
                 dest.setLastModified(file.lastModified())
             }
             return buildUri(context, dest.name)
+        }
+
+        /**
+         * Deletes every share copy except [keep]. Only the copy for the install being prepared is
+         * still needed: each new plan replaces the pending one, and nothing else reads the directory.
+         * Without this, every external install left its APK behind under a new name.
+         */
+        internal fun pruneShareDir(shareDir: File, keep: File) {
+            shareDir.listFiles()?.forEach { entry ->
+                if (entry.name != keep.name) entry.delete()
+            }
         }
 
         private fun buildFile(context: Context, uri: Uri): File {
@@ -132,10 +144,17 @@ class InstallerFileProvider : ContentProvider() {
             require(".." !in fileName) { "Path traversal is not allowed." }
 
             val dir = File(context.cacheDir, SHARE_DIR)
-            val target = File(dir, fileName)
+            return resolveInside(dir, File(dir, fileName))
+        }
+
+        /**
+         * The canonical form of [target], provided it lies strictly inside [dir]. The separator is
+         * part of the prefix, so a sibling such as `installer_share2` does not pass.
+         */
+        internal fun resolveInside(dir: File, target: File): File {
             val canonicalDir = dir.canonicalFile
             val canonicalTarget = target.canonicalFile
-            if (!canonicalTarget.path.startsWith(canonicalDir.path)) {
+            if (!canonicalTarget.path.startsWith(canonicalDir.path + File.separator)) {
                 throw SecurityException("Resolved path escapes share directory.")
             }
             return canonicalTarget

@@ -29,6 +29,7 @@ import app.morphe.manager.data.platform.Filesystem
 import app.morphe.manager.data.room.apps.installed.InstalledApp
 import app.morphe.manager.di.*
 import app.morphe.manager.domain.bundles.PatchBundleSource.Extensions.avatarUrls
+import app.morphe.manager.domain.manager.OruEndpoints
 import app.morphe.manager.domain.manager.PreferencesManager
 import app.morphe.manager.domain.repository.BlocklistRepository
 import app.morphe.manager.domain.repository.InstalledAppRepository
@@ -121,12 +122,11 @@ class ManagerApplication : Application() {
                 managerModule,
                 workerModule,
                 viewModelModule,
-                databaseModule
+                databaseModule,
+                // ORU: oru UX bindings, empty in morphe
+                oruModule
             )
         }
-
-        // Set before anything can ask for an avatar, so the first one read already comes from disk
-        AvatarCache.useDiskCache(fs.avatarCacheDir)
 
         // App icon loader (Coil)
         // Non-adaptive icons are drawn as they are rather than shrunk onto a white plate: icon
@@ -171,12 +171,12 @@ class ManagerApplication : Application() {
             // Patches FCM topic is determined by the default bundle (uid=0) prerelease toggle
             val usePatchesPrereleases = prefs.bundlePrereleasesEnabled.get().contains(DEFAULT_SOURCE_UID.toString())
 
-            // On GMS devices FCM is the primary delivery channel - WorkManager is not needed.
-            // Cancel any previously scheduled jobs on GMS devices
+            // On GMS devices FCM is the primary delivery channel - WorkManager is not needed there.
+            // ORU: oru has no FCM, so its GMS devices keep the WorkManager check
             val hasGms = GoogleApiAvailability.getInstance()
                 .isGooglePlayServicesAvailable(this@ManagerApplication) == ConnectionResult.SUCCESS
 
-            if (notificationsEnabled && !hasGms) {
+            if (OruEndpoints.current.updateWorkerScheduled(notificationsEnabled, hasGms)) {
                 UpdateCheckWorker.schedule(this@ManagerApplication, prefs.updateCheckInterval.get())
             } else {
                 UpdateCheckWorker.cancel(this@ManagerApplication)
@@ -384,13 +384,12 @@ class ManagerApplication : Application() {
         }
 
         // Preload bundle avatar images into AvatarCache while the user hasn't opened the sheet yet.
-        // Suspends until sources are ready, then loads them all in parallel, a fallback only for
-        // a source whose own picture does not load
+        // Suspends until sources are ready, then fetches all URLs in parallel on IO threads
         scope.launch(Dispatchers.IO) {
             patchBundleRepository.sources.first { it.isNotEmpty() }.forEach { bundle ->
                 launch {
                     val avatarUrls = bundle.avatarUrls
-                    loadAvatar(avatarUrls.primary, avatarUrls.fallback)
+                    loadWithFallback(avatarUrls.primary, avatarUrls.fallback, ::loadRemoteAvatar)
                 }
             }
         }

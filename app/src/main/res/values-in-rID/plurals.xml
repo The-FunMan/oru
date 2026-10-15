@@ -96,10 +96,6 @@
     <plurals name="changelog_change_count">
         <item quantity="other">%s perubahan</item>
     </plurals>
-    <!-- Value of the Apps row on a source card when apps were left out on arrival, for example "3/232 · 2 new". %1$s is the app count, %2$d the new apps -->
-    <plurals name="sources_apps_count_with_new">
-        <item quantity="other">%1$s · %2$d baru</item>
-    </plurals>
     <plurals name="changelog_new_releases">
         <item quantity="other">%s rilis baru</item>
     </plurals>

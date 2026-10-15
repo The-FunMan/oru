@@ -1,0 +1,17 @@
+{
+  "uniqueId": "org.jetbrains.kotlinx:kotlinx-datetime",
+  "name": "kotlinx-datetime",
+  "developers": [
+    {
+      "name": "JetBrains"
+    }
+  ],
+  "website": "https://github.com/Kotlin/kotlinx-datetime",
+  "scm": {
+    "connection": "scm:git:https://github.com/Kotlin/kotlinx-datetime.git",
+    "url": "https://github.com/Kotlin/kotlinx-datetime"
+  },
+  "licenses": [
+    "Apache-2.0"
+  ]
+}

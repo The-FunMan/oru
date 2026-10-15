@@ -1,0 +1,41 @@
+name: Set up the Oru build
+description: JDK 21, Gradle cache and, when native is true, the Android SDK packages, NDK and Rust targets the native crates need.
+
+inputs:
+  native:
+    description: Install the NDK, CMake and the Rust Android targets.
+    required: false
+    default: 'true'
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+      with:
+        distribution: temurin
+        java-version: '21'
+
+    - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+      with:
+        cache-read-only: ${{ github.event_name == 'pull_request' }}
+
+    - id: ndk
+      if: inputs.native == 'true'
+      shell: bash
+      run: echo "path=$ANDROID_HOME/ndk/28.2.13676358" >> "$GITHUB_OUTPUT"
+
+    - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      if: inputs.native == 'true'
+      with:
+        path: ${{ steps.ndk.outputs.path }}
+        key: ndk-28.2.13676358-${{ runner.os }}
+
+    - name: Install SDK packages
+      if: inputs.native == 'true'
+      shell: bash
+      run: sdkmanager "platforms;android-37" "build-tools;36.0.0" "ndk;28.2.13676358" "cmake;3.22.1"
+
+    - name: Add Rust Android targets
+      if: inputs.native == 'true'
+      shell: bash
+      run: rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android

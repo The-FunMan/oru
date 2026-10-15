@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Home Screen -->
-    <!-- Shown under the app a link was opened for -->
-    <!-- Asked when the link names an app of a source that is already added -->
     <!-- Home Screen - Update Notifications -->
     <!-- Home Screen - Home Greetings -->
     <!-- Humorous hype message with light nostalgia -->
@@ -28,9 +26,6 @@
     <!-- New Year greetings, shown instead of the ones above on December 31 and January 1 -->
     <!-- Pun on the saying "Out with the old, in with the new" -->
     <!-- Home Screen - Sources Management -->
-    <!-- Under an app left out of a source that keeps its home screen card because the user has patched it -->
-    <!-- Marks an app (not a patch) the source started supporting since its app list was last opened -->
-    <!-- Under the Bring new apps switch in a source's app list, whichever way it is set. "It" is the patch source -->
     <!-- Home Screen - Sources Dialogs -->
     <!-- Button under the files already picked, which opens the picker again -->
     <!-- %s is the name of the local source that another version of the same bundle replaces -->
@@ -84,7 +79,6 @@
     <!-- Expert patcher Screen -->
     <!-- "%1$s" is the share of the memory limit the patcher is using, already formatted as a percentage. "%2$s" is that limit in megabytes. -->
     <!-- Patcher Screen - Other hidden strings -->
-    <!-- Patcher Screen - Mini-games -->
     <!-- Settings -->
     <!-- Settings - Appearance Tab - Background animation -->
     <!-- %1$s is a holiday background name, such as Halloween. %2$s is a date, such as November 1 -->
@@ -126,8 +120,6 @@
     <!-- Shared strings -->
     <!-- Label of a footer button beside "Close". Keep it short, a longer one moves the buttons onto two rows -->
     <string name="copy">کاپی کریں</string>
-    <!-- Who made a patch source, as a field label -->
-    <!-- A file a patch source is added from, as a field label -->
     <!-- Button that starts patching the selected app. A verb, as in "patch this app" -->
     <!-- Label of a footer button beside "Translate". Keep it short, a longer one moves the buttons onto two rows -->
     <!-- Label of a footer button beside other buttons, which reads "Translate" until pressed. Keep it as short as "Translate", a longer one moves the buttons onto two rows -->

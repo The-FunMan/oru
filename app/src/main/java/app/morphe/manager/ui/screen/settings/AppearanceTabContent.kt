@@ -28,6 +28,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import app.morphe.manager.BuildConfig
 import app.morphe.manager.R
 import app.morphe.manager.domain.manager.HomeAppButtonPreferences
 import app.morphe.manager.ui.screen.settings.appearance.*
@@ -74,6 +75,7 @@ fun AppearanceTabContent(
     val outlines by themeViewModel.prefs.outlines.getAsState()
     val appCardColorMode by themeViewModel.prefs.appCardColorMode.getAsState()
     val customAppCardColors by themeViewModel.prefs.customAppCardColors.getAsState()
+    val showAppGroupingSwitcher by homeAppButtonPrefs.showCategoryViewSwitcher.collectAsStateWithLifecycle()
     val showSortButton by homeAppButtonPrefs.showSortButton.collectAsStateWithLifecycle()
     val backgroundType by themeViewModel.prefs.backgroundType.getAsState()
     val enableParallax by themeViewModel.prefs.enableBackgroundParallax.getAsState()
@@ -119,7 +121,14 @@ fun AppearanceTabContent(
         LanguageAndDisplaySection(
             appLanguage = appLanguage,
             uiScale = uiScale,
-            onLanguageClick = { showTranslationInfoDialog.value = true },
+            // ORU: the translation page is Morphe's, so oru goes straight to the language list
+            onLanguageClick = {
+                if (BuildConfig.ORU_UX) {
+                    showLanguageDialog.value = true
+                } else {
+                    showTranslationInfoDialog.value = true
+                }
+            },
             onUiScaleClick = { showUiScaleDialog.value = true }
         )
 
@@ -156,9 +165,11 @@ fun AppearanceTabContent(
             showGreetingPhrases = showGreetingPhrases,
             showRepatchNotice = showRepatchNotice,
             showSortButton = showSortButton,
+            showAppGrouping = showAppGroupingSwitcher,
             onGreetingPhrasesToggle = { themeViewModel.toggleShowGreetingPhrases(showGreetingPhrases) },
             onRepatchNoticeToggle = { themeViewModel.toggleShowRepatchNotice(showRepatchNotice) },
-            onSortButtonToggle = { homeAppButtonPrefs.setShowSortButton(!showSortButton) }
+            onSortButtonToggle = { homeAppButtonPrefs.setShowSortButton(!showSortButton) },
+            onAppGroupingToggle = { homeAppButtonPrefs.setShowCategoryViewSwitcher(!showAppGroupingSwitcher) }
         )
     }
 
@@ -475,9 +486,11 @@ private fun HomeScreenSection(
     showGreetingPhrases: Boolean,
     showRepatchNotice: Boolean,
     showSortButton: Boolean,
+    showAppGrouping: Boolean,
     onGreetingPhrasesToggle: () -> Unit,
     onRepatchNoticeToggle: () -> Unit,
-    onSortButtonToggle: () -> Unit
+    onSortButtonToggle: () -> Unit,
+    onAppGroupingToggle: () -> Unit
 ) {
     SectionTitle(
         text = stringResource(R.string.settings_appearance_home_screen),
@@ -507,6 +520,14 @@ private fun HomeScreenSection(
             icon = Icons.AutoMirrored.Outlined.Sort,
             checked = showSortButton,
             onToggle = onSortButtonToggle
+        )
+        SettingsDivider()
+        SettingsSwitchItem(
+            title = stringResource(R.string.settings_appearance_app_grouping),
+            subtitle = stringResource(R.string.settings_appearance_app_grouping_description),
+            icon = Icons.Outlined.ViewAgenda,
+            checked = showAppGrouping,
+            onToggle = onAppGroupingToggle
         )
     }
 }

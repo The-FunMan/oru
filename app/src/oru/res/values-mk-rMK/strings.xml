@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="battery_optimization_dialog_description">Некои уреди може да го запре закрпувачот кога апликацијата е минимизирана. Дозволете на Oru да работи без ограничувања на батеријата за да се осигури закрпувањето целосно</string>
+    <string name="deep_link_add_source_message">Дали сакате да го додадете овој извор на закрпување во Oru?</string>
+    <string name="home_app_info_app_deleted_description">Оваа апликација беше деинсталирана надвор од Oru. Повторно закрпете ја за да ја вратите функционалноста</string>
+    <string name="home_download_instructions_download_button_toast_6">Сега сте официјален тестер на копчето на Oru 🏅</string>
+    <string name="home_download_instructions_step4">Откако ќе заврши преземањето, вратете се во Oru</string>
+    <string name="home_download_instructions_step4_mount">Откако ќе ја инсталирате оригиналната APK, вратете се во Oru</string>
+    <string name="home_update_available">Достапно е ажурирање на Oru</string>
+    <string name="installer_mount_warning_install">Додели дозвола на Oru од апликацијата Shizuku</string>
+    <string name="notification_bundle_update_text_unversioned">Допрете за да ја отворите Oru и да ја ажурирате</string>
+    <string name="notification_channel_patcher_description">Се прикажува додека Oru го закрпува апликацијата во позадина</string>
+    <string name="notification_permission_dialog_description">На Oru му е потребна дозвола за известувања за да ве извести кога има достапни ажурирања во позадина</string>
+    <string name="onboarding_settings_desc">Прилагодете го Oru: изглед, напредни опции и системски алатки</string>
+    <string name="patcher_installed_conflict_body">"Oru ги потпишува закрпените апликации со сопствен сертификат, кој се разликува од оригиналниот. Android бара отстранување на постоечката верзија пред да може да се инсталира закрпената апликација.
+
+Отстранувањето трајно ќе ги избрише сите податоци од апликацијата"</string>
+    <string name="patcher_storage_permission_description_api30">Еден или повеќе опции за закрпување укажуваат на патеки до кои Oru не може да пристапи. Доделете пристап до складиште и допрете го копчето, а потоа закрпувањето ќе започне автоматски</string>
+    <string name="patcher_storage_permission_hint">Совет: Премести ги датотеките во /Android/data/app.oru.manager/files/ - не се потребни дополнителни дозволи</string>
+    <string name="settings_advanced_expert_mode_description">Препорачува и обновува амаждите од Oru</string>
+    <string name="settings_advanced_github_pat_export_include_supporting">Додава овој PAT на извезените поставки на Oru</string>
+    <string name="settings_advanced_patch_options_custom_branding_custom_icon_instruction">"Папка со слики што треба да се користат како прилагодена икона.
+
+Папката мора да содржи една или повеќе од следните папки, во зависност од DPI на уредот:
+- mipmap-mdpi
+- mipmap-hdpi
+- mipmap-xhdpi
+- mipmap-xxhdpi
+- mipmap-xxxhdpi
+
+Секоја од папките мора да содржи ги следните датотеки:
+morphe_adaptive_background_custom.png
+morphe_adaptive_foreground_custom.png
+
+Димензиите на сликата мора да бидат следните:
+- mipmap-mdpi: 108x108 px
+- mipmap-hdpi: 162x162 px
+- mipmap-xhdpi: 216x216 px
+- mipmap-xxhdpi: 324x324 px
+- mipmap-xxxhdpi: 432x432 px
+
+Опционално, патеката содржи папка „drawable“ со монохроматска икона:
+morphe_adaptive_monochrome_custom.xml
+
+Опционално, патеката содржи икона за известување во еден од следните формати:
+- XML векторска слика во „drawable“:
+  morphe_notification_icon_custom.xml
+- PNG растерна слика во папки „drawable-dpi“:
+  drawable-mdpi/morphe_notification_icon_custom.png (24x24 px)
+  drawable-hdpi/morphe_notification_icon_custom.png (36x36 px)
+  drawable-xhdpi/morphe_notification_icon_custom.png (48x48 px)
+  drawable-xxhdpi/morphe_notification_icon_custom.png (72x72 px)
+  drawable-xxxhdpi/morphe_notification_icon_custom.png (96x96 px)"</string>
+    <string name="settings_advanced_patch_options_custom_header_instruction">"Папка со слики за да се користи како прилагоден лого на горниот дел.
+
+Папката мора да содржи една или повеќе од следниве папки, во зависност од DPI на уредот:
+- drawable-hdpi
+- drawable-xhdpi
+- drawable-xxhdpi
+- drawable-xxxhdpi
+
+Секоја од папките мора да содржи ги следниве датотеки:
+morphe_header_custom_light.png
+morphe_header_custom_dark.png
+
+Димензиите на сликата мора да бидат следни:
+- drawable-hdpi: 194x72 px
+- drawable-xhdpi: 258x96 px
+- drawable-xxhdpi: 387x144 px
+- drawable-xxxhdpi: 512x192 px"</string>
+    <string name="settings_system_custom_file_picker_description">Прелистајте складиште со вградениот избирач на датотеки на Oru наместо стандардниот систем</string>
+    <string name="settings_system_export_manager_settings_fail">Неуспешно извезување на поставките на Oru: %s</string>
+    <string name="settings_system_export_manager_settings_success">Поставките на Oru се извезени</string>
+    <string name="settings_system_import_manager_settings_fail">Неуспешно внесување на поставките на Oru: %s</string>
+    <string name="settings_system_import_manager_settings_success">Поставките на Oru се внесени</string>
+    <string name="settings_system_morphe_settings">Поставки на Oru</string>
+    <string name="tour_prompt_desc">Сакате брза тура на клучните карактеристики на Oru\'s?</string>
+</resources>

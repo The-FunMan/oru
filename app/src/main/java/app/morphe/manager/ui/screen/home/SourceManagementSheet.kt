@@ -69,13 +69,11 @@ import app.morphe.manager.domain.repository.appsBrought
 import app.morphe.manager.ui.screen.patcher.IncompatiblePatcherVersionDialog
 import app.morphe.manager.ui.screen.shared.*
 import app.morphe.manager.util.*
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyListState
 import java.util.Locale
-import kotlin.time.Duration.Companion.milliseconds
 
 /** Enough placeholder rows to fill the sheet on open without implying a count. */
 private val SourceShimmerRows = (0 until 4).toList()
@@ -85,12 +83,6 @@ private const val BUNDLE_GLYPH_FRACTION = 0.55f
 
 /** How far a switched off source's icon and the lines under its name fade back. */
 private const val DISABLED_SOURCE_ALPHA = 0.7f
-
-/**
- * How long the cards keep gliding after a new order is picked, enough for [Animations.listSpring]
- * to settle.
- */
-private val SortSettleTime = 600.milliseconds
 
 /**
  * Bottom sheet for managing patch bundles.
@@ -125,17 +117,9 @@ fun BundleManagementSheet(
     val bundleInfo by patchBundleRepository.allBundlesInfoFlow.collectAsStateWithLifecycle(emptyMap())
     val blockedSources by patchBundleRepository.blockedSources.collectAsStateWithLifecycle(emptyMap())
     val keptFrom by sourceMuteRepository.mutedSources.collectAsStateWithLifecycle(emptyMap())
-    val unseenNewApps by sourceMuteRepository.unseenNewApps.collectAsStateWithLifecycle(emptyMap())
-    val appCounts = remember(bundleInfo, keptFrom, unseenNewApps) {
-        bundleInfo.mapValues { (uid, info) ->
-            val listed = info.listedApps()
-            SourceAppCount(
-                brought = info.appsBrought(keptFrom).size,
-                listed = listed.size,
-                // An app the source has since dropped is nothing left to look at
-                unseen = unseenNewApps[uid].orEmpty().count { it in listed }
-            )
-        }
+    // How many of its apps each source still brings, out of all it names
+    val appCounts = remember(bundleInfo, keptFrom) {
+        bundleInfo.mapValues { (_, info) -> info.appsBrought(keptFrom).size to info.listedApps().size }
     }
 
     val showSheetOnboarding = globalOnboardingState?.sheetOnboardingActive == true
@@ -144,7 +128,7 @@ fun BundleManagementSheet(
     // Set when the user flips pre-releases on: the toggle waits for confirmation first,
     // so the meaning of unstable testing builds is explained before anything changes
     val bundleToConfirmPrerelease = remember { mutableStateOf<PatchBundleSource?>(null) }
-    var showSortMenu by remember { mutableStateOf(false) }
+    var showSortDialog by remember { mutableStateOf(false) }
     // Search is offered from two sources up
     val isSearchable = sources.size >= 2
     val search = rememberSearchFieldState(searchable = isSearchable)
@@ -168,8 +152,6 @@ fun BundleManagementSheet(
     }
     var localOrder by remember { mutableStateOf(sources.map { it.uid }) }
     var isDragging by remember { mutableStateOf(false) }
-    // Set while the cards move into a new sort order, see SortSettleTime
-    var isSettlingSort by remember { mutableStateOf(false) }
     LaunchedEffect(sources) {
         if (isDragging) return@LaunchedEffect
         val sourceUids = sources.map { it.uid }
@@ -179,16 +161,13 @@ fun BundleManagementSheet(
         if (merged != localOrder) localOrder = merged
     }
     val sortModePreference by prefs.sourceBundleSortMode.getAsState()
-    val sourceSortMode = SourceBundleSortMode.fromPreference(sortModePreference)
-    val isManualSort = sourceSortMode == SourceBundleSortMode.MANUAL
-    // The list otherwise holds on to whichever source led it, which a new order leaves somewhere
-    // in the middle, so a new order starts the list over from its top. Requested in the pass that
-    // brings the order, so the list is laid out from the top at once rather than a frame later
-    val listedSortMode = remember { mutableListOf(sourceSortMode) }
-    if (listedSortMode[0] != sourceSortMode) {
-        listedSortMode[0] = sourceSortMode
-        listState.requestScrollToItem(0)
+    // ORU: the order is fixed to manual, so a sort chosen before the flavour changed is not applied
+    val sourceSortMode = if (BuildConfig.ORU_UX) {
+        SourceBundleSortMode.MANUAL
+    } else {
+        SourceBundleSortMode.fromPreference(sortModePreference)
     }
+    val isManualSort = sourceSortMode == SourceBundleSortMode.MANUAL
     val orderedSources = remember(localOrder, sources, sourceSortMode) {
         sources.sortedForSourceSort(sourceSortMode, localOrder)
     }
@@ -227,7 +206,7 @@ fun BundleManagementSheet(
         if (!alphabetScrollMode) {
             emptyList()
         } else {
-            buildIndexedScrollTargets(visibleSources) { source -> source.displayTitle }
+            buildIndexedScrollTargets(visibleSources) { source -> source.shownTitle }
         }
     }
     val haptic = LocalHapticFeedback.current
@@ -321,34 +300,18 @@ fun BundleManagementSheet(
                                 active = search.visible
                             )
 
-                            val activeSortLabel = stringResource(sourceSortMode.labelRes)
-                            Box {
+                            // ORU: no sort menu, the manual order is the only one
+                            if (!BuildConfig.ORU_UX) {
+                                val activeSortLabel = stringResource(sourceSortMode.labelRes)
                                 TitleAction(
                                     icon = Icons.AutoMirrored.Outlined.Sort,
                                     contentDescription = stringResource(R.string.sort),
-                                    onClick = { showSortMenu = true },
+                                    onClick = { showSortDialog = true },
                                     modifier = Modifier.semantics {
                                         role = Role.Button
                                         stateDescription = activeSortLabel
                                     },
-                                    style = TitleActionStyle.Toggle,
-                                    active = showSortMenu
-                                )
-                                SortModeMenu(
-                                    expanded = showSortMenu,
-                                    onDismissRequest = { showSortMenu = false },
-                                    current = sourceSortMode,
-                                    options = sortModeOptions<SourceBundleSortMode>(),
-                                    onSelect = { mode ->
-                                        scope.launch {
-                                            // Raised ahead of the new order, so the pass that lays it
-                                            // out already moves the cards rather than placing them
-                                            isSettlingSort = true
-                                            prefs.sourceBundleSortMode.update(mode.name)
-                                            delay(SortSettleTime)
-                                            isSettlingSort = false
-                                        }
-                                    }
+                                    style = TitleActionStyle.Neutral
                                 )
                             }
                         }
@@ -430,11 +393,10 @@ fun BundleManagementSheet(
                             ReorderableItem(
                                 reorderableState,
                                 key = bundle.uid,
-                                // Only wanted while the cards change places, by a drag or a new sort
-                                // order: elsewhere it lags behind a card growing on expand, letting it
-                                // overlap the one below
-                                animateItemModifier = if (isDragging || isSettlingSort) {
-                                    Modifier.animatedListItem(this)
+                                // Only wanted while dragging: elsewhere it lags behind a card growing
+                                // on expand, letting it overlap the one below
+                                animateItemModifier = if (isDragging) {
+                                    Modifier.animateItem()
                                 } else {
                                     Modifier.animateItem(placementSpec = null)
                                 }
@@ -444,7 +406,7 @@ fun BundleManagementSheet(
                                     info = SourceCardInfo(
                                         patchCount = patchCounts[bundle.uid] ?: 0,
                                         patchMatchCount = patchMatchCounts[bundle.uid],
-                                        appCount = appCounts[bundle.uid] ?: SourceAppCount.NONE,
+                                        appCount = appCounts[bundle.uid] ?: (0 to 0),
                                         updateInfo = manualUpdateInfo[bundle.uid],
                                         isUpdating = bundle.uid in activeUpdateUids,
                                         metadataFetchError = metadataFetchErrors[bundle.uid],
@@ -553,6 +515,20 @@ fun BundleManagementSheet(
         }
     }
 
+    // ORU: never opened, as the sort button is not shown
+    if (showSortDialog && !BuildConfig.ORU_UX) {
+        SortModeSelectionDialog(
+            title = stringResource(R.string.sources_sort_title),
+            current = sourceSortMode,
+            options = sortModeOptions<SourceBundleSortMode>(),
+            onSelect = { mode ->
+                scope.launch { prefs.sourceBundleSortMode.update(mode.name) }
+                showSortDialog = false
+            },
+            onDismiss = { showSortDialog = false }
+        )
+    }
+
     // Delete confirmation dialog
     bundleToDelete.value?.let { bundle ->
         ConfirmDialog(
@@ -560,7 +536,7 @@ fun BundleManagementSheet(
             message = stringResource(R.string.sources_dialog_delete_confirm_body),
             primaryText = stringResource(R.string.delete),
             subject = {
-                ConfirmSubject(name = bundle.displayTitle) { modifier ->
+                ConfirmSubject(name = bundle.shownTitle) { modifier ->
                     BundleIcon(bundle = bundle, modifier = modifier)
                 }
             },
@@ -607,7 +583,7 @@ fun BundleManagementSheet(
     // Outdated manager dialog, shared with the pre-flight check done when patching starts
     bundleRequiringManagerUpdate?.let { bundle ->
         IncompatiblePatcherVersionDialog(
-            bundleName = bundle.displayTitle,
+            bundleName = bundle.shownTitle,
             requiredVersion = bundle.requiredPatcherVersion.orEmpty(),
             onDismiss = { bundleRequiringManagerUpdate = null }
         )
@@ -656,28 +632,19 @@ private fun List<PatchBundleSource>.sortedForSourceSort(
 }
 
 private fun PatchBundleSource.sourceSortTitle(): String =
-    displayTitle.lowercase(Locale.ROOT)
+    shownTitle.lowercase(Locale.ROOT)
 
 /** Whether the source's own name answers to a search query, before its patches are consulted. */
 private fun PatchBundleSource.matchesQuery(query: String): Boolean =
-    displayTitle.contains(query, ignoreCase = true) || name.contains(query, ignoreCase = true)
-
-/**
- * Apps a source still [brought] to the home screen, out of all it [listed], and how many of them
- * were left out on arrival without the user having looked yet. None listed drops the card's row.
- */
-private data class SourceAppCount(val brought: Int, val listed: Int, val unseen: Int) {
-    companion object {
-        val NONE = SourceAppCount(0, 0, 0)
-    }
-}
+    shownTitle.contains(query, ignoreCase = true) || name.contains(query, ignoreCase = true)
 
 /** What a source card reports about its source, beyond the source itself. */
 private data class SourceCardInfo(
     val patchCount: Int,
     /** Patches matching the sheet's search, or null while nothing is searched. */
     val patchMatchCount: Int?,
-    val appCount: SourceAppCount,
+    /** Apps the source still brings, out of all it names. None named drops the row. */
+    val appCount: Pair<Int, Int>,
     val updateInfo: PatchBundleRepository.ManualBundleUpdateInfo?,
     val isUpdating: Boolean,
     val metadataFetchError: Throwable?,
@@ -778,9 +745,9 @@ private fun BundleManagementCard(
             // Build content description
             val updateLabel = stringResource(R.string.update)
             val availableLabel = stringResource(R.string.available)
-            val contentDesc = remember(bundle.displayTitle, isEnabled, expanded, forceExpanded, info.updateInfo) {
+            val contentDesc = remember(bundle.shownTitle, isEnabled, expanded, forceExpanded, info.updateInfo) {
                 buildString {
-                    append(bundle.displayTitle)
+                    append(bundle.shownTitle)
                     append(", ")
                     if (isEnabled) {
                         append(enabledState)
@@ -920,22 +887,17 @@ private fun BundleManagementCard(
                             // Apps, for any source naming some. It is also the one way back from an
                             // app kept from the source that does not depend on which mode the user
                             // patches in
-                            val (broughtApps, listedApps, unseenApps) = info.appCount
+                            val (offeredApps, listedApps) = info.appCount
                             if (listedApps > 0) {
                                 SettingsDivider()
 
-                                val count = if (broughtApps < listedApps) {
-                                    "$broughtApps/$listedApps"
-                                } else {
-                                    listedApps.toString()
-                                }
                                 InfoRow(
                                     icon = Icons.Outlined.Apps,
                                     label = stringResource(R.string.sources_apps),
-                                    value = if (unseenApps > 0) {
-                                        pluralStringResource(R.plurals.sources_apps_count_with_new, unseenApps, count, unseenApps)
+                                    value = if (offeredApps < listedApps) {
+                                        "$offeredApps/$listedApps"
                                     } else {
-                                        count
+                                        listedApps.toString()
                                     },
                                     onClick = actions.onAppsClick,
                                     enabled = !info.isUpdating
@@ -943,8 +905,9 @@ private fun BundleManagementCard(
                             }
                         }
 
-                        // Repository actions, as wide as the four pill action bar below
-                        if (bundle is RemotePatchBundle) {
+                        // Repository actions, as wide as the four pill action bar below.
+                        // ORU: the default source's pages are Morphe's GitHub repository, so it has none
+                        if (bundle is RemotePatchBundle && !(BuildConfig.ORU_UX && bundle.isDefault)) {
                             ActionPillRow(
                                 modifier = Modifier.padding(vertical = 4.dp),
                                 stretchLabelsTo = 4
@@ -952,7 +915,7 @@ private fun BundleManagementCard(
                                 ActionPillButton(
                                     onClick = actions.onOpenInBrowser,
                                     icon = Icons.AutoMirrored.Outlined.OpenInNew,
-                                    contentDescription = openInBrowser + " " + bundle.displayTitle,
+                                    contentDescription = openInBrowser + " " + bundle.shownTitle,
                                     label = openInBrowser,
                                     tooltip = openInBrowser
                                 )
@@ -961,7 +924,7 @@ private fun BundleManagementCard(
                                     ActionPillButton(
                                         onClick = actions.onShare,
                                         icon = Icons.Outlined.Share,
-                                        contentDescription = share + " " + bundle.displayTitle,
+                                        contentDescription = share + " " + bundle.shownTitle,
                                         tooltip = share
                                     )
                                 }
@@ -969,7 +932,7 @@ private fun BundleManagementCard(
                                 ActionPillButton(
                                     onClick = actions.onReportIssue,
                                     icon = Icons.Outlined.BugReport,
-                                    contentDescription = reportIssue + " " + bundle.displayTitle,
+                                    contentDescription = reportIssue + " " + bundle.shownTitle,
                                     tooltip = reportIssue
                                 )
                             }
@@ -1021,7 +984,7 @@ private fun BundleManagementCard(
                                 val disableEnableVerb = stringResource(
                                     if (bundle.enabled) R.string.disable else R.string.enable
                                 )
-                                val disableEnableDesc = disableEnableVerb + " " + bundle.displayTitle
+                                val disableEnableDesc = disableEnableVerb + " " + bundle.shownTitle
                                 val disableDone = stringResource(
                                     if (bundle.enabled) R.string.sources_management_source_disabled
                                     else R.string.sources_management_source_enabled
@@ -1041,7 +1004,7 @@ private fun BundleManagementCard(
                             val isLocal = bundle is LocalPatchBundle
                             if (bundle is RemotePatchBundle || isLocal) {
                                 val updateVerb = stringResource(R.string.update)
-                                val updateDesc = updateVerb + " " + bundle.displayTitle
+                                val updateDesc = updateVerb + " " + bundle.shownTitle
                                 val updateStarted = stringResource(R.string.sources_management_source_updating)
                                 // Update button. A local source has nothing to fetch from, so it asks
                                 // for a replacement file instead and reports progress once one is picked
@@ -1058,8 +1021,8 @@ private fun BundleManagementCard(
                             if (!bundle.isDefault) {
                                 val renameVerb = stringResource(R.string.rename)
                                 val deleteVerb = stringResource(R.string.delete)
-                                val renameDesc = renameVerb + " " + bundle.displayTitle
-                                val deleteDesc = deleteVerb + " " + bundle.displayTitle
+                                val renameDesc = renameVerb + " " + bundle.shownTitle
+                                val deleteDesc = deleteVerb + " " + bundle.shownTitle
                                 // Rename button
                                 ActionPillButton(
                                     onClick = actions.onRename,
@@ -1128,7 +1091,7 @@ private fun BundleCardHeader(
         // Title + badges
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = bundle.displayTitle,
+                text = bundle.shownTitle,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
                 color = titleColor,

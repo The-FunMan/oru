@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Oru screen copy. English only (decision D6). Used by the Oru Compose screens. The shared
+  upstream strings in values/strings.xml are overridden for the Oru flavour in
+  the flavour overlay strings.xml.
+  Rules: plain active voice, no speed claims, no dashes used as punctuation, and every stage
+  name matches the real pipeline step label.
+-->
+<resources>
+
+    <!-- Common actions -->
+    <string name="oru_action_cancel">Cancel</string>
+    <string name="oru_action_back">Back</string>
+    <string name="oru_action_dismiss">Dismiss</string>
+    <string name="oru_action_try_again">Try again</string>
+    <string name="oru_action_share_log">Share log</string>
+    <string name="oru_action_continue">Continue</string>
+    <string name="oru_action_not_now">Not now</string>
+    <string name="oru_action_open_settings">Open settings</string>
+    <string name="oru_action_settings">Settings</string>
+    <string name="oru_action_import_key">Import key</string>
+    <string name="oru_action_back_up_now">Back up now</string>
+
+    <!-- Home -->
+    <string name="oru_home_subtitle">Choose an app to patch or update.</string>
+    <string name="oru_home_check_updates">Check for updates</string>
+    <string name="oru_home_empty">No supported apps yet. Check for an update to Oru.</string>
+    <string name="oru_mode_label">Mode</string>
+    <string name="oru_mode_simple">Simple</string>
+    <string name="oru_mode_expert">Expert</string>
+
+    <!-- Home card status chips -->
+    <string name="oru_chip_apk_needed">APK needed</string>
+    <string name="oru_chip_waiting_apk">Waiting for the APK</string>
+    <string name="oru_chip_ready">Ready</string>
+    <string name="oru_chip_installed">Installed</string>
+    <string name="oru_chip_checking">Checking</string>
+    <string name="oru_chip_unverified">Unverified</string>
+
+    <!-- Home card lines -->
+    <string name="oru_state_version">Version %1$s</string>
+    <string name="oru_state_version_recommended">Version %1$s, recommended</string>
+    <string name="oru_state_saved_copy">Saved copy from your last patch</string>
+    <string name="oru_state_found_on_phone">Found on this phone</string>
+    <string name="oru_state_not_installed">Not installed on this phone</string>
+    <string name="oru_state_unpatched_installed">Unpatched version installed</string>
+    <string name="oru_state_update_available">Update available</string>
+    <string name="oru_state_loading">Getting the latest patches</string>
+    <string name="oru_state_checking_phone">Checking this phone</string>
+    <string name="oru_state_signature_unchecked">Signature not checked yet</string>
+    <string name="oru_hint_apkmirror">APKMirror opens in your browser for version %1$s. Download it, then come back and choose the file.</string>
+    <string name="oru_hint_return_download">Download the file, then come back here.</string>
+
+    <!-- Home card actions -->
+    <string name="oru_action_get_apk">Get APK</string>
+    <string name="oru_action_find_apkmirror">Find on APKMirror</string>
+    <string name="oru_action_use_file">Use a file</string>
+    <string name="oru_action_choose_file">Choose the file</string>
+    <string name="oru_action_open_apkmirror_again">Open APKMirror again</string>
+    <string name="oru_action_patch">Patch</string>
+    <string name="oru_action_update">Update</string>
+    <string name="oru_action_open">Open</string>
+    <string name="oru_action_patch_again">Patch again</string>
+    <string name="oru_action_app_info">App info</string>
+    <string name="oru_action_check_and_patch">Check and patch</string>
+    <string name="oru_action_patch_from_saved">Patch from saved copy</string>
+    <string name="oru_action_use_another_file">Use another file</string>
+    <string name="oru_handoff_toast">Opens APKMirror for version %1$s in your browser.</string>
+
+    <!-- Home banner (one at a time) -->
+    <string name="oru_banner_manager_update">An Oru update is ready to install.</string>
+    <string name="oru_banner_sources_attention">Some patch sources need attention.</string>
+    <string name="oru_banner_metered">You are on mobile data. Updates can wait for Wi-Fi.</string>
+    <plurals name="oru_banner_batch_updates">
+        <item quantity="one">%1$d app has an update ready.</item>
+        <item quantity="other">%1$d apps have updates ready.</item>
+    </plurals>
+    <string name="oru_banner_app_update">%1$s has an update ready.</string>
+    <string name="oru_banner_bundle_updating">Updating patch sources in the background. You can keep going.</string>
+    <string name="oru_banner_bundle_done">Patch sources are up to date.</string>
+    <string name="oru_banner_bundle_failed">Could not update patch sources. The saved ones still work.</string>
+    <plurals name="oru_banner_repatch">
+        <item quantity="one">%1$d patched app has newer patches available.</item>
+        <item quantity="other">%1$d patched apps have newer patches available.</item>
+    </plurals>
+    <string name="oru_banner_offline">No connection. Oru needs the patch list once.</string>
+    <plurals name="oru_banner_stale_patches">
+        <item quantity="one">Patches are from %1$d day ago. Update when you can.</item>
+        <item quantity="other">Patches are from %1$d days ago. Update when you can.</item>
+    </plurals>
+    <string name="oru_banner_action_update">Update</string>
+    <string name="oru_banner_action_review">Review</string>
+    <string name="oru_banner_action_retry">Retry</string>
+
+    <!-- Focus: rows -->
+    <string name="oru_focus_version">Version</string>
+    <string name="oru_focus_patches">Patches</string>
+    <string name="oru_focus_patches_included">%1$d included</string>
+    <string name="oru_focus_patches_selected">%1$d of %2$d selected</string>
+    <string name="oru_focus_patches_new">%1$d new since your last run</string>
+    <string name="oru_focus_channel">Patch channel</string>
+    <string name="oru_focus_channel_stable">Stable</string>
+    <string name="oru_focus_channel_prerelease">Pre-release</string>
+    <string name="oru_focus_install_with">Install with</string>
+    <string name="oru_focus_customize">Customize</string>
+    <string name="oru_row_more_options">More options</string>
+    <string name="oru_focus_ready_patch">Version %1$s. Ready to patch.</string>
+    <string name="oru_focus_installed">Installed. Patch again to update.</string>
+    <string name="oru_focus_cancelled">Cancelled. Nothing was changed.</string>
+    <string name="oru_focus_dock_patch">Patch %1$s</string>
+
+    <!-- Focus: notices -->
+    <string name="oru_notice_experimental_on">Version %1$s is newer than the patches were tested with, so it may not work. Experimental versions are on for %2$s.</string>
+    <string name="oru_notice_experimental_off">Version %1$s is newer than the patches were tested with, so it may not work. Experimental versions are off for %2$s.</string>
+    <string name="oru_notice_action_pick_version">Pick another version</string>
+    <string name="oru_notice_action_show_experimental">Show experimental versions</string>
+    <string name="oru_notice_unsupported">Version %1$s is not supported yet. Oru can patch %2$s instead.</string>
+    <string name="oru_action_patch_version">Patch %1$s</string>
+    <string name="oru_action_patch_anyway">Patch %1$s anyway</string>
+
+    <!-- Focus: local file and APK checks -->
+    <string name="oru_error_wrong_app">This file is for a different app. Choose another file.</string>
+    <string name="oru_error_changed">This file was changed after release. Oru will not patch it.</string>
+    <string name="oru_error_split">This is a split app. Oru will merge it into one file first.</string>
+    <string name="oru_error_generic">Something went wrong. Try again.</string>
+    <string name="oru_error_no_connection">Oru needs the internet to find the right version. Connect and try again.</string>
+    <string name="oru_error_low_storage">Not enough free storage to patch. Free up %1$s and try again.</string>
+    <string name="oru_error_shizuku_permission">Grant Oru permission in the Shizuku app, then try again.</string>
+    <string name="oru_error_helper_no_file">The helper app did not return an APK.</string>
+
+    <!-- Run: titles and status -->
+    <string name="oru_run_title_patching">Patching</string>
+    <string name="oru_run_title_upgrading">Upgrading</string>
+    <string name="oru_run_starting">Starting</string>
+    <string name="oru_run_elapsed">elapsed</string>
+    <string name="oru_run_keep_background">Keep going in background</string>
+    <string name="oru_run_ready">Ready</string>
+    <string name="oru_run_ready_caption">%1$s %2$s, patched with %3$d patches.</string>
+    <string name="oru_run_patch_count">Applying patches, %1$d of %2$d</string>
+    <string name="oru_run_not_available">Not available</string>
+    <string name="oru_run_in_progress">A patch run is already in progress.</string>
+    <string name="oru_run_stopped">The last run was stopped.</string>
+    <string name="oru_notification_ready_to_install">Ready to install</string>
+
+    <!-- Run: stages (real pipeline step labels) -->
+    <string name="oru_stage_load_patches">Loading patches</string>
+    <string name="oru_stage_split_apk">Merging split APK</string>
+    <string name="oru_stage_read_apk">Read APK file</string>
+    <string name="oru_stage_execute_patches">Applying patches</string>
+    <string name="oru_stage_write_apk">Writing patched APK file</string>
+    <string name="oru_stage_sign_apk">Signing patched APK file</string>
+    <plurals name="oru_stage_warnings">
+        <item quantity="one">%1$d warning</item>
+        <item quantity="other">%1$d warnings</item>
+    </plurals>
+
+    <!-- Run: usage readout -->
+    <string name="oru_vital_heap">Heap</string>
+    <string name="oru_vital_cpu">CPU</string>
+    <string name="oru_vital_io">I/O</string>
+    <string name="oru_vital_heap_limit">of %1$d MB</string>
+    <plurals name="oru_vital_cpu_cores">
+        <item quantity="one">%1$d core</item>
+        <item quantity="other">%1$d cores</item>
+    </plurals>
+
+    <!-- Run: cancel -->
+    <string name="oru_run_cancel_title">Cancel patching?</string>
+    <string name="oru_run_cancel_body">Nothing is installed or changed on this phone. Patching stops and its temporary files are removed.</string>
+    <string name="oru_run_cancel_go">Cancel patching</string>
+    <string name="oru_run_keep_patching">Keep patching</string>
+
+    <!-- Done and install -->
+    <string name="oru_done_signed_here">Signed on this phone.</string>
+    <string name="oru_done_signed_silent">Signed on this phone. Installs silently with %1$s.</string>
+    <string name="oru_done_phone_only">Built for this phone only.</string>
+    <string name="oru_done_output">Output</string>
+    <string name="oru_done_time">Time</string>
+    <string name="oru_done_peak_heap">Peak heap</string>
+    <string name="oru_action_install">Install</string>
+    <string name="oru_action_installing">Installing</string>
+    <string name="oru_action_installed">Installed</string>
+    <string name="oru_action_done">Done</string>
+    <string name="oru_action_update_install">Update</string>
+    <string name="oru_install_automatic">Installing automatically</string>
+    <string name="oru_install_with_silent">Installs with %1$s, without a prompt.</string>
+    <string name="oru_install_with_android">Android asks you to confirm the install.</string>
+    <string name="oru_install_waiting">Waiting for Android</string>
+    <string name="oru_install_almost">Almost there</string>
+    <string name="oru_install_done">%1$s is on your phone.</string>
+    <string name="oru_install_downgrade">The installed copy is newer than this one. Android cannot go back a version, so the installed copy has to be removed first. Its data is erased.</string>
+    <string name="oru_install_clone">Installs next to %1$s as a second app, because the patches give it its own package name.</string>
+    <string name="oru_install_unknown_sources">Android needs your permission before Oru can install apps. Allow it, then come back here.</string>
+    <string name="oru_install_error_title">Install did not finish</string>
+    <string name="oru_install_error_body">Android stopped the install. Try again. If it keeps failing, share the log.</string>
+    <string name="oru_installer_unavailable_title">This installer is not available</string>
+    <string name="oru_installer_unavailable_body">Choose another installer in Advanced, or install with Android.</string>
+    <string name="oru_action_install_with_android">Install with Android</string>
+    <string name="oru_install_stop_title">Stop waiting?</string>
+    <string name="oru_install_stop_body">Oru stops waiting for the installer. The install is abandoned and the patched APK is kept, so you can try again.</string>
+    <string name="oru_install_stop_keep">Keep waiting</string>
+    <string name="oru_install_stop_go">Stop</string>
+
+    <!-- Done and install: signing key decision -->
+    <string name="oru_signature_title">Different signing key</string>
+    <string name="oru_signature_body">A copy of %1$s signed with a different key is installed. Android cannot replace it, so it has to be removed first. Its data is erased.</string>
+    <string name="oru_signature_hint_import">Have the old key? Import it in Settings and Oru can update in place.</string>
+    <string name="oru_signature_hint_shizuku">With Shizuku, the uninstall runs without a prompt.</string>
+    <string name="oru_signature_go">Remove it and install</string>
+    <string name="oru_signature_ignore">Install anyway</string>
+    <string name="oru_signature_ignore_hint">Keeps the app data. Only works if a root module turns off Android\'s signature check.</string>
+
+    <!-- Done and install: root step -->
+    <string name="oru_root_title">Install with root</string>
+    <string name="oru_root_body">Oru can install the patched app with root, without an Android prompt. The original app must be installed first.</string>
+
+    <!-- Done: signing key notice (first patch) -->
+    <string name="oru_key_notice_title">Back up your signing key</string>
+    <string name="oru_key_notice_body">Oru signs every patched app with one key, stored on this phone. Keep a copy. Without it, you can only update a patched app by uninstalling it first.</string>
+
+    <!-- Failed -->
+    <string name="oru_failed_title">Patching stopped</string>
+    <string name="oru_failed_caption">Your phone\'s %1$s was not changed.</string>
+    <string name="oru_failed_step">Stopped at step: %1$s.</string>
+    <string name="oru_failed_patches_done">%1$d of %2$d patches done.</string>
+    <string name="oru_memory_title">Not enough memory</string>
+    <string name="oru_memory_body">Android stopped patching to free memory at a %1$d MB limit. A limit of %2$d MB gives the patcher a smaller target and can let the run finish. The new limit applies the next time you patch.</string>
+    <string name="oru_memory_action_lower">Lower to %1$d MB</string>
+    <string name="oru_memory_at_minimum">Android stopped patching at %1$d MB, the lowest limit this phone allows. Choose fewer patches in Expert mode and try again.</string>
+    <string name="oru_heap_exhausted">The patcher ran out of its %1$d MB heap. A lower limit cannot fix that, so choose fewer patches in Expert mode and try again.</string>
+    <string name="oru_battery_title">Let patching finish</string>
+    <string name="oru_battery_body">Some phones stop the patcher when Oru is in the background. Let Oru run without battery limits so patching can finish.</string>
+    <string name="oru_battery_allow">Allow</string>
+
+    <!-- Settings sheet -->
+    <string name="oru_settings_title">Settings</string>
+    <string name="oru_settings_section_appearance">Appearance</string>
+    <string name="oru_settings_section_updates">Updates</string>
+    <string name="oru_settings_section_storage">Storage and backup</string>
+    <string name="oru_settings_animations">Animations</string>
+    <string name="oru_settings_animations_helper">Turn off to switch screens with no motion.</string>
+    <string name="oru_settings_wallpaper">Match my wallpaper colors</string>
+    <string name="oru_settings_wallpaper_helper">Needs Android 12 or later. Uses your wallpaper colors instead of Oru blue.</string>
+    <string name="oru_settings_language">Language</string>
+    <string name="oru_settings_language_phone">Phone language</string>
+    <string name="oru_settings_updates">Keep apps up to date</string>
+    <string name="oru_settings_updates_helper">Tells you when a patched app or Oru has an update.</string>
+    <string name="oru_settings_mobile_data">Use mobile data for updates</string>
+    <string name="oru_settings_mobile_data_helper">Turn off to update only on Wi-Fi.</string>
+    <string name="oru_settings_free_space">Free up space</string>
+    <string name="oru_settings_free_space_value">%1$s can be removed</string>
+    <string name="oru_settings_free_space_none">Nothing to remove</string>
+    <string name="oru_settings_free_space_helper">Removes saved app files you no longer need.</string>
+    <string name="oru_settings_installer">Installer</string>
+    <string name="oru_settings_installer_ask">Ask which installer every time</string>
+    <string name="oru_settings_uninstall_original">Uninstall the original after installing</string>
+    <string name="oru_settings_needs_shizuku">Needs Shizuku</string>
+    <string name="oru_settings_prerelease_sources">Include pre-releases for patch sources</string>
+    <string name="oru_settings_prerelease_sources_helper">Patch sources can offer test builds. You can set this for each source.</string>
+    <string name="oru_settings_manager_prerelease">Manager pre-release</string>
+    <string name="oru_settings_manager_prerelease_helper">Early access to new Oru versions.</string>
+    <string name="oru_settings_other_apps">Let other apps start patching</string>
+    <string name="oru_settings_other_apps_helper">For automation.</string>
+    <string name="oru_settings_patch_sources">Patch sources</string>
+    <plurals name="oru_settings_patch_sources_count">
+        <item quantity="one">%1$d source</item>
+        <item quantity="other">%1$d sources</item>
+    </plurals>
+    <string name="oru_settings_signing_key">Signing key</string>
+    <string name="oru_settings_signing_key_helper">Keeps your patched apps updatable if you change phones.</string>
+    <string name="oru_settings_export_log">Export debug log</string>
+    <string name="oru_settings_about">About</string>
+    <string name="oru_settings_about_value">Oru %1$s</string>
+    <string name="oru_settings_about_helper">What is new, credits and licenses.</string>
+    <string name="oru_settings_advanced">Advanced</string>
+    <string name="oru_settings_advanced_helper">Installers, sources and other power settings.</string>
+    <string name="oru_settings_notifications_off">Notifications are off for Oru. Turn them on in Android settings.</string>
+    <string name="oru_settings_backup_folder">Choose a folder you can write to.</string>
+
+    <!-- Advanced -->
+    <string name="oru_advanced_confirm_body">Advanced choices can break a patched app if you change them without a reason.</string>
+
+</resources>

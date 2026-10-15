@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="adaptive_icon_guide_png_body">En logo på gjennomsiktig bakgrunn fungerer best, med bakgrunnsfargen valgt nedenfor. Et bilde uten gjennomsiktighet fyller hele ikonet i stedet, og de tematiserte ikonene og varslingsikonene beholder da Oru-logoen.</string>
+    <string name="adaptive_icon_no_transparency_warning">Dette bildet har ingen gjennomsiktige piksler, så de tematiserte ikonene og varslingsikonene beholder Oru-logoen</string>
+    <string name="battery_optimization_dialog_description">Noen enheter kan stoppe patchingen når appen minimeres. La Oru kjøre uten batteribegrensninger for å sikre at oppdateringen fullføres pålitelig.</string>
+    <string name="deep_link_add_source_message">Vil du legge til denne patch-kilden til Oru?</string>
+    <string name="external_batch_patch_description">%s vil at Oru skal patche og installere apper</string>
+    <string name="home_apk_helper_description">Oru vil be hjelpeappen nedenfor om å laste ned den originale APK-filen og gi filen tilbake</string>
+    <string name="home_apk_helper_installed_unavailable">Oru kunne ikke bruke den installerte appen</string>
+    <string name="home_apk_helper_warning">Fortsett bare hvis du stoler på denne hjelpeappen. Oru sjekker pakken, versjonen og signaturen til det den mottar før patching</string>
+    <string name="home_apk_helper_warning_unverified">Fortsett bare hvis du stoler på denne hjelpeappen. Oru kan ikke verifisere signaturen til denne APK-filen, så en modifisert fil vil ikke bli oppdaget</string>
+    <string name="home_app_filter_not_patched_description">Apper du ikke har patchet i Oru ennå</string>
+    <string name="home_app_filter_patched_description">Apper du har patchet eller lagret med Oru</string>
+    <string name="home_app_filter_uninstalled_description">Apper patchet med Oru som ikke lenger er på denne enheten</string>
+    <string name="home_app_info_app_deleted_description">Denne appen ble avinstallert utenfor Oru. Patch den på nytt for å gjenopprette funksjonaliteten</string>
+    <string name="home_app_info_install_unverified">Oru kan ikke bekrefte at den installerte appen er bygget den patchet. Repatcher eller installer den på nytt fra den lagrede APK-en for å gjenopprette handlingene.</string>
+    <string name="home_app_info_not_patched_description">En uoppdatert versjon av denne appen er installert. Oru har fortsatt sin tidligere patchregistrering</string>
+    <string name="home_download_instructions_download_button_toast_6">Du er nå en offisiell Oru-knapptester 🏅</string>
+    <string name="home_download_instructions_step2_search_note">Oru kan ikke gå god for disse nettstedene. Hopp over de som tilbyr sin egen appbutikk i stedet for en APK-fil</string>
+    <string name="home_download_instructions_step4">Etter at nedlastingen er fullført, gå tilbake til Oru</string>
+    <string name="home_download_instructions_step4_mount">Etter installasjon av den originale APK-filen, gå tilbake til Oru</string>
+    <string name="home_held_back_title">En patch-kilde fikk Oru til å krasje</string>
+    <string name="home_outdated_manager_title">Oru er utdatert</string>
+    <string name="home_update_available">Oru-oppdatering er tilgjengelig</string>
+    <string name="installer_shizuku_error_permission">Shizuku-tillatelse mangler. Gi tillatelse til Oru og prøv igjen</string>
+    <string name="installer_status_shizuku_permission">Gi Oru tillatelse fra Shizuku-appen</string>
+    <string name="installing_manager_update_hint">Oru vil lukke seg for å fullføre oppdateringen</string>
+    <string name="launch_app_unverified">Oru kunne ikke bekrefte at den installerte appen er det bygget som ble patchet.</string>
+    <string name="notification_bundle_update_text_unversioned">Trykk for å åpne Oru og oppdatere</string>
+    <string name="notification_channel_manager_updates">Oru-oppdateringer</string>
+    <string name="notification_channel_manager_updates_description">Varsler om nye Oru-utgivelser</string>
+    <string name="notification_channel_patcher_description">Vises mens Oru patcher en app i bakgrunnen</string>
+    <string name="notification_mount_replaced_text">v%1$s erstattet den patchede v%2$s. Åpne Oru for å gjenopprette den</string>
+    <string name="notification_permission_dialog_description">Oru trenger tillatelse til varsler for å varsle deg når oppdateringer er tilgjengelige i bakgrunnen</string>
+    <string name="onboarding_settings_desc">Tilpass Oru: utseende, avanserte innstillinger og systemverktøy</string>
+    <string name="patcher_incompatible_patcher_description">Kilden &lt;b&gt;%1$s&lt;/b&gt; krever patcher &lt;b&gt;%2$s&lt;/b&gt; eller nyere. Oppdater Oru for å bruke den</string>
+    <string name="patcher_installed_conflict_body">"Oru signerer patched apper med sitt eget sertifikat, som er forskjellig fra det originale. Android krever at du fjerner den eksisterende versjonen før den patched appen kan installeres.
+
+Avinstallering vil permanent slette alle appdata"</string>
+    <string name="patcher_storage_permission_description_api30">Én eller flere patch-alternativer peker til baner som Oru ikke kan lese. Gi tilgang til lagring og trykk på knappen, så starter patching automatisk</string>
+    <string name="patcher_storage_permission_hint">Tips: Flytt filer til /Android/data/app.oru.manager/files/ - ingen ekstra tillatelser nødvendig</string>
+    <string name="root_mount_module_unmount_warning">Hvis KernelSU har Unmount-moduler aktivert som standard, åpne KernelSU &gt; Superuser &gt; appen du monterte &gt; Profil &gt; Egendefinert og deaktiver Unmount-moduler. Ellers kan den monterte patchede APK-en kanskje ikke tre i kraft, selv om Oru viser at den er montert.</string>
+    <string name="settings_advanced_expert_mode_description">Aktiverer komplekse Oru-innstillinger for patching og tilpasningsmuligheter</string>
+    <string name="settings_advanced_github_pat_export_include_supporting">Legger denne PAT-en til eksporterte Oru-innstillinger</string>
+    <string name="settings_advanced_patch_options_custom_branding_custom_icon_instruction">"Mappe med bilder som skal brukes som et tilpasset ikon.
+
+Mappen må inneholde en eller flere av følgende mapper, avhengig av enhetens DPI:
+- mipmap-mdpi
+- mipmap-hdpi
+- mipmap-xhdpi
+- mipmap-xxhdpi
+- mipmap-xxxhdpi
+
+Hver av mappene må inneholde alle følgende filer:
+morphe_adaptive_background_custom.png
+morphe_adaptive_foreground_custom.png
+
+Bilde dimensjoner må være som følger:
+- mipmap-mdpi: 108x108 px
+- mipmap-hdpi: 162x162 px
+- mipmap-xhdpi: 216x216 px
+- mipmap-xxhdpi: 324x324 px
+- mipmap-xxxhdpi: 432x432 px
+
+Eventuelt inneholder banen en 'drawable'-mappe med et monokromt ikonfil:
+morphe_adaptive_monochrome_custom.xml
+
+Eventuelt inneholder banen et varslingsikon i et av følgende formater:
+- XML vector drawable i 'drawable':
+  morphe_notification_icon_custom.xml
+- PNG raster images i 'drawable-dpi'-mapper:
+  drawable-mdpi/morphe_notification_icon_custom.png (24x24 px)
+  drawable-hdpi/morphe_notification_icon_custom.png (36x36 px)
+  drawable-xhdpi/morphe_notification_icon_custom.png (48x48 px)
+  drawable-xxhdpi/morphe_notification_icon_custom.png (72x72 px)
+  drawable-xxxhdpi/morphe_notification_icon_custom.png (96x96 px)"</string>
+    <string name="settings_advanced_patch_options_custom_header_instruction">"Mappe med bilder som skal brukes som en egendefinert header-logo.
+
+ Mappen må inneholde en eller flere av følgende mapper, avhengig av enhetens DPI:
+- drawable-hdpi
+- drawable-xhdpi
+- drawable-xxhdpi
+- drawable-xxxhdpi
+
+Hver av mappene må inneholde alle følgende filer:
+morphe_header_custom_light.png
+morphe_header_custom_dark.png
+
+ Bilde dimensjoner må være som følger:
+- drawable-hdpi: 194x72 px
+- drawable-xhdpi: 258x96 px
+- drawable-xxhdpi: 387x144 px
+- drawable-xxxhdpi: 512x192 px"</string>
+    <string name="settings_advanced_updates_allow_metered_description">Lar Oru og patch-oppdateringer laste ned over mobildata</string>
+    <string name="settings_advanced_updates_manager_prereleases_description">Tidlig tilgang til nye Oru-versjoner</string>
+    <string name="settings_advanced_updates_prerelease_warning_message">"Pre-release-versjoner av Oru er fortsatt under utvikling og kan være ustabile.
+
+Patcher påvirkes ikke: aktiver pre-release-patcher for hver kilde i patch-kildelisten"</string>
+    <string name="settings_appearance_app_icon_selector_description">Hvordan Oru ser ut på startskjermen og i app-skuffen</string>
+    <string name="settings_auto_uninstall_warning_message">Hvis Android rapporterer en signaturkonflikt under Shizuku-autoinstallasjon, vil Oru avinstallere den eksisterende appen før den installerer den patchede APK-en</string>
+    <string name="settings_system_apk_download_helper_warning">APK-en kommer fra hjelpeappen, så stol bare på apper du kjenner. Oru sjekker fortsatt pakken, versjonen og signaturen til hver fil før patching.</string>
+    <string name="settings_system_custom_file_picker_description">Bla igjennom lagring med Orus innebygde filvelger i stedet for systemstandard.</string>
+    <string name="settings_system_export_manager_settings_fail">Kunne ikke eksportere Oru-innstillinger: %s</string>
+    <string name="settings_system_export_manager_settings_success">Oru-innstillinger eksportert</string>
+    <string name="settings_system_import_manager_settings_description">Sikkerhetskopierer og gjenoppretter Oru-innstillingene dine</string>
+    <string name="settings_system_import_manager_settings_fail">Kunne ikke importere Oru-innstillinger: %s</string>
+    <string name="settings_system_import_manager_settings_mode_title">Importer Oru-innstillinger</string>
+    <string name="settings_system_import_manager_settings_success">Oru-innstillinger importert</string>
+    <string name="settings_system_morphe_settings">Oru-innstillinger</string>
+    <string name="settings_system_process_runtime_heap_limit_ignored">Denne enheten ignorerte minnegrensen på siste kjøring, så patching kan falle tilbake til å kjøre inne i Oru</string>
+    <string name="settings_system_signing_key_dialog_description">Hver app Oru patcher er signert med denne nøkkelen. Ta vare på en kopi: uten den kan patchede apper bare oppdateres etter at de er avinstallert.</string>
+    <string name="settings_system_signing_key_missing">Oru lager en med din første patch.</string>
+    <string name="settings_system_storage_open_app_info_description">Administrer eller tøm alle Oru-data via systeminnstillinger</string>
+    <string name="sources_dialog_community_notice_message">"Patch-kilder fra fellesskapet er laget og opprettholdes av deres egne skapere. Oru verken gjennomgår eller verifiserer patcher fra tredjepart, og er ikke ansvarlig for innholdet eller virkningen de har på enheten din.
+
+Alt som legges til fra denne nettsiden brukes på egen risiko"</string>
+    <string name="sources_management_held_back_hint">Denne kilden fikk Oru til å krasje under innlasting, så den blir hoppet over. Oppdater eller importer den på nytt for å prøve igjen</string>
+    <string name="sources_management_outdated_manager_badge">Oppdater Oru</string>
+    <string name="sources_management_outdated_manager_hint">Denne kilden er bygget for patcher %1$s, men Oru %2$s inkluderer patcher %3$s. Oppdater Oru for å bruke den</string>
+    <string name="tour_prompt_desc">Vil du ha en rask omvisning i Orus nøkkelfunksjoner?</string>
+    <string name="uninstall_app_unverified">Ikke flyttet: Oru kunne ikke bekrefte at den installerte appen er det bygget som ble patchet.</string>
+</resources>

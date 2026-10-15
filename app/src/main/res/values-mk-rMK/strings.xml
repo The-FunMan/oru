@@ -15,8 +15,6 @@
     <string name="deep_link_add_source_title">Додај извор</string>
     <string name="deep_link_add_source_message">Дали сакате да го додадете овој извор на закрпување во Morphe?</string>
     <string name="deep_link_add_source_warning">Додајте ги само изворите во кои верувате</string>
-    <!-- Shown under the app a link was opened for -->
-    <!-- Asked when the link names an app of a source that is already added -->
     <!-- Home Screen - Update Notifications -->
     <string name="home_update_available">Достапно е ажурирање на Morphe</string>
     <string name="home_update_available_subtitle">Достапно е ажурирање</string>
@@ -78,9 +76,6 @@
     <string name="sources_management_title">Извори на поправки</string>
     <string name="sources_management_open_in_browser">Отвори во прелистувач</string>
     <string name="sources_management_failed_to_open_url">Не успеа да се отвори URL адреса</string>
-    <!-- Under an app left out of a source that keeps its home screen card because the user has patched it -->
-    <!-- Marks an app (not a patch) the source started supporting since its app list was last opened -->
-    <!-- Under the Bring new apps switch in a source's app list, whichever way it is set. "It" is the patch source -->
     <string name="sources_management_prerelease_toggle">Пред-издадени закрпи</string>
     <string name="sources_management_prerelease_toggle_description">Прима ран пристап до нови експериментални верзии на закрпи</string>
     <string name="sources_management_experimental_versions_toggle">Експериментални верзии на апликацијата</string>
@@ -290,7 +285,6 @@
     <!-- Fastest read or write rate reached while patching, in data per second -->
     <!-- Value of "Libraries": the libraries this device cannot use were dropped from the patched APK -->
     <!-- Value of "Libraries": every library was left in the patched APK -->
-    <string name="patcher_tab_game">Игри</string>
     <string name="patcher_long_step_warning">Овој чекор може да потрае некое време. Ве молам, почекајте…</string>
     <string name="patcher_installing_subtitle">Почти сте спремни за акција! 🎸</string>
     <string name="patcher_success_subtitle">Вашата апликација е поправена и инсталирана!</string>
@@ -378,19 +372,6 @@
     <string name="package_name">Име на пакет</string>
     <string name="failed_to_mount">Не успеа да се монтира: %s</string>
     <string name="failed_to_unmount">Не успеа да се размонтира: %s</string>
-    <!-- Patcher Screen - Mini-games -->
-    <string name="mini_game_new_record">Нов рекорд!</string>
-    <string name="mini_game_game_over">Игра завршена</string>
-    <string name="mini_game_try_again">Обидете се повторно</string>
-    <string name="mini_game_paused">Пауза</string>
-    <string name="mini_game_resume">Континуирај</string>
-    <string name="mini_game_2048_picker_subtitle">Поставете плочки за да ги споите</string>
-    <string name="mini_game_flappy_picker_subtitle">Допрете за да летате низ цевки</string>
-    <string name="mini_game_flappy_tap_to_start">Кликнете за да летате</string>
-    <string name="mini_game_snake_picker_subtitle">Јадете храна, не се удрете сами</string>
-    <string name="mini_game_snake_swipe_to_start">Повлечете за да започнете</string>
-    <string name="mini_game_dino_picker_subtitle">Допрете за да прескокнете над кактуси</string>
-    <string name="mini_game_dino_tap_to_start">Кликнете за да трчате</string>
     <!-- Settings -->
     <string name="appearance">Изглед</string>
     <string name="advanced">Напредно</string>
@@ -430,6 +411,7 @@
     <!-- Settings - Appearance Tab - Home Screen Section -->
     <string name="settings_appearance_home_screen">Почетен екран</string>
     <string name="settings_appearance_greeting_phrases">Поздрави</string>
+    <string name="settings_appearance_greeting_phrases_subtitle">Прикажи порака за поздрав на почетниот екран</string>
     <string name="settings_appearance_app_card_colors_default">Стандардно</string>
     <!-- Settings - Appearance Tab - App Icon Selector -->
     <string name="settings_appearance_app_icon_selector_title">Икона на апликација</string>
@@ -447,6 +429,7 @@
     <!-- "Morphe" here is the app itself, not the patches. Do not translate this as pre-release patches -->
     <!-- Shown before pre-release updates are turned on for the app itself. Patches have their own toggle in each patch source -->
     <string name="settings_advanced_updates_allow_metered">Завршува закрпувањето во посебен процес за поголема стабилност</string>
+    <string name="settings_advanced_updates_allow_metered_description">Повисоките граници го забрзуваат закрпувањето на способни уреди</string>
     <string name="settings_advanced_updates_background_notifications">Известувања за ажурирање во позадина</string>
     <string name="settings_advanced_updates_background_notifications_description">Периодично проверувај за ажурирања во позадина и извести кога се достапни</string>
     <string name="settings_advanced_updates_background_notifications_description_fcm">Увезува или извезува вашиот keystore за потпишување</string>
@@ -469,9 +452,11 @@
     <!-- Settings - Advanced Tab - Expert settings Section -->
     <string name="settings_advanced_expert">Напредни поставки</string>
     <string name="settings_advanced_expert_mode">Експертски режим</string>
+    <string name="settings_advanced_expert_mode_description">Препорачува и обновува амаждите од Morphe</string>
     <string name="settings_advanced_expert_mode_dialog_title">Дали сакате да го вклучите Expert режим?</string>
     <string name="settings_advanced_expert_mode_dialog_message">Expert режимот дава повеќе контрола врз тоа како се применуваат закрпите, но лошо конфигурирање на поставките во Expert режимот може да резултира со апликација која не функционира</string>
     <string name="settings_advanced_strip_unused_libs">Оптимизирај за архитектура на уред</string>
+    <string name="settings_advanced_strip_unused_libs_description">Ја прави резевата на постоечките апликации за оптимизација</string>
     <!-- Settings - Advanced Tab - GitHub PAT Settings -->
     <string name="settings_advanced_github_pat_description">Потребно за извори на pull барања</string>
     <string name="settings_advanced_github_pat_configured">Token е конфигуриран</string>
@@ -580,6 +565,7 @@ morphe_header_custom_dark.png
     <string name="installer_unavailable_shizuku_hint">Проверете дали Shizuku работи и дали дозволата е доделена на оваа апликација</string>
     <string name="installer_use_standard">Користи стандардно</string>
     <string name="settings_prompt_installer_on_install">Помошни информации за инсталирање</string>
+    <string name="settings_prompt_installer_on_install_description">Го одржува закрпувачот за целосно закрпување</string>
     <string name="settings_auto_install_with_shizuku">Автоматски инсталирај по закрпа</string>
     <!-- Settings - System Tab - Performance Section -->
     <string name="settings_system_battery_optimization">Оптимизација на батеријата</string>
@@ -591,6 +577,7 @@ morphe_header_custom_dark.png
     <string name="settings_system_memory_limit_subtitle">Меморија достапна за закрпување</string>
     <string name="settings_system_memory_limit_warning">Нисзок лимит на меморија може да предизвика неуспеси при закрпување на поголеми апликации</string>
     <string name="settings_system_process_runtime_enabled_description">Лимит од %s MB</string>
+    <string name="settings_system_process_runtime_disabled_description">Кликнете за да конфигурирате</string>
     <string name="settings_system_process_runtime_description_not_available">Оваа функција бара Android 11 или подоцна</string>
     <!-- Settings - System Tab - Notifications Section -->
     <string name="settings_system_notifications_sound_default">Стандардно</string>
@@ -652,6 +639,7 @@ morphe_header_custom_dark.png
     <!-- Copy selection from another bundle -->
     <!-- Settings - System Tab - Custom file picker -->
     <string name="settings_system_custom_file_picker">Прилагоден избирач на датотеки</string>
+    <string name="settings_system_custom_file_picker_description">Прелистајте складиште со вградениот избирач на датотеки на Morphe наместо стандардниот систем</string>
     <!-- Settings - System Tab - APK download helper -->
     <!-- File Picker -->
     <string name="file_picker_no_files">Нема датотеки овде</string>
@@ -726,8 +714,6 @@ morphe_header_custom_dark.png
     <string name="available">Достапно</string>
     <string name="continue_">Продолжи</string>
     <string name="version">Верзија</string>
-    <!-- Who made a patch source, as a field label -->
-    <!-- A file a patch source is added from, as a field label -->
     <!-- Button that starts patching the selected app. A verb, as in "patch this app" -->
     <string name="patch">Закрпи</string>
     <string name="open">Отвори</string>

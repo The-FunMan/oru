@@ -383,7 +383,6 @@ private fun AppIconCard(
 
             Spacer(modifier = Modifier.height(6.dp))
 
-            // Icon name
             Text(
                 text = label,
                 style = MaterialTheme.typography.bodySmall,

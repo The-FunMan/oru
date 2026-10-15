@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Oru expert copy: the Version, Patches, Options, Customize, Install with and Sources for this app sheets of the Focus.
+  English only (decision D6). Keys that already exist in oru_strings.xml or oru_strings_focus.xml are reused.
+-->
+<resources>
+    <!-- Version sheet -->
+    <string name="oru_version_title">Version</string>
+    <string name="oru_version_body">The newest version the patches support is picked for you. Pick another one to change the APKMirror link.</string>
+    <string name="oru_version_recommended">Recommended</string>
+    <string name="oru_version_compatible">Supported by the patches</string>
+    <string name="oru_version_experimental">Experimental</string>
+    <string name="oru_version_experimental_off">Experimental. Off for this source.</string>
+    <string name="oru_version_unsupported">Not installable on this phone</string>
+
+    <!-- Patch selection sheet -->
+    <string name="oru_patches_title">Patches for %1$s</string>
+    <string name="oru_patches_search">Search patches</string>
+    <string name="oru_patches_all">All</string>
+    <string name="oru_patches_recommended">Recommended</string>
+    <string name="oru_patches_select_all">Select all</string>
+    <string name="oru_patches_clear">Clear</string>
+    <string name="oru_patches_required">Required for this install</string>
+    <string name="oru_patches_unavailable">Not available for this install</string>
+    <string name="oru_patches_none_match">No patch matches the search.</string>
+    <plurals name="oru_patch_options_count">
+        <item quantity="one">%1$d option</item>
+        <item quantity="other">%1$d options</item>
+    </plurals>
+
+    <!-- Options sheet and Customize -->
+    <string name="oru_options_title">Options</string>
+    <string name="oru_options_reset_all">Reset all</string>
+    <string name="oru_options_reset_one">Use default</string>
+    <string name="oru_options_read_only">Files and folders cannot be picked here yet. The patch uses its default.</string>
+    <string name="oru_options_invalid_number">Enter a number.</string>
+    <string name="oru_customize_title">Customize</string>
+    <string name="oru_customize_body">The name and icon the patched app is built with. They are saved with this selection.</string>
+
+    <!-- Install with sheet -->
+    <string name="oru_installer_title">Install with</string>
+    <string name="oru_installer_body">This installer becomes the default, and this run installs with it.</string>
+    <string name="oru_installer_available">Available</string>
+    <string name="oru_installer_unavailable">Unavailable</string>
+
+    <!-- Sources for this app sheet and row. The global list is "Patch sources" in oru_strings.xml -->
+
+    <!-- Focus rows -->
+    <string name="oru_focus_channel_mixed">%1$d of %2$d on pre-release</string>
+    <string name="oru_focus_repatch">Re-patch from the saved copy</string>
+    <string name="oru_focus_repatch_value">Starts from the APK saved after your last patch</string>
+    <string name="oru_action_close">Close</string>
+</resources>

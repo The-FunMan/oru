@@ -26,9 +26,6 @@ import app.morphe.manager.R
 import app.morphe.manager.ui.theme.ThemeTraitsDefaults
 import kotlinx.coroutines.launch
 
-/** Shape of a surface rising from the bottom edge, a sheet or a panel docked there: Material's sheet corners. */
-val SheetShape: Shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)
-
 /**
  * A [ModalBottomSheet] that never overlaps the status bar.
  *
@@ -53,7 +50,7 @@ fun AppBottomSheet(
         initialValue = SheetValue.Hidden,
         enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
     ),
-    shape: Shape = SheetShape,
+    shape: Shape = BottomSheetDefaults.ExpandedShape,
     containerColor: Color = MaterialTheme.colorScheme.background,
     contentColor: Color = contentColorFor(containerColor),
     scrimColor: Color = BottomSheetDefaults.ScrimColor,
@@ -70,6 +67,7 @@ fun AppBottomSheet(
         // surface from entering the status-bar zone at the window-layout level.
         modifier = modifier
             .statusBarsPadding()
+            .padding(horizontal = Defaults.SheetSideInset)
             .predictiveBackSlide(backProgress),
         sheetState = sheetState,
         shape = shape,
@@ -104,7 +102,7 @@ fun AppBottomSheet(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .sheetBorder(CardBorder.neutral, shape)
+                        .cardBorder(CardBorder.neutral, shape)
                 ) {
                     if (showDragHandle) SheetDragHandle(contentColor, onDismissRequest)
                     content()

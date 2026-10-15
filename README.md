@@ -1,157 +1,142 @@
-<div align="center"> 
-<picture>
-    <source
-      width="512px"
-      media="(prefers-color-scheme: dark)"
-      srcset="https://raw.githubusercontent.com/MorpheApp/.github/refs/heads/main/profile/assets/morphe-wordmark/morphe_wordmark_dark.svg"
-    />
-    <img 
-      width="512px"
-      alt="Morphe"
-      src="https://raw.githubusercontent.com/MorpheApp/.github/refs/heads/main/profile/assets/morphe-wordmark/morphe_wordmark_light.svg"
-    />
-</picture>
+# Oru
 
-[![Website badge](https://img.shields.io/badge/Website-gray.svg?logo=data:image/svg%2bxml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0gQ29weXJpZ2h0IDIwMjUgTW9ycGhlLiBUaGlzIGlzIGNvcHlyaWdodGVkIGNvbnRlbnQsIGFuZCBub3QgbGljZW5zZWQgdW5kZXIgb3BlbiBzb3VyY2UgdGVybXMuCiAgICAgU2VlIGh0dHBzOi8vZ2l0aHViLmNvbS9Nb3JwaGVBcHAvbW9ycGhlLWJyYW5kaW5nIC0tPgoKPHN2ZwogICB3aWR0aD0iNTEyIgogICBoZWlnaHQ9IjUxMiIKICAgdmlld0JveD0iMCAwIDUxMiA1MTIiCiAgIHZlcnNpb249IjEuMSIKICAgaWQ9InN2ZzIiCiAgIHNvZGlwb2RpOmRvY25hbWU9Im1vcnBoZV9sb2dvX2xpZ2h0LnN2ZyIKICAgaW5rc2NhcGU6dmVyc2lvbj0iMS40LjIgKGViZjBlOTQwZDAsIDIwMjUtMDUtMDgpIgogICB4bWxuczppbmtzY2FwZT0iaHR0cDovL3d3dy5pbmtzY2FwZS5vcmcvbmFtZXNwYWNlcy9pbmtzY2FwZSIKICAgeG1sbnM6c29kaXBvZGk9Imh0dHA6Ly9zb2RpcG9kaS5zb3VyY2Vmb3JnZS5uZXQvRFREL3NvZGlwb2RpLTAuZHRkIgogICB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgIHhtbG5zOnN2Zz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxzb2RpcG9kaTpuYW1lZHZpZXcKICAgICBpZD0ibmFtZWR2aWV3MiIKICAgICBwYWdlY29sb3I9IiNmZmZmZmYiCiAgICAgYm9yZGVyY29sb3I9IiMwMDAwMDAiCiAgICAgYm9yZGVyb3BhY2l0eT0iMC4yNSIKICAgICBpbmtzY2FwZTpzaG93cGFnZXNoYWRvdz0iMiIKICAgICBpbmtzY2FwZTpwYWdlb3BhY2l0eT0iMC4wIgogICAgIGlua3NjYXBlOnBhZ2VjaGVja2VyYm9hcmQ9IjAiCiAgICAgaW5rc2NhcGU6ZGVza2NvbG9yPSIjZDFkMWQxIgogICAgIGlua3NjYXBlOnpvb209IjEuMTU0Mjk2OSIKICAgICBpbmtzY2FwZTpjeD0iMjU2IgogICAgIGlua3NjYXBlOmN5PSIyNTYiCiAgICAgaW5rc2NhcGU6d2luZG93LXdpZHRoPSIxNDQwIgogICAgIGlua3NjYXBlOndpbmRvdy1oZWlnaHQ9IjgzNiIKICAgICBpbmtzY2FwZTp3aW5kb3cteD0iMCIKICAgICBpbmtzY2FwZTp3aW5kb3cteT0iMCIKICAgICBpbmtzY2FwZTp3aW5kb3ctbWF4aW1pemVkPSIxIgogICAgIGlua3NjYXBlOmN1cnJlbnQtbGF5ZXI9InN2ZzIiPgogICAgPGlua3NjYXBlOnBhZ2UKICAgICAgIHg9IjAiCiAgICAgICB5PSIwIgogICAgICAgd2lkdGg9IjUxMiIKICAgICAgIGhlaWdodD0iNTEyIgogICAgICAgaWQ9InBhZ2UyIgogICAgICAgbWFyZ2luPSIwIgogICAgICAgYmxlZWQ9IjAiIC8+CiAgPC9zb2RpcG9kaTpuYW1lZHZpZXc+CiAgPGRlZnMKICAgICBpZD0iZGVmczIiIC8+CiAgPCEtLSBMZXR0ZXIgLS0+CiAgPGcKICAgICBpZD0iTGV0dGVyIgogICAgIHN0eWxlPSJmaWxsOiNmZmZmZmY7ZmlsbC1vcGFjaXR5OjEiPgogICAgPHBhdGgKICAgICAgIGlkPSJMZWZ0IgogICAgICAgZD0ibSAxMjMsMTQwIGMgLTIxLDAgLTM5LDE3IC00MCwzOCB2IDE5MiBjIDEsMjEgMTksMzggNDAsMzggMjEsMCAzOSwtMTcgNDAsLTM4IFYgMTc4IGMgLTEsLTIxIC0xOSwtMzggLTQwLC0zOCB6IgogICAgICAgZmlsbD0iIzFFNUFBOCIKICAgICAgIHN0eWxlPSJmaWxsOiNmZmZmZmY7ZmlsbC1vcGFjaXR5OjEiIC8+CiAgICA8cGF0aAogICAgICAgaWQ9IlJpZ2h0IgogICAgICAgZD0ibSAzNDksMjg1IHYgODUgYyAxLDIxIDE5LDM4IDQwLDM4IDIxLDAgMzksLTE3IDQwLC0zOCBWIDE4MiBjIC0xMSwtMTQgLTc0LDYzIC04MCwxMDMgeiIKICAgICAgIGZpbGw9IiMwMEFGQUUiCiAgICAgICBzdHlsZT0iZmlsbDojZmZmZmZmO2ZpbGwtb3BhY2l0eToxIiAvPgogICAgPHBhdGgKICAgICAgIGlkPSJNaWRkbGUiCiAgICAgICBkPSJtIDEyNywxMDggYyAtMzQsMCAtNDQsMjUgLTQ0LDQwIHYgNTQgYyAzMCwtMzMgNzUsMjcgODAsMzMgMjgsMzIgNDQsODcgOTMsODkgNDgsLTIgNjcsLTU2IDkzLC04OSAwLDAgNDUsLTc0IDgwLC04MCAwLC0yOCAtMTEsLTQ3IC00NCwtNDcgLTM0LDAgLTU4LDUwIC03NSw3MiAtMTcsMjIgLTI1LDQ2IC01NCw0NiAtMjksMCAtMzgsLTI1IC01NCwtNDYgLTE3LC0yMiAtNDEsLTcyIC03NSwtNzIgeiIKICAgICAgIGZpbGw9InVybCgjbGluZWFyR3JhZGllbnQyKSIKICAgICAgIHN0eWxlPSJmaWxsOiNmZmZmZmY7ZmlsbC1vcGFjaXR5OjEiIC8+CiAgPC9nPgo8L3N2Zz4K&style=for-the-badge)](https://morphe.software) [![Documentation badge](https://img.shields.io/badge/Documentation-gray?style=for-the-badge&logo=github)](https://github.com/MorpheApp/morphe-documentation#readme) [![Guides badge](https://img.shields.io/badge/Guides-gray?style=for-the-badge&logo=bookstack&logoColor=white)](docs/README.md) [![Subreddit badge](https://img.shields.io/badge/Reddit-gray?style=for-the-badge&logo=reddit&logoColor=white)](https://www.reddit.com/r/MorpheApp) [![Crowdin badge](https://img.shields.io/badge/Translations-gray?style=for-the-badge&logo=crowdin)](https://morphe.software/translate)
-<br>
-</div>
+Oru patches Android apps on your own device. It takes an APK you already have, runs patch bundles on the phone, and installs the patched app.
 
-&nbsp;
-<p align="center">
-  <a href="https://morphe.software" title="Download Morphe">
-    <img src="https://raw.githubusercontent.com/MorpheApp/.github/refs/heads/main/profile/assets/download-morphe.svg" alt="Download Morphe" width="240"/>
-  </a>
-</p>
-&nbsp;
+Oru is an Android app. It is not a ROM hack or a game.
 
-# 💊 Morphe
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
+[![Latest release](https://img.shields.io/github/v/release/The-FunMan/oru)](https://github.com/The-FunMan/oru/releases/latest)
+[![CI](https://github.com/The-FunMan/oru/actions/workflows/ci.yml/badge.svg?branch=dev)](https://github.com/The-FunMan/oru/actions/workflows/ci.yml)
 
-> Want to watch ads? Us neither.
+## What Oru is and is not
 
-Morphe is an Android app that patches YouTube, YouTube Music, and Reddit - stripping ads and giving you back control over your experience. No root required.
+- Oru is an independent project. It is a general tool that runs patch bundles on the device, and the bundles are the ones you choose.
+- Oru does not provide, host or distribute any app, APK or patch for a specific third-party app. The default patch source is the upstream bundle, which Oru downloads from GitHub.
+- Which apps can be patched depends only on the patch sources you choose.
+- Oru is not a YouTube patcher, and it is not a Morphe or ReVanced product.
+- Oru contains no code or assets of Google's or YouTube's apps. It uses Google's Android libraries as they are published.
 
-## ✨ Why Morphe?
+## Principles
 
-Modern apps are full of ads and dark patterns designed to grab your attention. Morphe patches them at the bytecode level - modifying the app directly on your device, without any of your data leaving it. The result is a cleaner version of the app you already know, exactly the way you want it.
+- **Opinionated defaults.** Oru picks the sensible path. A few switches remain for people who need them, such as pre-release channels.
+- **Simple.** Home lists your apps. Each app has one screen. A run shows the real stages and real counts, not invented progress.
+- **Your APK, your device.** Oru never downloads a stock app APK, and it does not upload APK files. It keeps copies of the original APKs it patches in its own storage. For a version you choose, Get APK opens the APKMirror page in your browser. You download the file and select it in Oru.
+- **No unmeasured claims.** Oru does not claim speed gains that have not been measured.
+- **Upstream patches.** Oru runs the patch bundles as their authors publish them. It does not change them.
 
-## 📲 Download
+## Relationship to Morphe
 
-**[→ Download at morphe.software](https://morphe.software)**
+Oru is built on Morphe Manager, which is open source under the GNU General Public License version 3 with the additional terms in [NOTICE](NOTICE). Morphe Manager is built on ReVanced Manager and Universal ReVanced Manager. Oru keeps their credits and the notices in [NOTICE](NOTICE).
 
-The website will guide you to the latest release for your device. No account needed.
+- Oru is not made, endorsed or supported by the Morphe project.
+- The name Morphe is not used for Oru's own identity. Oru has its own name, package name and artwork. The name Morphe appears in the credits, the licence texts, and the names of the image files that the custom branding options read.
+- Report problems with Oru in this repository, not to the upstream projects.
+- Patches are the work of their authors. The default patch source is the bundle of the Morphe project, and each bundle is made by its own authors.
 
-## 🚀 How it works
+## Install
 
-1. **Install Morphe** from [morphe.software](https://morphe.software).
-2. **Pick an app** - YouTube, YouTube Music, or Reddit are supported out of the box.
-3. **Choose your mode:**
-    - **Simple mode** - designed for a one-tap experience. Just tap Patch and Morphe handles the rest with sensible defaults. No configuration needed.
-    - **Expert mode** - gives you full control. Choose exactly which of the 100+ patches to apply, configure per-patch options (colors, toggles, and more), and fine-tune everything before patching.
-4. **Provide the APK** - Morphe guides you through obtaining the original app file via step-by-step dialogs. The patching itself happens entirely on your device.
-5. **Install and enjoy** - once patching is complete, install the result like any normal APK.
+1. Open the [latest release](https://github.com/The-FunMan/oru/releases/latest) and download `oru-<version>.apk`. Development builds are published as pre-releases.
+2. Check the file's SHA-256 against `SHA256SUMS.txt` on the same release, for example with `sha256sum oru-<version>.apk`. On Windows, use `Get-FileHash oru-<version>.apk -Algorithm SHA256`.
+3. Optional: verify the build provenance with the GitHub CLI:
+   `gh attestation verify oru-<version>.apk --repo The-FunMan/oru`
+4. Open the APK and allow installs from the app you used to download it when Android asks.
 
-Everything happens locally. Morphe never uploads your APKs or personal data anywhere.
+The release workflows check the signing certificate before they publish. The certificate's SHA-256 is not printed in the release notes.
 
-## 📖 Guides
+To receive new releases automatically, add `https://github.com/The-FunMan/oru` to [Obtainium](https://github.com/ImranR98/Obtainium) and let it track GitHub releases. Turn on pre-releases only if you want development builds.
 
-Step-by-step walkthroughs with screenshots, covering patching in both modes, installers, updates, patch sources, backups, and customization: **[→ Morphe guides](docs/README.md)**
+Oru also checks for new releases of itself when it starts. When you choose to update, it downloads the release APK from GitHub, checks it against `SHA256SUMS.txt` and the installed signature, and then asks Android to install it.
 
-## 🔧 Features
+## Requirements
 
-**Patching**
-- Simple mode for one-tap patching with curated defaults
-- Expert mode for full patch selection, per-patch configuration, and experimental version support
-- Expert mode also shows an expanded patching screen with real-time logs and live RAM usage monitoring during patching
-- 100+ patches for YouTube, YouTube Music, and Reddit
-- Support for split APKs
-- Optional "Optimize for device architecture" mode - skips split APK modules for unsupported CPU architectures, locales, and screen densities during merge, and strips native libraries for unsupported architectures from plain APKs after patching
-- Sends a notification the moment patching finishes, so you don't have to keep the app open
-- Optional completion sound, with a distinct tone for success and failure
-- Optional auto-install right after patching completes, through Shizuku, or through the system installer where Android lets Morphe replace a build it installed itself
-- Batch patching - select several apps and patch them in one queue, with every question asked
-  up front so the run never stops to wait for you
-- A re-patch banner on the home screen when a patch source releases changes for your apps, counting them and queueing them all in one tap
+- Android 8.0 (API 26) or newer.
+- Shizuku is optional. When Shizuku is running and Oru is allowed to use it, Oru can install without showing the system prompt.
+- Root is optional. When the device is rooted and you grant root access, Oru can install through root.
+- Free storage for the original APK copy, the patched output and the app data. Check the size of the app you want to patch first.
+- Oru declares the permissions it needs: internet access, installing and removing apps, notifications, and all-files storage access, which it uses to read files you select.
 
-**Patch options** *(Simple mode: available in the Advanced tab; Expert mode: available on the patch selection screen)*
-- Custom app display name, launcher icon, and header logo per app, with built-in creators that generate every density variant for you
-- App theme colors (background color presets)
-- Hide Shorts app shortcut and widget (YouTube)
-- And more, depending on installed patch bundles
+## How patching works
 
-**Patch sources**
-- Add any compatible patch bundle via GitHub URL or deep link
-- Per-source pre-release toggle to get early patch access
-- Automatic background update notifications (even when the app is closed)
-- Sort your app list and patch sources however you like (name, install date, and more)
+1. Choose an app installed on this device, or select an APK file you already have.
+2. Choose a version. Oru shows the versions the patch sources cover and marks the recommended one.
+3. If you need the file, use Get APK. It opens the APKMirror page for that version in your browser. Oru does not download the APK for you.
+4. Choose patches. Oru uses the recommended set. With Expert mode turned on in Settings, under Advanced, you can choose patches and their options.
+5. Oru patches the APK on the device, signs it with a keystore that is created on this device at the first patch, and installs it through the installer you chose, when Android or that installer allows.
 
-**Installer**
-- Standard Android installer
-- Shizuku, Shizuku+ or Sui for installs with no confirmation dialog
-- Root installer with Magisk module support (mount-based, no data loss on update)
-- Play Store installer variants, so Google Play recognizes itself as the install source (with a warning about the trade-off - Play Store may then offer updates that would overwrite your patched build)
-- Any third-party installer apps detected on the system are also available as an option
-- Prompt-on-install option to choose per session
-- On rooted devices, Morphe asks whether you want a Root Mount install or a Standard install before patching starts, and adjusts the applied patches to match your choice
+A patched app is signed with a different key than the stock app, so Android does not install it over the stock app. Oru can remove the stock app first. You confirm that, or you turn on the Shizuku auto-uninstall option. Uninstalling an app deletes its data. Back up anything you need before you patch.
 
-**Appearance**
-- System / Light / Dark / Material You themes
-- Pure Black mode for OLED screens
-- Accent color selection
-- Animated backgrounds - pick one you like, or let Morphe shuffle them for you on each launch, daily, or every three days
-- App icon selection
+## Patch sources
 
-**Home screen**
-- Friendly time-of-day greeting when you open the app
-- Rearrange your app list into the order that suits you
-- Group your apps by patch source or your own categories
-- Hide apps you never patch, and bring them back whenever you like
-- Home cards for apps patched with universal patches, not just app-specific ones
-- Multi-select and bulk actions for cleaning up saved APKs and patch selections, and for
-  patching several apps in one queue
-- Launcher shortcuts for re-patching outdated apps, checking for updates, and jumping straight
-  into patching a recently patched app
-- Floating scroll-to-top button when your lists get long
-- A short guided tour after your first patch, so you know where everything lives
+Oru runs patch bundles. The default source is the patch bundle of the Morphe project, published at [MorpheApp/morphe-patches](https://github.com/MorpheApp/morphe-patches). Oru downloads it from GitHub when it loads sources. The bundle is not part of this repository or of the APK.
 
-**Advanced**
-- Import/export your Morphe settings as JSON, with a Replace or Merge choice on import
-- Import/export your signing keystore
-- Manage saved original APKs and patched APKs
-- Manage saved patch selections per app
-- GitHub Personal Access Token support for higher API rate limits
-- Process runtime - run patching in a separate process for better stability, with configurable memory limit
-- Bytecode processing mode - controls how bytecode is processed during patching, affecting patching speed, memory usage, and output APK size
-- Built-in file picker as an alternative to the system one, with an option to show hidden files
-- Optional external trigger, so automation apps can queue a batch through an intent, gated by
-  a per-app confirmation
-- Export debug logs for troubleshooting
+You can add more sources: a GitHub or GitLab repository, a bundle at an https address, or a local `.mpp` file. Each bundle is made and licensed by its authors. Oru does not review or vouch for the patches in a bundle.
 
-## ❓ New to GitHub?
+## Network use
 
-If you ended up here but aren't sure what to do next - no worries. Here's the short version:
+Oru has no accounts. It does not send analytics or crash reports, and it does not receive push messages. In the Oru build, it contacts only these hosts:
 
-1. Go to the **[Releases page](https://github.com/MorpheApp/morphe-manager/releases/latest)**.
-2. Under **Assets**, tap the file ending in `.apk` to download it.
-3. Open the downloaded file on your Android device and tap **Install**.
-4. If Android asks you to allow installs from unknown sources, follow the prompt to enable it - this is required for any app not from the Play Store.
+- `api.github.com`: the release feed of this repository, to check for a new Oru version. Oru checks when it starts and at most every six hours after that, unless you check yourself. It is also used to find a download link again when a download fails on a network error. If you have set a GitHub token, that token is sent to GitHub only.
+- `raw.githubusercontent.com`: the version file (`patches-bundle.json`) of each GitHub patch source, which Oru checks when it starts. It also reads the changelog files of patch sources when it shows their changes.
+- `github.com` and the GitHub download hosts: patch bundle files you download, and the Oru release APK when you choose to update.
+- `github.com/<owner>.png`: the profile picture of the owner of each GitHub patch source, loaded when Oru starts. A patch source that publishes a picture next to its bundle file is loaded from its own host instead.
+- `gitlab.com`: the version and changelog files of GitLab patch sources you add.
+- The https address of any other patch source you add, including its picture file.
 
-That's it. Once Morphe is installed, everything else happens inside the app - the **[guides](docs/README.md)** above walk you through the first patch.
+Get APK and the other links in the app open in your browser. Oru does not fetch the APKMirror page itself.
 
-For FAQs and troubleshooting, visit **[morphe.software](https://morphe.software)** or join the community on **[Reddit](https://www.reddit.com/r/MorpheApp)**.
+Oru does not contact `api.morphe.software` or any other service of the Morphe project, and it does not fetch the list of blocked patch sources. GitHub and the other hosts see your IP address and the requests, as with any web request.
 
-## 📙 Contributing
+## Privacy
 
-Thank you for considering contributing to Morphe.
-You can find the contribution guidelines [here](CONTRIBUTING.md).
+- Oru keeps its data in the app's own storage on the device: your app list, patch choices and settings, the signing keystore, copies of the original APKs, and the patched APKs.
+- Oru does not upload any of this data. Apart from the requests listed in Network use, nothing leaves the device unless you send it yourself.
+- Exports that you start, the keystore, the settings and the debug log, are saved to your Downloads folder. The keystore export contains your signing key, so keep it private. The settings export includes your GitHub token only if you turn on the option for that.
+- The debug log can contain names and file paths. Read it before you share it.
+- Oru requires no account, and it has no analytics.
 
-## ❗ About
+## Building from source
 
-Morphe is built on the foundation of [ReVanced Manager](https://github.com/ReVanced/revanced-manager) and [URV](https://github.com/Jman-Github/Universal-ReVanced-Manager). All changes made by Morphe are documented in the Git history.
+Requirements:
 
-## 📜 License
+- JDK 21.
+- Android SDK with platform 37, the compile SDK in `app/build.gradle.kts`.
+- For the native code: a Rust toolchain with the Android targets, and the Android NDK. CI uses NDK 28.2.13676358. Without `cargo`, the build logs a warning and leaves the native libraries out, and the patcher then runs on the JVM. Release workflows reject an APK without them.
+- Gradle resolves dependencies from Maven Central, Google, JitPack and a GitHub Packages repository. The GitHub Packages repository reads with a token that has `read:packages`, from `gpr.key` in `local.properties` or from `GITHUB_TOKEN`.
 
-Morphe is licensed under the [GNU General Public License v3.0](LICENSE), with additional conditions under GPLv3 Section 7:
+```sh
+export GITHUB_TOKEN=<token with read:packages>   # only if Gradle asks for it
+./gradlew :app:testOruDebugUnitTest
+./gradlew :app:assembleOruDebug
+```
 
-- **Name & Branding Restrictions (7c & 7e):** Derivative works must use their own distinct branding. The **"Morphe"** name, logos, and trademarks may not be used for the branding or title of derivative works (e.g., names like *"Morphe Plus"*, *"Morphe Expanded"*, or *"Morphe UserXYZ"* are strictly prohibited).
+On Windows, use `gradlew.bat`. A release build (`assembleOruRelease`) needs your own signing key at `app/keystore.jks` and the variables `KEYSTORE_PASSWORD`, `KEYSTORE_ENTRY_ALIAS` and `KEYSTORE_ENTRY_PASSWORD`, described in `app/build.gradle.kts`. Without the key, release tasks stop with an error. For local testing, pass `-PsignAsDebug` to sign with the debug key.
 
-See the [LICENSE](LICENSE) file for the full GPLv3 terms and the [NOTICE](NOTICE) file for full conditions of GPLv3 Section 7.
+## Contributing
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md) first. Open an issue before a feature pull request, and send pull requests to `dev`. Report security problems through the private advisory form in the Security tab, not in public issues. See [SECURITY.md](SECURITY.md).
+
+Maintainers: the release and maintenance checklists are in [docs/maintainers/RUNBOOK.md](docs/maintainers/RUNBOOK.md).
+
+## Translations
+
+Oru uses the English strings in `app/src/main/res/values/strings.xml`, with the Oru overrides in `app/src/oru/res/`. Translations that are in the repository are used as they are. Corrections go through pull requests to the `values-*` folders.
+
+## Credits
+
+Oru is a modified version of Morphe Manager (https://github.com/MorpheApp/morphe-manager), which is built on ReVanced Manager (https://github.com/ReVanced/revanced-manager) and Universal ReVanced Manager (https://github.com/Jman-Github/Universal-ReVanced-Manager). Thanks to the Morphe and ReVanced contributors, to the authors of every patch bundle, to the Shizuku project, and to the authors of the open source libraries listed in [NOTICE](NOTICE) and on the licences screen of the app.
+
+## Disclaimers
+
+- Oru is not affiliated with, endorsed by or sponsored by Google, YouTube, Reddit, APKMirror, the Morphe project, or the developer of any app that a patch targets.
+- Product and company names belong to their owners. They are used only to identify the app that a patch targets.
+- Patching an app can change how it behaves and may break it. Patching may also go against the terms of service of that app. You are responsible for the apps you patch, for the APK files you use, and for how you use the result. Use only files you are entitled to use.
+- Oru does not, by itself, bypass any protection of an app, and it never downloads a stock APK. Any change to an app comes from the patch bundle you choose to run.
+- Oru is provided as is, without warranty of any kind, as described in sections 15 and 16 of the GPLv3.
+
+## License
+
+Oru is licensed under the [GNU General Public License v3.0](LICENSE). The additional terms under GPLv3 Section 7 are stated in [NOTICE](NOTICE). The Oru name and mark are not licensed for use by other projects.
+
+## Use of generative AI
+
+Large parts of Oru's code, tests, documentation and design were written with the help of generative AI tools, namely Anthropic's Claude, used through Claude Code, working under the direction of the maintainer. The maintainer sets the requirements, reviews and tests the changes on real devices, and is responsible for what is published. AI-assisted contributions are held to the same standard and licence (GPLv3) as any other code. Reports of problems are welcome in the issue tracker.

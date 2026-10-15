@@ -112,25 +112,20 @@
         <item quantity="other">%s çekirdek</item>
     </plurals>
     <plurals name="changelog_feature_count">
-        <item quantity="one">%s özellik</item>
-        <item quantity="other">%s özellik</item>
+        <item quantity="one">%s özelliği</item>
+        <item quantity="other">%s özellikleri</item>
     </plurals>
     <plurals name="changelog_fix_count">
         <item quantity="one">%s düzeltme</item>
         <item quantity="other">%s düzeltme</item>
     </plurals>
     <plurals name="changelog_performance_count">
-        <item quantity="one">%s optimizasyon</item>
-        <item quantity="other">%s optimizasyon</item>
+        <item quantity="one">%s optimizasyonu</item>
+        <item quantity="other">%s optimizasyonları</item>
     </plurals>
     <plurals name="changelog_change_count">
         <item quantity="one">%s değişiklik</item>
         <item quantity="other">%s değişiklik</item>
-    </plurals>
-    <!-- Value of the Apps row on a source card when apps were left out on arrival, for example "3/232 · 2 new". %1$s is the app count, %2$d the new apps -->
-    <plurals name="sources_apps_count_with_new">
-        <item quantity="one">%1$s · %2$d yeni</item>
-        <item quantity="other">%1$s · %2$d yeni</item>
     </plurals>
     <plurals name="changelog_new_releases">
         <item quantity="one">%s yeni sürüm</item>

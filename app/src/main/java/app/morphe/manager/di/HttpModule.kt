@@ -42,7 +42,7 @@ val httpModule = module {
                 protocols(listOf(Protocol.HTTP_1_1))
                 cache(Cache(context.cacheDir.resolve("cache").also { it.mkdirs() }, 1024 * 1024 * 100))
                 followRedirects(true)
-                followSslRedirects(true)
+                followSslRedirects(false)
             }
         }
         install(ContentNegotiation) {
@@ -54,7 +54,12 @@ val httpModule = module {
             requestTimeoutMillis = 10 * 60_000L
         }
         install(UserAgent) {
-            agent = "Morphe-Manager/${BuildConfig.VERSION_CODE}"
+            // The oru flavour identifies as Oru; the morphe flavour keeps upstream's agent string
+            agent = if (BuildConfig.UPSTREAM_SERVICES) {
+                "Morphe-Manager/${BuildConfig.VERSION_CODE}"
+            } else {
+                "Oru/${BuildConfig.VERSION_NAME}"
+            }
         }
     }
 

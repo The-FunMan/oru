@@ -42,6 +42,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import app.morphe.manager.BuildConfig
 import app.morphe.manager.R
 import app.morphe.manager.domain.manager.PreferencesManager
 import app.morphe.manager.util.APK_EXTENSIONS
@@ -240,10 +241,16 @@ fun FilePicker(
 
     var currentDir by remember { mutableStateOf(downloadsDir) }
     var refreshKey by remember { mutableIntStateOf(0) }
+    // Oru fixes the sort and hides hidden files (SETTINGS_IA rows 48-49), so it neither reads nor writes them
     var sortMode by remember {
-        mutableStateOf(enumByNameOrNull<SortMode>(prefs.filePickerSortMode.getBlocking()) ?: SortMode.DATE_DESC)
+        mutableStateOf(
+            if (BuildConfig.ORU_UX) SortMode.NAME_ASC
+            else enumByNameOrNull<SortMode>(prefs.filePickerSortMode.getBlocking()) ?: SortMode.NAME_ASC
+        )
     }
-    var showHiddenFiles by remember { mutableStateOf(prefs.filePickerShowHiddenFiles.getBlocking()) }
+    var showHiddenFiles by remember {
+        mutableStateOf(!BuildConfig.ORU_UX && prefs.filePickerShowHiddenFiles.getBlocking())
+    }
     var showViewMenu by remember { mutableStateOf(false) }
     val search = rememberSearchFieldState(searchable = currentDir != null)
     val checkedFiles = remember { mutableStateListOf<File>() }
@@ -357,32 +364,35 @@ fun FilePicker(
                     expanded = showViewMenu,
                     onDismissRequest = { showViewMenu = false }
                 ) {
-                    SortMode.entries.forEach { mode ->
+                    // Oru has no sort or hidden-file choice, so the menu keeps only Refresh there
+                    if (!BuildConfig.ORU_UX) {
+                        SortMode.entries.forEach { mode ->
+                            AppDropdownMenuItem(
+                                text = stringResource(mode.labelRes()),
+                                selected = sortMode == mode,
+                                onClick = {
+                                    sortMode = mode
+                                    showViewMenu = false
+                                    coroutineScope.launch { prefs.filePickerSortMode.update(mode.name) }
+                                }
+                            )
+                        }
+                        SettingsDivider(fullWidth = true)
                         AppDropdownMenuItem(
-                            text = stringResource(mode.labelRes()),
-                            selected = sortMode == mode,
+                            text = stringResource(R.string.file_picker_show_hidden_files),
+                            trailing = {
+                                SelectionCheckIndicator(
+                                    if (showHiddenFiles) ToggleableState.On else ToggleableState.Off
+                                )
+                            },
+                            modifier = Modifier.semantics { role = Role.Checkbox },
                             onClick = {
-                                sortMode = mode
-                                showViewMenu = false
-                                coroutineScope.launch { prefs.filePickerSortMode.update(mode.name) }
+                                val next = !showHiddenFiles
+                                showHiddenFiles = next
+                                coroutineScope.launch { prefs.filePickerShowHiddenFiles.update(next) }
                             }
                         )
                     }
-                    SettingsDivider(fullWidth = true)
-                    AppDropdownMenuItem(
-                        text = stringResource(R.string.file_picker_show_hidden_files),
-                        trailing = {
-                            SelectionCheckIndicator(
-                                if (showHiddenFiles) ToggleableState.On else ToggleableState.Off
-                            )
-                        },
-                        modifier = Modifier.semantics { role = Role.Checkbox },
-                        onClick = {
-                            val next = !showHiddenFiles
-                            showHiddenFiles = next
-                            coroutineScope.launch { prefs.filePickerShowHiddenFiles.update(next) }
-                        }
-                    )
                     // Picks up what changed on disk while the picker was open, such as a file
                     // just downloaded or access just granted
                     AppDropdownMenuItem(

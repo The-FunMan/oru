@@ -383,7 +383,7 @@ class InstalledAppInfoViewModel(
                     context.getString(R.string.home_app_info_patches_source_removed)
                 }
                 val attribution = resolveAppliedBundleAttribution(
-                    sourceTitle = source?.displayTitle,
+                    sourceTitle = source?.shownTitle,
                     bundleName = info?.name,
                     bundleVersion = info?.version,
                     storedVersion = storedVersions[bundleUid],

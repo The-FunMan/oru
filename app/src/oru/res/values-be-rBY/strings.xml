@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="deep_link_add_source_message">Вы хочаце дадаць гэтую крыніцу патча ў Oru?</string>
+    <string name="home_apk_helper_description">Oru папросіць дапаможную праграму ніжэй спампаваць арыгінальны APK і вярнуць файл</string>
+    <string name="home_apk_helper_installed_unavailable">Oru не змог выкарыстоўваць усталяваную праграму</string>
+    <string name="home_apk_helper_warning">Працягвайце толькі ў тым выпадку, калі вы давяраеце гэтай дапаможнай праграме. Oru правярае пакет, версію і подпіс атрыманых даных перад патчынгам</string>
+    <string name="home_apk_helper_warning_unverified">Працягвайце толькі ў тым выпадку, калі вы давяраеце гэтай дапаможнай праграме. Oru не можа праверыць подпіс гэтага APK, таму прапатчаны файл не будзе выяўлены</string>
+    <string name="home_download_instructions_download_button_toast_6">Вы цяпер афіцыйны тэстар кнопкі Oru 🏅</string>
+    <string name="home_download_instructions_step4">Пасля завяршэння спампоўкі вярніцеся да Oru</string>
+    <string name="home_download_instructions_step4_mount">Пасля ўсталявання арыгінальнага APK, вярніцеся да Oru</string>
+    <string name="home_outdated_manager_title">Oru састарэў</string>
+    <string name="home_update_available">Даступна абнаўленне Oru</string>
+    <string name="sources_management_outdated_manager_badge">Абнавіць Oru</string>
+    <string name="sources_management_outdated_manager_hint">Гэтая крыніца створана для патчара %1$s, але Oru %2$s уключае патчар %3$s. Абнавіце Oru, каб выкарыстоўваць яе</string>
+</resources>

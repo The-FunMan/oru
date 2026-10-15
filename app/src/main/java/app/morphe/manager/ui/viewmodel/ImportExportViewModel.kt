@@ -23,6 +23,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import app.morphe.manager.BuildConfig
 import app.morphe.manager.R
 import app.morphe.manager.domain.manager.HomeAppButtonPreferences
 import app.morphe.manager.domain.manager.KeystoreManager
@@ -51,6 +52,7 @@ import kotlinx.serialization.json.encodeToStream
 import java.io.BufferedWriter
 import java.io.File
 import java.io.FileOutputStream
+import java.io.InputStream
 import java.io.OutputStream
 import java.nio.file.Files
 import java.nio.file.Path
@@ -90,10 +92,7 @@ data class PatchBundleDataExportFile(
     val options: Map<String, Map<String, Map<String, String>>>?,
     // Apps kept from this source. Null in backups written before an app could be, which reads the
     // same as a backup where no app was
-    val mutedPackages: List<String>? = null,
-    // Apps the source has listed so far, present only when it leaves new apps out. Null in backups
-    // written before a source could, which reads as a source that brings them
-    val knownApps: List<String>? = null
+    val mutedPackages: List<String>? = null
 )
 
 /**
@@ -126,6 +125,21 @@ data class BundleSnapshot(
     // Experimental versions toggle. Null in backups written before per-source toggles were exported
     val experimentalVersions: Boolean? = null
 )
+
+/**
+ * Copies the stream [open] returns into a new temp file in [dir] and returns its path. A failed
+ * copy removes the temp file again, so nothing is left in the cache.
+ */
+internal fun copyToTempFile(dir: File, prefix: String, suffix: String, open: () -> InputStream?): Path {
+    val path = File.createTempFile(prefix, suffix, dir).toPath()
+    try {
+        open()!!.use { Files.copy(it, path, StandardCopyOption.REPLACE_EXISTING) }
+    } catch (e: Throwable) {
+        Files.deleteIfExists(path)
+        throw e
+    }
+    return path
+}
 
 @OptIn(ExperimentalSerializationApi::class)
 class ImportExportViewModel(
@@ -169,13 +183,7 @@ class ImportExportViewModel(
     fun startKeystoreImport(content: Uri) = viewModelScope.launch {
         uiSafe(app, R.string.settings_system_import_keystore_failed, "Failed to import keystore") {
             val path = withContext(Dispatchers.IO) {
-                File.createTempFile("signing", "ks", app.cacheDir).toPath().also {
-                    Files.copy(
-                        contentResolver.openInputStream(content)!!,
-                        it,
-                        StandardCopyOption.REPLACE_EXISTING
-                    )
-                }
+                copyToTempFile(app.cacheDir, "signing", "ks") { contentResolver.openInputStream(content) }
             }
 
             // Detect format: magic bytes first (reliable), extension as fallback
@@ -299,7 +307,7 @@ class ImportExportViewModel(
                 appLanguage = AppLocale.selected.value,
                 customBundles = bundles.ifEmpty { null },
                 homeAppButtons = homeAppButtons
-            ).restrictedTo(sections),
+            ).forExport(sections),
             selections = if (SettingsSection.PATCH_SELECTIONS in sections) allSelectionsExportFile() else null
         )
     }
@@ -415,10 +423,9 @@ class ImportExportViewModel(
                     exportDate = exportDate,
                     selections = selections,
                     options = options.ifEmpty { null },
-                    mutedPackages = sourceMuteRepository.exportForBundle(bundleUid).ifEmpty { null },
-                    knownApps = sourceMuteRepository.exportKnownApps(bundleUid)
+                    mutedPackages = sourceMuteRepository.exportForBundle(bundleUid).ifEmpty { null }
                 )
-            }.filter { it.selections.isNotEmpty() || it.mutedPackages != null || it.knownApps != null }
+            }.filter { it.selections.isNotEmpty() || it.mutedPackages != null }
         }
 
         return AllSelectionsExportFile(
@@ -431,7 +438,8 @@ class ImportExportViewModel(
      * Filename for the all-selections export file.
      */
     fun getAllSelectionsExportFileName(): String =
-        FilenameUtils.timestamped("morphe_all_selections.json")
+        // ORU: brand prefix comes from the flavour (morphe_ or oru_)
+        FilenameUtils.timestamped("${OruFileNames.prefix(BuildConfig.ORU_UX)}_all_selections.json")
 
     /**
      * Import patch selections and options from a file.
@@ -527,8 +535,7 @@ class ImportExportViewModel(
                         }
                         sourceMuteRepository.importForBundle(
                             bundleUid,
-                            exportFile.mutedPackages.orEmpty(),
-                            exportFile.knownApps
+                            exportFile.mutedPackages.orEmpty()
                         )
                     }
                     PatchBundleRepository.ImportMode.Merge -> {
@@ -546,11 +553,9 @@ class ImportExportViewModel(
                                 options = packageOptions
                             )
                         }
-                        sourceMuteRepository.mergeForBundle(
-                            bundleUid,
-                            exportFile.mutedPackages.orEmpty(),
-                            exportFile.knownApps
-                        )
+                        exportFile.mutedPackages?.let {
+                            sourceMuteRepository.muteApps(bundleUid, it)
+                        }
                     }
                 }
             }
@@ -563,11 +568,13 @@ class ImportExportViewModel(
     fun getPackageBundleDataExportFileName(packageName: String, bundleUid: Int, bundleName: String?): String {
         val bundle = bundleName?.replace(" ", "_")?.take(20) ?: "bundle_$bundleUid"
         val pkg = packageName.substringAfterLast('.').take(15)
-        return FilenameUtils.timestamped("morphe_${bundle}_${pkg}.json")
+        // ORU: brand prefix comes from the flavour (morphe_ or oru_)
+        return FilenameUtils.timestamped("${OruFileNames.prefix(BuildConfig.ORU_UX)}_${bundle}_${pkg}.json")
     }
 
     val debugLogFileName: String
-        get() = FilenameUtils.timestamped("morphe_logcat.log")
+        // ORU: brand prefix comes from the flavour (morphe_ or oru_)
+        get() = FilenameUtils.timestamped("${OruFileNames.prefix(BuildConfig.ORU_UX)}_logcat.log")
 
     /**
      * Writes the debug log content to [writer]. Returns the logcat exit code.
@@ -579,7 +586,9 @@ class ImportExportViewModel(
             app.packageManager.getPackageInfo(app.packageName, 0).versionName
         }.getOrDefault("unknown")
 
-        writer.write("=== Morphe Manager Debug Log ===\n")
+        // ORU: the header names the flavour's manager
+        val brand = if (BuildConfig.ORU_UX) "Oru" else "Morphe"
+        writer.write("=== $brand Manager Debug Log ===\n")
         writer.write("Date       : ${LocalDateTime.now()}\n")
         writer.write("Version    : $versionName\n")
 
@@ -686,7 +695,7 @@ class ImportExportViewModel(
     fun exportKeystoreToDownloads() = viewModelScope.launch {
         uiSafe(app, R.string.settings_system_export_keystore_failed, "Failed to export keystore to Downloads") {
             withContext(Dispatchers.IO) {
-                val stream = openDownloadsOutputStream("Morphe.keystore", BIN_MIMETYPE)
+                val stream = openDownloadsOutputStream(OruFileNames.keystore(BuildConfig.ORU_UX), BIN_MIMETYPE)
                     ?: throw IllegalStateException("Cannot open Downloads output stream")
                 stream.use { keystoreManager.export(it) }
             }
@@ -701,7 +710,11 @@ class ImportExportViewModel(
         uiSafe(app, R.string.settings_system_export_manager_settings_fail, "Failed to export settings to Downloads") {
             val exportFile = managerSettingsExportFile()
             withContext(Dispatchers.IO) {
-                val stream = openDownloadsOutputStream("morphe_manager_settings.json", JSON_MIMETYPE)
+                // ORU: brand prefix comes from the flavour (morphe_ or oru_)
+                val stream = openDownloadsOutputStream(
+                    "${OruFileNames.prefix(BuildConfig.ORU_UX)}_manager_settings.json",
+                    JSON_MIMETYPE
+                )
                     ?: throw IllegalStateException("Cannot open Downloads output stream")
                 stream.use { settingsJson.encodeToStream(exportFile, it) }
             }
@@ -739,7 +752,10 @@ class ImportExportViewModel(
          */
         internal val settingsJson = Json(json) { explicitNulls = false }
 
-        private val knownPasswords = arrayOf("Morphe", "s3cur3p@ssw0rd")
-        private val aliases = arrayOf(KeystoreManager.DEFAULT, "alias", "Morphe Key")
+        // ORU: oru keystores (alias and password) are tried too; the morphe list is unchanged
+        private val knownPasswords = arrayOf("Morphe", "s3cur3p@ssw0rd") +
+                OruFileNames.extraKeystoreSecrets(BuildConfig.ORU_UX)
+        private val aliases = arrayOf(KeystoreManager.DEFAULT, "alias", "Morphe Key") +
+                OruFileNames.extraKeystoreSecrets(BuildConfig.ORU_UX)
     }
 }

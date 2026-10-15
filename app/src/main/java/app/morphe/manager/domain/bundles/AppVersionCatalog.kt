@@ -14,6 +14,7 @@ import app.morphe.manager.domain.repository.PatchBundleRepository.Companion.DEFA
 import app.morphe.manager.patcher.patch.PatchBundleInfo
 import app.morphe.manager.util.AppCoroutineScope
 import app.morphe.manager.util.compareVersions
+import app.morphe.manager.util.shownTitle
 import app.morphe.patcher.patch.AppTarget
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -147,6 +148,25 @@ class AppVersionCatalog(
     scope: AppCoroutineScope
 ) {
     /**
+     * Every version each package can be patched at, grouped by source, newest first, before the sources an app is
+     * turned down from are taken out. The per-source answers (a source's own recommendation, the versions of the
+     * source an app is patched from) are read from here, so a turned-down source still has its own answer.
+     */
+    val sourceVersions: Flow<Map<String, List<BundledAppTarget>>> = combine(
+        patchBundleRepository.bundleInfoFlow,
+        patchBundleRepository.sources,
+        prefs.bundleExperimentalVersionsEnabled.flow,
+    ) { bundleInfo, sources, experimentalEnabledUids ->
+        val enabledSources = sources.filter { it.enabled }
+        extract(
+            bundleInfo = bundleInfo,
+            bundleNames = enabledSources.associate { it.uid to it.shownTitle },
+            enabledBundleUids = enabledSources.map { it.uid }.toSet(),
+            experimentalEnabledUids = experimentalEnabledUids
+        )
+    }.shareIn(scope, SharingStarted.Eagerly, replay = 1)
+
+    /**
      * Every version each package can be patched at, grouped by source, newest first. This is the
      * full set, which is what an APK already on the device has to be judged against; [offered]
      * narrows it to what a picker should put in front of the user.
@@ -155,18 +175,10 @@ class AppVersionCatalog(
      * all readers instead of being rebuilt by each of them, on whatever thread collects it.
      */
     val compatibleVersions: Flow<Map<String, List<BundledAppTarget>>> = combine(
-        patchBundleRepository.bundleInfoFlow,
-        patchBundleRepository.sources,
-        prefs.bundleExperimentalVersionsEnabled.flow,
+        sourceVersions,
         sourceMuteRepository.mutedSources
-    ) { bundleInfo, sources, experimentalEnabledUids, mutedSources ->
-        val enabledSources = sources.filter { it.enabled }
-        extract(
-            bundleInfo = bundleInfo,
-            bundleNames = enabledSources.associate { it.uid to it.displayTitle },
-            enabledBundleUids = enabledSources.map { it.uid }.toSet(),
-            experimentalEnabledUids = experimentalEnabledUids
-        ).mapValues { (packageName, targets) ->
+    ) { versionsBySource, mutedSources ->
+        versionsBySource.mapValues { (packageName, targets) ->
             // Or the picker suggests a download none of the sources left standing can patch
             val muted = mutedSources[packageName].orEmpty()
             targets.filterNot { it.bundleUid in muted }

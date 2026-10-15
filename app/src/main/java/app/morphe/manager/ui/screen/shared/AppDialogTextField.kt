@@ -93,7 +93,6 @@ fun AppDialogTextField(
                     horizontalArrangement = Arrangement.spacedBy(4.dp),
                     modifier = Modifier.padding(end = 4.dp)
                 ) {
-                    // Password visibility toggle
                     if (isPassword) {
                         IconButton(
                             onClick = { passwordVisible = !passwordVisible },
@@ -114,7 +113,6 @@ fun AppDialogTextField(
                         }
                     }
 
-                    // Clear button
                     if (showClearButton && value.isNotBlank()) {
                         IconButton(
                             onClick = { onValueChange("") },
@@ -127,7 +125,6 @@ fun AppDialogTextField(
                         }
                     }
 
-                    // Folder picker button
                     if (onFolderPickerClick != null) {
                         IconButton(
                             onClick = onFolderPickerClick,
@@ -140,7 +137,6 @@ fun AppDialogTextField(
                         }
                     }
 
-                    // File picker button
                     if (onFilePickerClick != null) {
                         IconButton(
                             onClick = onFilePickerClick,
@@ -348,7 +344,6 @@ fun AppDialogDropdownTextField(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.padding(end = 4.dp)
                 ) {
-                    // Folder picker button
                     if (onFolderPickerClick != null) {
                         IconButton(
                             onClick = onFolderPickerClick,
@@ -361,7 +356,7 @@ fun AppDialogDropdownTextField(
                         }
                     }
 
-                    // Clear button, hidden while the field already shows nothing
+                    // Hidden while the field already shows nothing
                     if (showClearButton && displayValue.isNotBlank()) {
                         IconButton(
                             onClick = { changeInput("") },

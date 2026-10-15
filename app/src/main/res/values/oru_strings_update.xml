@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copy of the Oru self-update: the Home banner and the reasons a downloaded update is refused.
+  English only, like oru_strings.xml. The banner strings are read through OruHomeContent.
+-->
+<resources>
+    <string name="oru_update_banner_available">Oru %1$s is ready to download.</string>
+    <string name="oru_update_banner_downloading">Downloading the Oru update.</string>
+    <string name="oru_update_banner_downloading_percent">Downloading the Oru update, %1$d%%.</string>
+    <string name="oru_update_banner_ready">The Oru update is downloaded and checked.</string>
+    <string name="oru_update_banner_installing">Installing the Oru update.</string>
+    <string name="oru_update_banner_failed">The Oru update failed. %1$s</string>
+    <string name="oru_update_action_install">Install</string>
+
+    <string name="oru_update_error_generic">Try the update again.</string>
+    <string name="oru_update_error_no_checksums">This release has no checksum list, so the download cannot be checked. It was discarded.</string>
+    <string name="oru_update_error_checksums_unreadable">The checksum list of this release is damaged. The download was discarded.</string>
+    <string name="oru_update_error_checksum_missing">The checksum list does not name this download. It was discarded.</string>
+    <string name="oru_update_error_checksum_mismatch">The download does not match its checksum. It was discarded.</string>
+    <string name="oru_update_error_package_mismatch">The download is not an Oru build. It was discarded.</string>
+    <string name="oru_update_error_signer_mismatch">The download is not signed with the same key as the installed Oru. It was discarded.</string>
+    <string name="oru_update_error_verify_failed">The download could not be checked. It was discarded.</string>
+</resources>

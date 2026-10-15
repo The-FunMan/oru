@@ -54,51 +54,26 @@ fun ImportExportSection(
 ) {
     var showSigningKeyDialog by remember { mutableStateOf(false) }
     var showSettingsDialog by remember { mutableStateOf(false) }
-    val signingKey = importExportViewModel.signingKey
 
     // Patching creates the key and an import replaces it, both away from this screen
     LaunchedEffect(Unit) { importExportViewModel.refreshSigningKey() }
 
     if (showSigningKeyDialog) {
-        ImportExportDialog(
-            title = stringResource(R.string.settings_system_signing_key),
-            description = stringResource(R.string.settings_system_signing_key_dialog_description),
-            onImport = onImportKeystore,
-            onExport = onExportKeystore.takeIf { signingKey != null },
+        SigningKeyBackupDialog(
+            importExportViewModel = importExportViewModel,
+            onImportKeystore = onImportKeystore,
+            onExportKeystore = onExportKeystore,
             onDismiss = { showSigningKeyDialog = false }
-        ) {
-            if (signingKey != null) {
-                SigningKeyPreview(signingKey)
-            } else {
-                Text(
-                    text = stringResource(R.string.settings_system_signing_key_missing),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = dialogSecondaryTextColor(),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
-        }
+        )
     }
 
     if (showSettingsDialog) {
-        ImportExportDialog(
-            title = stringResource(R.string.settings_system_morphe_settings),
-            // The sections below say what the backup holds, so this says the one thing no settings
-            // backup carries: moving to a new phone with only this file would otherwise look like
-            // a complete backup. Held above the list, a list taller than the screen cannot push
-            // it out of sight
-            description = stringResource(R.string.settings_system_backup_signing_key_note),
-            onImport = onImportSettings,
-            onExport = onExportSettings,
-            onDismiss = { showSettingsDialog = false },
-            enabled = importExportViewModel.settingsSections.isNotEmpty()
-        ) {
-            SettingsBackupContents(
-                selected = importExportViewModel.settingsSections,
-                onToggle = importExportViewModel::toggleSettingsSection
-            )
-        }
+        SettingsBackupDialog(
+            importExportViewModel = importExportViewModel,
+            onImportSettings = onImportSettings,
+            onExportSettings = onExportSettings,
+            onDismiss = { showSettingsDialog = false }
+        )
     }
 
     Column(verticalArrangement = Arrangement.spacedBy(Defaults.ContentPadding)) {
@@ -124,6 +99,69 @@ fun ImportExportSection(
                 subtitle = stringResource(R.string.settings_system_import_manager_settings_description)
             )
         }
+    }
+}
+
+/**
+ * The signing key dialog: what the key is, with its export and its import. Internal so the oru Advanced page can
+ * open it from its own rows. Left open while a picker runs, as the section does.
+ */
+@Composable
+internal fun SigningKeyBackupDialog(
+    importExportViewModel: ImportExportViewModel,
+    onImportKeystore: () -> Unit,
+    onExportKeystore: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    val signingKey = importExportViewModel.signingKey
+    ImportExportDialog(
+        title = stringResource(R.string.settings_system_signing_key),
+        description = stringResource(R.string.settings_system_signing_key_dialog_description),
+        onImport = onImportKeystore,
+        onExport = onExportKeystore.takeIf { signingKey != null },
+        onDismiss = onDismiss
+    ) {
+        if (signingKey != null) {
+            SigningKeyPreview(signingKey)
+        } else {
+            Text(
+                text = stringResource(R.string.settings_system_signing_key_missing),
+                style = MaterialTheme.typography.bodyMedium,
+                color = dialogSecondaryTextColor(),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+    }
+}
+
+/**
+ * The settings backup dialog: which sections move, with the import and the export. Internal so the oru Advanced page
+ * can open it from its own rows.
+ */
+@Composable
+internal fun SettingsBackupDialog(
+    importExportViewModel: ImportExportViewModel,
+    onImportSettings: () -> Unit,
+    onExportSettings: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    ImportExportDialog(
+        title = stringResource(R.string.settings_system_morphe_settings),
+        // The sections below say what the backup holds, so this says the one thing no settings
+        // backup carries: moving to a new phone with only this file would otherwise look like
+        // a complete backup. Held above the list, a list taller than the screen cannot push
+        // it out of sight
+        description = stringResource(R.string.settings_system_backup_signing_key_note),
+        onImport = onImportSettings,
+        onExport = onExportSettings,
+        onDismiss = onDismiss,
+        enabled = importExportViewModel.settingsSections.isNotEmpty()
+    ) {
+        SettingsBackupContents(
+            selected = importExportViewModel.settingsSections,
+            onToggle = importExportViewModel::toggleSettingsSection
+        )
     }
 }
 

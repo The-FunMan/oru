@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="settings_advanced_patch_options_custom_header_instruction">"કસ્ટમ હેડર લોગો તરીકે ઉપયોગ કરવા માટે છબીઓ સાથેનું ફોલ્ડર.
+
+ઉપકરણના DPI પર આધાર રાખીને, ફોલ્ડરમાં નીચેનામાંથી એક અથવા વધુ ફોલ્ડર્સ હોવા આવશ્યક છે:
+- drawable-hdpi
+- drawable-xhdpi
+- drawable-xxhdpi
+- drawable-xxxhdpi
+
+દરેક ફોલ્ડરમાં નીચેની બધી ફાઇલો હોવી આવશ્યક છે:
+morphe_header_custom_light.png
+morphe_header_custom_dark.png
+
+છબીના પરિમાણો નીચે મુજબ હોવા જોઈએ:
+- drawable-hdpi: 194x72 px
+- drawable-xhdpi: 258x96 px
+- drawable-xxhdpi: 387x144 px
+- drawable-xxxhdpi: 512x192 px
+
+"</string>
+</resources>

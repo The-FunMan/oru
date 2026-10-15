@@ -81,8 +81,6 @@ private val SwipeFlingVelocity = 400.dp
  *   height, rather than each its own as a dialog's do.
  * @param selectorPadding Room around the pill, for pages that run to the edges of their container.
  * @param contentColor Ink of the pill and its idle segments, the text color of the surface below.
- * @param pageSwipeEnabled Whether a swipe over the settled page turns it. A page that takes drags
- *   of its own, such as a game, turns it off, leaving the pill to switch it.
  * @param below Content every page shares, laid out under the pager rather than repeated in it.
  */
 @Composable
@@ -96,7 +94,6 @@ fun SegmentedTabs(
     fillHeight: Boolean = false,
     selectorPadding: PaddingValues = PaddingValues(),
     contentColor: Color = dialogTextColor(),
-    pageSwipeEnabled: (page: Int) -> Boolean = { true },
     below: @Composable ColumnScope.() -> Unit = {},
     page: @Composable (index: Int) -> Unit
 ) {
@@ -153,8 +150,6 @@ fun SegmentedTabs(
         HorizontalPager(
             state = pagerState,
             verticalAlignment = Alignment.Top,
-            // Read off the settled page, so a swipe already under way is never cut off halfway
-            userScrollEnabled = pageSwipeEnabled(pagerState.settledPage),
             modifier = if (fillHeight) {
                 Modifier.fillMaxWidth().weight(1f)
             } else {

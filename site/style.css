@@ -1,0 +1,392 @@
+/* Oru project page. Static, no external resources. */
+
+@font-face {
+  font-family: "Oru Wordmark";
+  src: url("assets/oru-wordmark.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Theme tokens. Light values are the default. */
+:root {
+  color-scheme: light;
+  --bg: #FBF8F3;
+  --surface: #F2EDE4;
+  --border: #DCD4C6;
+  --ink: #1B1D26;
+  --ink-muted: #545A6B;
+  --accent: #4650C4;
+  --accent-hover: #353EA8;
+  --on-accent: #FBF8F3;
+  --peach: #FFB59A;
+  --mark-ring: #1B1D26;
+  --focus: #4650C4;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #101219;
+    --surface: #171A24;
+    --border: #2A2F3F;
+    --ink: #E7E9F2;
+    --ink-muted: #A9AFC4;
+    --accent: #8F98FF;
+    --accent-hover: #B2B9FF;
+    --on-accent: #101219;
+    --peach: #FFB59A;
+    --mark-ring: #F2F3F8;
+    --focus: #B2B9FF;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #101219;
+  --surface: #171A24;
+  --border: #2A2F3F;
+  --ink: #E7E9F2;
+  --ink-muted: #A9AFC4;
+  --accent: #8F98FF;
+  --accent-hover: #B2B9FF;
+  --on-accent: #101219;
+  --peach: #FFB59A;
+  --mark-ring: #F2F3F8;
+  --focus: #B2B9FF;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  overflow-wrap: break-word;
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+svg {
+  max-width: 100%;
+}
+
+a {
+  color: var(--accent);
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
+}
+
+a:hover {
+  color: var(--accent-hover);
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+h1,
+h2 {
+  color: var(--ink);
+}
+
+h1 {
+  font-size: clamp(2rem, 1.3rem + 3vw, 3.25rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+  margin: 1.75rem 0 1rem;
+  max-width: 20ch;
+  text-wrap: balance;
+}
+
+h2 {
+  font-size: clamp(1.35rem, 1.15rem + 1vw, 1.75rem);
+  line-height: 1.25;
+  font-weight: 650;
+  margin: 0 0 1.25rem;
+}
+
+p {
+  margin: 0 0 0.9rem;
+}
+
+.wrap {
+  width: 100%;
+  max-width: 48rem;
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+.prose {
+  max-width: 65ch;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: 0.75rem;
+  z-index: 10;
+  padding: 0.5rem 0.85rem;
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: none;
+}
+
+/* Mark and wordmark */
+
+.mark {
+  display: block;
+  flex: none;
+  color: var(--mark-ring);
+  aspect-ratio: 1;
+}
+
+.wordmark {
+  font-family: "Oru Wordmark", cursive, serif;
+  font-weight: 400;
+  font-size: clamp(3.5rem, 2.2rem + 5vw, 5.5rem);
+  line-height: 1;
+  color: var(--ink);
+}
+
+/* Header */
+
+.site-header {
+  border-bottom: 1px solid var(--border);
+}
+
+.site-header .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1.25rem;
+  padding-block: 0.9rem;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.brand .mark {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+.brand .wordmark {
+  font-size: 1.75rem;
+}
+
+.site-nav {
+  flex: 1 1 100%;
+  min-width: 0;
+}
+
+@media (min-width: 40rem) {
+  .site-nav {
+    flex: 0 1 auto;
+  }
+}
+
+.site-nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.9rem;
+}
+
+.site-nav a {
+  color: var(--ink-muted);
+  text-decoration: none;
+}
+
+.site-nav a:hover {
+  color: var(--ink);
+  text-decoration: underline;
+}
+
+/* Hero */
+
+.hero {
+  padding-block: clamp(3rem, 9vw, 6rem) clamp(2.5rem, 6vw, 4rem);
+}
+
+.lockup {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.75rem, 2.5vw, 1.25rem);
+}
+
+.lockup .mark {
+  width: clamp(4.5rem, 14vw, 6.5rem);
+  height: auto;
+}
+
+.lede {
+  font-size: clamp(1.05rem, 1rem + 0.4vw, 1.25rem);
+  line-height: 1.55;
+  color: var(--ink-muted);
+  max-width: 65ch;
+  margin: 0;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  max-width: 100%;
+  padding: 0.6rem 1.25rem;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  color: var(--accent);
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+}
+
+.button:hover {
+  color: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+.button.primary {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.button.primary:hover {
+  background: var(--accent-hover);
+  color: var(--on-accent);
+}
+
+/* Sections */
+
+.section {
+  border-top: 1px solid var(--border);
+  padding-block: clamp(2.5rem, 6vw, 4rem);
+}
+
+.section ol,
+.section ul {
+  margin: 0 0 0.9rem;
+  padding-left: 1.25rem;
+}
+
+.section li {
+  margin-bottom: 0.9rem;
+}
+
+.section li:last-child {
+  margin-bottom: 0;
+}
+
+.section .principles {
+  list-style: none;
+  padding-left: 0;
+}
+
+.principles li {
+  padding-left: 1rem;
+  border-left: 2px solid var(--peach);
+}
+
+.principles strong {
+  display: block;
+  color: var(--ink);
+}
+
+.notice {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: clamp(1.1rem, 3vw, 1.6rem);
+}
+
+.notice h2 {
+  margin-bottom: 0.9rem;
+}
+
+.notice .note-links {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+}
+
+/* Footer */
+
+.site-footer {
+  border-top: 1px solid var(--border);
+  padding-block: 2rem 2.5rem;
+  color: var(--ink-muted);
+  font-size: 0.9rem;
+}
+
+.site-footer ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin: 0 0 1rem;
+  padding: 0;
+  list-style: none;
+}
+
+.site-footer p {
+  margin: 0 0 0.5rem;
+}
+
+/* One subtle fade on load. Not shown when reduced motion is requested. */
+@media (prefers-reduced-motion: no-preference) {
+  .hero {
+    animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}

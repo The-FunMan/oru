@@ -1,0 +1,17 @@
+{
+  "uniqueId": "io.ktor:ktor-client-core",
+  "name": "Ktor Client",
+  "developers": [
+    {
+      "name": "JetBrains"
+    }
+  ],
+  "website": "https://ktor.io",
+  "scm": {
+    "connection": "scm:git:https://github.com/ktorio/ktor.git",
+    "url": "https://github.com/ktorio/ktor"
+  },
+  "licenses": [
+    "Apache-2.0"
+  ]
+}

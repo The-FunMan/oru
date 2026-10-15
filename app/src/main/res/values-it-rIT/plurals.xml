@@ -127,11 +127,6 @@
         <item quantity="one">%s modifica</item>
         <item quantity="other">%s modifiche</item>
     </plurals>
-    <!-- Value of the Apps row on a source card when apps were left out on arrival, for example "3/232 · 2 new". %1$s is the app count, %2$d the new apps -->
-    <plurals name="sources_apps_count_with_new">
-        <item quantity="one">%1$s · %2$d nuovo</item>
-        <item quantity="other">%1$s · %2$d nuovi</item>
-    </plurals>
     <plurals name="changelog_new_releases">
         <item quantity="one">%s nuova versione</item>
         <item quantity="other">%s nuove versioni</item>

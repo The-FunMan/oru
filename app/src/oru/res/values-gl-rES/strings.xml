@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="deep_link_add_source_message">Desexa engadir esta fonte de parches a Oru?</string>
+    <string name="home_app_info_app_deleted_description">Esta aplicación foi desinstalada fóra de Oru. Volva a parchear para restaurar a súa funcionalidade</string>
+    <string name="home_download_instructions_step4">Cando remate a descarga, regrese a Oru</string>
+    <string name="home_download_instructions_step4_mount">Tras instalar o APK orixinal, regrese a Oru</string>
+    <string name="home_update_available">Actualización de Oru dispoñible</string>
+</resources>

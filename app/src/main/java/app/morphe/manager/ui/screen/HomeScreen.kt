@@ -105,6 +105,7 @@ fun HomeScreen(
     val homeAppSortMode = homeAppState?.sortMode ?: HomeAppSortMode.MANUAL
     val homeAppCategoryState = homeAppState?.categoryState ?: HomeAppCategoryState(emptyList(), emptyMap())
     val homeAppCategoryViewMode = homeAppState?.categoryViewMode ?: HomeAppCategoryViewMode.ALL_APPS
+    val showCategoryViewSwitcher = homeAppState?.showCategoryViewSwitcher == true
     val homeAppSourceGroups = homeAppState?.sourceGroups ?: emptyList()
     val bundlePipelineLoading = homeAppState == null
     val showOtherAppsButton by homeViewModel.apps.showOtherAppsButton.collectAsStateWithLifecycle()
@@ -308,6 +309,7 @@ fun HomeScreen(
                     filterMode = HomeAppFilterMode.fromPreference(homeAppFilterModePref),
                     categoryState = homeAppCategoryState,
                     categoryViewMode = homeAppCategoryViewMode,
+                    showCategoryViewSwitcher = showCategoryViewSwitcher,
                     sourceGroups = homeAppSourceGroups
                 ),
                 appActions = HomeAppActions(

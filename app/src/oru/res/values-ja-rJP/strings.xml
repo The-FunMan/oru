@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="adaptive_icon_guide_png_body">透明背景のロゴを使う場合、下で選択した背景色が適用されます。透明部分のない画像はアイコン全体に表示され、テーマアイコンと通知アイコンには Oru のロゴがそのまま表示されます</string>
+    <string name="adaptive_icon_no_transparency_warning">この画像には透明なピクセルが含まれていないため、テーマアイコンと通知アイコンには Oru のロゴがそのまま表示されます</string>
+    <string name="battery_optimization_dialog_description">一部のデバイスでは、アプリを最小化するとパッチャーが停止する場合があります。確実にパッチ処理を完了するため、Oru をバッテリー制限の対象外にしてください</string>
+    <string name="deep_link_add_source_message">このパッチソースを Oru に追加しますか？</string>
+    <string name="external_batch_patch_description">%s が Oru にアプリのパッチ適用とインストールを要求しています</string>
+    <string name="home_apk_helper_description">Oru は、以下のヘルパーアプリにオリジナル APK をダウンロードしてもらい、そのファイルを受け取ります</string>
+    <string name="home_apk_helper_installed_unavailable">Oru はインストール済みのアプリを使用できませんでした</string>
+    <string name="home_apk_helper_warning">このヘルパーアプリを信頼できる場合のみ続行してください。Oru はパッチ適用前に、受け取った APK のパッケージ名、バージョン、署名を確認します</string>
+    <string name="home_apk_helper_warning_unverified">このヘルパーアプリを信頼できる場合のみ続行してください。Oru はこの APK の署名を検証できないため、改ざんされたファイルを検出できません</string>
+    <string name="home_app_filter_not_patched_description">Oru でまだパッチを適用していないアプリ</string>
+    <string name="home_app_filter_patched_description">Oru でパッチを適用した、または保存したアプリ</string>
+    <string name="home_app_filter_uninstalled_description">Oru でパッチを適用した後、このデバイスから削除されたアプリ</string>
+    <string name="home_app_info_app_deleted_description">このアプリは Oru の外でアンインストールされました。機能を復元するには、再度パッチを適用してください</string>
+    <string name="home_app_info_install_unverified">Oru は、インストールされているアプリがパッチ適用済みのビルドと同じものか確認できません。アクションを復元するには、再パッチするか、保存済みの APK を再インストールしてください</string>
+    <string name="home_app_info_not_patched_description">このアプリには未パッチ版がインストールされています。Oru には以前のパッチ履歴が残っています</string>
+    <string name="home_download_instructions_download_button_toast_6">これであなたも Oru の公式「ボタン」テスターです🏅</string>
+    <string name="home_download_instructions_step2_search_note">Oru はこれらのウェブサイトの信頼性を保証できません。APK ファイルではなく独自のアプリストアを提供しているサイトは避けてください</string>
+    <string name="home_download_instructions_step4">ダウンロード完了後、 Oru に戻る</string>
+    <string name="home_download_instructions_step4_mount">オリジナルの APK をインストール後、 Oru に戻る</string>
+    <string name="home_held_back_title">パッチソースが原因で Oru がクラッシュしました</string>
+    <string name="home_outdated_manager_title">Oru は最新のバージョンではありません</string>
+    <string name="home_update_available">Oru の更新が利用可能です</string>
+    <string name="installer_shizuku_error_permission">Shizuku の権限がありません。Oru に権限を許可してから再試行してください</string>
+    <string name="installer_status_shizuku_permission">Shizuku アプリで Oru に権限を付与してください</string>
+    <string name="installing_manager_update_hint">更新を完了するため、Oru を終了します</string>
+    <string name="launch_app_unverified">Oru は、インストールされているアプリがパッチ適用済みのビルドであることを確認できませんでした</string>
+    <string name="notification_bundle_update_text_unversioned">Oru を開いて更新するには、タップしてください</string>
+    <string name="notification_channel_manager_updates">Oru の更新</string>
+    <string name="notification_channel_manager_updates_description">Oru の新しいリリースに関する通知</string>
+    <string name="notification_channel_patcher_description">バックグラウンドで Oru がアプリにパッチを適用しているときに表示されます</string>
+    <string name="notification_mount_replaced_text">パッチ適用済みの v%2$s が v%1$s に置き換えられました。Oru を起動して復元してください</string>
+    <string name="notification_permission_dialog_description">バックグラウンドで更新が利用可能になった際に通知するには、Oru に通知権限を許可する必要があります</string>
+    <string name="onboarding_settings_desc">Oru の外観や詳細設定、システムツールをカスタマイズできます</string>
+    <string name="patcher_incompatible_patcher_description">ソース &lt;b&gt;%1$s&lt;/b&gt; にはパッチャー &lt;b&gt;%2$s&lt;/b&gt; 以降が必要です。これを使用するには Oru を更新してください</string>
+    <string name="patcher_installed_conflict_body">"Oru は、元のアプリとは異なる独自の証明書でパッチ済みアプリに署名します。Android の仕様上、パッチ済みアプリをインストールする前に既存のアプリをアンインストールする必要があります。
+
+アンインストールすると、アプリのデータは完全に消去されます"</string>
+    <string name="patcher_storage_permission_description_api30">一部のパッチオプションが、Oru が読み取れないパスを参照しています。ストレージへのアクセス権限を許可してボタンをタップすると、パッチ処理が自動的に開始されます</string>
+    <string name="patcher_storage_permission_hint">ヒント: ファイルを /Android/data/app.oru.manager/files/ に移動すれば、追加の権限は必要ありません</string>
+    <string name="root_mount_module_unmount_warning">KernelSU で「モジュールをアンマウント」がデフォルトで有効になっている場合は、KernelSU &gt; スーパーユーザー &gt; マウントしたアプリ &gt; プロファイル &gt; カスタムから「モジュールをアンマウント」を無効にしてください。無効にしないと、Oru でマウント済みと表示されても、パッチ適用済み APK が反映されない場合があります</string>
+    <string name="settings_advanced_expert_mode_description">Oru の高度なパッチ設定とカスタマイズ オプションを有効にします</string>
+    <string name="settings_advanced_github_pat_export_include_supporting">この PAT をエクスポートした Oru の設定に追加します</string>
+    <string name="settings_advanced_patch_options_custom_branding_custom_icon_instruction">"カスタム アイコンとして使用する画像のフォルダーです。
+
+フォルダーには、デバイスの DPI に応じて、以下のフォルダーのいずれか、または複数を含める必要があります。
+- mipmap-mdpi
+- mipmap-hdpi
+- mipmap-xhdpi
+- mipmap-xxhdpi
+- mipmap-xxxhdpi
+
+各フォルダーには、以下のファイルすべてを含める必要があります。
+morphe_adaptive_background_custom.png
+morphe_adaptive_foreground_custom.png
+
+画像の寸法は以下のとおりです。
+- mipmap-mdpi: 108x108 ピクセル
+- mipmap-hdpi: 162x162 ピクセル
+- mipmap-xhdpi: 216x216 ピクセル
+- mipmap-xxhdpi: 324x324 ピクセル
+- mipmap-xxxhdpi: 432x432 ピクセル
+
+必要に応じて、モノクロ アイコン ファイルを含む「drawable」フォルダーを含めることができます。
+morphe_adaptive_monochrome_custom.xml
+
+必要に応じて、以下のいずれかの形式の通知アイコンを含めることができます。
+- 「drawable」フォルダー内に XML ベクター画像
+  morphe_notification_icon_custom.xml
+- 「drawable-dpi」フォルダー内に PNG ラスター画像
+  drawable-mdpi/morphe_notification_icon_custom.png (24x24 ピクセル)
+  drawable-hdpi/morphe_notification_icon_custom.png (36x36 ピクセル)
+  drawable-xhdpi/morphe_notification_icon_custom.png (48x48 ピクセル)
+  drawable-xxhdpi/morphe_notification_icon_custom.png (72x72 ピクセル)
+  drawable-xxxhdpi/morphe_notification_icon_custom.png (96x96 ピクセル)"</string>
+    <string name="settings_advanced_patch_options_custom_header_instruction">"カスタム ヘッダー ロゴとして使用する画像を含むフォルダーです。
+
+このフォルダーには、デバイスの DPI に応じて、以下のフォルダーのうち 1 つ以上を含める必要があります。
+- drawable-hdpi
+- drawable-xhdpi
+- drawable-xxhdpi
+- drawable-xxxhdpi
+
+各フォルダーには、以下のすべてのファイルが含まれている必要があります。
+morphe_header_custom_light.png
+morphe_header_custom_dark.png
+
+画像のサイズは、以下の通りである必要があります。
+- drawable-hdpi: 194x72 ピクセル
+- drawable-xhdpi: 258x96 ピクセル
+- drawable-xxhdpi: 387x144 ピクセル
+- drawable-xxxhdpi: 512x192 ピクセル"</string>
+    <string name="settings_advanced_updates_allow_metered_description">モバイルデータ通信での Oru およびパッチの更新のダウンロードを許可します</string>
+    <string name="settings_advanced_updates_manager_prereleases_description">新しいバージョンの Oru をいち早く試すことができます</string>
+    <string name="settings_advanced_updates_prerelease_warning_message">"Oruのプレリリース版は開発中のため、不安定な場合があります。
+
+パッチには影響しません。プレリリース版のパッチを有効にするには、パッチソース一覧から各自有効にしてください"</string>
+    <string name="settings_appearance_app_icon_selector_description">ホーム画面やアプリドロワーでの Oru の見た目です</string>
+    <string name="settings_auto_uninstall_warning_message">Shizuku での自動インストール時に Android から署名の競合が報告された場合、Oru は既存のアプリを削除してからパッチ適用済み APK をインストールします</string>
+    <string name="settings_system_about">Oru について</string>
+    <string name="settings_system_apk_download_helper_warning">この APK はヘルパーアプリから提供されたものです。Oru では、パッチ適用前にすべてのファイルのパッケージ名、バージョン、署名を確認していますが、それでも信頼できるアプリのみ使用してください</string>
+    <string name="settings_system_custom_file_picker_description">システム標準の代わりに、Oru の内蔵ファイルピッカーを使用してストレージを閲覧します</string>
+    <string name="settings_system_export_manager_settings_fail">Oru の設定のエクスポートに失敗しました: %s</string>
+    <string name="settings_system_export_manager_settings_success">Oru の設定をエクスポートしました</string>
+    <string name="settings_system_import_manager_settings_description">Oru の設定をバックアップおよび復元します</string>
+    <string name="settings_system_import_manager_settings_fail">Oru の設定のインポートに失敗しました: %s</string>
+    <string name="settings_system_import_manager_settings_mode_title">Oru の設定をインポート</string>
+    <string name="settings_system_import_manager_settings_success">Oru の設定をインポートしました</string>
+    <string name="settings_system_morphe_settings">Oru の設定</string>
+    <string name="settings_system_process_runtime_heap_limit_ignored">前回、このデバイスではメモリ制限が無視されたため、パッチ処理は Oru 内で実行される場合があります</string>
+    <string name="settings_system_signing_key_dialog_description">Oru でパッチを適用したアプリは、すべてこのキーで署名されます。必ずバックアップしてください。このキーがないと、パッチ適用済みアプリを更新するにはアンインストールする必要があります
+</string>
+    <string name="settings_system_signing_key_missing">最初のパッチ適用時に Oru が作成します</string>
+    <string name="settings_system_storage_open_app_info_description">システム設定から Oru のデータを管理または消去します</string>
+    <string name="sources_dialog_community_notice_message">"コミュニティのパッチソースは、それぞれの作者によって作成・管理されています。Oru は、サードパーティー製のパッチの内容を審査・検証しておらず、その内容や、お使いのデバイスに及ぼす影響について一切の責任を負いません。
+
+このウェブサイトから追加したものは、すべて自己責任で使用してください"</string>
+    <string name="sources_management_held_back_hint">このソースの読み込み中に Oru がクラッシュしたため、スキップします。もう一度試すには、ソースを更新または再インポートしてください</string>
+    <string name="sources_management_outdated_manager_badge">Oru を更新</string>
+    <string name="sources_management_outdated_manager_hint">このソースはパッチャー %1$s 用に作成されていますが、Oru %2$s にはパッチャー %3$s が含まれています。Oru を更新して使用してください</string>
+    <string name="tour_prompt_desc">Oru の主な機能を簡単に見てみませんか？</string>
+    <string name="uninstall_app_unverified">変更されていません： Oru は、インストールされているアプリがパッチ適用済みのビルドであることを確認できませんでした
+</string>
+</resources>

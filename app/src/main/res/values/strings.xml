@@ -22,10 +22,6 @@
     <string name="deep_link_add_source_title">Add source</string>
     <string name="deep_link_add_source_message">Do you want to add this patch source to Morphe?</string>
     <string name="deep_link_add_source_warning">Only add sources you trust</string>
-    <!-- Shown under the app a link was opened for -->
-    <string name="deep_link_add_source_only_app">Only this app is added. You can add other apps from the source\'s app list</string>
-    <!-- Asked when the link names an app of a source that is already added -->
-    <string name="deep_link_add_source_app_back">This source is already added. Add this app from the existing source?</string>
 
     <!-- Home Screen - Update Notifications -->
     <string name="home_update_available">Morphe update available</string>
@@ -60,9 +56,6 @@
     <string name="home_app_filter_uninstalled_description">Apps patched with Morphe that are no longer on this device</string>
     <string name="home_app_filter_clones">Clones</string>
     <string name="home_app_filter_clones_description">Apps built under a package name of their own, installed alongside the original</string>
-    <string name="home_app_grouping_all_apps_description">One list with every app</string>
-    <string name="home_app_grouping_sources_description">Apps under the patch source that provides them</string>
-    <string name="home_app_grouping_custom_description">Apps in categories you create</string>
     <string name="home_app_sort_manual_description">Long-press an app, then tap reorder button</string>
     <string name="home_app_sort_recommended">Recommended order</string>
     <string name="home_app_sort_recommended_description">Installed and pinned apps first</string>
@@ -157,6 +150,7 @@
     <!-- Home Screen - Sources Management -->
     <string name="sources_management_title">Patch sources</string>
     <string name="sources_search">Search sources and patches</string>
+    <string name="sources_sort_title">Sort patch sources</string>
     <string name="sources_sort_manual">Manual order</string>
     <string name="sources_sort_manual_hint">Long-press a source to reorder</string>
     <string name="sources_sort_last_updated">Last updated</string>
@@ -168,17 +162,12 @@
     <string name="sources_management_report_issue">Report an issue</string>
     <string name="sources_management_failed_to_open_url">Failed to open URL</string>
     <string name="sources_apps">Apps</string>
-    <string name="sources_apps_description">Ticked apps come from this source. Tap an app to leave it out or bring it back. An app leaves the home screen once no source brings it, unless you have patched it</string>
+    <string name="sources_apps_description">Tap an app to leave it out of this source or bring it back, or long-press to pick several. An app leaves the home screen once no source brings it</string>
     <string name="sources_apps_brought">Brought by this source</string>
     <string name="sources_apps_left_out">Left out of this source</string>
+    <string name="sources_apps_leave_out">Leave out</string>
+    <string name="sources_apps_leave_out_done">Left out</string>
     <string name="sources_apps_bring_back">Bring back</string>
-    <!-- Under an app left out of a source that keeps its home screen card because the user has patched it -->
-    <string name="sources_apps_stays_patched">Kept as patched</string>
-    <!-- Marks an app (not a patch) the source started supporting since its app list was last opened -->
-    <string name="sources_apps_new">New</string>
-    <string name="sources_apps_new_apps">Bring new apps</string>
-    <!-- Under the Bring new apps switch in a source's app list, whichever way it is set. "It" is the patch source -->
-    <string name="sources_apps_new_apps_description">Apps it adds later show up on the home screen</string>
     <string name="sources_management_prerelease_toggle">Pre-release patches</string>
     <string name="sources_management_prerelease_toggle_description">Receives early access to new experimental patch versions</string>
     <string name="sources_prerelease_warning_title">Enable pre-release patches?</string>
@@ -224,6 +213,7 @@
     <string name="sources_dialog_url_invalid">URL must point to a GitHub/GitLab repo or .json file</string>
     <string name="sources_dialog_preinstalled">Pre-installed</string>
     <string name="sources_dialog_community">Community patches</string>
+    <string name="sources_dialog_choose_apps">Choose apps</string>
     <string name="sources_dialog_choose_apps_description">Pick which of its apps to keep once the source has loaded</string>
     <!-- Shown before leaving Morphe for the community patches website. The sources listed there are not reviewed by Morphe -->
     <string name="sources_dialog_community_notice_title">Third-party patch sources</string>
@@ -594,8 +584,6 @@ For the best results, this app recommends patching a &lt;b&gt;full APK&lt;/b&gt;
     <string name="patcher_field_value_kept">kept</string>
     <string name="patcher_patches_progress_format" translatable="false">%1$s / %2$s</string>
     <string name="patcher_percentage" translatable="false">%s%%</string>
-    <string name="patcher_tab_logs">Patcher logs</string>
-    <string name="patcher_tab_game">Games</string>
     <string name="patcher_logs_waiting">Waiting for log output…</string>
     <string name="patcher_logs_lost">Log output is not kept across app restarts</string>
     <string name="patcher_long_step_warning">This step may take a while. Please wait…</string>
@@ -625,7 +613,6 @@ Uninstalling will permanently erase all app data"</string>
     <string name="patcher_install_error_subtitle">Try uninstalling and installing again</string>
     <string name="patcher_ready_to_mount_subtitle">Press the button below to mount</string>
     <string name="patcher_patches_excluded_for_installer">Not available for this install method and excluded: %s</string>
-    <string name="patcher_back_to_game_hint">Tap %1$s to go back to your game</string>
     <string name="patcher_storage_permission_dialog_title">Cannot access storage path</string>
     <string name="patcher_incompatible_patcher_title">Update required</string>
     <string name="patcher_incompatible_patcher_description">The source &lt;b&gt;%1$s&lt;/b&gt; requires patcher &lt;b&gt;%2$s&lt;/b&gt; or newer. Update Morphe to use it</string>
@@ -732,48 +719,6 @@ Uninstalling will permanently erase all app data"</string>
     <string name="failed_to_mount">Failed to mount: %s</string>
     <string name="failed_to_unmount">Failed to unmount: %s</string>
 
-    <!-- Patcher Screen - Mini-games -->
-    <string name="mini_game_score">Score %s</string>
-    <string name="mini_game_best">Best %s</string>
-    <string name="mini_game_new_record">New record!</string>
-    <string name="mini_game_game_over">Game Over</string>
-    <string name="mini_game_try_again">Try Again</string>
-    <string name="mini_game_paused">Paused</string>
-    <string name="mini_game_resume">Continue</string>
-    <string name="mini_game_restart">Start over</string>
-    <string name="mini_game_change">Choose another game</string>
-
-    <string name="mini_game_2048" translatable="false">2048</string>
-    <string name="mini_game_2048_picker_subtitle">Slide tiles to merge</string>
-    <string name="mini_game_2048_win" translatable="false">2048!</string>
-
-    <string name="mini_game_flappy" translatable="false">Flappy</string>
-    <string name="mini_game_flappy_picker_subtitle">Tap to fly through pipes</string>
-    <string name="mini_game_flappy_tap_to_start">Tap to fly</string>
-
-    <string name="mini_game_snake" translatable="false">Snake</string>
-    <string name="mini_game_snake_picker_subtitle">Eat food, don\'t hit yourself</string>
-    <string name="mini_game_snake_swipe_to_start">Swipe to start</string>
-
-    <string name="mini_game_dino" translatable="false">Dino</string>
-    <string name="mini_game_dino_picker_subtitle">Tap to jump over cacti</string>
-    <string name="mini_game_dino_tap_to_start">Tap to run</string>
-
-    <string name="mini_game_blocks" translatable="false">Blocks</string>
-    <string name="mini_game_blocks_picker_subtitle">Fit the shapes, clear lines</string>
-    <string name="mini_game_blocks_tap_to_start">Tap to rotate, swipe to move, swipe down to drop</string>
-
-    <string name="mini_game_bricks" translatable="false">Bricks</string>
-    <string name="mini_game_bricks_picker_subtitle">Bounce the ball, clear the wall</string>
-    <string name="mini_game_bricks_tap_to_start">Drag to aim, tap to launch</string>
-
-    <string name="mini_game_miner" translatable="false">Miner</string>
-    <string name="mini_game_miner_picker_subtitle">Tap to open, hold to flag</string>
-    <string name="mini_game_miner_flags" translatable="false">%1$s/%2$s</string>
-
-    <string name="mini_game_pairs" translatable="false">Pairs</string>
-    <string name="mini_game_pairs_picker_subtitle">Flip cards, find the match</string>
-
     <!-- Settings -->
     <string name="appearance">Appearance</string>
     <string name="advanced">Advanced</string>
@@ -821,7 +766,7 @@ Uninstalling will permanently erase all app data"</string>
     <string name="settings_appearance_pure_black">Pure Black</string>
     <string name="settings_appearance_pure_black_description">Uses true black backgrounds</string>
     <string name="settings_appearance_color_accents">App and source colors</string>
-    <string name="settings_appearance_color_accents_description">Uses each app\'s and source\'s color instead of the accent</string>
+    <string name="settings_appearance_color_accents_description">Uses each app\'s and source\'s own color instead of the accent color</string>
     <string name="settings_appearance_outlines">Outlines</string>
     <string name="settings_appearance_outlines_description">Draws a thin edge around cards, panels and buttons</string>
 
@@ -844,11 +789,13 @@ Uninstalling will permanently erase all app data"</string>
     <!-- Settings - Appearance Tab - Home Screen Section -->
     <string name="settings_appearance_home_screen">Home screen</string>
     <string name="settings_appearance_greeting_phrases">Greeting phrases</string>
-    <string name="settings_appearance_greeting_phrases_subtitle">Shows a greeting message</string>
+    <string name="settings_appearance_greeting_phrases_subtitle">Show a greeting message on the home screen</string>
+    <string name="settings_appearance_app_grouping">App grouping</string>
+    <string name="settings_appearance_app_grouping_description">Show a switcher to group apps by source or category</string>
     <string name="settings_appearance_repatch_notice">Re-patch notice</string>
-    <string name="settings_appearance_repatch_notice_description">Shows a banner when patched apps can be re-patched</string>
+    <string name="settings_appearance_repatch_notice_description">Show a banner when patched apps can be re-patched</string>
     <string name="settings_appearance_sort_button">Sort and filter button</string>
-    <string name="settings_appearance_sort_button_description">Shows a button to sort and filter apps</string>
+    <string name="settings_appearance_sort_button_description">Show the sort and filter button on the home screen</string>
     <string name="settings_appearance_app_card_colors">App card colors</string>
     <string name="settings_appearance_app_card_colors_default">Default</string>
     <string name="settings_appearance_app_card_colors_default_description">Give each app the color of its own bundle</string>
@@ -907,7 +854,7 @@ Uninstalling will permanently erase all app data"</string>
 
 Patches are not affected: enable pre-release patches for each source in the patch sources list"</string>
     <string name="settings_advanced_updates_allow_metered">Mobile data updates</string>
-    <string name="settings_advanced_updates_allow_metered_description">Downloads Morphe and patch updates over mobile data</string>
+    <string name="settings_advanced_updates_allow_metered_description">Allows Morphe and patch updates to download over mobile data</string>
     <string name="settings_advanced_updates_background_notifications">Background update notifications</string>
     <string name="settings_advanced_updates_background_notifications_description">Periodically check for updates in the background and notify when available</string>
     <string name="settings_advanced_updates_background_notifications_description_fcm">Push notifications for new releases, even when the app is closed</string>
@@ -923,7 +870,7 @@ Patches are not affected: enable pre-release patches for each source in the patc
     <string name="settings_advanced_update_interval_battery_warning">Background checks may not work reliably on some devices. Manufacturers like Xiaomi, Huawei, Samsung, and OnePlus often aggressively restrict background processes to save battery</string>
 
     <string name="settings_advanced_external_batch_patch">Allow external triggers</string>
-    <string name="settings_advanced_external_batch_patch_description">Lets automation apps start batch patching</string>
+    <string name="settings_advanced_external_batch_patch_description">Lets automation apps start batch patching via an intent</string>
     <string name="external_batch_patch_title">Start batch patching?</string>
     <string name="external_batch_patch_description">%s wants Morphe to patch and install apps</string>
     <string name="external_batch_patch_trust_caller">Always allow this app</string>
@@ -949,11 +896,11 @@ Patches are not affected: enable pre-release patches for each source in the patc
     <!-- Settings - Advanced Tab - Expert settings Section -->
     <string name="settings_advanced_expert">Expert settings</string>
     <string name="settings_advanced_expert_mode">Expert mode</string>
-    <string name="settings_advanced_expert_mode_description">Unlocks advanced patching settings and patch options</string>
+    <string name="settings_advanced_expert_mode_description">Enables complex Morphe patching settings and customization options</string>
     <string name="settings_advanced_expert_mode_dialog_title">Enable Expert mode?</string>
     <string name="settings_advanced_expert_mode_dialog_message">Expert mode gives more control over how patches are applied, but misconfiguring settings in expert mode can result in a non-functional app</string>
     <string name="settings_advanced_strip_unused_libs">Optimize for device architecture</string>
-    <string name="settings_advanced_strip_unused_libs_description">Removes unused native libraries and APK splits</string>
+    <string name="settings_advanced_strip_unused_libs_description">Removes unused CPU architecture libs and split APK modules. The patched app then only runs on this device\'s CPU type</string>
 
     <!-- Settings - Advanced Tab - GitHub PAT Settings -->
     <string name="settings_advanced_github_pat" translatable="false">GitHub PAT</string>
@@ -1091,13 +1038,13 @@ The image dimensions must be as follows:
     <string name="installer_play_store_warning_risk">Play Store may offer updates for the patched app. Installing that update will overwrite the patched APK with the original version and remove the patches. If prompted to update, tap the three-dot menu on the app\'s Play Store page and choose \"Turn off updates\"</string>
     <string name="installer_play_store_warning_continue">I understand, continue</string>
     <string name="installer_play_store_mode">Install as Play Store</string>
-    <string name="installer_play_store_mode_description">Marks Google Play Store as the install source</string>
+    <string name="installer_play_store_mode_description">Record Google Play Store as the installation source for this install method</string>
     <string name="settings_prompt_installer_on_install">Installer selection prompt</string>
-    <string name="settings_prompt_installer_on_install_description">Asks which installer to use for every install</string>
+    <string name="settings_prompt_installer_on_install_description">Shows installer selection dialog each time a patched app is installed</string>
     <string name="settings_auto_install_with_shizuku">Auto-install after patching</string>
     <string name="settings_auto_install_with_shizuku_description">Installs the patched APK as soon as patching completes</string>
     <string name="settings_auto_uninstall_with_shizuku">Auto-uninstall on conflict</string>
-    <string name="settings_auto_uninstall_with_shizuku_description">Uninstalls the existing app on a signature conflict. This can remove app data</string>
+    <string name="settings_auto_uninstall_with_shizuku_description">When auto-installing with Shizuku, uninstall the existing app first if Android reports a signature conflict. This can remove app data</string>
     <string name="settings_auto_uninstall_warning_title">Enable auto-uninstall?</string>
     <string name="settings_auto_uninstall_warning_message">If Android reports a signature conflict during Shizuku auto-install, Morphe will uninstall the existing app before installing the patched APK</string>
     <string name="settings_auto_uninstall_warning_risk">This can remove app data. If the patched APK fails to install after uninstalling, the previous app may already be gone</string>
@@ -1136,14 +1083,14 @@ Details: %2$s"</string>
     <string name="settings_system_memory_limit_warning">A low memory limit may cause failures when patching larger apps</string>
     <string name="settings_system_memory_limit_high_warning">A high memory limit can make patching much slower on some devices. Raise it only if patching keeps failing at lower limits</string>
     <string name="settings_system_process_runtime_enabled_description">%s MB limit</string>
-    <string name="settings_system_process_runtime_disabled_description">Tap to configure</string>
+    <string name="settings_system_process_runtime_disabled_description">Click to configure</string>
     <string name="settings_system_process_runtime_description_not_available">This feature requires Android 11 or greater</string>
     <string name="settings_system_patcher_completion_sound">Completion sound</string>
     <string name="settings_system_patcher_completion_sound_description">Plays a distinct tone for success or failure when patching finishes</string>
 
     <!-- Settings - System Tab - Notifications Section -->
     <string name="settings_system_notifications">Notifications</string>
-    <string name="settings_system_notifications_description">Configures background alerts and completion sounds</string>
+    <string name="settings_system_notifications_description">Configure background alerts and completion sounds</string>
     <string name="settings_system_notifications_success_sound">Success sound</string>
     <string name="settings_system_notifications_error_sound">Failure sound</string>
     <string name="settings_system_notifications_sound_default">Default</string>
@@ -1156,7 +1103,7 @@ Details: %2$s"</string>
     <!-- Settings - System Tab - Import and Export Section -->
     <string name="settings_system_import_export">Import &amp; export</string>
     <string name="settings_system_signing_key">Signing key</string>
-    <string name="settings_system_signing_key_description">Backs up or restores the key that signs patched apps</string>
+    <string name="settings_system_signing_key_description">Backs up and restores the key your patched apps are signed with</string>
     <string name="settings_system_signing_key_dialog_description">Every app Morphe patches is signed with this key. Keep a copy: without it, patched apps can only be updated after uninstalling them</string>
     <string name="settings_system_signing_key_missing">Morphe creates one with your first patch</string>
     <string name="settings_system_signing_key_created">Created %s</string>
@@ -1215,7 +1162,7 @@ Details: %2$s"</string>
 
     <!-- Settings - System Tab - Storage Management screen -->
     <string name="settings_system_storage_management_title">Storage management</string>
-    <string name="settings_system_storage_management_description">Shows disk usage and clears cached files</string>
+    <string name="settings_system_storage_management_description">Review disk usage and clear cached files</string>
     <string name="settings_system_storage_keystore_title">Signing keystore</string>
     <string name="settings_system_storage_app_data_title">App data</string>
     <string name="settings_system_storage_patch_bundles_title">Patch bundles</string>
@@ -1288,7 +1235,7 @@ Details: %2$s"</string>
 
     <!-- Settings - System Tab - Custom file picker -->
     <string name="settings_system_custom_file_picker">Custom file picker</string>
-    <string name="settings_system_custom_file_picker_description">Uses Morphe\'s built-in file picker instead of the system one</string>
+    <string name="settings_system_custom_file_picker_description">Browse storage with Morphe\'s built-in file picker instead of the system default</string>
 
     <!-- Settings - System Tab - APK download helper -->
     <string name="settings_system_apk_download_helper">APK download helper</string>
@@ -1316,6 +1263,7 @@ Details: %2$s"</string>
     <!-- Settings - System Tab - About Section -->
     <string name="settings_system_about">About</string>
     <string name="settings_system_manager_description">An open-source project for modern, streamlined patching of popular Android apps, driven by community feedback and contributions</string>
+    <string name="oru_about_independent">This build is an independent project and is not endorsed by Google, YouTube, Reddit, APKMirror or any app developer.</string>
     <string name="credits">Credits</string>
     <string name="credits_current_development">Current development</string>
     <string name="credits_prior_development">Prior development</string>
@@ -1345,7 +1293,6 @@ Details: %2$s"</string>
     <string name="no">No</string>
     <string name="all">All</string>
     <string name="filter">Filter</string>
-    <string name="group">Group</string>
     <string name="reset">Reset</string>
     <string name="reset_all">Reset All</string>
     <string name="apply">Apply</string>
@@ -1413,10 +1360,6 @@ Details: %2$s"</string>
     <string name="available">Available</string>
     <string name="continue_">Continue</string>
     <string name="version">Version</string>
-    <!-- Who made a patch source, as a field label -->
-    <string name="author">Author</string>
-    <!-- A file a patch source is added from, as a field label -->
-    <string name="file">File</string>
     <string name="clone">Clone</string>
     <!-- Button that starts patching the selected app. A verb, as in "patch this app" -->
     <string name="patch">Patch</string>

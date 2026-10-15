@@ -158,12 +158,6 @@
         <item quantity="few">%s modificări</item>
         <item quantity="other">%s de modificări</item>
     </plurals>
-    <!-- Value of the Apps row on a source card when apps were left out on arrival, for example "3/232 · 2 new". %1$s is the app count, %2$d the new apps -->
-    <plurals name="sources_apps_count_with_new">
-        <item quantity="one">%1$s · %2$d nouă</item>
-        <item quantity="few">%1$s · %2$d noi</item>
-        <item quantity="other">%1$s · %2$d de noi</item>
-    </plurals>
     <plurals name="changelog_new_releases">
         <item quantity="one">%s versiune nouă</item>
         <item quantity="few">%s versiuni noi</item>

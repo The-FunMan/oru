@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="adaptive_icon_guide_png_body">Az átlátszó hátterű logó a legjobb, a háttérszínt pedig alul választhatja ki. Az átlátszóság nélküli kép ehelyett kitölti a teljes ikont, és a témázott és az értesítési ikonok ekkor a Oru logót tartják meg.</string>
+    <string name="adaptive_icon_no_transparency_warning">Ezen a képen nincsenek átlátszó pixelek, ezért a témázott és az értesítési ikonok a Oru logót tartják meg</string>
+    <string name="battery_optimization_dialog_description">Bizonyos eszközök leállíthatják a javítót, ha az alkalmazás minimalizálva van. Engedélyezze a Oru akadálytalan futását akkumulátor-korlátozások nélkül, hogy a javítás megbízhatóan befejeződjön.</string>
+    <string name="deep_link_add_source_message">Hozzáadod ezt a módosításforrást a Oru-hez?</string>
+    <string name="external_batch_patch_description">A(z) %s alkalmazás javításokat és telepítéseket szeretne végrehajtani a Oru-val</string>
+    <string name="home_apk_helper_description">A Oru megkéri az alábbi segédalkalmazást, hogy töltse le az eredeti APK-t, és adja vissza a fájlt.</string>
+    <string name="home_apk_helper_installed_unavailable">A Oru nem tudta használni a telepített alkalmazást.</string>
+    <string name="home_apk_helper_warning">Csak akkor folytasd, ha megbízol ebben a segédalkalmazásban. A Oru ellenőrzi a csomagot, a verziót és az aláírást a kapott fájlnak, mielőtt bármit is javítanál.</string>
+    <string name="home_apk_helper_warning_unverified">Csak akkor folytasd, ha megbízol ebben a segédalkalmazásban. A Oru nem tudja ellenőrizni ennek az APK-nak az aláírását, így egy módosított fájl nem lenne felismerhető.</string>
+    <string name="home_app_filter_not_patched_description">A Oru-ban még nem módosított alkalmazások</string>
+    <string name="home_app_filter_patched_description">A Oru-val módosított vagy mentett alkalmazások</string>
+    <string name="home_app_filter_uninstalled_description">A Oru-val módosított, az eszközről már eltávolított alkalmazások</string>
+    <string name="home_app_info_install_unverified">A Oru nem tudja megerősíteni, hogy a telepített alkalmazás az a build, amelyet módosított. Módosítsa újra, vagy telepítse újra a mentett APK-ból a műveleteinek visszaállításához.</string>
+    <string name="home_app_info_not_patched_description">Az alkalmazás nem javított verziója van telepítve. A Oru még mindig tartalmazza a korábbi javítási rekordját.</string>
+    <string name="home_download_instructions_download_button_toast_6">Mostantól hivatalos Oru gomb tesztelő lettél 🏅</string>
+    <string name="home_download_instructions_step2_search_note">A Oru nem tud jótállni ezekért a weboldalakért. Hagyd ki azokat, amelyek APK-fájl helyett saját alkalmazásboltot kínálnak</string>
+    <string name="home_download_instructions_step4">A letöltés után térj vissza a Oru alkalmazásba</string>
+    <string name="home_download_instructions_step4_mount">Az eredeti APK telepítése után térj vissza Oru alkalmazásba</string>
+    <string name="home_held_back_title">A Oru egy módosításforrás miatt összeomlott</string>
+    <string name="home_outdated_manager_title">A Oru verziója elavult</string>
+    <string name="home_update_available">Oru frissítés elérhető</string>
+    <string name="installer_shizuku_error_permission">Hiányzik a Shizuku engedély. Adjon engedélyt a Oru számára, és próbálja meg újra.</string>
+    <string name="installer_status_shizuku_permission">Adj engedélyt a Oru számára a Shizuku alkalmazásból</string>
+    <string name="installing_manager_update_hint">A Oru bezárul, hogy befejezze a frissítést</string>
+    <string name="launch_app_unverified">A Oru nem tudta ellenőrizni, hogy a telepített alkalmazás az a build, amelyet javított</string>
+    <string name="notification_bundle_update_text_unversioned">Koppints a Oru megnyitásához és a frissítéshez</string>
+    <string name="notification_channel_manager_updates">Oru-frissítések</string>
+    <string name="notification_channel_manager_updates_description">Értesítések az új Oru-kiadásokról</string>
+    <string name="notification_channel_patcher_description">Akkor jelenik meg, amikor a Oru a háttérben módosít egy alkalmazást</string>
+    <string name="notification_mount_replaced_text">v%1$s lecserélte a javított v%2$s verziót. Nyissa meg a Oru alkalmazást a visszaállításhoz</string>
+    <string name="notification_permission_dialog_description">​A Oru-nek értesítési engedélyre van szüksége, hogy jelezni tudja, ha a háttérben frissítés válik elérhetővé</string>
+    <string name="onboarding_settings_desc">A Oru testreszabása: megjelenés, haladó beállítások és rendszereszközök</string>
+    <string name="patcher_incompatible_patcher_description">A &lt;b&gt;%1$s&lt;/b&gt; forrás a &lt;b&gt;%2$s&lt;/b&gt; vagy újabb patchert igényel. A használatához frissítse a Oru-ot</string>
+    <string name="patcher_installed_conflict_body">"A Oru saját tanúsítvánnyal írja alá a javított alkalmazásokat, ami eltér az eredetitől. Az Androidnak el kell távolítani a meglévő verziót, mielőtt a javított alkalmazást telepíteni lehet.
+
+Az eltávolítás véglegesen törli az alkalmazás összes adatát."</string>
+    <string name="patcher_storage_permission_description_api30">Egy vagy több módosítási opció olyan elérési útra mutat, amelyeket a Oru nem tud olvasni. Add meg a tárhely hozzáférést, majd koppints a gombra, és a módosítás automatikusan elindul</string>
+    <string name="patcher_storage_permission_hint">Tipp: Mozgasd át a fájlokat az /Android/data/app.oru.manager/files/ könyvtárba - nincs szükség extra engedélyekre</string>
+    <string name="root_mount_module_unmount_warning">Ha a KernelSU alapértelmezés szerint engedélyezi a leválasztó modulokat, nyissa meg a KernelSU-t &gt; Szuperfelhasználó &gt; azt az alkalmazást, amelyet rögzített &gt; Profil &gt; Egyéni és tiltsa le a leválasztó modulokat. Ellenkező esetben a rögzített APK nem lép életbe, még akkor sem, ha a Oru rögzítettként mutatja.</string>
+    <string name="settings_advanced_expert_mode_description">Engedélyezi a Oru komplex módosítási beállításait és a testreszabási lehetőségeket.</string>
+    <string name="settings_advanced_github_pat_export_include_supporting">Hozzáadja a PAT-ot a Oru exportált beállításaihoz</string>
+    <string name="settings_advanced_patch_options_custom_branding_custom_icon_instruction">"Képek mappája, amelyek egyedi ikonként használhatók.
+
+A mappa egy vagy több alkönyvet tartalmaznia kell a készülék PPI-jétől függően:
+- mipmap-mdpi
+- mipmap-hdpi
+- mipmap-xhdpi
+- mipmap-xxhdpi
+- mipmap-xxxhdpi
+
+Az egyes mappáknak tartalmaznia kell az alábbi fájlokat:
+morphe_adaptive_background_custom.png
+morphe_adaptive_foreground_custom.png
+
+A képek mérete a következőnek kell lennie:
+- mipmap-mdpi: 108x108 px
+- mipmap-hdpi: 162x162 px
+- mipmap-xhdpi: 216x216 px
+- mipmap-xxhdpi: 324x324 px
+- mipmap-xxxhdpi: 432x432 px
+
+Opcionálisan, a mappa tartalmazhat egy 'drawable' mappát, amely egy monokrom ikon fájlját tartalmazza:
+morphe_adaptive_monochrome_custom.xml
+
+Opcionálisan, a mappa tartalmazhat egy értesítési ikont az alábbi formátumok egyikében:
+- XML vektoros rajz a 'drawable' mappában:
+  morphe_notification_icon_custom.xml
+- PNG raster képeket a 'drawable-dpi' mappákban:
+  drawable-mdpi/morphe_notification_icon_custom.png (24x24 px)
+  drawable-hdpi/morphe_notification_icon_custom.png (36x36 px)
+  drawable-xhdpi/morphe_notification_icon_custom.png (48x48 px)
+  drawable-xxhdpi/morphe_notification_icon_custom.png (72x72 px)
+  drawable-xxxhdpi/morphe_notification_icon_custom.png (96x96 px)"</string>
+    <string name="settings_advanced_patch_options_custom_header_instruction">"Mappa, mely tartalmazza az egyedi fejléclogó használata céljából szükséges képeket.
+
+A mappa tartalmazhat egy vagy több könyvtárat a DPI alapján:
+- drawable-hdpi
+- drawable-xhdpi
+- drawable-xxhdpi
+- drawable-xxxhdpi
+
+Minden mappának tartalmaznia kell az alábbi fájlokat:
+morphe_header_custom_light.png
+morphe_header_custom_dark.png
+
+A képek méreteinek a következőknek kell lennie:
+- drawable-hdpi: 194x72 px
+- drawable-xhdpi: 258x96 px
+- drawable-xxhdpi: 387x144 px
+- drawable-xxxhdpi: 512x192 px"</string>
+    <string name="settings_advanced_updates_allow_metered_description">A Oru és a módosítások frissítéseinek letöltése mobiladattal.</string>
+    <string name="settings_advanced_updates_manager_prereleases_description">Korai hozzáférés az új Oru verziókhoz</string>
+    <string name="settings_advanced_updates_prerelease_warning_message">"Pre-release versions of Oru are still in development and can be unstable.
+
+Patches are not affected: enable pre-release patches for each source in the patch sources list"</string>
+    <string name="settings_appearance_app_icon_selector_description">Hogyan néz ki a Oru a kezdőképernyőn és az alkalmazásfiókban</string>
+    <string name="settings_auto_uninstall_warning_message">Ha az Android aláírási konfliktát jelent a Shizuku automatikus telepítése során, a Oru eltávolítja a meglévő alkalmazást, mielőtt telepítené a javított APK-t.</string>
+    <string name="settings_system_apk_download_helper_warning">Az APK a segédalkalmazásból származik, ezért csak olyan alkalmazásokban bízzon meg, amelyeket ismer. A Oru a módosítás előtt továbbra is ellenőrzi minden fájl csomagját, verzióját és aláírását.</string>
+    <string name="settings_system_custom_file_picker_description">A Oru beépített fájlválasztóját használja a rendszer alapértelmezett helyett.</string>
+    <string name="settings_system_export_manager_settings_fail">Hiba történt a Oru beállításainak exportálásakor: %s</string>
+    <string name="settings_system_export_manager_settings_success">Oru beállítások exportálva</string>
+    <string name="settings_system_import_manager_settings_description">A Oru beállításainak biztonsági mentése és visszaállítása.</string>
+    <string name="settings_system_import_manager_settings_fail">Hiba történt a Oru beállításainak importálásakor: %s</string>
+    <string name="settings_system_import_manager_settings_mode_title">Oru beállítások importálása</string>
+    <string name="settings_system_import_manager_settings_success">Oru beállítások importálva</string>
+    <string name="settings_system_morphe_settings">Oru beállítások</string>
+    <string name="settings_system_process_runtime_heap_limit_ignored">Ez az eszköz az utolsó futtatáskor figyelmen kívül hagyta a memóriakorlátot, ezért a javítás visszaeshet a Oru-ban való futásra.</string>
+    <string name="settings_system_signing_key_dialog_description">A Oru minden általa javított alkalmazást ezzel a kulccsal ír alá. Tarts meg egy másolatot: enélkül a javított alkalmazások csak eltávolítás után frissíthetők.</string>
+    <string name="settings_system_signing_key_missing">A Oru az első javításnál létrehoz egyet.</string>
+    <string name="settings_system_storage_open_app_info_description">Oru adatok kezelése vagy törlése a rendszerbeállításokon keresztül</string>
+    <string name="sources_dialog_community_notice_message">"A közösségi javításforrásokat saját szerzőik készítik és tartják karban. A Oru nem vizsgálja felül és nem ellenőrzi a harmadik féltől származó javításokat, és nem felelős azok tartalmáért vagy azért, amit az eszközén tesznek.
+
+Bármit is ad hozzá erről a weboldalról, azt saját felelősségére teszi."</string>
+    <string name="sources_management_held_back_hint">Ez a forrás a betöltése közben okozott összeomlást a Oru alkalmazásban, ezért kihagyásra kerül. Frissítse vagy importálja újra, hogy újra megpróbálhassa</string>
+    <string name="sources_management_outdated_manager_badge">Oru frissítése</string>
+    <string name="sources_management_outdated_manager_hint">Ez a forrás a %1$s javítóprogramhoz készült, de a Oru %2$s a %3$s javítóprogramot tartalmazza. Frissítse a Oru-t a használatához.</string>
+    <string name="tour_prompt_desc">Szeretnél egy rövid bemutatót a Oru fő funkcióiról?</string>
+    <string name="uninstall_app_unverified">A helyén hagyva: a Oru nem tudta ellenőrizni, hogy a telepített alkalmazás az a build, amelyet javított</string>
+</resources>

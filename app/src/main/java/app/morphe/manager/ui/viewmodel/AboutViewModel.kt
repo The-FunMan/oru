@@ -11,6 +11,7 @@ import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material.icons.outlined.Translate
 import androidx.lifecycle.ViewModel
+import app.morphe.manager.BuildConfig
 import app.morphe.manager.util.MORPHE_WEBSITE_URL
 import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Brands
@@ -25,29 +26,47 @@ data class SocialLink(
 
 class AboutViewModel : ViewModel() {
     companion object {
-        val socials: List<SocialLink> = listOf(
-            SocialLink(
-                name = "Website",
-                url = MORPHE_WEBSITE_URL,
-                preferred = true
-            ),
-            SocialLink(
-                name = "Changelog",
-                url = "$MORPHE_WEBSITE_URL/changelog"
-            ),
-            SocialLink(
-                name = "GitHub",
-                url = "https://github.com/MorpheApp"
-            ),
-            SocialLink(
-                name = "Reddit",
-                url = "https://reddit.com/r/MorpheApp"
-            ),
-            SocialLink(
-                name = "Crowdin",
-                url = "$MORPHE_WEBSITE_URL/translate"
-            )
-        )
+        // ORU: the website, GitHub, Reddit and Crowdin entries are Morphe's own accounts and are
+        // left out of the oru flavour. The changelog link also points at Morphe's website and is left out.
+        val socials: List<SocialLink> = buildList {
+            if (!BuildConfig.ORU_UX) {
+                add(
+                    SocialLink(
+                        name = "Website",
+                        url = MORPHE_WEBSITE_URL,
+                        preferred = true
+                    )
+                )
+            }
+            if (!BuildConfig.ORU_UX) {
+                add(
+                    SocialLink(
+                        name = "Changelog",
+                        url = "$MORPHE_WEBSITE_URL/changelog"
+                    )
+                )
+            }
+            if (!BuildConfig.ORU_UX) {
+                add(
+                    SocialLink(
+                        name = "GitHub",
+                        url = "https://github.com/MorpheApp"
+                    )
+                )
+                add(
+                    SocialLink(
+                        name = "Reddit",
+                        url = "https://reddit.com/r/MorpheApp"
+                    )
+                )
+                add(
+                    SocialLink(
+                        name = "Crowdin",
+                        url = "$MORPHE_WEBSITE_URL/translate"
+                    )
+                )
+            }
+        }
 
         private val socialIcons = mapOf(
             "Website" to Icons.Outlined.Public,

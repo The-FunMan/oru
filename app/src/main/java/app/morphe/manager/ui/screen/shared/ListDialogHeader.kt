@@ -34,28 +34,28 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import app.morphe.manager.R
 import app.morphe.manager.ui.theme.ThemeTraitsDefaults
-import app.morphe.manager.ui.theme.headerTitle
 
 /** How a dialog heads itself, shared by the list dialogs and the app details so they read alike. */
 object DialogHeaderDefaults {
-    val IconSize = 48.dp
+    val IconSize = 44.dp
 
     /** Rounding that keeps an app icon's own shape at [IconSize]. */
-    val IconCornerRadius = 14.dp
+    val IconCornerRadius = 13.dp
     val IconSpacing = Defaults.ItemSpacing
     val TextSpacing = 2.dp
-    val VerticalPadding = Defaults.ItemSpacing
+    val VerticalPadding = Defaults.ContentPadding
 
     val titleStyle: TextStyle
-        @Composable get() = MaterialTheme.typography.headerTitle
+        @Composable get() = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
     val subtitleStyle: TextStyle
-        @Composable get() = MaterialTheme.typography.bodyMedium
+        @Composable get() = MaterialTheme.typography.bodySmall
 }
 
 /**

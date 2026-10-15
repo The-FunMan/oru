@@ -26,4 +26,7 @@ data class MorpheAsset (
     val pageUrl: String? = null,
     val description: String,
     val version: String,
+    /** Checksum list of the release, which a Oru download must match. Null where none is published. */
+    @SerialName("checksums_url")
+    val checksumsUrl: String? = null,
 )

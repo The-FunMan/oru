@@ -12,6 +12,7 @@ import android.os.SystemClock
 import android.util.Log
 import app.morphe.manager.util.PLAY_STORE_INSTALLER_PACKAGE
 import app.morphe.manager.util.PM
+import app.morphe.manager.util.sha256OrNull
 import com.topjohnwu.superuser.Shell
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
@@ -123,8 +124,6 @@ class RootInstaller(
                         "mount -o bind $patchedPath $stockPath; " +
                         mountInZygoteNamespacesCommand(patchedPath, stockPath) + "; " +
                         replaceOtherMountsCommand(patchedAPK, stockPath) + "; " +
-                        frameworkWatcherCommand(packageName, "watch") + "; " +
-                        moduleStatusCommand(packageName, "Mounted the patched APK in Morphe") + "; " +
                         "am force-stop ${packageName.shellQuote()}"
             ).assertSuccess("Failed to mount APK")
             _mountChanges.emit(packageName)
@@ -140,8 +139,6 @@ class RootInstaller(
             // Force-stop the app so it restarts clean without the unmounted patched APK.
             execute(
                 unmountBindCommands(stockPath) + "; " +
-                        frameworkWatcherCommand(packageName, "stop") + "; " +
-                        moduleStatusCommand(packageName, "Unmounted in Morphe until the next boot") + "; " +
                         "am force-stop ${packageName.shellQuote()}"
             ).assertSuccess("Failed to unmount APK")
             _mountChanges.emit(packageName)
@@ -154,9 +151,6 @@ class RootInstaller(
      * The module is staged beside the files it replaces and only switched in after [onStaged].
      * A process killed during the slow copies leaves the previous module in place, still
      * matching what was recorded about it.
-     *
-     * [stockAPK] is only installed when the matching stock app is missing. The stock copy the
-     * module mounts at boot always comes from the installed APK.
      */
     suspend fun install(
         patchedAPK: File,
@@ -177,6 +171,7 @@ class RootInstaller(
         removeOtherRootInstalls(packageName)
 
         var installedStockInfo = pm.getPackageInfo(packageName)
+        var stockSourceFile: File? = null
 
         stockAPK?.let { stockApp ->
             val stockInfo = pm.getPackageInfo(stockApp)
@@ -192,7 +187,9 @@ class RootInstaller(
 
             if (!stockAlreadyInstalled) {
                 onStage(MountStage.RESTORING_STOCK)
-                val result = installStockApp(stockApp, packageName)
+                // Only a stock build older than the installed one is a downgrade, which pm refuses without -d
+                val allowDowngrade = installedInfo?.let { pm.getVersionCode(it) > pm.getVersionCode(stockInfo) } == true
+                val result = installStockApp(stockApp, allowDowngrade)
                 val stockInstalled = waitForInstalledStock(packageName, stockInfo)
                 if (!stockInstalled) {
                     if (!result.isSuccess) throw StockAppInstallException(result.failureDetail())
@@ -201,15 +198,15 @@ class RootInstaller(
             }
 
             installedStockInfo = pm.getPackageInfo(packageName)
+            stockSourceFile = stockApp
         }
 
         onStage(MountStage.COPYING)
         val installedStockPath = installedStockInfo?.applicationInfo?.sourceDir
         val stockMountPaths = collectStockMountPaths(packageName, installedStockPath)
         val stockModuleApk = "$modulePath/$packageName-stock.apk"
-        // post-fs-data mounts this copy over the installed APK at boot, where one that differs fails
-        // PackageManager's certificate check and the app is removed
-        val stockModuleApkWritten = !installedStockPath.isNullOrBlank() && stockMountPaths.isNotEmpty()
+        val stockSourcePath = stockSourceFile?.absolutePath ?: installedStockPath
+        val stockModuleApkWritten = !stockSourcePath.isNullOrBlank() && stockMountPaths.isNotEmpty()
 
         val placeholders = mapOf(
             "__PKG_NAME__" to packageName,
@@ -234,7 +231,7 @@ class RootInstaller(
 
         val patchedModuleApk = "$modulePath/$packageName.apk"
         if (stockModuleApkWritten) {
-            stageCopy(installedStockPath, stockModuleApk, "Stock APK doesn't exist")
+            stageCopy(stockSourcePath, stockModuleApk, "Stock APK doesn't exist")
         }
         stageCopy(patchedAPK.absolutePath, patchedModuleApk, "File doesn't exist")
 
@@ -271,23 +268,6 @@ class RootInstaller(
     }
 
     /**
-     * Starts ("watch") or stops ("stop") the module's watcher for a framework restart, see service.sh,
-     * in init's mount namespace where the framework starts. An older module's script has no watcher
-     * and would mount the app all over again instead, so it is left alone.
-     */
-    private fun frameworkWatcherCommand(packageName: String, action: String): String {
-        val script = "$MODULES_PATH/${moduleId(packageName)}/service.sh".shellQuote()
-        return "if grep -q watch_framework_restarts $script; then " +
-                "(nsenter -t 1 -m -- sh $script $action </dev/null >/dev/null 2>&1 &); fi"
-    }
-
-    /** Sets the description root managers show for the module, so it does not read as mounted once unmounted. */
-    private fun moduleStatusCommand(packageName: String, status: String): String {
-        val prop = "$MODULES_PATH/${moduleId(packageName)}/module.prop".shellQuote()
-        return "sed -i ${"s|^description=.*|description=$status|".shellQuote()} $prop 2>/dev/null"
-    }
-
-    /**
      * Resolve the path of the patched APK stored in the Morphe module directory.
      */
     private suspend fun resolvePatchedApkPath(packageName: String): String {
@@ -318,25 +298,9 @@ class RootInstaller(
             .assertSuccess("Failed to put the module in place")
     }
 
-    private suspend fun installStockApp(stockApp: File, packageName: String): Shell.Result {
-        val tempPath = "/data/local/tmp/morphe-stock-$packageName.apk"
-        val tempPathQuoted = tempPath.shellQuote()
-
-        // The subshell keeps exit from closing the shared root shell, which would leave the
-        // commands queued after this one reading nothing back
-        return execute(
-            $$"""
-                (
-                    rm -f $$tempPathQuoted;
-                    cp $${stockApp.absolutePath.shellQuote()} $$tempPathQuoted &&
-                    chmod 644 $$tempPathQuoted &&
-                    pm install -r -d $$tempPathQuoted;
-                    result=$?;
-                    rm -f $$tempPathQuoted;
-                    exit $result
-                )
-            """.trimIndent()
-        )
+    private suspend fun installStockApp(stockApp: File, allowDowngrade: Boolean): Shell.Result {
+        val sha256 = stockApp.sha256OrNull() ?: throw StockAppInstallException("Failed to read the stock APK")
+        return execute(stockInstallCommand(stockApp.absolutePath, sha256, allowDowngrade))
     }
 
     private suspend fun waitForInstalledStock(packageName: String, stockInfo: PackageInfo): Boolean =
@@ -413,7 +377,8 @@ class RootInstaller(
                 grep -vF " "$${mountSource.shellQuote()}" "$$targetPath" " |
                 sed 's|/mountinfo:.*|/ns/mnt|' | sort -u | xargs stat -Lc '%i %n' 2>/dev/null |
                 grep -v "^$own_ns " | sort -u -k1,1 | cut -d/ -f3); do
-                $${liftLayersOfPidCommand(targetPath)};
+                while grep -qF " "$$targetPath" " "/proc/$pid/mountinfo" &&
+                    nsenter -t "$pid" -m -- umount -l $$targetPath 2>/dev/null; do :; done;
                 nsenter -t "$pid" -m -- mount -o bind $$sourcePath $$targetPath 2>/dev/null || true;
             done
         """.trimIndent()
@@ -448,26 +413,13 @@ class RootInstaller(
     private fun unmountBindCommands(targetPath: String) =
         $$"""
             for pid in $(pidof zygote64) $(pidof zygote) $${Process.myPid()}; do
-                $${liftLayersOfPidCommand(targetPath)};
+                while grep -qF " "$$targetPath" " "/proc/$pid/mountinfo" &&
+                    nsenter -t "$pid" -m -- umount -l $$targetPath 2>/dev/null; do :; done;
             done;
-            $${liftLayersCommand(targetPath, "/proc/self/mountinfo", "umount -l $targetPath")};
+            while grep -qF " "$$targetPath" " /proc/self/mountinfo &&
+                umount -l $$targetPath 2>/dev/null; do :; done;
             true
         """.trimIndent()
-
-    /**
-     * Runs [umount] while [mountTable] lists the quoted [targetPath], one layer per run. Bounded, as
-     * a root that hides mounts can report each umount as done and hold the shell there forever.
-     */
-    private fun liftLayersCommand(targetPath: String, mountTable: String, umount: String) =
-        "for _ in 1 2 3 4 5 6 7 8 9 10; do " +
-                "grep -qF \" \"$targetPath\" \" $mountTable && $umount 2>/dev/null || break; done"
-
-    /** [liftLayersCommand] in the namespace of the process the shell holds in `$pid`. */
-    private fun liftLayersOfPidCommand(targetPath: String) = liftLayersCommand(
-        targetPath,
-        mountTable = $$"\"/proc/$pid/mountinfo\"",
-        umount = $$"nsenter -t \"$pid\" -m -- umount -l $$targetPath"
-    )
 
     companion object {
         const val MODULES_PATH = "/data/adb/modules"
@@ -496,6 +448,32 @@ class RootInstaller(
         private fun String.shellQuote() = "'${replace("'", "'\"'\"'")}'"
 
         private fun staged(path: String) = "$path.tmp"
+
+        /**
+         * Installs the stock APK at [stockApp] as root. The copy goes into a directory made with
+         * `mkdir`, which fails rather than follow anything already there, and its name carries a
+         * random UUID, so no other process can plant a file or a symlink where root writes. The copy
+         * is hashed against [stockSha256] before `pm install` reads it. `-d` is passed only when
+         * [allowDowngrade] is set, because pm refuses an older version without it.
+         */
+        internal fun stockInstallCommand(stockApp: String, stockSha256: String, allowDowngrade: Boolean): String {
+            val downgrade = if (allowDowngrade) " -d" else ""
+            // The subshell keeps exit from closing the shared root shell, which would leave the
+            // commands queued after this one reading nothing back
+            return $$"""
+                (
+                    dir=/data/local/tmp/morphe-stock-$(cat /proc/sys/kernel/random/uuid) &&
+                    mkdir -m 700 "$dir" &&
+                    cp $${stockApp.shellQuote()} "$dir/stock.apk" &&
+                    chmod 644 "$dir/stock.apk" &&
+                    { [ "$(sha256sum "$dir/stock.apk" | cut -d' ' -f1)" = $${stockSha256.shellQuote()} ] || { echo 'Stock APK changed while it was staged' >&2; false; }; } &&
+                    pm install -r$$downgrade "$dir/stock.apk";
+                    result=$?;
+                    rm -rf "$dir";
+                    exit $result
+                )
+            """.trimIndent()
+        }
 
         private const val ROOT_CHECK_INTERVAL_MS = 1_000L
         private val STOCK_INSTALL_SETTLE_TIMEOUT = Duration.ofSeconds(30L)

@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="adaptive_icon_guide_png_body">Ang isang logo sa transparent na background ay pinakamahusay na gumagana, na ang kulay ng background ay pinili sa ibaba. Ang isang larawang walang transparency ay pumupuno sa buong icon sa halip, at pinapanatili ng mga icon na themed at notification ang logo ng Oru.</string>
+    <string name="adaptive_icon_no_transparency_warning">Ang larawang ito ay walang mga transparent na pixel, kaya pinapanatili ng mga icon na themed at notification ang logo ng Oru</string>
+    <string name="battery_optimization_dialog_description">Maaaring itigil ng ilang device ang patcher kapag na-minimize ang app. Payagan ang Oru na tumakbo nang walang mga paghihigpit sa baterya upang matiyak na kumpleto ang pag-patch nang maaasahan</string>
+    <string name="deep_link_add_source_message">Gusto mo bang idagdag ang patch source na ito sa Oru?</string>
+    <string name="external_batch_patch_description">%s ay gustong i-patch at i-install ang mga app ng Oru</string>
+    <string name="home_apk_helper_description">Hihingi ang Oru sa helper app sa ibaba na i-download ang orihinal na APK at ibalik ang file</string>
+    <string name="home_apk_helper_installed_unavailable">Hindi magamit ni Oru ang naka-install na app</string>
+    <string name="home_apk_helper_warning">Magpatuloy lamang kung pinagkakatiwalaan mo ang helper app na ito. Sinusuri ng Oru ang package, bersyon at lagda ng anumang matatanggap nito bago i-patch</string>
+    <string name="home_apk_helper_warning_unverified">Magpatuloy lamang kung pinagkakatiwalaan mo ang helper app na ito. Hindi maaaring i-verify ng Oru ang lagda ng APK na ito, kaya ang binagong file ay hindi matutukoy</string>
+    <string name="home_app_filter_not_patched_description">Mga app na hindi mo pa na-patch sa Oru</string>
+    <string name="home_app_filter_patched_description">Mga app na na-patch o na-save mo gamit ang Oru</string>
+    <string name="home_app_filter_uninstalled_description">Mga app na na-patch gamit ang Oru na wala na sa device na ito</string>
+    <string name="home_app_info_app_deleted_description">Binura ang aplikasyong ito sa labas ng Oru. Ire-patch ito upang maibalik ang kanyang punksyonalidad</string>
+    <string name="home_app_info_install_unverified">Hindi makumpirma ng Oru na ang naka-install na app ay ang build na na-patch nito. I-repatch o i-reinstall ito mula sa naka-save na APK upang maibalik ang mga aksyon nito.</string>
+    <string name="home_app_info_not_patched_description">Naka-install ang hindi na-patch na bersyon ng app na ito. Mayroon pa ring dating patch record ang Oru</string>
+    <string name="home_download_instructions_download_button_toast_6">Opisyal ka nang Oru button tester 🏅</string>
+    <string name="home_download_instructions_step2_search_note">Hindi magagarantiya ng Oru ang mga website na ito. Laktawan ang mga nag-aalok ng sarili nilang app store sa halip na APK file</string>
+    <string name="home_download_instructions_step4">Pagkatapos ang pag-download, bumalik sa Oru</string>
+    <string name="home_download_instructions_step4_mount">Pagkatapos ang pag-install ng orihinal na APK, bumalik sa Oru</string>
+    <string name="home_held_back_title">Nagpa-crash sa Oru ang isang patch source. </string>
+    <string name="home_outdated_manager_title">Luma na ang Oru</string>
+    <string name="home_update_available">May available na update para sa Oru</string>
+    <string name="installer_shizuku_error_permission">Nawawala ang pahintulot ng Shizuku. Ipagkaloob ang pahintulot sa Oru at subukang muli</string>
+    <string name="installer_status_shizuku_permission">Bigyan ng pahintulot ang Oru mula sa Shizuku app</string>
+    <string name="installing_manager_update_hint">Magsasara ang Oru upang matapos ang update</string>
+    <string name="launch_app_unverified">Hindi ma-verify ng Oru na ang naka-install na app ay ang build na ni-patch nito</string>
+    <string name="notification_bundle_update_text_unversioned">I-tap para buksan ang Oru at i-update</string>
+    <string name="notification_channel_manager_updates">Mga update sa Oru</string>
+    <string name="notification_channel_manager_updates_description">Mga notification tungkol sa mga bagong release ng Oru</string>
+    <string name="notification_channel_patcher_description">Ipinapakita habang ina-patch ng Oru ang isang app sa background</string>
+    <string name="notification_mount_replaced_text">Pinalitan ng v%1$s ang naka-patch na v%2$s. Buksan ang Oru upang maibalik ito</string>
+    <string name="notification_permission_dialog_description">Kailangan ng Oru ang pahintulot sa notipikasyon upang abisuhan ka kapag may mga update na magagamit sa background</string>
+    <string name="onboarding_settings_desc">I-customize ang Oru: hitsura, mga advanced na opsyon, at mga tool ng sistema</string>
+    <string name="patcher_incompatible_patcher_description">Ang source &lt;b&gt;%1$s&lt;/b&gt; ay nangangailangan ng patcher &lt;b&gt;%2$s&lt;/b&gt; o mas bago. I-update ang Oru upang magamit ito</string>
+    <string name="patcher_installed_conflict_body">"Nilalagdaan ng Oru ang mga patched app gamit ang sarili nitong sertipiko, na naiiba sa orihinal. Kinakailangan ng Android na alisin ang kasalukuyang bersyon bago mai-install ang patched app.
+
+Ang pag-uninstall ay permanenteng bubura sa lahat ng data ng app."</string>
+    <string name="patcher_storage_permission_description_api30">Isa o higit pang mga pagpipilian sa patch ay tumuturo sa mga landas na hindi mabasa ng Oru. Bigyan ng access sa imbakan at i-tap ang button at pagkatapos ay awtomatikong magsisimula ang pag-patch</string>
+    <string name="patcher_storage_permission_hint">Pahiwatig: Ilipat ang mga file sa /Android/data/app.oru.manager/files/ - hindi na kailangan ng karagdagang mga pahintulot</string>
+    <string name="root_mount_module_unmount_warning">Kung naka-enable bilang default ang mga Unmount module ng KernelSU, buksan ang KernelSU &gt; Superuser &gt; ang app na iyong minount &gt; Profile &gt; Custom at i-disable ang mga Unmount module. Kung hindi, maaaring hindi gumana ang minount na patched APK, kahit na ipakita ng Oru na nakaminount ito.</string>
+    <string name="settings_advanced_expert_mode_description">Pinapagana ang masalimuot na Oru patch settings at mga pasadyang pagpipilian</string>
+    <string name="settings_advanced_github_pat_export_include_supporting">Idinaragdag ang PAT na ito sa mga na-export na setting ng Oru</string>
+    <string name="settings_advanced_patch_options_custom_branding_custom_icon_instruction">"Folder na may mga larawan na gagamitin bilang isang custom na icon.
+
+Ang folder ay dapat maglaman ng isa o higit pa sa mga sumusunod na folder, depende sa DPI ng device:
+- mipmap-mdpi
+- mipmap-hdpi
+- mipmap-xhdpi
+- mipmap-xxhdpi
+- mipmap-xxxhdpi
+
+Ang bawat isa sa mga folder ay dapat maglaman ng lahat ng mga sumusunod na file:
+morphe_adaptive_background_custom.png
+morphe_adaptive_foreground_custom.png
+
+Ang mga dimensyon ng larawan ay dapat tulad ng sumusunod:
+- mipmap-mdpi: 108x108 px
+- mipmap-hdpi: 162x162 px
+- mipmap-xhdpi: 216x216 px
+- mipmap-xxhdpi: 324x324 px
+- mipmap-xxxhdpi: 432x432 px
+
+Opsyonal, ang path ay naglalaman ng isang 'drawable' folder na may monochrome icon file:
+morphe_adaptive_monochrome_custom.xml
+
+Opsyonal, ang path ay naglalaman ng isang notification icon sa isa sa mga sumusunod na format:
+- XML vector drawable sa 'drawable':
+  morphe_notification_icon_custom.xml
+- PNG raster images sa 'drawable-dpi' folders:
+  drawable-mdpi/morphe_notification_icon_custom.png (24x24 px)
+  drawable-hdpi/morphe_notification_icon_custom.png (36x36 px)
+  drawable-xhdpi/morphe_notification_icon_custom.png (48x48 px)
+  drawable-xxhdpi/morphe_notification_icon_custom.png (72x72 px)
+  drawable-xxxhdpi/morphe_notification_icon_custom.png (96x96 px)"</string>
+    <string name="settings_advanced_patch_options_custom_header_instruction">"Folder na may mga larawan na gagamitin bilang pasadyang tatak ng header.
+
+Kailangan ng isa o higit pang mga sumusunod na folder ang folder na ito, depende sa DPI ng device:
+- drawable-hdpi
+- drawable-xhdpi
+- drawable-xxhdpi
+- drawable-xxxhdpi
+
+Dapat naglalaman ng bawat folder ang lahat ng sumusunod na mga file:
+morphe_header_custom_light.png
+morphe_header_custom_dark.png
+
+Dapat ang mga sumusunod na sukat ng larawan ay:
+- drawable-hdpi: 194x72 px
+- drawable-xhdpi: 258x96 px
+- drawable-xxhdpi: 387x144 px
+- drawable-xxxhdpi: 512x192 px"</string>
+    <string name="settings_advanced_updates_allow_metered_description">Pinapayagan ang Oru at mga pag-update ng patch na mag-download sa pamamagitan ng mobile data</string>
+    <string name="settings_advanced_updates_manager_prereleases_description">Maagang pag-access sa mga bagong bersyon ng Oru</string>
+    <string name="settings_advanced_updates_prerelease_warning_message">"Ang mga bersyon ng Oru na pre-release ay nasa development pa at maaaring maging hindi matatag.
+
+Hindi maaapektuhan ang mga patch: paganahin ang mga patch na pre-release para sa bawat pinagmulan ng patch sa listahan ng mga pinagmulan ng patch"</string>
+    <string name="settings_appearance_app_icon_selector_description">Paano ang hitsura ng Oru sa iyong home screen at sa app drawer</string>
+    <string name="settings_auto_uninstall_warning_message">Kung mag-uulat ang Android ng salungatan sa lagda sa panahon ng Shizuku auto-install, ia-uninstall ng Oru ang kasalukuyang app bago i-install ang na-patch na APK</string>
+    <string name="settings_system_apk_download_helper_warning">Ang APK ay nagmumula sa helper app, kaya magtiwala ka lamang sa mga app na kilala mo. Sinusuri pa rin ng Oru ang package, bersyon, at lagda ng bawat file bago i-patch.</string>
+    <string name="settings_system_custom_file_picker_description">Gumamit ng file picker na binuo ng Oru sa halip na ang default ng sistema</string>
+    <string name="settings_system_export_manager_settings_fail">Nabigong ma-export ang mga setting ng Oru: %s</string>
+    <string name="settings_system_export_manager_settings_success">Na-export ang mga setting ng Oru</string>
+    <string name="settings_system_import_manager_settings_description">Ibinabalik at ibinubuhay ang iyong mga setting ng Oru</string>
+    <string name="settings_system_import_manager_settings_fail">Nabigong ma-import ang mga setting ng Oru: %s</string>
+    <string name="settings_system_import_manager_settings_mode_title">I-import ang mga setting ng Oru</string>
+    <string name="settings_system_import_manager_settings_success">Na-import ang mga setting ng Oru</string>
+    <string name="settings_system_morphe_settings">Mga setting ng Oru</string>
+    <string name="settings_system_process_runtime_heap_limit_ignored">Ang device na ito ay hindi pinansin ang limitasyon ng memorya sa huling pagtakbo, kaya ang pag-patch ay maaaring mag-fallback sa pagtakbo sa loob ng Oru.</string>
+    <string name="settings_system_signing_key_dialog_description">Ang bawat app na ina-patch ng Oru ay nilalagdaan gamit ang susi na ito. Magtago ng kopya: kung wala nito, ang mga na-patch na app ay maaari lamang i-update pagkatapos i-uninstall ang mga ito</string>
+    <string name="settings_system_signing_key_missing">Gumagawa ang Oru ng susi sa iyong unang pag-patch</string>
+    <string name="settings_system_storage_open_app_info_description">Pamahalaan o i-clear ang lahat ng data ng Oru sa pamamagitan ng mga setting ng system</string>
+    <string name="sources_dialog_community_notice_message">"Ang mga pinagmulan ng community patch ay ginawa at pinapanatili ng kanilang mga sariling may-akda. Hindi nire-review o bine-verify ng Oru ang mga third-party patches, at hindi ito responsable sa kanilang nilalaman o sa mga ginagawa nito sa iyong device.
+
+Anumang idagdag mo mula sa website na ito ay gagamitin sa iyong sariling panganib."</string>
+    <string name="sources_management_held_back_hint">Habang nilo-load ang source na ito, nag-crash ang Oru, kaya nilalaktawan ito. I-update o i-import ito muli upang subukan muli</string>
+    <string name="sources_management_outdated_manager_badge">I-update ang Oru</string>
+    <string name="sources_management_outdated_manager_hint">Ang mapagkukunang ito ay binuo para sa patcher %1$s, ngunit ang Oru %2$s ay may kasamang patcher %3$s. I-update ang Oru para gamitin ito</string>
+    <string name="tour_prompt_desc">Gusto mo bang mabilis na paglilibot sa mga pangunahing feature ng Oru?</string>
+    <string name="uninstall_app_unverified">Iniwan sa lugar: Hindi ma-verify ng Oru na ang naka-install na app ay ang build na ni-patch nito</string>
+</resources>

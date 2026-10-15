@@ -10,6 +10,7 @@
 
 package app.morphe.manager.domain.bundles
 
+import app.morphe.manager.BuildConfig
 import app.morphe.manager.domain.manager.PreferencesManager
 import app.morphe.manager.network.api.MorpheAPI
 import app.morphe.manager.network.dto.MorpheAsset
@@ -44,6 +45,12 @@ data class PatchBundleDownloadResult(
 )
 
 typealias PatchBundleDownloadProgress = (bytesRead: Long, bytesTotal: Long?) -> Unit
+
+/**
+ * Largest patch bundle accepted from a PR artifact. The biggest bundle measured locally is 11.5 MB,
+ * so 256 MiB leaves room for growth while bounding what a crafted artifact can write.
+ */
+private const val MAX_PR_BUNDLE_BYTES = 256L shl 20
 
 sealed class RemotePatchBundle(
     name: String,
@@ -163,9 +170,12 @@ sealed class RemotePatchBundle(
             ?: manifestPageUrl?.let { issuesUrlForRepoUrl(it) }
             ?: browsePageUrl
 
-    /** Add-source link for this source, see [addSourceLinkForEndpoint]. */
+    /**
+     * Add-source link for this source, see [addSourceLinkForEndpoint]. ORU: null in the oru
+     * flavour, so no share link to Morphe's website is built.
+     */
     open val addSourceLink: String?
-        get() = addSourceLinkForEndpoint(endpoint, name)
+        get() = if (BuildConfig.ORU_UX) null else addSourceLinkForEndpoint(endpoint, name)
 
     /**
      * Shared cache logic for [fetchChangelogEntries] and its overrides.
@@ -655,9 +665,10 @@ class GitHubPullRequestBundle(
                                 while (entry != null) {
                                     if (!entry.isDirectory && entry.name.endsWith(".mpp")) {
                                         extractedTotal = entry.size.takeIf { it > 0 }
+                                        val bundleEntry = BoundedInputStream(zis, MAX_PR_BUNDLE_BYTES)
 
                                         while (true) {
-                                            val read = zis.read(buffer)
+                                            val read = bundleEntry.read(buffer)
                                             if (read == -1) break
                                             patchOutput.write(buffer, 0, read)
                                             copiedBytes += read.toLong()
@@ -697,6 +708,9 @@ class GitHubPullRequestBundle(
                                 if (read <= 0) continue
                                 patchOutput.write(buffer, 0, read)
                                 copiedBytes += read.toLong()
+                                if (copiedBytes > MAX_PR_BUNDLE_BYTES) {
+                                    throw IOException("PR artifact is larger than $MAX_PR_BUNDLE_BYTES bytes")
+                                }
                                 val now = System.currentTimeMillis()
                                 // Report progress less frequently: every 256KB or 500ms
                                 if (copiedBytes - lastReportedBytes >= 256 * 1024 || now - lastReportedAt >= 500) {

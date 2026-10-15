@@ -223,7 +223,7 @@ internal object Merger {
             val path = resValue.valueAsString
             if (!path.isNullOrBlank()) {
                 zipEntryMap.remove(path)
-                Log.i(TAG, "Removed table entry $path")
+                Log.v(TAG, "Removed table entry $path")
             }
             resEntry.isNull = true
             val specTypePair: SpecTypePair = resEntry.typeBlock.parentSpecTypePair

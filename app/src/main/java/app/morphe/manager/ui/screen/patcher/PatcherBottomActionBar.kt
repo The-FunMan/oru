@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.outlined.InstallMobile
+import androidx.compose.material.icons.outlined.Save
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,6 +46,7 @@ fun PatcherBottomActionBar(
     // Visibility control
     showCancelButton: Boolean = true,
     showHomeButton: Boolean = true,
+    showSaveButton: Boolean = false,
     showCopyLogsButton: Boolean = false,
     showLogsButton: Boolean = false,
     resultButton: ResultButton? = null,
@@ -52,9 +54,13 @@ fun PatcherBottomActionBar(
     // Actions, needed only for the buttons shown
     onCancelClick: () -> Unit = {},
     onHomeClick: () -> Unit = {},
+    onSaveClick: () -> Unit = {},
     onCopyLogsClick: () -> Unit = {},
     onLogsClick: () -> Unit = {},
-    onResultClick: () -> Unit = {}
+    onResultClick: () -> Unit = {},
+
+    // State
+    isSaving: Boolean = false
 ) {
     // Tracks the brief "Copied!" feedback state on the copy button
     val copied = remember { mutableStateOf(false) }
@@ -69,7 +75,11 @@ fun PatcherBottomActionBar(
         else -> ""
     }
     val homeLabel = if (showHomeButton) stringResource(R.string.home) else ""
-    val trailingLabel = if (showCopyLogsButton) stringResource(android.R.string.copy) else ""
+    val trailingLabel = when {
+        showCopyLogsButton -> stringResource(android.R.string.copy)
+        showSaveButton -> stringResource(R.string.save)
+        else -> ""
+    }
     val labels = remember(leadingLabel, homeLabel, trailingLabel) {
         listOf(leadingLabel, homeLabel, trailingLabel).filter { it.isNotEmpty() }
     }
@@ -112,7 +122,7 @@ fun PatcherBottomActionBar(
             )
         }
 
-        // Right: Copy logs button
+        // Right: Save / Copy logs button
         if (showCopyLogsButton) {
             BottomActionButton(
                 onClick = {
@@ -128,6 +138,15 @@ fun PatcherBottomActionBar(
                 showLabel = showLabels,
                 // The tone alone reports the copy, so the label keeps a stable width
                 tone = if (copied.value) BottomActionTone.Highlight else BottomActionTone.Neutral
+            )
+        } else if (showSaveButton) {
+            BottomActionButton(
+                onClick = onSaveClick,
+                icon = Icons.Outlined.Save,
+                text = trailingLabel,
+                showLabel = showLabels,
+                enabled = !isSaving,
+                showProgress = isSaving
             )
         }
     }

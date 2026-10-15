@@ -35,6 +35,16 @@ const val MANAGER_PRERELEASE_JSON_URL = "https://raw.githubusercontent.com/Morph
 /** Controls whether manager updates are fetched directly from JSON files in the repository instead of using the GitHub API */
 const val USE_MANAGER_DIRECT_JSON = true
 
+/**
+ * The GitHub repository an Oru build updates itself from, as `owner/name`. Its releases carry the
+ * `oru-<version>.apk` asset and the `SHA256SUMS.txt` list that check it. Change this one constant
+ * when the repository moves.
+ */
+const val ORU_RELEASE_REPO = "The-FunMan/oru"
+
+/** Web page of [ORU_RELEASE_REPO], the base of its release pages. */
+const val ORU_REPO_URL = "https://github.com/$ORU_RELEASE_REPO"
+
 /** Controls whether patches are fetched directly from JSON files in the repository instead of using the Morphe API */
 const val USE_PATCHES_DIRECT_JSON = true
 

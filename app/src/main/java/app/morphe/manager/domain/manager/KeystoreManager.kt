@@ -26,11 +26,32 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import java.io.*
+import java.nio.file.AtomicMoveNotSupportedException
 import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.StandardCopyOption
 import java.security.KeyStore
 import java.security.UnrecoverableKeyException
 import java.security.cert.Certificate
 import java.security.cert.X509Certificate
+
+/**
+ * Replaces [target] with [data] through a temporary file beside it, so a write cut short never
+ * leaves a truncated keystore where the signing key lives.
+ */
+internal fun replaceFileAtomically(target: Path, data: ByteArray) {
+    val temp = Files.createTempFile(target.parent, target.fileName.toString(), ".tmp")
+    try {
+        Files.write(temp, data)
+        try {
+            Files.move(temp, target, StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING)
+        } catch (_: AtomicMoveNotSupportedException) {
+            Files.move(temp, target, StandardCopyOption.REPLACE_EXISTING)
+        }
+    } finally {
+        Files.deleteIfExists(temp)
+    }
+}
 
 /**
  * What tells one signing key from another at a glance.
@@ -84,10 +105,15 @@ class KeystoreManager(app: Application, private val prefs: PreferencesManager) {
      * Signs [apk] in place for this device, which never needs a v1 signature. Only ever handed
      * what the patcher just wrote, whose headers it already rewrites where the signer would reject them.
      */
-    suspend fun sign(apk: File) = withContext(Dispatchers.Default) {
-        signer()?.signApk(apk, apk, Build.VERSION.SDK_INT)
+    suspend fun sign(apk: File, onProgress: ((Float) -> Unit)? = null) = withContext(Dispatchers.Default) {
+        signer()?.signApk(apk, apk, Build.VERSION.SDK_INT, onProgress)
             // Creates the keystore on the first patch
-            ?: ApkUtils.signApk(apk, apk, prefs.keystoreAlias.get(), signingDetails(), Build.VERSION.SDK_INT)
+            ?: run {
+                // ORU: a keystore made here takes the oru alias and password, and is stored with them
+                // so later signing reads the same values. Only reached when no keystore file exists.
+                OruEndpoints.current.newKeystoreAlias?.let { updatePrefs(it, it, prefs.keystorePassword.get()) }
+                ApkUtils.signApk(apk, apk, prefs.keystoreAlias.get(), signingDetails(), Build.VERSION.SDK_INT, onProgress)
+            }
     }
 
     /** Starts loading the signing key, which takes BouncyCastle a while, so signing need not wait for it. */
@@ -121,13 +147,27 @@ class KeystoreManager(app: Application, private val prefs: PreferencesManager) {
             return false
         }
 
+        val target = keystorePath.toPath()
+        val previous = withContext(Dispatchers.IO) {
+            target.takeIf(Files::exists)?.let(Files::readAllBytes)
+        }
         withContext(Dispatchers.IO) {
-            Files.write(keystorePath.toPath(), keystoreData)
+            replaceFileAtomically(target, keystoreData)
         }
 
         updatePrefs(alias, pass, keystorePw)
-        return true
+        // The preference store drops a failed write without reporting it, so the stored
+        // credentials are read back to find out whether they describe the new keystore
+        if (storedKeystoreCredentials() == Triple(alias, pass, keystorePw)) return true
+
+        withContext(Dispatchers.IO) {
+            if (previous != null) replaceFileAtomically(target, previous) else Files.deleteIfExists(target)
+        }
+        return false
     }
+
+    private suspend fun storedKeystoreCredentials() =
+        Triple(prefs.keystoreAlias.get(), prefs.keystorePass.get(), prefs.keystorePassword.get())
 
     /**
      * SHA-256 fingerprints of every certificate the signing keystore holds, in the same form the

@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="adaptive_icon_guide_png_body">Logo pada latar belakang transparan bekerja paling baik, dengan warna latar belakang yang dipilih di bawah. Gambar tanpa transparansi akan mengisi seluruh ikon, dan ikon bertema serta notifikasi kemudian tetap menggunakan logo Oru.</string>
+    <string name="adaptive_icon_no_transparency_warning">Gambar ini tidak memiliki piksel transparan, sehingga ikon bertema dan notifikasi tetap menggunakan logo Oru</string>
+    <string name="battery_optimization_dialog_description">Beberapa perangkat mungkin menghentikan proses penambal ketika aplikasi diminimalkan. Izinkan Oru berjalan tanpa batasan penggunaan baterai agar proses penambalan dapat diselesaikan dengan lancar</string>
+    <string name="deep_link_add_source_message">Apakah Anda ingin menambahkan sumber tambalan ini ke Oru?</string>
+    <string name="external_batch_patch_description">%s ingin Oru menambal dan memasang aplikasi</string>
+    <string name="home_apk_helper_description">Oru akan meminta aplikasi pembantu di bawah ini untuk mengunduh APK asli dan mengembalikan berkas tersebut</string>
+    <string name="home_apk_helper_installed_unavailable">Oru tidak dapat menggunakan aplikasi yang telah dipasang</string>
+    <string name="home_apk_helper_warning">Lanjutkan hanya jika Anda mempercayai aplikasi pembantu ini. Oru memeriksa paket, versi dan tanda tangan dari apa pun yang diterimanya sebelum melakukan penambalan</string>
+    <string name="home_apk_helper_warning_unverified">Lanjutkan hanya jika Anda mempercayai aplikasi pembantu ini. Oru tidak dapat memverifikasi tanda tangan APK ini, sehingga berkas yang dimodifikasi tidak akan terdeteksi</string>
+    <string name="home_app_filter_not_patched_description">Aplikasi yang belum Anda tambal di Oru</string>
+    <string name="home_app_filter_patched_description">Aplikasi yang sudah Anda tambal atau simpan dengan Oru</string>
+    <string name="home_app_filter_uninstalled_description">Aplikasi yang ditambal dengan Oru dan tidak lagi berada di perangkat ini</string>
+    <string name="home_app_info_app_deleted_description">Aplikasi ini telah dicopot di luar Oru. Tambal ulang untuk mengembalikan fungsinya</string>
+    <string name="home_app_info_install_unverified">Oru tidak dapat memastikan bahwa aplikasi yang terpasang adalah versi yang telah ditambal. Tambal ulang atau pasang ulang aplikasi tersebut dari berkas APK yang disimpan untuk mengembalikan fungsinya</string>
+    <string name="home_app_info_not_patched_description">Versi tanpa tambalan dari aplikasi ini terpasang. Oru masih memiliki catatan tambalan sebelumnya</string>
+    <string name="home_download_instructions_download_button_toast_6">Selamat Anda sekarang adalah penguji resmi tombol Oru 🏅</string>
+    <string name="home_download_instructions_step2_search_note">Oru tidak dapat menjamin situs-situs web ini. Lewati yang menawarkan toko aplikasi sendiri, bukan file APK</string>
+    <string name="home_download_instructions_step4">Setelah proses unduh selesai, kembali ke Oru</string>
+    <string name="home_download_instructions_step4_mount">Setelah memasang APK asli, kembali ke Oru</string>
+    <string name="home_held_back_title">Sumber tambalan membuat Oru rusak</string>
+    <string name="home_outdated_manager_title">Oru sudah tidak terbaru</string>
+    <string name="home_update_available">Pembaruan Oru tersedia</string>
+    <string name="installer_shizuku_error_permission">Izin Shizuku hilang. Berikan izin ke Oru dan coba lagi</string>
+    <string name="installer_status_shizuku_permission">Berikan izin ke Oru dari aplikasi Shizuku</string>
+    <string name="installing_manager_update_hint">Oru akan ditutup untuk menyelesaikan pembaruan</string>
+    <string name="launch_app_unverified">Oru tidak dapat memverifikasi bahwa aplikasi terpasang adalah hasil yang ditambal</string>
+    <string name="notification_bundle_update_text_unversioned">Ketuk untuk buka Oru dan perbarui</string>
+    <string name="notification_channel_manager_updates">Pembaruan Oru</string>
+    <string name="notification_channel_manager_updates_description">Notifikasi tentang rilis Oru baru</string>
+    <string name="notification_channel_patcher_description">Ditampilkan saat Oru menambal aplikasi di latar belakang</string>
+    <string name="notification_mount_replaced_text">v%1$s menggantikan v%2$s yang ditambal. Buka Oru untuk memulihkannya</string>
+    <string name="notification_permission_dialog_description">Oru memerlukan izin notifikasi untuk memberi tahu Anda saat pembaruan tersedia di latar belakang</string>
+    <string name="onboarding_settings_desc">Sesuaikan Oru: tampilan, pilihan lanjutan, dan peralatan sistem</string>
+    <string name="patcher_incompatible_patcher_description">Sumber &lt;b&gt;%1$s&lt;/b&gt; memerlukan patcher &lt;b&gt;%2$s&lt;/b&gt; atau yang lebih baru. Perbarui Oru untuk menggunakannya</string>
+    <string name="patcher_installed_conflict_body">"Oru menandatangani aplikasi yang ditambal dengan sertifikatnya sendiri, yang berbeda dari yang asli. Android mengharuskan penghapusan versi yang sudah ada sebelum aplikasi yang ditambal dapat dipasang.
+
+Mencopot akan menghapus semua data aplikasi secara permanen"</string>
+    <string name="patcher_storage_permission_description_api30">Satu atau lebih opsi tambalan yang mengarah pada jalur Oru tidak dapat dibaca. Beri akses penyimpanan dan ketuk tombol lalu penambalan akan dimulai secara otomatis</string>
+    <string name="patcher_storage_permission_hint">Saran: Pindahkan berkas ke /Android/data/app.oru.manager/files/ - tidak diperlukan perizinan tambahan</string>
+    <string name="root_mount_module_unmount_warning">Jika KernelSU memiliki module Unmount yang diaktifkan secara bawaan, buka KernelSU &gt; Superuser &gt; aplikasi yang Anda mount &gt; Profil &gt; Khusus dan nonaktifkan module Unmount. Jika tidak, APK yang ditambal dan di-mount mungkin tidak berfungsi, meskipun Oru menampilkannya sebagai di-mount</string>
+    <string name="settings_advanced_expert_mode_description">Mengaktifkan setelan penambalan Oru yang kompleks dan opsi kustomisasi</string>
+    <string name="settings_advanced_github_pat_export_include_supporting">Menambahkan PAT ini ke setelan Oru yang diekspor</string>
+    <string name="settings_advanced_patch_options_custom_branding_custom_icon_instruction">"Folder yang berisi gambar untuk digunakan sebagai ikon kustom.
+
+Folder harus berisi satu atau lebih folder berikut, tergantung pada DPI perangkat:
+- mipmap-mdpi
+- mipmap-hdpi
+- mipmap-xhdpi
+- mipmap-xxhdpi
+- mipmap-xxxhdpi
+
+Setiap folder harus berisi semua berkas berikut:
+morphe_adaptive_background_custom.png
+morphe_adaptive_foreground_custom.png
+
+Dimensi gambar harus sebagai berikut:
+- mipmap-mdpi: 108x108 px
+- mipmap-hdpi: 162x162 px
+- mipmap-xhdpi: 216x216 px
+- mipmap-xxhdpi: 324x324 px
+- mipmap-xxxhdpi: 432x432 piksel
+
+Opsional, jalur tersebut berisi folder ‘drawable’ dengan berkas ikon monokrom:
+morphe_adaptive_monochrome_custom.xml
+
+Opsional, jalur yang berisi ikon notifikasi dalam salah satu format berikut:
+- Gambar vektor XML di dalam ‘drawable’:
+  morphe_notification_icon_custom.xml
+- Gambar raster PNG di folder ‘drawable-dpi’:
+  drawable-mdpi/morphe_notification_icon_custom.png (24x24 px)
+  drawable-hdpi/morphe_notification_icon_custom.png (36x36 px)
+  drawable-xhdpi/morphe_notification_icon_custom.png (48x48 px)
+  drawable-xxhdpi/morphe_notification_icon_custom.png (72x72 px)
+  drawable-xxxhdpi/morphe_notification_icon_custom.png (96x96 px)"</string>
+    <string name="settings_advanced_patch_options_custom_header_instruction">"Folder yang berisi gambar untuk digunakan sebagai logo header kustom.
+
+Folder tersebut harus berisi satu atau lebih folder berikut, tergantung pada DPI perangkat:
+- drawable-hdpi
+- drawable-xhdpi
+- drawable-xxhdpi
+- drawable-xxxhdpi
+
+Setiap folder harus berisi semua berkas berikut:
+morphe_header_custom_light.png
+morphe_header_custom_dark.png
+
+Dimensi gambar harus sebagai berikut:
+- drawable-hdpi: 194x72 px
+- drawable-xhdpi: 258x96 px
+- drawable-xxhdpi: 387x144 px
+- drawable-xxxhdpi: 512x192 px"</string>
+    <string name="settings_advanced_updates_allow_metered_description">Mengizinkan Oru dan pembaruan tambalan untuk diunduh melalui data seluler</string>
+    <string name="settings_advanced_updates_manager_prereleases_description">Akses awal ke versi Oru baru</string>
+    <string name="settings_advanced_updates_prerelease_warning_message">"Versi pra-rilis Oru masih tahap pengembangan dan mungkin tidak stabil. 
+
+Tambalan tidak terpengaruh: aktifkan tambalan pra-rilis untuk setiap sumber dalam daftar sumber tambalan"</string>
+    <string name="settings_appearance_app_icon_selector_description">Seperti apa tampilan Oru di layar utama dan di laci aplikasi</string>
+    <string name="settings_auto_uninstall_warning_message">Jika Android melaporkan konflik tanda tangan selama pemasangan otomatis Shizuku, Oru akan mencopot aplikasi yang ada sebelum memasang APK hasil tambalan</string>
+    <string name="settings_system_apk_download_helper_warning">APK berasal dari aplikasi pembantu, jadi hanya percayai aplikasi yang Anda kenal. Oru tetap memeriksa paket, versi, dan tanda tangan setiap file sebelum menambal.</string>
+    <string name="settings_system_custom_file_picker_description">Telusuri penyimpanan dengan pemilih berkas bawaan Oru daripada pemilih berkas bawaan sistem</string>
+    <string name="settings_system_export_manager_settings_fail">Gagal mengekspor setelan Oru: %s</string>
+    <string name="settings_system_export_manager_settings_success">Setelan Oru diekspor</string>
+    <string name="settings_system_import_manager_settings_description">Mencadangkan dan mengembalikan pengaturan Oru Anda</string>
+    <string name="settings_system_import_manager_settings_fail">Gagal mengimpor pengaturan Oru: %s</string>
+    <string name="settings_system_import_manager_settings_mode_title">Impor setelan Oru</string>
+    <string name="settings_system_import_manager_settings_success">Setelan Oru diimpor</string>
+    <string name="settings_system_morphe_settings">Setelan Oru</string>
+    <string name="settings_system_process_runtime_heap_limit_ignored">Perangkat ini mengabaikan batas memori pada proses terakhir, sehingga penambalan mungkin akan kembali berjalan di dalam Oru</string>
+    <string name="settings_system_signing_key_dialog_description">Setiap aplikasi yang di-patch oleh Oru ditandatangani dengan kunci ini. Simpan salinannya: tanpa kunci ini, aplikasi yang di-patch hanya dapat diperbarui setelah menghapus instalasinya.</string>
+    <string name="settings_system_signing_key_missing">Oru membuatnya dengan patch pertama Anda.</string>
+    <string name="settings_system_storage_open_app_info_description">Kelola atau bersihkan semua data Oru melalui setelan sistem</string>
+    <string name="sources_dialog_community_notice_message">"Sumber tambalan komunitas dibuat dan dikelola oleh pembuatnya masing-masing. Oru tidak meninjau atau memverifikasi tambalan pihak ketiga, serta tidak bertanggung jawab atas konten maupun dampaknya terhadap perangkat Anda.
+
+Segala sesuatu yang Anda tambahkan dari situs web ini digunakan atas risiko Anda sendiri"</string>
+    <string name="sources_management_held_back_hint">Sumber ini menyebabkan Oru crash saat sedang dimuat, sehingga dilewati. Perbarui atau impor ulang sumber ini untuk mencoba lagi</string>
+    <string name="sources_management_outdated_manager_badge">Perbarui Oru</string>
+    <string name="sources_management_outdated_manager_hint">Sumber ini dibuat untuk penambal %1$s, tetapi Oru %2$s menyertakan penambal %3$s. Perbarui Oru untuk menggunakannya</string>
+    <string name="tour_prompt_desc">Ingin tur cepat fitur utama Oru?</string>
+    <string name="uninstall_app_unverified">Dibiarkan di tempat: Oru tidak dapat memverifikasi bahwa aplikasi terpasang adalah hasil yang ditambal</string>
+</resources>

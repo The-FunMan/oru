@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="adaptive_icon_guide_png_body">En logotyp på en genomskinlig bakgrund fungerar bäst, med bakgrundsfärgen som väljs nedan. En bild utan genomskinlighet fyller i stället hela ikonen, och då behåller de temaanpassade ikonerna och aviseringsikonerna Orus logotyp.</string>
+    <string name="adaptive_icon_no_transparency_warning">Den här bilden har inga genomskinliga pixlar, så de temaanpassade ikonerna och aviseringsikonerna behåller Orus logotyp</string>
+    <string name="battery_optimization_dialog_description">Vissa enheter kan stoppa modifieringsverktyget när appen minimeras. Tillåt att Oru körs utan batteribegränsningar för att säkerställa att modifieringen slutförs tillförlitligt</string>
+    <string name="deep_link_add_source_message">Vill du lägga till den här tilläggskällan i Oru?</string>
+    <string name="external_batch_patch_description">%s vill att Oru ska modifiera och installera appar</string>
+    <string name="home_apk_helper_description">Oru ber hjälpappen nedan att ladda ned den ursprungliga APK-filen och lämna tillbaka filen</string>
+    <string name="home_apk_helper_installed_unavailable">Oru kunde inte använda den installerade appen</string>
+    <string name="home_apk_helper_warning">Fortsätt endast om du litar på den här hjälpappen. Oru kontrollerar paketet, versionen och signaturen för det den tar emot innan modifiering.</string>
+    <string name="home_apk_helper_warning_unverified">Fortsätt endast om du litar på den här hjälpappen. Oru kan inte verifiera signaturen för den här APK-filen, så en modifierad fil skulle inte identifieras.</string>
+    <string name="home_app_filter_not_patched_description">Appar som du ännu inte har modifierat i Oru</string>
+    <string name="home_app_filter_patched_description">Appar som du har modifierat eller sparat med Oru</string>
+    <string name="home_app_filter_uninstalled_description">Appar modifierade med Oru som inte längre finns på den här enheten</string>
+    <string name="home_app_info_app_deleted_description">Den här appen avinstallerades utanför Oru. Modifiera den igen för att återställa funktionaliteten</string>
+    <string name="home_app_info_install_unverified">Oru kan inte bekräfta att den installerade appen är den version som modifierades. Modifiera om eller installera om den från den sparade APK-filen för att återställa dess funktioner</string>
+    <string name="home_app_info_not_patched_description">En omodifierad version av den här appen är installerad. Oru har fortfarande sin tidigare modifieringspost.</string>
+    <string name="home_download_instructions_download_button_toast_6">Du är nu en officiell Oru-knapptestare🏅</string>
+    <string name="home_download_instructions_step2_search_note">Oru kan inte gå i god för dessa webbplatser. Hoppa över de som erbjuder sin egen appbutik istället för en APK-fil.</string>
+    <string name="home_download_instructions_step4">Öppna Oru igen när nedladdningen har slutförts</string>
+    <string name="home_download_instructions_step4_mount"> Öppna Oru igen när du har installerat den ursprungliga APK-filen</string>
+    <string name="home_held_back_title">En tilläggskälla fick Oru att krascha</string>
+    <string name="home_outdated_manager_title">Oru är inaktuellt</string>
+    <string name="home_update_available">Uppdatering för Oru är tillgänglig</string>
+    <string name="installer_shizuku_error_permission">Behörighet saknas för Shizuku. Ge behörighet till Oru och försök igen</string>
+    <string name="installer_status_shizuku_permission">Ge behörighet till Oru från Shizuku-appen</string>
+    <string name="installing_manager_update_hint">Oru stängs för att slutföra uppdateringen</string>
+    <string name="launch_app_unverified">Oru kunde inte verifiera att den installerade appen är den version den modifierade</string>
+    <string name="notification_bundle_update_text_unversioned">Tryck för att öppna Oru och uppdatera</string>
+    <string name="notification_channel_manager_updates">Uppdateringar för Oru</string>
+    <string name="notification_channel_manager_updates_description">Aviseringar om nya Oru-versioner</string>
+    <string name="notification_channel_patcher_description">Visas när Oru modifierar en app i bakgrunden</string>
+    <string name="notification_mount_replaced_text">v%1$s har ersatt den modifierade v%2$s. Öppna Oru för att återställa den</string>
+    <string name="notification_permission_dialog_description">Oru behöver behörighet att skicka aviseringar för att kunna meddela dig när uppdateringar är tillgängliga i bakgrunden</string>
+    <string name="onboarding_settings_desc">Anpassa Oru: utseende, avancerade alternativ och systemverktyg</string>
+    <string name="patcher_incompatible_patcher_description">Källan &lt;b&gt;%1$s&lt;/b&gt; kräver modifieringsverktyg &lt;b&gt;%2$s&lt;/b&gt; eller nyare. Uppdatera Oru för att använda den</string>
+    <string name="patcher_installed_conflict_body">"Oru signerar modifierade appar med sitt eget certifikat som skiljer sig från det ursprungliga. Android kräver att du tar bort den befintliga versionen innan den modifierade appen kan installeras.
+
+Om du avinstallerar raderas alla appdata permanent"</string>
+    <string name="patcher_storage_permission_description_api30">Ett eller flera tilläggsalternativ pekar på sökvägar som Oru inte kan läsa. Ge åtkomst till lagringen och tryck på knappen så startas modifieringen automatiskt</string>
+    <string name="patcher_storage_permission_hint">Tips: Flytta filerna till /Android/data/app.oru.manager/files/ – inga extra behörigheter behövs</string>
+    <string name="root_mount_module_unmount_warning">Om KernelSU har Unmount modules aktiverat som standard öppnar du KernelSU &gt; Superuser &gt; appen du monterat &gt; Profile &gt; Custom och inaktivera Unmount modules. Annars kan det hända att den modifierade APK-filen som har monterats inte träder i kraft, även om Oru visar att den är monterad</string>
+    <string name="settings_advanced_expert_mode_description">Aktiverar komplexa modifieringsinställningar och anpassningsalternativ för Oru</string>
+    <string name="settings_advanced_github_pat_export_include_supporting">Lägger till denna PAT i exporterade Oru-inställningar</string>
+    <string name="settings_advanced_patch_options_custom_branding_custom_icon_instruction">"Mapp med bilder som ska användas som anpassad ikon.
+
+Mappen måste innehålla en eller flera av följande mappar beroende på enhetens DPI:
+- mipmap-mdpi
+- mipmap-hdpi
+- mipmap-xhdpi
+- mipmap-xxhdpi
+- mipmap-xxxhdpi
+
+Varje mapp måste innehålla följande filer:
+morphe_adaptive_background_custom.png
+morphe_adaptive_foreground_custom.png
+
+Bildernas mått ska vara följande:
+- mipmap-mdpi: 108 x 108 px
+- mipmap-hdpi: 162 x 162 px
+- mipmap-xhdpi: 216 x 216 px
+- mipmap-xxhdpi: 324 x 324 px
+- mipmap-xxxhdpi: 432 x 432 px
+
+Valfritt: Sökvägen innehåller en \"drawable\"-mapp med en monokrom ikonfil:
+morphe_adaptive_monochrome_custom.xml
+
+Valfritt: Sökvägen innehåller en aviseringsikon i ett av följande format:
+- XML-vektor-drawable i \"drawable\":
+  morphe_notification_icon_custom.xml
+- PNG-rasterbilder i \"drawable-dpi\"-mappar:
+  drawable-mdpi/morphe_notification_icon_custom.png (24 x 24 px)
+  drawable-hdpi/morphe_notification_icon_custom.png (36 x 36 px)
+  drawable-xhdpi/morphe_notification_icon_custom.png (48 x 48 px)
+  drawable-xxhdpi/morphe_notification_icon_custom.png (72 x 72 px)
+  drawable-xxxhdpi/morphe_notification_icon_custom.png (96 x 96 px)"</string>
+    <string name="settings_advanced_patch_options_custom_header_instruction">"Mapp med bilder som ska användas som anpassad logotyp i sidhuvudet.
+
+Mappen måste innehålla en eller flera av följande mappar beroende på enhetens DPI:
+- drawable-hdpi
+- drawable-xhdpi
+- drawable-xxhdpi
+- drawable-xxxhdpi
+
+Varje mapp måste innehålla följande filer:
+morphe_header_custom_light.png
+morphe_header_custom_dark.png
+
+Bildernas mått ska vara följande:
+- drawable-hdpi: 194 x 72 px
+- drawable-xhdpi: 258 x 96 px
+- drawable-xxhdpi: 387 x 144 px
+- drawable-xxxhdpi: 512 x 192 px"</string>
+    <string name="settings_advanced_updates_allow_metered_description">Tillåter att uppdateringar för Oru och tillägg laddas ned via mobildata</string>
+    <string name="settings_advanced_updates_manager_prereleases_description">Tidig åtkomst till nya Oru-versioner</string>
+    <string name="settings_advanced_updates_prerelease_warning_message">"Förhandsversioner av Oru är fortfarande under utveckling och kan vara instabila.
+
+Tillägg påverkas inte: aktivera förhandsversioner av tillägg för varje källa i listan över tilläggskällor"</string>
+    <string name="settings_appearance_app_icon_selector_description">Hur Oru ser ut på din startskärm och i panelen med appar</string>
+    <string name="settings_auto_uninstall_warning_message">Om Android rapporterar en signaturkonflikt under automatisk installation med Shizuku avinstallerar Oru den befintliga appen innan den modifierade APK-filen installeras</string>
+    <string name="settings_system_apk_download_helper_warning">APK-filen kommer från hjälpappen, så lita bara på appar du känner. Oru kontrollerar fortfarande paketet, versionen och signaturen för varje fil innan modifiering</string>
+    <string name="settings_system_custom_file_picker_description">Bläddra i lagringen med Orus inbyggda filväljare istället för systemets standardfilväljare</string>
+    <string name="settings_system_export_manager_settings_fail">Det gick inte att exportera Oru-inställningar: %s</string>
+    <string name="settings_system_export_manager_settings_success">Oru-inställningar exporterades</string>
+    <string name="settings_system_import_manager_settings_description">Säkerhetskopierar och återställer dina Oru-inställningar</string>
+    <string name="settings_system_import_manager_settings_fail">Det gick inte att importera Oru-inställningar: %s</string>
+    <string name="settings_system_import_manager_settings_mode_title">Importera Oru-inställningar</string>
+    <string name="settings_system_import_manager_settings_success">Oru-inställningar importerades</string>
+    <string name="settings_system_morphe_settings">Oru-inställningar</string>
+    <string name="settings_system_process_runtime_heap_limit_ignored">Den här enheten ignorerade minnesgränsen under den senaste körningen, så modifiering kan återgå till att köras inuti Oru</string>
+    <string name="settings_system_signing_key_dialog_description">Varje app som Oru modifierar signeras med den här nyckeln. Spara en kopia: utan den kan modifierade appar bara uppdateras efter att de har avinstallerats</string>
+    <string name="settings_system_signing_key_missing">Oru skapar en i samband med din första modifiering</string>
+    <string name="settings_system_storage_open_app_info_description">Hantera eller rensa alla data för Oru i systeminställningarna</string>
+    <string name="sources_dialog_community_notice_message">"Tilläggskällor från communityn skapas och underhålls av sina egna författare. Oru varken granskar eller verifierar tillägg från tredje part och är inte ansvarig för deras innehåll eller vad de gör på din enhet.
+
+Allt du lägger till från den här webbplatsen används på egen risk"</string>
+    <string name="sources_management_held_back_hint">Den här källan fick Oru att krascha när den lästes in, så den hoppas över. Uppdatera eller importera den igen för att försöka igen</string>
+    <string name="sources_management_outdated_manager_badge">Uppdatera Oru</string>
+    <string name="sources_management_outdated_manager_hint">Den här källan är avsedd för modifieringsverktyg %1$s, men i Oru %2$s ingår modifieringsverktyg %3$s. Uppdatera Oru om du vill använda den</string>
+    <string name="tour_prompt_desc">Vill du få en snabb genomgång av Orus grundläggande funktioner?</string>
+    <string name="uninstall_app_unverified">Lämnad på plats: Oru kunde inte verifiera att den installerade appen är den version den modifierade</string>
+</resources>

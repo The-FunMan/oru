@@ -236,8 +236,12 @@ class ContentTranslator(
                     file.parentFile?.mkdirs()
                     // Written aside and moved over, so a process killed midway leaves the previous file whole
                     val temp = File(file.path + ".tmp")
-                    temp.writeText(http.json.encodeToString(snapshot))
-                    if (!temp.renameTo(file)) throw IOException("Could not replace $file")
+                    try {
+                        temp.writeText(http.json.encodeToString(snapshot))
+                        if (!moveReplacing(temp, file)) throw IOException("Could not replace $file")
+                    } finally {
+                        temp.delete()
+                    }
                 }.onFailure { Log.w(tag, "Failed to save translations into $language", it) }
             }
         }

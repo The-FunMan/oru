@@ -75,9 +75,6 @@ class Filesystem(
 
     /** Home card cache, kept apart so storage management does not take it for patcher scratch. */
     val homeCardCacheDir: File = app.cacheDir.resolve("home")
-
-    /** Avatars of patch sources, kept apart for the same reason as [homeCardCacheDir]. */
-    val avatarCacheDir: File = app.cacheDir.resolve("avatars")
     private val patchedAppsDir: File = app.getDir("patched-apps", Context.MODE_PRIVATE).apply { mkdirs() }
 
     /**

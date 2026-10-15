@@ -41,6 +41,17 @@ import java.util.UUID
 
 private const val TAG = "Morphe BatchPatcher"
 
+/** What [BatchPatchCoordinator.start] did. Anything but [STARTED] leaves the queue as it was. */
+enum class BatchStartResult {
+    STARTED,
+
+    /** A single-app patch run holds the one-run rule, so the queue waits. */
+    SINGLE_RUN_BUSY,
+
+    /** The queue is not in preflight, or has nothing to patch. */
+    NOT_READY,
+}
+
 /**
  * Drives a batch patch run: one app at a time, no user interaction between items.
  *
@@ -274,15 +285,22 @@ class BatchPatchCoordinator(
         }
     }
 
-    /** Starts the queue. Items that are not [BatchItemState.READY] are left untouched. */
-    fun start() {
-        val current = _state.value ?: return
-        if (current.phase != BatchPhase.PREFLIGHT) return
-        if (current.runnable.isEmpty()) return
+    /**
+     * Starts the queue. Items that are not [BatchItemState.READY] are left untouched. Returns why it did not start,
+     * so the caller can tell the user. The phase turns to RUNNING before this returns, so the single run gate sees it.
+     */
+    fun start(): BatchStartResult {
+        val current = _state.value ?: return BatchStartResult.NOT_READY
+        if (current.phase != BatchPhase.PREFLIGHT) return BatchStartResult.NOT_READY
+        if (current.runnable.isEmpty()) return BatchStartResult.NOT_READY
+        val singleRunBusy = runCatching {
+            org.koin.core.context.GlobalContext.get().getOrNull<app.morphe.manager.ui.oru.focus.SingleRunOwner>()?.isBusy == true
+        }.getOrDefault(false)
+        if (singleRunBusy) return BatchStartResult.SINGLE_RUN_BUSY
 
+        _state.update { it.copy(phase = BatchPhase.RUNNING) }
         runJob?.cancel()
         runJob = scope.launch {
-            _state.update { it.copy(phase = BatchPhase.RUNNING) }
             try {
                 runQueue()
             } catch (e: CancellationException) {
@@ -304,6 +322,7 @@ class BatchPatchCoordinator(
                 }
             }
         }
+        return BatchStartResult.STARTED
     }
 
     /** Cancels the active item and marks everything still queued as canceled. */
@@ -430,19 +449,30 @@ class BatchPatchCoordinator(
             workspace.mkdirs()
         }
 
-        while (true) {
-            val current = _state.value ?: return
-            val index = current.items.indexOfFirst { it.state.isRunnable }
-            if (index < 0) return
+        coroutineScope {
+            val inputs = InputPrefetcher<String, SelectedApp>(this, discard = ::cleanupInput)
+            try {
+                while (true) {
+                    val current = _state.value ?: return@coroutineScope
+                    val index = current.items.indexOfFirst { it.state.isRunnable }
+                    if (index < 0) return@coroutineScope
 
-            updateItem(index) { it.copy(state = BatchItemState.RUNNING) }
+                    updateItem(index) { it.copy(state = BatchItemState.RUNNING) }
 
-            val item = _state.value?.items?.get(index) ?: return
-            runItem(index, item)
+                    val item = _state.value?.items?.get(index) ?: return@coroutineScope
+                    runItem(index, item, inputs)
+                }
+            } finally {
+                inputs.close()
+            }
         }
     }
 
-    private suspend fun runItem(index: Int, item: BatchPatchItem) {
+    private suspend fun runItem(
+        index: Int,
+        item: BatchPatchItem,
+        inputs: InputPrefetcher<String, SelectedApp>
+    ) {
         // Published before the APK is prepared: copying one takes seconds, and until a run of
         // its own exists the screen would still be showing the previous app's finished steps
         val runProgress = withContext(Dispatchers.IO) {
@@ -456,7 +486,7 @@ class BatchPatchCoordinator(
         runProgress.startStallWatch()
         _state.update { it.copy(activeIndex = index, activeRun = runProgress) }
 
-        val selectedApp = withContext(Dispatchers.IO) { materialize(item) }
+        val selectedApp = inputs.take(item.id) { withContext(Dispatchers.IO) { materialize(item) } }
         if (selectedApp == null) {
             runProgress.finish()
             updateItem(index) {
@@ -490,6 +520,7 @@ class BatchPatchCoordinator(
                 runProgress.updateSplitRequirement(file, needsSplit, merged)
             },
             onProgress = runProgress::onProgress,
+            onStageFraction = runProgress::onStageFraction,
             patchSources = patchSources,
             announceCompletion = false,
             queuePosition = _state.value?.let { it.processed to it.total }
@@ -497,6 +528,11 @@ class BatchPatchCoordinator(
 
         val workId = workerRepository.launchExpedited<PatcherWorker, PatcherWorker.Args>(args)
         activeWorkId = workId
+
+        // The next app's input is prepared while this one patches, one ahead at most
+        _state.value?.items?.firstOrNull { it.state.isRunnable }?.let { next ->
+            inputs.prefetch(next.id) { withContext(Dispatchers.IO) { materialize(next) } }
+        }
 
         try {
             val finished = workManager.getWorkInfoByIdFlow(workId).first { it?.state?.isFinished == true }
@@ -538,8 +574,12 @@ class BatchPatchCoordinator(
     }
 
     /**
-     * Copies the source APK into the workspace when it lives outside it. Installed apps are
-     * materialized here rather than during planning so excluded items never pay the cost.
+     * Prepares the input the patcher reads. Installed apps are materialized here rather than
+     * during planning so excluded items never pay the cost.
+     *
+     * A plain installed APK is read in place, as the single-app path reads an installed app: the
+     * patcher only reads its input, and the file is not marked temporary, so cleanup never
+     * deletes the app's own APK. Split installs are merged into an archive in the workspace.
      */
     private fun materialize(item: BatchPatchItem): SelectedApp? {
         val source = item.source ?: return null
@@ -563,19 +603,20 @@ class BatchPatchCoordinator(
             )
 
             is BatchApkSource.Installed -> try {
+                // Keyed by item rather than package, so a clone of the same app never shares a path
+                // with the next item while it is being prepared ahead of time
                 val target = if (source.isSplit) {
-                    workspace.resolve("${item.packageName}_installed.apks")
+                    workspace.resolve("${item.id}_installed.apks")
                         .also { SplitApkPreparer.writeApksArchive(source.apkPath, source.splitPaths, it) }
                 } else {
-                    workspace.resolve("${item.packageName}_installed.apk")
-                        .also { File(source.apkPath).copyTo(it, overwrite = true) }
+                    File(source.apkPath).also { require(it.isFile) { "Installed APK is missing: ${it.path}" } }
                 }
                 SelectedApp.Local(
                     packageName = item.packageName,
                     version = source.version,
                     versionCode = source.versionCode,
                     file = target,
-                    temporary = true,
+                    temporary = source.isSplit,
                     fromInstalledDevice = true
                 )
             } catch (e: Exception) {
@@ -752,4 +793,53 @@ class BatchPatchCoordinator(
         }
     }
 
+}
+
+/**
+ * Holds at most one input prepared ahead of the item that will use it, so the copy or archive
+ * write for the next app overlaps the patch of the current one.
+ *
+ * [take] hands over the prefetched input only when it was prepared for the key asked for. Any
+ * other prefetch is discarded and the caller prepares its own. [discard] releases an input that
+ * nobody took, which keeps a cancelled run from leaving a temporary APK behind.
+ */
+internal class InputPrefetcher<K, V : Any>(
+    private val scope: CoroutineScope,
+    private val discard: (V) -> Unit
+) {
+    private class Pending<K, V : Any>(val key: K, val input: Deferred<V?>)
+
+    private var pending: Pending<K, V>? = null
+
+    fun prefetch(key: K, prepare: suspend () -> V?) {
+        check(pending == null) { "Only one input can be prepared ahead at a time" }
+        pending = Pending(key, scope.async { prepare() })
+    }
+
+    suspend fun take(key: K, orElse: suspend () -> V?): V? {
+        val current = pending ?: return orElse()
+        pending = null
+        if (current.key != key) {
+            drop(current)
+            return orElse()
+        }
+        return try {
+            current.input.await()
+        } catch (e: CancellationException) {
+            drop(current)
+            throw e
+        }
+    }
+
+    /** Cancels a preparation still running and discards what a finished one produced. */
+    suspend fun close() {
+        val current = pending ?: return
+        pending = null
+        drop(current)
+    }
+
+    private suspend fun drop(current: Pending<K, V>) = withContext(NonCancellable) {
+        current.input.cancelAndJoin()
+        if (!current.input.isCancelled) current.input.getCompleted()?.let(discard)
+    }
 }
