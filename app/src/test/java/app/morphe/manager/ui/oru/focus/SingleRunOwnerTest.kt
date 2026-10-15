@@ -410,7 +410,7 @@ class SingleRunOwnerTest {
     }
 
     @Test
-    fun `finished run whose install is under way stays busy and is attached to on return`() = runBlocking {
+    fun `finished run whose install is under way stays busy and is attached to while its Focus stays open`() = runBlocking {
         val fakePatcher = FakeSingleRunPatcher()
         var created = 0
         val owner = newOwner {
@@ -434,11 +434,132 @@ class SingleRunOwnerTest {
         assertEquals(pkg, owner.activePackageKey)
         assertFalse(fakePatcher.destroyCalled, "the install's run is not released while the install is under way")
 
-        // The Focus comes back: it attaches to the same patcher, and no second run is made
+        // The Focus was not left (a notification or a return while it is open): it attaches to the same patcher
         assertSame(patcher, owner.getOrStartRun(pkg, testItem(pkg), testParams(pkg)))
         assertSame(patcher, owner.getRun(pkg))
         assertEquals(1, created)
         assertSame(install, owner.install.value)
+    }
+
+    @Test
+    fun `a finished run is released when its Focus is left, so the next start is a new run`() = runBlocking {
+        val first = FakeSingleRunPatcher()
+        val second = FakeSingleRunPatcher()
+        var created = 0
+        val owner = newOwner {
+            created++
+            if (created == 1) first else second
+        }
+
+        val pkg = "com.example.leave"
+        owner.getOrStartRun(pkg, testItem(pkg), testParams(pkg))
+        finishSuccessfully(first)
+        owner.beginInstall(picked = null) { coordinator(FakeExecutor()) }
+        assertTrue(owner.isBusy)
+
+        // Back leaves the Focus before the install has an outcome: the run is released anyway
+        owner.releaseLeftRun()
+        assertTrue(first.destroyCalled)
+
+        val again = owner.getOrStartRun(pkg, testItem(pkg), testParams(pkg))
+        assertSame(second, again)
+        assertEquals(2, created)
+        assertEquals(OruRunStatus.Working, owner.runStatus.value)
+        assertNull(owner.install.value)
+    }
+
+    @Test
+    fun `a run still working is kept when its Focus is left`() = runBlocking {
+        val fakePatcher = FakeSingleRunPatcher()
+        var created = 0
+        val owner = newOwner {
+            created++
+            fakePatcher
+        }
+
+        val pkg = "com.example.working"
+        val patcher = owner.getOrStartRun(pkg, testItem(pkg), testParams(pkg))
+
+        owner.releaseLeftRun()
+
+        assertFalse(fakePatcher.destroyCalled)
+        assertTrue(owner.isActive)
+        assertSame(patcher, owner.getOrStartRun(pkg, testItem(pkg), testParams(pkg)))
+        assertEquals(1, created)
+    }
+
+    @Test
+    fun `a declined system install keeps the run, so the install can be tried again`() = runBlocking {
+        val fakePatcher = FakeSingleRunPatcher()
+        val owner = newOwner { fakePatcher }
+
+        val pkg = "com.example.declined"
+        val patcher = owner.getOrStartRun(pkg, testItem(pkg), testParams(pkg))
+        finishSuccessfully(fakePatcher)
+
+        val executor = FakeExecutor()
+        val install = coordinator(executor)
+        owner.beginInstall(picked = null) { install }
+
+        // The system installer is declined: the install is back at its plan, with no outcome
+        executor.execution = OruExecution.Running
+        install.refresh()
+        executor.execution = OruExecution.Idle
+        install.refresh()
+        assertFalse(isInstallSettled(install.state.value.ui))
+        assertTrue(owner.isBusy)
+
+        // Try again, still on the install screen: the run is not released by it
+        install.retry()
+        assertTrue(executor.calls.contains("resetExecution"))
+        assertFalse(fakePatcher.destroyCalled)
+        assertSame(patcher, owner.getRun(pkg))
+        assertTrue(owner.isBusy)
+    }
+
+    @Test
+    fun `releasing a finished run clears its install, the tracker and the busy flag`() = runBlocking {
+        val fakePatcher = FakeSingleRunPatcher()
+        val owner = newOwner { fakePatcher }
+
+        val pkg = "com.example.clear"
+        owner.getOrStartRun(pkg, testItem(pkg), testParams(pkg))
+        finishSuccessfully(fakePatcher)
+        owner.beginInstall(picked = null) { coordinator(FakeExecutor()) }
+        assertTrue(owner.isBusy)
+        assertNotNull(owner.install.value)
+
+        owner.releaseLeftRun()
+
+        assertTrue(fakePatcher.destroyCalled)
+        assertNull(owner.currentRun.value)
+        assertNull(owner.runStatus.value)
+        assertNull(owner.install.value)
+        assertNull(activeRunTracker.run.value)
+        assertFalse(owner.isBusy)
+        assertTrue(owner.canStart())
+        assertFalse(File(tempDir, "oru_active_run_flag").exists())
+    }
+
+    @Test
+    fun `a failed run is released when its Focus is left`() = runBlocking {
+        val fake1 = FakeSingleRunPatcher()
+        val fake2 = FakeSingleRunPatcher()
+        var created = 0
+        val owner = newOwner {
+            created++
+            if (created == 1) fake1 else fake2
+        }
+
+        val pkg = "com.example.failedleave"
+        owner.getOrStartRun(pkg, testItem(pkg), testParams(pkg))
+        fake1.succeededFlow.value = false
+
+        owner.releaseLeftRun()
+
+        assertTrue(fake1.destroyCalled)
+        assertSame(fake2, owner.getOrStartRun(pkg, testItem(pkg), testParams(pkg)))
+        assertEquals(2, created)
     }
 
     @Test

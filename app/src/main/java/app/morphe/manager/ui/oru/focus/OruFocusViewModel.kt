@@ -563,15 +563,15 @@ class OruFocusViewModel(private val deps: OruFocusDeps) : ViewModel() {
         installer?.pickInstaller(option)
     }
 
-    /** Called when the Focus leaves. Clears what the flow left open, unless an install is writing now. */
-    fun onLeave() {
+    /**
+     * Called when the Focus leaves. Clears what the flow left open, unless an install is writing now. [leaving] is
+     * false for a configuration change, which rebuilds the screen without leaving it, so the run is kept across it.
+     */
+    fun onLeave(leaving: Boolean) {
         if (installState?.ui is OruInstallUi.Installing) return
         val runWorking = singleRunOwner?.isActive == true
         if (runWorking) return
-        // A finished run is released here only when its install has no outcome to wait for, see finishIdleRun
-        if (runStatus == OruRunStatus.Done) {
-            singleRunOwner?.finishIdleRun()
-        }
+        if (leaving) singleRunOwner?.releaseLeftRun()
 
         home.showApkAvailabilityDialog = false
         home.showDownloadInstructionsDialog = false

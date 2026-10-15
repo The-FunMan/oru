@@ -97,8 +97,9 @@ fun OruFocusRoute(
 ) {
     val context = LocalContext.current
     val app = context.applicationContext as Application
+    val activity = LocalActivity.current
     // HomeViewModel lives with the activity, as in MainActivity; the Focus reads the same instance
-    val home: HomeViewModel = koinViewModel(viewModelStoreOwner = LocalActivity.current as ComponentActivity)
+    val home: HomeViewModel = koinViewModel(viewModelStoreOwner = activity as ComponentActivity)
     val installViewModel: InstallViewModel = koinViewModel()
     val installerManager: InstallerManager = koinInject()
     val sessionInstaller: SessionInstaller = koinInject()
@@ -143,7 +144,7 @@ fun OruFocusRoute(
     // The flow's run is held here rather than started by Home's callback. Home's callback comes back when the
     // Focus leaves, so this one is undone on the way out.
     // While the Focus is mounted the old Home dialogs are not composed (OruHomeScreen), so the flow shows only here
-    DisposableEffect(home, vm) {
+    DisposableEffect(home, vm, activity) {
         val previous = home.onStartQuickPatch
         val previouslyMounted = home.oruFocusMounted
         home.onStartQuickPatch = { params -> vm.hold(params) }
@@ -151,7 +152,8 @@ fun OruFocusRoute(
         onDispose {
             home.onStartQuickPatch = previous
             home.oruFocusMounted = previouslyMounted
-            vm.onLeave()
+            // A rotation or theme change disposes this screen too, and it does not leave the Focus
+            vm.onLeave(leaving = activity?.isChangingConfigurations != true)
         }
     }
 

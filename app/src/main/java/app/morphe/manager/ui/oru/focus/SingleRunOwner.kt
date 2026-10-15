@@ -339,6 +339,16 @@ class SingleRunOwner(
         if (_currentRun.value != null && !isBusy) finishRun()
     }
 
+    /**
+     * Releases the run when its Focus is left, unless it is still working. A finished run is released whether or not
+     * its install was begun, so the next start is a new run and the Focus never reopens on the old outcome. The
+     * original APK stays as the app's saved copy, which "Patch from saved copy" uses.
+     */
+    fun releaseLeftRun() {
+        val status = _runStatus.value ?: return
+        if (status != OruRunStatus.Working) finishRun()
+    }
+
     /** Explicitly cancels the active run. */
     fun cancelRun() {
         val run = _currentRun.value ?: return
