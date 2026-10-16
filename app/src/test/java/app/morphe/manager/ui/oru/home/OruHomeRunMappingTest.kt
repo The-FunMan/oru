@@ -48,6 +48,22 @@ class OruHomeRunMappingTest {
     }
 
     @Test
+    fun `a finished single-app run marks its card until it is released`() {
+        val finished = ActiveRun(
+            packageKey = "slot-yt",
+            packageName = "com.google.android.youtube",
+            label = "YouTube",
+            progress = 1f,
+            done = 96,
+            total = 96,
+            ready = true,
+        )
+        assertEquals(setOf("slot-yt"), oruReadyToInstallOf(finished))
+        assertEquals(emptySet<String>(), oruReadyToInstallOf(finished.copy(ready = false)))
+        assertEquals(emptySet<String>(), oruReadyToInstallOf(null))
+    }
+
+    @Test
     fun `no single-app run when none is published`() {
         assertNull(oruSingleHomeRunOf(active = null) { null })
     }

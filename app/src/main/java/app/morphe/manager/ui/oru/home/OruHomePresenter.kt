@@ -47,7 +47,12 @@ object OruHomePresenter {
      */
     fun card(item: HomeAppItem, input: OruHomeInput): OruHomeCard {
         val handedOff = item.packageName in input.handedOff
-        val status = statusOf(item, handedOff, input.effectiveVersions[item.packageName])
+        // A finished run that waits for its install is the newest state of the app, so it outranks the install state
+        val status = if (item.id in input.readyToInstall) {
+            OruHomeCardStatus.ReadyToInstall
+        } else {
+            statusOf(item, handedOff, input.effectiveVersions[item.packageName])
+        }
         val recommended = input.recommendedVersions[item.packageName]
         val needsFile = status in NeedsFileStatuses
         val expert = input.expert
@@ -119,6 +124,7 @@ object OruHomePresenter {
         OruHomeCardStatus.UpdateAvailable -> OruHomeAction.Update
         OruHomeCardStatus.Installed,
         OruHomeCardStatus.PatchedElsewhere -> OruHomeAction.Open
+        OruHomeCardStatus.ReadyToInstall -> OruHomeAction.Install
     }
 
     private fun secondaryFor(status: OruHomeCardStatus): OruHomeAction? = when (status) {
@@ -133,6 +139,7 @@ object OruHomePresenter {
         OruHomeCardStatus.UpdateAvailable -> OruHomeAction.AppInfo
         OruHomeCardStatus.Installed,
         OruHomeCardStatus.PatchedElsewhere -> OruHomeAction.PatchAgain
+        OruHomeCardStatus.ReadyToInstall -> null
     }
 
     private fun hintFor(status: OruHomeCardStatus): OruHomeHint? = when (status) {
@@ -165,6 +172,7 @@ fun OruHomeCardStatus.tone(): OruTone = when (this) {
     OruHomeCardStatus.UnpatchedInstalled -> OruTone.Warn
     OruHomeCardStatus.SavedCopy,
     OruHomeCardStatus.ReadyOnDevice,
+    OruHomeCardStatus.ReadyToInstall,
     OruHomeCardStatus.Installed,
     OruHomeCardStatus.PatchedElsewhere -> OruTone.Ok
     OruHomeCardStatus.UpdateAvailable -> OruTone.Neutral
@@ -183,6 +191,7 @@ fun OruHomeCardStatus.simpleSentence(): OruHomeSentence = when (this) {
     OruHomeCardStatus.UpdateAvailable -> OruHomeSentence.UpdateReady
     OruHomeCardStatus.Installed -> OruHomeSentence.UpToDate
     OruHomeCardStatus.PatchedElsewhere -> OruHomeSentence.Patched
+    OruHomeCardStatus.ReadyToInstall -> OruHomeSentence.ReadyToInstall
 }
 
 /** The button look of an action. One filled action per card at most, and it is always the primary one. */
@@ -192,7 +201,8 @@ fun OruHomeAction.style(): OruButtonStyle = when (this) {
     OruHomeAction.PatchFromSaved,
     OruHomeAction.Patch,
     OruHomeAction.Update,
-    OruHomeAction.Open -> OruButtonStyle.Filled
+    OruHomeAction.Open,
+    OruHomeAction.Install -> OruButtonStyle.Filled
     // A card that still needs its APK leads with the find step, so the ready apps keep the filled buttons
     OruHomeAction.FindOnApkMirror,
     OruHomeAction.GetIt -> OruButtonStyle.Tonal

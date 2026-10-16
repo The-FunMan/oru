@@ -23,7 +23,7 @@ class OruCardActionRoutingTest {
             OruHomeAction.CheckAndPatch, OruHomeAction.FindOnApkMirror, OruHomeAction.UseFile,
             OruHomeAction.PatchFromSaved, OruHomeAction.UseAnotherFile, OruHomeAction.GetIt,
             OruHomeAction.Patch, OruHomeAction.Update, OruHomeAction.PatchAgain,
-            OruHomeAction.ChooseFile, OruHomeAction.OpenApkMirrorAgain,
+            OruHomeAction.ChooseFile, OruHomeAction.OpenApkMirrorAgain, OruHomeAction.Install,
         ).forEach { assertTrue(oruActionOpensFocus(it), it.name) }
     }
 }

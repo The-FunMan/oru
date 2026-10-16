@@ -51,6 +51,9 @@ enum class OruHomeCardStatus {
      * installed, with the copy's own icon and version, and can be patched again from the app's stock APK.
      */
     PatchedElsewhere,
+
+    /** A finished run of this app waits for its install, and nothing has started it yet. See [OruHomeInput.readyToInstall]. */
+    ReadyToInstall,
 }
 
 /**
@@ -73,13 +76,16 @@ enum class OruHomeAction {
     Update,
     Open,
     PatchAgain,
+
+    /** Opens the Focus of a finished run, where its install is. */
+    Install,
 }
 
 /** The line under the status chip that says what happens next. */
 enum class OruHomeHint { ApkMirror, ReturnDownload, SavedCopy, SavedCopyGated }
 
 /** The one sentence a Simple card says about its app. Expert reads the status as chips instead, see [OruHomeCardStatus]. */
-enum class OruHomeSentence { Checking, NotChecked, NeedsApk, WaitingApk, SavedCopyGated, Ready, UpdateReady, UpToDate, Patched }
+enum class OruHomeSentence { Checking, NotChecked, NeedsApk, WaitingApk, SavedCopyGated, Ready, ReadyToInstall, UpdateReady, UpToDate, Patched }
 
 /** One card on Home, already decided. The composable only turns its parts into strings. */
 @Immutable
@@ -159,6 +165,11 @@ data class OruHomeInput(
     val sourceNames: Map<String, String> = emptyMap(),
     /** Packages Expert set up differently from the recommended setup, see [oruAppOverrides]. */
     val customized: Set<String> = emptySet(),
+    /**
+     * The ids of the cards whose finished single-app run waits to be installed, see [oruReadyToInstallOf]. Such a card
+     * says so and offers the install. It stops once the install starts or the run is released.
+     */
+    val readyToInstall: Set<String> = emptySet(),
     val banner: OruBannerInput,
     /** No network connection. An empty list with no connection is the network's fault, so the empty state says so. */
     val offline: Boolean = false,

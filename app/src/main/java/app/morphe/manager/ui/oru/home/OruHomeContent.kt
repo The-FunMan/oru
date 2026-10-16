@@ -634,6 +634,7 @@ private fun OruHomeCard.sentenceText(): String = when (status.simpleSentence()) 
     OruHomeSentence.SavedCopyGated -> version?.let { stringResource(R.string.oru_simple_status_gated, item.displayName, it) }
         ?: stringResource(R.string.oru_simple_status_gated_plain)
     OruHomeSentence.Ready -> stringResource(R.string.oru_simple_status_ready)
+    OruHomeSentence.ReadyToInstall -> stringResource(R.string.oru_notification_ready_to_install)
     OruHomeSentence.UpdateReady -> stringResource(R.string.oru_simple_status_update_ready)
     OruHomeSentence.UpToDate -> stringResource(R.string.oru_simple_status_up_to_date)
     OruHomeSentence.Patched -> stringResource(R.string.oru_simple_status_patched)
@@ -686,6 +687,7 @@ private fun OruHomeCard.statusTextRes(): Int = when (status) {
     OruHomeCardStatus.UpdateAvailable -> R.string.oru_state_update_available
     OruHomeCardStatus.Installed,
     OruHomeCardStatus.PatchedElsewhere -> R.string.oru_chip_installed
+    OruHomeCardStatus.ReadyToInstall -> R.string.oru_notification_ready_to_install
 }
 
 /** The label of an action. Expert's shorter label for the saved copy fits one line; Simple keeps the full one. */
@@ -704,6 +706,7 @@ private fun OruHomeAction.labelRes(expert: Boolean): Int = when (this) {
     OruHomeAction.Update -> R.string.oru_action_update
     OruHomeAction.Open -> R.string.oru_action_open
     OruHomeAction.PatchAgain -> R.string.oru_action_patch_again
+    OruHomeAction.Install -> R.string.oru_action_install
 }
 
 // Header spacing: the list adds 12 dp below the header, so 6 dp here makes 18.

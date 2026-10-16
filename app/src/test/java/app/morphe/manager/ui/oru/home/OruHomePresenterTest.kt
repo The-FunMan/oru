@@ -77,6 +77,7 @@ class OruHomePresenterTest {
         patchCounts: Map<String, Int> = emptyMap(),
         batch: OruBatchSignal = OruBatchSignal(OruBatchPhase.Idle),
         customized: Set<String> = emptySet(),
+        readyToInstall: Set<String> = emptySet(),
         offline: Boolean = false,
     ) = OruHomeInput(
         items = items,
@@ -87,6 +88,7 @@ class OruHomePresenterTest {
         effectiveVersions = supported.mapValues { (_, versions) -> targets(*versions.toTypedArray()) },
         patchCounts = patchCounts,
         customized = customized,
+        readyToInstall = readyToInstall,
         offline = offline,
         banner = OruBannerInput(
             managerUpdate = null,
@@ -242,6 +244,29 @@ class OruHomePresenterTest {
         assertTrue(OruHomePresenter.card(item, input(customized = setOf("com.example.app"))).customized)
         assertTrue(OruHomePresenter.card(item, input(expert = false, customized = setOf("com.example.app"))).customized)
         assertFalse(OruHomePresenter.card(item, input(customized = setOf("other.app"))).customized)
+    }
+
+    @Test
+    fun `a finished run waiting for its install says so and offers the install, in both modes`() {
+        val item = item(savedFile = File("saved.apk"))
+        val simple = OruHomePresenter.card(item, input(expert = false, readyToInstall = setOf(item.id)))
+        assertEquals(OruHomeCardStatus.ReadyToInstall, simple.status)
+        assertEquals(OruHomeAction.Install, simple.primary)
+        assertNull(simple.secondary)
+        assertEquals(OruTone.Ok, simple.chipTone)
+        assertEquals(OruHomeSentence.ReadyToInstall, simple.status.simpleSentence())
+        assertEquals(OruButtonStyle.Filled, OruHomeAction.Install.style())
+
+        val expert = OruHomePresenter.card(item, input(expert = true, readyToInstall = setOf(item.id)))
+        assertEquals(OruHomeCardStatus.ReadyToInstall, expert.status)
+        assertEquals(OruHomeAction.Install, expert.primary)
+    }
+
+    @Test
+    fun `the ready state marks only the card of its run and yields to nothing else`() {
+        val item = item(savedFile = File("saved.apk"))
+        assertEquals(OruHomeCardStatus.SavedCopy, OruHomePresenter.card(item, input(readyToInstall = setOf("other.app"))).status)
+        assertEquals(OruHomeCardStatus.SavedCopy, OruHomePresenter.card(item, input()).status)
     }
 
     @Test

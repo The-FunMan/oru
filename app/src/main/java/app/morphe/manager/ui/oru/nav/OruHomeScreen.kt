@@ -51,6 +51,7 @@ import app.morphe.manager.ui.oru.home.OruHomeRun
 import app.morphe.manager.ui.oru.home.OruManagerUpdate
 import app.morphe.manager.ui.oru.home.oruAppName
 import app.morphe.manager.ui.oru.home.oruHomeRunOf
+import app.morphe.manager.ui.oru.home.oruReadyToInstallOf
 import app.morphe.manager.ui.oru.home.oruSingleHomeRunOf
 import app.morphe.manager.ui.oru.settings.OruSettingsOpen
 import app.morphe.manager.ui.oru.settings.OruSettingsSection
@@ -251,6 +252,8 @@ fun OruHomeScreen(
         patchCounts = patchCounts,
         sourceNames = sourceNames,
         customized = customizedApps,
+        // A finished single-app run waiting for its install marks its card, see oruReadyToInstallOf
+        readyToInstall = oruReadyToInstallOf(activeRun),
         banner = OruBannerInput(
             managerUpdate = oruManagerUpdateOf(
                 vm = updateViewModel,
