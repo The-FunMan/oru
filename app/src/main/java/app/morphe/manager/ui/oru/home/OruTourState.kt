@@ -31,10 +31,12 @@ data class OruTourState(
     val dismissed: Boolean = false,
 )
 
-/** A card that means the user already patched or installed something, so a first-run tour has nothing to teach. */
+/**
+ * A card that means the user already patched or installed something, so a first-run tour has nothing to teach. An update
+ * badge is not one of them: a stock app that is merely on the phone can carry it.
+ */
 private val PatchedStatuses = setOf(
     OruHomeCardStatus.Installed,
-    OruHomeCardStatus.UpdateAvailable,
     OruHomeCardStatus.PatchedElsewhere,
 )
 

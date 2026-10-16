@@ -33,8 +33,8 @@ class OruTourStateTest {
     }
 
     @Test
-    fun updateAvailableCardHidesTheTour() {
-        assertFalse(oruTourVisible(done = false, state = fresh, input = input(OruHomeCardStatus.UpdateAvailable)))
+    fun updateAvailableCardDoesNotHideTheTour() {
+        assertTrue(oruTourVisible(done = false, state = fresh, input = input(OruHomeCardStatus.UpdateAvailable)))
     }
 
     @Test
@@ -87,7 +87,7 @@ class OruTourStateTest {
     @Test
     fun patchedCardIsRecognised() {
         assertTrue(oruTourPatchedOn(listOf(OruHomeCardStatus.NeedsApk, OruHomeCardStatus.Installed)))
-        assertTrue(oruTourPatchedOn(listOf(OruHomeCardStatus.UpdateAvailable)))
+        assertFalse(oruTourPatchedOn(listOf(OruHomeCardStatus.UpdateAvailable)))
         assertTrue(oruTourPatchedOn(listOf(OruHomeCardStatus.PatchedElsewhere)))
         assertFalse(oruTourPatchedOn(listOf(OruHomeCardStatus.NeedsApk, OruHomeCardStatus.ReadyToInstall)))
     }

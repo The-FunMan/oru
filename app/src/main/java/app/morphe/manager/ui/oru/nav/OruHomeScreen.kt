@@ -142,7 +142,10 @@ fun OruHomeScreen(
     val hasHeldBackSources by homeViewModel.patchBundleRepository.hasHeldBackSources.collectAsStateWithLifecycle()
     val isRefreshing by homeViewModel.isRefreshing.collectAsStateWithLifecycle()
     val useExpertMode by homeViewModel.prefs.useExpertMode.getAsState()
-    val tourDone by homeViewModel.prefs.oruTourDone.getAsState()
+    val tourFlag by homeViewModel.prefs.oruTourDone.getAsState()
+    // A first patch that ended on its Done screen has already taught what the tour would
+    val keyNoticeShown by homeViewModel.prefs.oruKeyNoticeShown.getAsState()
+    val tourDone = tourFlag || keyNoticeShown
 
     val visibleItems = homeAppState?.visible.orEmpty()
 
@@ -284,8 +287,8 @@ fun OruHomeScreen(
     val uiState = remember(input) { OruHomePresenter.state(input) }
 
     // The first patch ends the first-run tour for good, however it was made: a patched app on Home is the proof
-    LaunchedEffect(tourDone, uiState) {
-        if (!tourDone && oruTourPatchedOn(uiState.cards.map { it.status })) {
+    LaunchedEffect(tourFlag, uiState) {
+        if (!tourFlag && oruTourPatchedOn(uiState.cards.map { it.status })) {
             homeViewModel.prefs.oruTourDone.update(true)
         }
     }
