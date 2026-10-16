@@ -44,7 +44,8 @@ import androidx.compose.ui.window.DialogWindowProvider
 
 /**
  * A decision with one or two actions, as a centred card over a dimmed scrim. The primary action is filled,
- * the secondary one tonal, and both stack full width so long labels never wrap. Tapping the scrim or going
+ * the secondary one tonal or a text button in the tone (see [OruDialogActionStyle]), and both stack full width so long
+ * labels never wrap. Tapping the scrim or going
  * back calls [onDismiss]. An [OruTone.Error] tone colours the title, so a removal reads as one. [hint] is
  * an optional line under the actions.
  */
@@ -149,11 +150,19 @@ fun OruDecisionDialog(
                             modifier = Modifier.fillMaxWidth(),
                         )
                         if (secondary != null) {
-                            OruSecondaryButton(
-                                text = secondary.label,
-                                onClick = secondary.onClick,
-                                modifier = Modifier.fillMaxWidth(),
-                            )
+                            when (secondary.style) {
+                                OruDialogActionStyle.Tonal -> OruSecondaryButton(
+                                    text = secondary.label,
+                                    onClick = secondary.onClick,
+                                    modifier = Modifier.fillMaxWidth(),
+                                )
+                                OruDialogActionStyle.Text -> OruTextButton(
+                                    text = secondary.label,
+                                    onClick = secondary.onClick,
+                                    color = if (tone == OruTone.Error) scheme.error else scheme.primary,
+                                    modifier = Modifier.fillMaxWidth(),
+                                )
+                            }
                         }
                     }
                     if (hint != null) {

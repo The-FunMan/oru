@@ -44,6 +44,7 @@ import app.morphe.manager.R
 import app.morphe.manager.ui.oru.components.OruContainerRole
 import app.morphe.manager.ui.oru.components.OruDecisionDialog
 import app.morphe.manager.ui.oru.components.OruDialogAction
+import app.morphe.manager.ui.oru.components.OruDialogActionStyle
 import app.morphe.manager.ui.oru.components.OruFitMinSize
 import app.morphe.manager.ui.oru.components.OruFrostedDock
 import app.morphe.manager.ui.oru.components.OruHero
@@ -127,8 +128,9 @@ fun OruRunContent(
     // The percentage of this run never steps back: a retry that starts over holds the figure it had reached
     val hold = remember(runKey) { OruProgressHold() }
     val shownProgress = hold.show(run.progress)
-    // The Cancel button is where the Patch button was, so a second tap of a double tap on Patch lands here as the run
-    // layout appears. Taps are ignored for a moment after the layout is shown (see OruTapGate).
+    // The dock's first button is where the Patch button was, so a second tap of a double tap on Patch lands on Keep
+    // going, which is harmless, and not on Cancel. Cancel still ignores taps for a moment after the layout is shown
+    // (see OruTapGate).
     val cancelGate = remember(runKey) { OruTapGate().apply { arm() } }
 
     Column(modifier = modifier.fillMaxSize()) {
@@ -245,15 +247,16 @@ fun OruRunContent(
             title = stringResource(R.string.oru_run_cancel_title),
             body = stringResource(R.string.oru_run_cancel_body),
             primary = OruDialogAction(
+                label = stringResource(R.string.oru_run_keep_patching),
+                onClick = { confirmCancel = false },
+            ),
+            secondary = OruDialogAction(
                 label = stringResource(R.string.oru_run_cancel_go),
                 onClick = {
                     confirmCancel = false
                     onCancel()
                 },
-            ),
-            secondary = OruDialogAction(
-                label = stringResource(R.string.oru_run_keep_patching),
-                onClick = { confirmCancel = false },
+                style = OruDialogActionStyle.Text,
             ),
             tone = OruTone.Error,
             onDismiss = { confirmCancel = false },
