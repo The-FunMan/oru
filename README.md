@@ -24,6 +24,11 @@ Oru is an Android app. It patches apps you already have, on your own device.
 <div align="center">
 
 <picture>
+  <source media="(prefers-color-scheme: dark)" srcset="site/assets/shots/apple-tap-dark.webp">
+  <img src="site/assets/shots/apple-tap-light.webp" width="880" alt="The words One tap. above the top of a phone. Its screen shows a hexagon filling from the bottom under the word Patching, with three steps: Preparing, Applying patches and Finishing.">
+</picture>
+
+<picture>
   <source media="(prefers-color-scheme: dark)" srcset="site/assets/shots/apple-done-dark.webp">
   <img src="site/assets/shots/apple-done-light.webp" width="880" alt="The words Your call. above the top of a phone. Its screen shows a complete green hexagon with a check mark and the word Installed.">
 </picture>
