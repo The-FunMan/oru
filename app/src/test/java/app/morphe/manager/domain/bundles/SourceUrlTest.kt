@@ -69,7 +69,7 @@ class SourceUrlTest {
     }
 
     @Test
-    fun `the .git form and the plain form are the same source`() {
+    fun `the dot git form and the plain form are the same source`() {
         assertEquals(
             SourceUrl.canonical("https://github.com/owner/repo"),
             SourceUrl.canonical("https://github.com/owner/repo.git"),
