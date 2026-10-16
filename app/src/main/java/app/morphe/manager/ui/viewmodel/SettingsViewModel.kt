@@ -29,6 +29,8 @@ import app.morphe.manager.domain.repository.SourceMuteRepository
 import app.morphe.manager.patcher.patch.PatchInfo
 import app.morphe.manager.ui.screen.settings.system.CopyTarget
 import app.morphe.manager.ui.screen.shared.CopySelectionCandidate
+import app.morphe.manager.ui.oru.focus.expert.asNameFact
+import app.morphe.manager.ui.oru.focus.expert.displaySourceName
 import app.morphe.manager.util.AppDataResolver
 import app.morphe.manager.util.AppDataSource
 import app.morphe.manager.util.syncFcmTopics
@@ -290,10 +292,13 @@ class SettingsViewModel(
         selectionRepository.getSelectionsSummaryFlow()
             .stateIn(viewModelScope, SharingStarted.Eagerly, emptyMap())
 
-    /** Bundle uid → bundle name */
+    /** Bundle uid → the name the bundle is shown under, with its repository where another source shares the name */
     val bundleNames: StateFlow<Map<Int, String>> =
         patchBundleRepository.sources
-            .map { bundles -> bundles.associate { it.uid to it.name } }
+            .map { bundles ->
+                val facts = bundles.map { it.asNameFact() }
+                facts.associate { it.uid to displaySourceName(it, facts) }
+            }
             .stateIn(viewModelScope, SharingStarted.Eagerly, emptyMap())
 
     // Which sources an app is kept from is part of how it is configured, so a reset that clears

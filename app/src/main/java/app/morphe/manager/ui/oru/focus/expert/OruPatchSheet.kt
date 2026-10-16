@@ -255,7 +255,10 @@ private fun OruPatchRow(
 }
 
 /** The name a source shows under in the sheets (the default source is never named by its own configured name). */
-internal fun sourceTitle(home: HomeViewModel, uid: Int, fallback: String): String =
-    oruSourceDisplayName(uid, home.getPatchSource(uid)?.displayTitle ?: fallback)
+internal fun sourceTitle(home: HomeViewModel, uid: Int, fallback: String): String {
+    val source = home.getPatchSource(uid) ?: return oruSourceDisplayName(uid, fallback)
+    // Named with its repository where another source has the same name, so the two can be told apart
+    return displaySourceName(source.asNameFact(), home.patchBundleRepository.sources.value.map { it.asNameFact() })
+}
 
 private val SheetGutter = 20.dp
