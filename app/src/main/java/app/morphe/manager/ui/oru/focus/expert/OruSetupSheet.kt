@@ -36,6 +36,7 @@ import app.morphe.manager.ui.oru.focus.OruFocusViewModel
 import app.morphe.manager.ui.oru.focus.customize.oruBrandingTargets
 import app.morphe.manager.ui.oru.focus.oruFocusShowsInstalled
 import app.morphe.manager.ui.oru.home.OruHomePresenter
+import app.morphe.manager.ui.oru.sources.oruVersionGate
 import app.morphe.manager.ui.oru.sources.rememberOruAppSources
 import app.morphe.manager.ui.oru.theme.OruGroupInnerShape
 import app.morphe.manager.ui.oru.theme.OruGroupShape
@@ -103,10 +104,13 @@ internal fun rememberOruSetup(vm: OruFocusViewModel, home: HomeViewModel, item: 
     val effective = appSources.effective
     val loadedSources by home.patchBundleRepository.sources.collectAsStateWithLifecycle()
     val held = vm.held
-    var hasSavedCopy by remember(packageName) { mutableStateOf(false) }
+    var savedVersion by remember(packageName) { mutableStateOf<String?>(null) }
     LaunchedEffect(packageName) {
-        hasSavedCopy = originals.get(packageName) != null
+        savedVersion = originals.get(packageName)?.version
     }
+    // A saved copy the sources do not patch is not offered to patch again (see oruVersionGate)
+    val hasSavedCopy = savedVersion != null &&
+        oruVersionGate(savedVersion, null, appSources.effectiveVersions).patchable
     val effectiveSource = loadedSources.firstOrNull { it.uid == effective?.uid }
     val channels = oruChannelStates(
         listOfNotNull(effectiveSource).map { source ->
