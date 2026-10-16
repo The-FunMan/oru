@@ -102,6 +102,16 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+      # A script committed from Windows loses its executable bit and then fails with "Permission denied" in CI.
+      # The scripts shipped as app assets are not run from the repository, so they are left out.
+      - name: Scripts are executable
+        run: |
+          bad=$(git ls-files -s '*.sh' | awk '$1 != "100755" && $4 !~ /\/assets\// {print $4}')
+          if [ -n "$bad" ]; then
+            echo "::error::These scripts are not executable in git. Run: git update-index --chmod=+x <file>"
+            echo "$bad"
+            exit 1
+          fi
       - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
         with:
           workspaces: |
