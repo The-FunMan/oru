@@ -10,6 +10,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.SavedStateHandle
 import app.morphe.manager.domain.batch.BatchPatchCoordinator
 import app.morphe.manager.domain.batch.BatchPhase
+import app.morphe.manager.ui.oru.home.oruNotifiedAppName
 import app.morphe.manager.ui.oru.install.OruInstallCoordinator
 import app.morphe.manager.ui.oru.install.OruInstallUi
 import app.morphe.manager.ui.oru.install.OruInstallerOption
@@ -330,7 +331,10 @@ class SingleRunOwner(
                                 ready = true,
                             )
                         )
-                        readyNotifier.readyToInstall(run.packageKey, run.item.displayName)
+                        readyNotifier.readyToInstall(
+                            run.packageKey,
+                            oruNotifiedAppName(run.item.packageName, run.item.displayName),
+                        )
                     }
                     else -> {
                         runs.clear(this@SingleRunOwner)
