@@ -5,7 +5,9 @@
 
 package app.morphe.manager.ui.screen.home
 
+import android.content.Context
 import android.content.Intent
+import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
@@ -64,8 +66,10 @@ import app.morphe.manager.domain.manager.PreferencesManager
 import app.morphe.manager.domain.manager.SourceBundleSortMode
 import app.morphe.manager.domain.repository.BlocklistRepository
 import app.morphe.manager.domain.repository.PatchBundleRepository
+import app.morphe.manager.domain.repository.PatchBundleRepository.Companion.DEFAULT_SOURCE_UID
 import app.morphe.manager.domain.repository.SourceMuteRepository
 import app.morphe.manager.domain.repository.appsBrought
+import app.morphe.manager.patcher.patch.PatchBundleInfo
 import app.morphe.manager.ui.screen.patcher.IncompatiblePatcherVersionDialog
 import app.morphe.manager.ui.screen.shared.*
 import app.morphe.manager.util.*
@@ -103,6 +107,7 @@ fun BundleManagementSheet(
     val prefs: PreferencesManager = koinInject()
     val sourceMuteRepository: SourceMuteRepository = koinInject()
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     val sources by patchBundleRepository.sources.collectAsStateWithLifecycle()
     val bundleState by patchBundleRepository.bundleState.collectAsStateWithLifecycle()
@@ -117,6 +122,7 @@ fun BundleManagementSheet(
     val bundleInfo by patchBundleRepository.allBundlesInfoFlow.collectAsStateWithLifecycle(emptyMap())
     val blockedSources by patchBundleRepository.blockedSources.collectAsStateWithLifecycle(emptyMap())
     val keptFrom by sourceMuteRepository.mutedSources.collectAsStateWithLifecycle(emptyMap())
+    val appMetadata by patchBundleRepository.allAppMetadata.collectAsStateWithLifecycle()
     // How many of its apps each source still brings, out of all it names
     val appCounts = remember(bundleInfo, keptFrom) {
         bundleInfo.mapValues { (_, info) -> info.appsBrought(keptFrom).size to info.listedApps().size }
@@ -531,9 +537,21 @@ fun BundleManagementSheet(
 
     // Delete confirmation dialog
     bundleToDelete.value?.let { bundle ->
+        // The apps this source patches now, and where each one goes once it is gone, named in the confirmation
+        val sourceNames = sources.associate { it.uid to it.shownTitle }
+        val moves = appsMovedOffBy(bundle.uid, bundleInfo, sourceNames, keptFrom)
+        val target = SourceRemoval.sharedTarget(moves)?.let { sourceNames[it.uid] }
+            ?: stringResource(R.string.sources_delete_target_other)
+        val moveNames = moves.map { appMetadata[it.packageName]?.displayName ?: it.packageName }
+        val impact = context.removalSentence(
+            names = moveNames,
+            target = target,
+            oneRes = R.string.sources_delete_impact_one,
+            manyRes = R.string.sources_delete_impact_many
+        )
         ConfirmDialog(
             title = stringResource(R.string.delete),
-            message = stringResource(R.string.sources_dialog_delete_confirm_body),
+            message = listOfNotNull(stringResource(R.string.sources_dialog_delete_confirm_body), impact).joinToString("\n\n"),
             primaryText = stringResource(R.string.delete),
             subject = {
                 ConfirmSubject(name = bundle.shownTitle) { modifier ->
@@ -545,6 +563,13 @@ fun BundleManagementSheet(
             onConfirm = {
                 onDelete(bundle)
                 bundleToDelete.value = null
+                // Said once the source is gone, so an app that moved does not look unchanged without a reason
+                context.removalSentence(
+                    names = moveNames,
+                    target = target,
+                    oneRes = R.string.sources_removed_moved_one,
+                    manyRes = R.string.sources_removed_moved_many
+                )?.let { context.toast(it) }
             }
         )
     }
@@ -1395,4 +1420,51 @@ private fun Modifier.saturation(saturation: Float): Modifier = drawWithCache {
             canvas.restore()
         }
     }
+}
+
+/**
+ * The apps that patch from the source [uid] now, each with the source it moves to once [uid] is gone. Only enabled
+ * sources count, since only those patch anything.
+ */
+private fun appsMovedOffBy(
+    uid: Int,
+    bundleInfo: Map<Int, PatchBundleInfo>,
+    sourceNames: Map<Int, String>,
+    keptFrom: Map<String, Set<Int>>,
+): List<AppMovedOff> {
+    val covering = mutableMapOf<String, MutableList<AppSourceFact>>()
+    bundleInfo.forEach { (sourceUid, info) ->
+        if (!info.enabled) return@forEach
+        val fact = AppSourceFact(
+            uid = sourceUid,
+            name = sourceNames[sourceUid] ?: info.name,
+            isDefault = sourceUid == DEFAULT_SOURCE_UID,
+            repositoryPath = null,
+            patchVersion = null,
+            patchCount = 0,
+            recommendedVersion = null,
+        )
+        info.listedApps().forEach { packageName -> covering.getOrPut(packageName) { mutableListOf() } += fact }
+    }
+    return SourceRemoval.appsMovedOff(uid, covering, keptFrom)
+}
+
+/**
+ * The sentence naming the apps that move to [target]: [oneRes] for a single app, [manyRes] for several. Null when no
+ * app moves.
+ */
+private fun Context.removalSentence(
+    names: List<String>,
+    target: String,
+    @StringRes oneRes: Int,
+    @StringRes manyRes: Int,
+): String? {
+    if (names.isEmpty()) return null
+    val list = SourceRemoval.nameList(names)
+    val shown = when {
+        list.others > 0 -> getString(R.string.sources_apps_and_more, list.shown.joinToString(", "), list.others)
+        list.shown.size == 2 -> getString(R.string.sources_apps_pair, list.shown[0], list.shown[1])
+        else -> list.shown.single()
+    }
+    return getString(if (names.size == 1) oneRes else manyRes, shown, target)
 }

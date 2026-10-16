@@ -199,6 +199,13 @@
     <string name="sources_dialog_add_source">Add patch source</string>
     <string name="sources_dialog_checking">Checking…</string>
     <string name="sources_dialog_delete_confirm_body">This cannot be undone</string>
+    <string name="sources_delete_impact_one">%1$s uses this source and will switch to %2$s.</string>
+    <string name="sources_delete_impact_many">%1$s use this source and will switch to %2$s.</string>
+    <string name="sources_delete_target_other">another source</string>
+    <string name="sources_removed_moved_one">%1$s now uses %2$s.</string>
+    <string name="sources_removed_moved_many">%1$s now use %2$s.</string>
+    <string name="sources_apps_pair">%1$s and %2$s</string>
+    <string name="sources_apps_and_more">%1$s and %2$d more</string>
     <string name="sources_dialog_remote">Remote</string>
     <string name="sources_dialog_remote_url">Source URL</string>
     <string name="sources_dialog_remote_url_hint">A repository or a link to a patch bundle .json. Paste several at once to add them all</string>
