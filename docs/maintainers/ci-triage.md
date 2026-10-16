@@ -55,6 +55,7 @@ Anything that reaches the network or follows a moving target is a way for a run 
 - **Retries for network steps.** SDK packages, Rust targets and bundle downloads go through `.github/scripts/retry.sh`. Gradle repository downloads retry through the properties at the end of `gradle.properties`. A checksum mismatch is never retried.
 - **Each repository answers for its own groups.** JitPack is asked only for `com.github.*` and GitHub Packages only for `app.morphe`. Central and Google serve everything else, so an outage at a host we only need for a few libraries does not touch the rest.
 - **Both copies of a Kotlin plugin marker POM are trusted** (see the table above).
+- **The patcher jobs build the patcher alone.** They run from `patcher/`. From the repository root Gradle also configures the app, and its Android plugin then tries to download the NDK, which those jobs do not install.
 - **Pinned actions and the runner image label.** Actions are pinned by commit. The runner label is `ubuntu-24.04`, not `latest`.
 
 Not pinned on purpose: the Rust toolchain on the runner (`cargo test` only, no lint gate) and the Gradle and Kotlin versions, which are pinned in the repository already.

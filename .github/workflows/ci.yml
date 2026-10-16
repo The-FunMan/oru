@@ -50,7 +50,9 @@ jobs:
       - uses: ./.github/actions/setup-oru
         with:
           native: false
-      - run: ./gradlew :patcher:test :patcher:apiCheck :patcher:jar --stacktrace
+      # Run from the patcher's own build. From the repository root Gradle also configures the app, whose Android
+      # plugin then wants the NDK, which this job does not install.
+      - run: cd patcher && ./gradlew test apiCheck jar --stacktrace
 
   patch-api-guard:
     runs-on: ubuntu-24.04
@@ -64,7 +66,7 @@ jobs:
       - uses: ./.github/actions/setup-oru
         with:
           native: false
-      - run: ./gradlew :patcher:jar --stacktrace
+      - run: cd patcher && ./gradlew jar --stacktrace
       # The blocking check runs against a bundle pinned by tag and checksum (tools/parity/pinned-bundle.env), so a run
       # means the same thing every time. Newer upstream releases are checked in the advisory step below.
       - name: Fetch the pinned bundle
