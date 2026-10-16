@@ -65,25 +65,33 @@ jobs:
         with:
           native: false
       - run: ./gradlew :patcher:jar --stacktrace
-      - name: Fetch upstream bundles (read-only)
+      # The blocking check runs against a bundle pinned by tag and checksum (tools/parity/pinned-bundle.env), so a run
+      # means the same thing every time. Newer upstream releases are checked in the advisory step below.
+      - name: Fetch the pinned bundle
         run: |
-          d="$RUNNER_TEMP/bundles"
-          mkdir -p "$d/stable" "$d/dev"
-          gh release download --repo MorpheApp/morphe-patches --pattern '*.mpp' --dir "$d/stable"
-          tag=$(gh release list --repo MorpheApp/morphe-patches --exclude-drafts --limit 30 \
-                --json tagName,isPrerelease --jq '[.[] | select(.isPrerelease)][0].tagName')
-          gh release download "$tag" --repo MorpheApp/morphe-patches --pattern '*.mpp' --dir "$d/dev"
-      - name: Guard, stable (blocking)
+          bundle=$(.github/scripts/fetch-pinned-bundle.sh "$RUNNER_TEMP/bundles/pinned" | tail -n 1)
+          echo "BUNDLE=$bundle" >> "$GITHUB_ENV"
+      - name: Guard, pinned bundle (blocking)
         run: |
           python3 -I tools/parity/patch_api_guard.py \
             --patcher "$(ls patcher/build/libs/morphe-patcher-[0-9]*.jar | head -1)" \
-            --bundle "$RUNNER_TEMP"/bundles/stable/*.mpp
-      - name: Guard, dev (advisory)
+            --bundle "$BUNDLE"
+      - name: Guard, newest upstream releases (advisory)
         continue-on-error: true
         run: |
-          python3 -I tools/parity/patch_api_guard.py \
-            --patcher "$(ls patcher/build/libs/morphe-patcher-[0-9]*.jar | head -1)" \
-            --bundle "$RUNNER_TEMP"/bundles/dev/*.mpp
+          d="$RUNNER_TEMP/bundles/latest"
+          mkdir -p "$d/stable" "$d/dev"
+          .github/scripts/retry.sh 4 gh release download --repo MorpheApp/morphe-patches --pattern '*.mpp' --dir "$d/stable"
+          tag=$(.github/scripts/retry.sh 4 gh release list --repo MorpheApp/morphe-patches --exclude-drafts --limit 30 \
+                --json tagName,isPrerelease --jq '[.[] | select(.isPrerelease)][0].tagName')
+          .github/scripts/retry.sh 4 gh release download "$tag" --repo MorpheApp/morphe-patches --pattern '*.mpp' --dir "$d/dev"
+          status=0
+          for set in stable dev; do
+            python3 -I tools/parity/patch_api_guard.py \
+              --patcher "$(ls patcher/build/libs/morphe-patcher-[0-9]*.jar | head -1)" \
+              --bundle "$d/$set"/*.mpp || status=1
+          done
+          exit "$status"
 
   rust:
     runs-on: ubuntu-24.04

@@ -29,7 +29,7 @@ echo "Installing into $tools ($(df -h --output=avail "$tools" | tail -n 1 | tr -
 log "JDK $jdk_major (Temurin)"
 if [ ! -x "$tools/jdk/bin/java" ]; then
   tmp=$(mktemp -d)
-  curl -fsSL "https://api.adoptium.net/v3/binary/latest/$jdk_major/ga/linux/x64/jdk/hotspot/normal/eclipse" -o "$tmp/jdk.tgz"
+  curl -fsSL --retry 5 --retry-delay 3 "https://api.adoptium.net/v3/binary/latest/$jdk_major/ga/linux/x64/jdk/hotspot/normal/eclipse" -o "$tmp/jdk.tgz"
   mkdir -p "$tools/jdk"
   tar -xzf "$tmp/jdk.tgz" -C "$tools/jdk" --strip-components=1
   rm -rf "$tmp"
@@ -40,7 +40,7 @@ log "Android command line tools"
 sdk="$tools/android-sdk"
 if [ ! -x "$sdk/cmdline-tools/latest/bin/sdkmanager" ]; then
   tmp=$(mktemp -d)
-  curl -fsSL "$cmdline_tools_url" -o "$tmp/cmdline.zip"
+  curl -fsSL --retry 5 --retry-delay 3 "$cmdline_tools_url" -o "$tmp/cmdline.zip"
   unzip -q "$tmp/cmdline.zip" -d "$tmp"
   mkdir -p "$sdk/cmdline-tools"
   rm -rf "$sdk/cmdline-tools/latest"
@@ -59,7 +59,7 @@ sdkmanager="$sdk/cmdline-tools/latest/bin/sdkmanager"
 log "Rust"
 export RUSTUP_HOME="$tools/rustup" CARGO_HOME="$tools/cargo"
 if [ ! -x "$CARGO_HOME/bin/rustup" ]; then
-  curl -fsSL https://sh.rustup.rs | sh -s -- -y --profile minimal --no-modify-path >/dev/null
+  curl -fsSL --retry 5 --retry-delay 3 https://sh.rustup.rs | sh -s -- -y --profile minimal --no-modify-path >/dev/null
 fi
 "$CARGO_HOME/bin/rustup" target add "${rust_targets[@]}"
 "$CARGO_HOME/bin/rustc" --version
