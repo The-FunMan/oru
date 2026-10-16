@@ -64,7 +64,6 @@ import app.morphe.manager.ui.oru.components.OruBackdropHost
 import app.morphe.manager.ui.oru.components.OruBanner
 import app.morphe.manager.ui.oru.components.OruCardButton
 import app.morphe.manager.ui.oru.components.OruCardUi
-import app.morphe.manager.ui.oru.components.OruChip
 import app.morphe.manager.ui.oru.components.OruChipUi
 import app.morphe.manager.ui.oru.components.OruGlassForm
 import app.morphe.manager.ui.oru.components.OruGlassSurface
@@ -230,7 +229,6 @@ fun OruHomeContent(
                                     anchor = titleAnchor,
                                     titleAlpha = titleAlpha,
                                     subtitleAlpha = subtitleAlpha,
-                                    expert = state.expert,
                                 )
                             }
 
@@ -405,7 +403,6 @@ private fun HomeHeader(
     anchor: OruTitleAnchor,
     titleAlpha: () -> Float,
     subtitleAlpha: () -> Float,
-    expert: Boolean,
 ) {
     Column(modifier = Modifier.padding(top = HeaderTopSpace, bottom = HeaderBottomSpace)) {
         Box(
@@ -436,15 +433,6 @@ private fun HomeHeader(
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
-        // The mode the cards are in, under what the list says: Expert only, as Simple is the default reading
-        if (expert) {
-            Spacer(modifier = Modifier.height(TitleLedeSpace))
-            OruChip(
-                text = stringResource(R.string.oru_mode_expert),
-                tone = OruTone.Neutral,
-                modifier = Modifier.graphicsLayer { alpha = subtitleAlpha() },
-            )
-        }
     }
 }
 
