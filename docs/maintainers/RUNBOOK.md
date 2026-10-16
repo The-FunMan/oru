@@ -6,6 +6,9 @@ The checklists for running this repository: setting it up, cutting releases, and
 
 - [First-time setup](first-time-setup.md): settings, environments, secrets, the signing key, the local build and the first dry run.
 - [Branch protection](branch-protection.md): the settings for `main` and `dev`, the commands that apply them, and how to check them.
+- [Remote dev box](dev-box.md): building and testing on a Linux machine over SSH, the toolchain script, credentials and housekeeping.
+- [CI triage](ci-triage.md): reading a red run, the failures seen so far and their fixes.
+- [Device QA](device-qa.md): the rules for testing on a phone or an emulator, and the release smoke test.
 
 ## Releases
 
@@ -43,4 +46,7 @@ The checklists for running this repository: setting it up, cutting releases, and
 | `.github/scripts/ci-gate.sh` | Cut stable release | makes sure the required CI checks passed on the release commit |
 | `.github/scripts/verify-apk.sh` | CI and both release workflows | checks the APK |
 | `scripts/privacy-scan.sh` | the owner, before publishing | scans the tree and the new commits |
+| `scripts/dev/setup-linux.sh` | the owner and agents | installs the build toolchain on a Linux box |
+| `scripts/dev/check.sh` | the owner and agents | the CI checks, locally (`quick` or `full`) |
+| `scripts/dev/oru-focus-guard.sh` | device QA | succeeds only when Oru is the focused window |
 | `tools/parity/patch_api_guard.py` | CI and the release checklist | checks bundles against the patcher API |
