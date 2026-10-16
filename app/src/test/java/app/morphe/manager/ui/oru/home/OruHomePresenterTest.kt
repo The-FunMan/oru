@@ -155,6 +155,23 @@ class OruHomePresenterTest {
     }
 
     @Test
+    fun `the focus opens on the step its card names, for each mode and state`() {
+        val needsApk = item(deleted = true, installed = installed())
+        assertEquals(OruHomeAction.GetIt, OruHomePresenter.primaryActionOf(needsApk, null, expert = false))
+        assertEquals(OruHomeAction.FindOnApkMirror, OruHomePresenter.primaryActionOf(needsApk, null, expert = true))
+
+        val ready = item(onDevice = true)
+        assertEquals(OruHomeAction.Patch, OruHomePresenter.primaryActionOf(ready, setOf("1.0"), expert = false))
+    }
+
+    @Test
+    fun `the step a focus opens on is the primary action its card shows`() {
+        val needsApk = item(deleted = true, installed = installed())
+        val card = OruHomePresenter.card(needsApk, input(expert = false))
+        assertEquals(card.primary, OruHomePresenter.primaryActionOf(needsApk, null, expert = false))
+    }
+
+    @Test
     fun `simple mode drops the patch count, the source and the second button`() {
         val card = OruHomePresenter.card(
             item(installed = installed(), hasUpdate = true),

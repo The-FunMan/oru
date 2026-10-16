@@ -8,6 +8,7 @@ package app.morphe.manager.ui.oru.home
 import app.morphe.manager.data.room.apps.installed.InstallType
 import app.morphe.manager.data.room.apps.installed.InstalledApp
 import app.morphe.manager.data.room.apps.installed.trackingKey
+import app.morphe.manager.ui.oru.focus.OruFocusOpening
 import app.morphe.manager.ui.oru.components.OruTone
 import app.morphe.manager.ui.model.HomeAppItem
 import kotlin.test.Test
@@ -95,6 +96,21 @@ class OruHomeActionRouterTest {
         val commands = FakeCommands()
         OruHomeActionRouter.route(card(), OruHomeAction.FindOnApkMirror, commands)
         assertEquals(listOf("patch:com.example.app:-"), commands.calls)
+    }
+
+    @Test
+    fun `get it makes no call, because the focus it opens already starts on the download step`() {
+        val commands = FakeCommands()
+        OruHomeActionRouter.route(card(), OruHomeAction.GetIt, commands)
+        assertEquals(emptyList<String>(), commands.calls)
+    }
+
+    @Test
+    fun `get it opens focus on the download step, and the other actions keep the apk choice`() {
+        assertEquals(OruFocusOpening.DownloadStep, OruFocusOpening.forAction(OruHomeAction.GetIt))
+        OruHomeAction.entries
+            .filter { it != OruHomeAction.GetIt }
+            .forEach { assertEquals(OruFocusOpening.Choice, OruFocusOpening.forAction(it), it.name) }
     }
 
     @Test

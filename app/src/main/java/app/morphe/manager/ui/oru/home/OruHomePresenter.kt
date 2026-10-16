@@ -86,6 +86,14 @@ object OruHomePresenter {
         else -> needsFile(handedOff)
     }
 
+    /**
+     * The primary action the card of [item] shows, read off the same status [card] uses. The Focus opened from that
+     * card reads it too, so the step it opens on is the one the card names. A Focus is open for an app only when no
+     * hand-off waits on it, so [handedOff] is false here.
+     */
+    fun primaryActionOf(item: HomeAppItem, supportedVersions: Set<String>?, expert: Boolean): OruHomeAction =
+        primaryFor(statusOf(item, handedOff = false, supportedVersions = supportedVersions), expert)
+
     private fun needsFile(handedOff: Boolean): OruHomeCardStatus =
         if (handedOff) OruHomeCardStatus.Waiting else OruHomeCardStatus.NeedsApk
 

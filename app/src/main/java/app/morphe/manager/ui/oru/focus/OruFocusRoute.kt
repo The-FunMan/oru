@@ -158,7 +158,7 @@ fun OruFocusRoute(
     }
 
     LaunchedEffect(item?.id) {
-        item?.let { vm.autoStart(it) }
+        item?.let { vm.autoStart(it, expert) }
     }
 
     // Permissions and Shizuku may change in the settings the install sends the user to; the plan is read again on resume

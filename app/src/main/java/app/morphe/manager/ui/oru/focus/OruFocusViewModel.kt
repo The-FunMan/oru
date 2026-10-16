@@ -26,6 +26,7 @@ import app.morphe.manager.ui.oru.install.OruInstallerOption
 import app.morphe.manager.ui.oru.install.OruInstallerReadings
 import app.morphe.manager.ui.oru.install.OruPackageReadings
 import app.morphe.manager.ui.oru.install.SignatureSource
+import app.morphe.manager.ui.oru.home.OruHomePresenter
 import app.morphe.manager.ui.oru.install.oruInstallRequest
 import app.morphe.manager.ui.oru.run.OruFailure
 import app.morphe.manager.ui.oru.run.OruMemoryOffer
@@ -246,12 +247,13 @@ class OruFocusViewModel(private val deps: OruFocusDeps) : ViewModel() {
 
     /**
      * Opens the APK flow for [item] once, when the Focus opens, so the card's own actions are not needed first.
-     * Nothing starts while a flow for the app is already going.
+     * Nothing starts while a flow for the app is already going. The Focus then opens on the step its card names
+     * (see [OruFocusOpening]).
      */
-    fun autoStart(item: HomeAppItem) {
+    fun autoStart(item: HomeAppItem, expert: Boolean) {
         if (autoStarted) return
         autoStarted = true
-        if (held == null && home.pendingPackageName != item.packageName) startFlow(item)
+        if (held == null && home.pendingPackageName != item.packageName) launchFlow(item, cardExpert = expert)
     }
 
     /**
@@ -259,12 +261,39 @@ class OruFocusViewModel(private val deps: OruFocusDeps) : ViewModel() {
      * starts from the source the app is patched from, so no source is asked for before the Focus.
      */
     fun startFlow(item: HomeAppItem) {
+        launchFlow(item, cardExpert = null)
+    }
+
+    /**
+     * Starts the flow. [cardExpert] is the mode of the card the Focus opens from, so the Focus can open on that card's
+     * step; null for a restart, which keeps the APK choice.
+     */
+    private fun launchFlow(item: HomeAppItem, cardExpert: Boolean?) {
         held = null
         userSelecting = false
         autoSelecting = false
         viewModelScope.launch {
-            val source = oruAppSourcesNow(home, item.packageName).effective?.uid
-            home.showPatchDialog(item.packageName, item.installedApp?.trackingKey, source)
+            val sources = oruAppSourcesNow(home, item.packageName)
+            home.showPatchDialog(item.packageName, item.installedApp?.trackingKey, sources.effective?.uid)
+            cardExpert?.let { openOnCardStep(item, sources.supportedVersions, it) }
+        }
+    }
+
+    /**
+     * Moves the Focus to the step the card's primary action names, once the flow shows its APK choice. Only the step is
+     * set: the APKMirror link is not opened. Skipped when the flow went another way (a notice came up) or when the user
+     * has moved on.
+     */
+    private suspend fun openOnCardStep(item: HomeAppItem, supportedVersions: Set<String>, expert: Boolean) {
+        val opening = OruFocusOpening.forAction(OruHomePresenter.primaryActionOf(item, supportedVersions, expert))
+        if (opening == OruFocusOpening.Choice) return
+        withTimeoutOrNull(OPEN_STEP_WAIT_MS) {
+            snapshotFlow { home.showApkAvailabilityDialog }.first { it }
+        } ?: return
+        if (held != null || home.pendingPackageName != item.packageName) return
+        when (opening) {
+            OruFocusOpening.DownloadStep -> findOnApkMirror()
+            OruFocusOpening.Choice -> Unit
         }
     }
 
@@ -636,6 +665,9 @@ class OruFocusViewModel(private val deps: OruFocusDeps) : ViewModel() {
 
         /** How long a memory retry waits for the lower limit to be stored before it starts the run. */
         const val MEMORY_LIMIT_WAIT_MS = 2_000L
+
+        /** How long the card's step waits for the APK choice the flow opens, before it gives up on the step. */
+        const val OPEN_STEP_WAIT_MS = 5_000L
         const val MEMORY_LIMIT_POLL_MS = 50L
     }
 }
