@@ -173,10 +173,29 @@ jobs:
       - name: Open or reuse the pull request dev -> main
         if: inputs.dry_run == false
         run: |
-          # a re-run reuses the open pull request, or the merged one when the merge already happened
-          pr=$(gh pr list --base main --head dev --state open --json number --jq '.[0].number // empty')
+          # main may already hold the release commit (dev was merged by hand): then there is nothing to open or merge
+          # and the tag goes on the head of main, provided its version file says this version.
+          status=$(gh api "repos/$GH_REPO/compare/main...$SHA" --jq .status)
+          if [ "$status" = identical ] || [ "$status" = behind ]; then
+            main_sha=$(gh api "repos/$GH_REPO/commits/main" --jq .sha)
+            main_version=$(gh api "repos/$GH_REPO/contents/app/gradle.properties?ref=$main_sha" --jq .content | base64 -d \
+              | sed -n 's/^version[[:space:]]*=[[:space:]]*//p' | tr -d '[:space:]\r')
+            if [ "$main_version" != "$VERSION" ]; then
+              echo "::error::main already holds $SHA, but its app/gradle.properties says '$main_version', not $VERSION"
+              exit 1
+            fi
+            echo "main already holds $SHA: no pull request, the tag goes on $main_sha"
+            echo "MERGE_SHA=$main_sha" >> "$GITHUB_ENV"
+            echo "ALREADY_ON_MAIN=true" >> "$GITHUB_ENV"
+            exit 0
+          fi
+          # a re-run reuses the open pull request for this release, or the merged one when the merge already happened.
+          # Only a pull request titled for this tag counts: an older release's merged pull request must never be reused.
+          pr=$(gh pr list --base main --head dev --state open --search "\"Release $TAG\" in:title" --json number,title \
+            --jq "map(select(.title == \"Release $TAG\"))[0].number // empty")
           if [ -z "$pr" ]; then
-            pr=$(gh pr list --base main --head dev --state merged --json number --jq '.[0].number // empty')
+            pr=$(gh pr list --base main --head dev --state merged --search "\"Release $TAG\" in:title" --json number,title \
+              --jq "map(select(.title == \"Release $TAG\"))[0].number // empty")
           fi
           if [ -z "$pr" ]; then
             gh pr create --base main --head dev --title "Release $TAG" \
@@ -187,7 +206,7 @@ jobs:
           echo "pull request #$pr"
 
       - name: Merge with a merge commit
-        if: inputs.dry_run == false
+        if: inputs.dry_run == false && env.ALREADY_ON_MAIN != 'true'
         run: |
           state=$(gh pr view "$PR_NUMBER" --json state --jq '.state')
           if [ "$state" != MERGED ]; then
