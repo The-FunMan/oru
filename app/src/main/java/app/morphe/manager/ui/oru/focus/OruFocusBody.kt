@@ -69,6 +69,7 @@ import app.morphe.manager.ui.oru.nav.oruTitleSharedKey
 import app.morphe.manager.ui.oru.nav.rememberOruPresence
 import app.morphe.manager.ui.oru.components.OruSwapText
 import app.morphe.manager.ui.oru.sources.OruAppSources
+import app.morphe.manager.ui.oru.sources.oruVersionGate
 import app.morphe.manager.ui.oru.sources.rememberOruAppSources
 import app.morphe.manager.ui.oru.theme.OruBlobShape
 import app.morphe.manager.ui.oru.theme.OruMotion
@@ -127,7 +128,9 @@ internal fun OruFocusShell(
     val plan = oruDockPlan(
         state = state,
         pending = home.pendingPackageName == item.packageName,
-        hasSaved = home.pendingSavedApkInfo != null,
+        hasSaved = home.pendingSavedApkInfo?.let { saved ->
+            oruVersionGate(saved.version, saved.versionCode, sources.effectiveVersions).patchable
+        } == true,
         hasInstalled = home.pendingInstalledApkInfo != null,
     )
     val dockItem = focusDockItems(state, vm, item, openFilePicker, openUrl)
@@ -298,7 +301,7 @@ private fun focusLine(
             // An installed app, whichever way it was installed, is the app on the phone, so its version is the line to read.
             // The status is the Home card's, so the Focus does not say "Needs" for an app Home shows as installed.
             // The source is named by the Setup line, not here: the headline says what the APK has to be
-            val installedStatus = OruHomePresenter.statusOf(item, handedOff = false, supportedVersions = null)
+            val installedStatus = OruHomePresenter.statusOf(item, handedOff = false, targets = null)
             if (oruFocusShowsInstalled(installedStatus)) {
                 stringResource(R.string.oru_focus_installed_line, item.version)
             } else {

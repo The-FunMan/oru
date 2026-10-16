@@ -157,7 +157,7 @@ fun OruHomeScreen(
         }
     }
     val patchCounts = remember(appSources) { appSources.mapValues { it.value.effective?.patchCount ?: 0 } }
-    val supportedVersions = remember(appSources) { appSources.mapValues { it.value.supportedVersions } }
+    val effectiveVersions = remember(appSources) { appSources.mapValues { it.value.effectiveVersions } }
     val recommended = remember(appSources) {
         appSources.mapNotNull { (packageName, sources) -> sources.effective?.recommendedVersion?.let { packageName to it } }
             .toMap()
@@ -247,7 +247,7 @@ fun OruHomeScreen(
         handedOff = handedOff,
         offline = offline,
         recommendedVersions = recommended,
-        supportedVersions = supportedVersions,
+        effectiveVersions = effectiveVersions,
         patchCounts = patchCounts,
         sourceNames = sourceNames,
         customized = customizedApps,

@@ -45,6 +45,9 @@ import app.morphe.manager.patcher.split.SplitApkInspector
 import app.morphe.manager.patcher.split.SplitApkPreparer
 import app.morphe.manager.ui.model.*
 import app.morphe.manager.ui.model.navigation.Patcher
+import app.morphe.manager.ui.oru.sources.OruVersionGate
+import app.morphe.manager.ui.oru.sources.oruAppSourcesNow
+import app.morphe.manager.ui.oru.sources.oruVersionGate
 import app.morphe.manager.ui.screen.shared.CopySelectionCandidate
 import app.morphe.manager.util.*
 import app.morphe.manager.util.PatchSelectionUtils.applyAvailability
@@ -1952,15 +1955,27 @@ class HomeViewModel(
         // that the APK version is not officially supported.
         // Note: experimental versions are compatible (they pass the version check) but show an
         // additional "Experimental" badge in the warning dialog.
-        val versionMismatch = !hasCompatible && hasIncompatible
+        // Oru answers this with the gate the Home card reads, for the source the app is patched from
+        // (see OruVersionGate). The other flavour keeps the check over every enabled bundle.
+        val oruGate = if (BuildConfig.ORU_UX) {
+            oruVersionGate(
+                selectedApp.version,
+                selectedApp.versionCode,
+                oruAppSourcesNow(this, selectedApp.packageName).effectiveVersions,
+            )
+        } else {
+            null
+        }
+        val versionMismatch = oruGate?.let { it == OruVersionGate.Unsupported } ?: (!hasCompatible && hasIncompatible)
         // Experimental check is independent - a version can be experimental AND compatible
-        val isVersionExperimental = enabledBundles.any { it.isVersionExperimental }
+        val isVersionExperimental = oruGate?.let {
+            it == OruVersionGate.ExperimentalAllowed || it == OruVersionGate.ExperimentalOff
+        } ?: enabledBundles.any { it.isVersionExperimental }
 
         // Check if the user has enabled experimental-version mode for this package's bundle
         val experimentalEnabledUids = prefs.bundleExperimentalVersionsEnabled.getBlocking()
-        val isExperimentalModeEnabled = enabledBundles.any { bundle ->
-            bundle.uid.toString() in experimentalEnabledUids
-        }
+        val isExperimentalModeEnabled = oruGate?.let { it == OruVersionGate.ExperimentalAllowed }
+            ?: enabledBundles.any { bundle -> bundle.uid.toString() in experimentalEnabledUids }
 
         if (versionMismatch && !allowIncompatible) {
             pendingSelectedApp = selectedApp

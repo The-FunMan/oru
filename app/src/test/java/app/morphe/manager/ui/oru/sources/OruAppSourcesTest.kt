@@ -66,7 +66,6 @@ class OruAppSourcesTest {
     fun `the version list holds only the effective source's versions, newest first`() {
         val sources = oruAppSourcesOf(listOf(default, community), versions, turnedDown = setOf(0))
         assertEquals(listOf("21.20.405", "21.16.256"), sources.effectiveVersions.map { it.target.version })
-        assertEquals(setOf("21.20.405", "21.16.256"), sources.supportedVersions)
     }
 
     @Test

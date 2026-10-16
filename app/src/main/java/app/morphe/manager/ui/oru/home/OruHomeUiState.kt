@@ -7,6 +7,7 @@ package app.morphe.manager.ui.oru.home
 
 import android.content.pm.PackageInfo
 import androidx.compose.runtime.Immutable
+import app.morphe.manager.domain.bundles.BundledAppTarget
 import app.morphe.manager.ui.oru.components.OruTone
 import app.morphe.manager.ui.model.HomeAppItem
 
@@ -29,6 +30,9 @@ enum class OruHomeCardStatus {
 
     /** A patched copy from an earlier run is kept on the phone and can be patched again. */
     SavedCopy,
+
+    /** A patched copy is kept on the phone, but the sources do not patch its version, so the APK has to be found again. */
+    SavedCopyGated,
 
     /** The app is on the phone, unpatched by Oru, and the sources cover its version. */
     ReadyOnDevice,
@@ -72,10 +76,10 @@ enum class OruHomeAction {
 }
 
 /** The line under the status chip that says what happens next. */
-enum class OruHomeHint { ApkMirror, ReturnDownload, SavedCopy }
+enum class OruHomeHint { ApkMirror, ReturnDownload, SavedCopy, SavedCopyGated }
 
 /** The one sentence a Simple card says about its app. Expert reads the status as chips instead, see [OruHomeCardStatus]. */
-enum class OruHomeSentence { Checking, NotChecked, NeedsApk, WaitingApk, Ready, UpdateReady, UpToDate, Patched }
+enum class OruHomeSentence { Checking, NotChecked, NeedsApk, WaitingApk, SavedCopyGated, Ready, UpdateReady, UpToDate, Patched }
 
 /** One card on Home, already decided. The composable only turns its parts into strings. */
 @Immutable
@@ -147,8 +151,8 @@ data class OruHomeInput(
     val handedOff: Set<String>,
     /** Recommended version name per package, from the source the app is patched from. */
     val recommendedVersions: Map<String, String>,
-    /** Supported version names per package, from the source the app is patched from. */
-    val supportedVersions: Map<String, Set<String>>,
+    /** The versions of the source each app is patched from, read by [oruVersionGate] for the version the card names. */
+    val effectiveVersions: Map<String, List<BundledAppTarget>>,
     /** Patch count per package, from the source the app is patched from. */
     val patchCounts: Map<String, Int>,
     /** Name of the source to show as a chip, per package, for an app more than one source can patch. */

@@ -8,9 +8,11 @@ package app.morphe.manager.ui.oru.home
 import app.morphe.manager.data.room.apps.installed.InstallType
 import app.morphe.manager.data.room.apps.installed.InstalledApp
 import app.morphe.manager.domain.bundles.AppVersionStatus
+import app.morphe.manager.domain.bundles.BundledAppTarget
 import app.morphe.manager.ui.oru.components.OruButtonStyle
 import app.morphe.manager.ui.oru.components.OruTone
 import app.morphe.manager.ui.model.HomeAppItem
+import app.morphe.patcher.patch.AppTarget
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -82,7 +84,7 @@ class OruHomePresenterTest {
         expert = expert,
         handedOff = handedOff,
         recommendedVersions = recommended,
-        supportedVersions = supported,
+        effectiveVersions = supported.mapValues { (_, versions) -> targets(*versions.toTypedArray()) },
         patchCounts = patchCounts,
         customized = customized,
         offline = offline,
@@ -95,8 +97,13 @@ class OruHomePresenterTest {
         ),
     )
 
+    /** The source's versions as the card reads them: stable, one bundle. */
+    private fun targets(vararg versions: String): List<BundledAppTarget> = versions.map {
+        BundledAppTarget(target = AppTarget(version = it), bundleUid = 0, bundleName = "Source")
+    }
+
     private fun statusOf(item: HomeAppItem, handedOff: Boolean = false, supported: Set<String>? = null) =
-        OruHomePresenter.statusOf(item, handedOff, supported)
+        OruHomePresenter.statusOf(item, handedOff, supported?.let { targets(*it.toTypedArray()) })
 
     @Test
     fun `a pending install state is checking with only app info`() {
@@ -166,7 +173,7 @@ class OruHomePresenterTest {
         assertEquals(OruHomeAction.PatchFromSaved, OruHomePresenter.primaryActionOf(saved, null, expert = false))
 
         val ready = item(onDevice = true)
-        assertEquals(OruHomeAction.Patch, OruHomePresenter.primaryActionOf(ready, setOf("1.0"), expert = false))
+        assertEquals(OruHomeAction.Patch, OruHomePresenter.primaryActionOf(ready, targets("1.0"), expert = false))
     }
 
     @Test
@@ -205,6 +212,7 @@ class OruHomePresenterTest {
         assertEquals(OruHomeSentence.NotChecked, sentences[OruHomeCardStatus.Unverified])
         assertEquals(OruHomeSentence.NeedsApk, sentences[OruHomeCardStatus.NeedsApk])
         assertEquals(OruHomeSentence.WaitingApk, sentences[OruHomeCardStatus.Waiting])
+        assertEquals(OruHomeSentence.SavedCopyGated, sentences[OruHomeCardStatus.SavedCopyGated])
         assertEquals(OruHomeSentence.Ready, sentences[OruHomeCardStatus.SavedCopy])
         assertEquals(OruHomeSentence.Ready, sentences[OruHomeCardStatus.ReadyOnDevice])
         assertEquals(OruHomeSentence.Ready, sentences[OruHomeCardStatus.UnpatchedInstalled])
@@ -476,5 +484,44 @@ class OruHomePresenterTest {
     fun `an install this manager tracks is installed rather than a patched copy`() {
         val status = statusOf(item(installed = installed(), installedPatched = "app.example.patched"), supported = null)
         assertEquals(OruHomeCardStatus.Installed, status)
+    }
+
+    @Test
+    fun `a saved copy at a version the source does not patch is not ready, and names the apk to find`() {
+        val saved = item(deleted = true, installed = installed(), savedFile = File("saved.apk"), version = "21.39.522")
+        val supported = mapOf("com.example.app" to setOf("21.20.405"))
+        val recommended = mapOf("com.example.app" to "21.20.405")
+
+        val simple = OruHomePresenter.card(saved, input(expert = false, recommended = recommended, supported = supported))
+        assertEquals(OruHomeCardStatus.SavedCopyGated, simple.status)
+        assertEquals(OruTone.Warn, simple.chipTone)
+        assertEquals(OruHomeAction.GetIt, simple.primary)
+        assertNull(simple.secondary)
+        assertEquals("21.20.405", simple.version)
+        assertEquals(OruHomeSentence.SavedCopyGated, simple.status.simpleSentence())
+
+        val expert = OruHomePresenter.card(saved, input(expert = true, recommended = recommended, supported = supported))
+        assertEquals(OruHomeAction.FindOnApkMirror, expert.primary)
+        assertEquals(OruHomeAction.UseFile, expert.secondary)
+        assertEquals(OruHomeHint.SavedCopyGated, expert.hint)
+        assertEquals("21.20.405", expert.hintVersion)
+    }
+
+    @Test
+    fun `a saved copy at a version the source patches is still ready to patch from`() {
+        val saved = item(deleted = true, installed = installed(), savedFile = File("saved.apk"), version = "21.20.405")
+        val card = OruHomePresenter.card(
+            saved,
+            input(expert = false, supported = mapOf("com.example.app" to setOf("21.20.405"))),
+        )
+        assertEquals(OruHomeCardStatus.SavedCopy, card.status)
+        assertEquals(OruHomeAction.PatchFromSaved, card.primary)
+    }
+
+    @Test
+    fun `the focus does not open on the saved copy of a version the source does not patch`() {
+        val saved = item(deleted = true, installed = installed(), savedFile = File("saved.apk"), version = "3.0")
+        assertEquals(OruHomeAction.GetIt, OruHomePresenter.primaryActionOf(saved, targets("2.5"), expert = false))
+        assertEquals(OruHomeAction.FindOnApkMirror, OruHomePresenter.primaryActionOf(saved, targets("2.5"), expert = true))
     }
 }

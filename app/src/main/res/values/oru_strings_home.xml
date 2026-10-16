@@ -19,6 +19,10 @@
     <string name="oru_simple_status_update_ready">Update ready</string>
     <string name="oru_simple_status_needs">Needs %1$s %2$s</string>
     <string name="oru_simple_status_needs_plain">Needs %1$s</string>
+    <string name="oru_simple_status_gated">Your saved copy is not supported. Find %1$s %2$s.</string>
+    <string name="oru_simple_status_gated_plain">Your saved copy is not supported. Find the APK to patch.</string>
+    <string name="oru_hint_saved_gated">Your saved copy is not supported. Get version %1$s to patch.</string>
+    <string name="oru_hint_saved_gated_plain">Your saved copy is not supported. Find a version Oru can patch.</string>
     <string name="oru_simple_status_ready">Ready to patch</string>
     <string name="oru_simple_status_patched">Patched</string>
     <string name="oru_simple_status_not_checked">Not checked yet</string>

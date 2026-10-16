@@ -643,6 +643,8 @@ private fun OruHomeCard.sentenceText(): String = when (status.simpleSentence()) 
     OruHomeSentence.NeedsApk -> version?.let { stringResource(R.string.oru_simple_status_needs, item.displayName, it) }
         ?: stringResource(R.string.oru_simple_status_needs_plain, item.displayName)
     OruHomeSentence.WaitingApk -> stringResource(R.string.oru_chip_waiting_apk)
+    OruHomeSentence.SavedCopyGated -> version?.let { stringResource(R.string.oru_simple_status_gated, item.displayName, it) }
+        ?: stringResource(R.string.oru_simple_status_gated_plain)
     OruHomeSentence.Ready -> stringResource(R.string.oru_simple_status_ready)
     OruHomeSentence.UpdateReady -> stringResource(R.string.oru_simple_status_update_ready)
     OruHomeSentence.UpToDate -> stringResource(R.string.oru_simple_status_up_to_date)
@@ -674,12 +676,16 @@ private fun OruHomeCard.hintText(): String? = when (hint) {
             ?: stringResource(R.string.oru_hint_return_download)
     OruHomeHint.ReturnDownload -> stringResource(R.string.oru_hint_return_download)
     OruHomeHint.SavedCopy -> stringResource(R.string.oru_state_saved_copy)
+    OruHomeHint.SavedCopyGated ->
+        hintVersion?.let { stringResource(R.string.oru_hint_saved_gated, it) }
+            ?: stringResource(R.string.oru_hint_saved_gated_plain)
 }
 
 private fun OruHomeCard.statusTextRes(): Int = when (status) {
     OruHomeCardStatus.Checking -> R.string.oru_chip_checking
     OruHomeCardStatus.Unverified -> R.string.oru_chip_unverified
-    OruHomeCardStatus.NeedsApk -> R.string.oru_chip_apk_needed
+    OruHomeCardStatus.NeedsApk,
+    OruHomeCardStatus.SavedCopyGated -> R.string.oru_chip_apk_needed
     OruHomeCardStatus.Waiting -> R.string.oru_chip_waiting_apk
     OruHomeCardStatus.SavedCopy,
     OruHomeCardStatus.ReadyOnDevice -> R.string.oru_chip_ready
