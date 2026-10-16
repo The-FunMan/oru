@@ -35,6 +35,7 @@ import app.morphe.manager.ui.oru.components.OruRow
 import app.morphe.manager.ui.oru.components.OruTileSource
 import app.morphe.manager.ui.oru.components.OruTone
 import app.morphe.manager.ui.oru.install.postinstall.OruDoneFacts
+import app.morphe.manager.ui.oru.install.postinstall.OruDoneChanges
 import app.morphe.manager.ui.oru.install.postinstall.OruDoneFactsRow
 import app.morphe.manager.ui.oru.run.OruRunHexagon
 import app.morphe.manager.ui.oru.theme.OruBlobShape
@@ -385,11 +386,12 @@ private fun unavailableActions(
     return list
 }
 
-/** The done facts row, when the run has facts to show. */
+/** The done facts row and the "What changed" list, when the run has facts to show. */
 @Composable
 private fun DoneFacts(facts: OruDoneFacts?) {
     if (facts != null) {
         OruDoneFactsRow(facts = facts)
+        OruDoneChanges(names = facts.patchNames)
     }
 }
 

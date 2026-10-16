@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Copy of the done receipt. English only. Plain active voice, no dashes used as punctuation.
+  Copy of the done receipt: the "What changed" list and the patching fact. English only. Plain active voice, no
+  dashes used as punctuation.
 -->
 <resources>
 
-    <!-- Done receipt: the patching fact, the time the patch run took -->
+    <!-- Done receipt: the patching fact, and the list of patches that succeeded -->
     <string name="oru_done_patching">Patching</string>
+    <string name="oru_done_changes_title">What changed</string>
+    <string name="oru_done_changes_more">+ %1$d more</string>
+    <string name="oru_done_changes_fewer">Show fewer</string>
 
 </resources>

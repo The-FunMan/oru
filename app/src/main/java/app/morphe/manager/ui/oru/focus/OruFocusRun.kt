@@ -141,7 +141,7 @@ internal fun OruFocusRunRoute(
     )
     val usage = OruRunUsage.of(currentPatcher.patchRun)
 
-    // The done facts of a finished run: the output's size on disk and the run's elapsed time.
+    // The done facts of a finished run: the output's size on disk, the run's elapsed time and the patches it applied.
     // None of them was passed before, so the done screen had no facts row.
     val done = runState.hero == OruHeroState.DONE
     val outputBytes by produceState<Long?>(initialValue = null, currentPatcher.outputFile, done) {
@@ -151,6 +151,7 @@ internal fun OruFocusRunRoute(
         OruDoneFacts.of(
             outputBytes = outputBytes,
             elapsedMs = oruElapsedMs(currentPatcher.patchRun.stepTimings.values),
+            logLines = currentPatcher.patchRun.logs.map { it.second },
         )
     } else {
         null
