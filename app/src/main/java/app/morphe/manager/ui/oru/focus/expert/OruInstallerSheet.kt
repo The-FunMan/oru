@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.item
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -105,22 +106,32 @@ internal fun ColumnScope.OruInstallerPicker(
         )
     }
 
+    val (available, unavailable) = oruInstallerGroups(options)
     LazyColumn(
         modifier = Modifier.weight(1f, fill = false).fillMaxWidth().padding(horizontal = SheetGutter),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        items(options, key = { it.token }) { option ->
-            val state = if (option.enabled) {
-                stringResource(R.string.oru_installer_available)
-            } else {
-                option.reason ?: stringResource(R.string.oru_installer_unavailable)
-            }
+        items(available, key = { it.token }) { option ->
             OruRow(
                 title = option.label,
-                value = state,
-                onClick = if (option.enabled) ({ onPick(option) }) else null,
+                value = stringResource(R.string.oru_installer_available),
+                onClick = { onPick(option) },
                 trailing = oruChosenMark(option.token == current),
             )
+        }
+        // The unavailable installers share one reason, so it is named once here and not on each row
+        if (unavailable.isNotEmpty()) {
+            item(key = "unavailable-note") {
+                Text(
+                    text = stringResource(R.string.oru_installer_needs_root_or_shizuku),
+                    modifier = Modifier.padding(start = 4.dp, top = 8.dp),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            items(unavailable, key = { it.token }) { option ->
+                OruRow(title = option.label, value = null, onClick = null)
+            }
         }
     }
 
@@ -130,5 +141,12 @@ internal fun ColumnScope.OruInstallerPicker(
         modifier = Modifier.fillMaxWidth().padding(horizontal = SheetGutter, vertical = 12.dp),
     )
 }
+
+/**
+ * The installers in the order the sheet lists them: the available ones first, then the unavailable ones. Each group
+ * keeps the order the installers came in.
+ */
+internal fun oruInstallerGroups(options: List<OruInstallerOption>): Pair<List<OruInstallerOption>, List<OruInstallerOption>> =
+    options.partition { it.enabled }
 
 private val SheetGutter = 20.dp
