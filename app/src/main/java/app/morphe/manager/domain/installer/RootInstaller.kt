@@ -151,6 +151,9 @@ class RootInstaller(
      * The module is staged beside the files it replaces and only switched in after [onStaged].
      * A process killed during the slow copies leaves the previous module in place, still
      * matching what was recorded about it.
+     *
+     * [stockAPK] is only installed when the matching stock app is missing. The stock copy the
+     * module mounts at boot always comes from the installed APK.
      */
     suspend fun install(
         patchedAPK: File,
@@ -171,7 +174,6 @@ class RootInstaller(
         removeOtherRootInstalls(packageName)
 
         var installedStockInfo = pm.getPackageInfo(packageName)
-        var stockSourceFile: File? = null
 
         stockAPK?.let { stockApp ->
             val stockInfo = pm.getPackageInfo(stockApp)
@@ -198,15 +200,15 @@ class RootInstaller(
             }
 
             installedStockInfo = pm.getPackageInfo(packageName)
-            stockSourceFile = stockApp
         }
 
         onStage(MountStage.COPYING)
         val installedStockPath = installedStockInfo?.applicationInfo?.sourceDir
         val stockMountPaths = collectStockMountPaths(packageName, installedStockPath)
         val stockModuleApk = "$modulePath/$packageName-stock.apk"
-        val stockSourcePath = stockSourceFile?.absolutePath ?: installedStockPath
-        val stockModuleApkWritten = !stockSourcePath.isNullOrBlank() && stockMountPaths.isNotEmpty()
+        // post-fs-data mounts this copy over the installed APK at boot, where one that differs fails
+        // PackageManager's certificate check and the app is removed
+        val stockModuleApkWritten = !installedStockPath.isNullOrBlank() && stockMountPaths.isNotEmpty()
 
         val placeholders = mapOf(
             "__PKG_NAME__" to packageName,
@@ -231,7 +233,7 @@ class RootInstaller(
 
         val patchedModuleApk = "$modulePath/$packageName.apk"
         if (stockModuleApkWritten) {
-            stageCopy(stockSourcePath, stockModuleApk, "Stock APK doesn't exist")
+            stageCopy(installedStockPath, stockModuleApk, "Stock APK doesn't exist")
         }
         stageCopy(patchedAPK.absolutePath, patchedModuleApk, "File doesn't exist")
 
