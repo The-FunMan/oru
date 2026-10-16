@@ -29,7 +29,10 @@ import app.morphe.manager.data.room.bundles.Source
 import app.morphe.manager.domain.bundles.*
 import app.morphe.manager.domain.bundles.PatchBundleSource.Extensions.isHeldBack
 import app.morphe.manager.domain.manager.PreferencesManager
+import app.morphe.manager.network.api.MorpheAPI
+import app.morphe.manager.network.dto.MorpheAsset
 import app.morphe.manager.network.utils.APIError
+import app.morphe.manager.network.utils.APIResponse
 import app.morphe.manager.patcher.patch.BundleAppMetadata
 import app.morphe.manager.patcher.patch.PatchBundle
 import app.morphe.manager.patcher.patch.PatchBundleInfo
@@ -67,6 +70,7 @@ class PatchBundleRepository(
     private val prefs: PreferencesManager,
     private val blocklistRepository: BlocklistRepository,
     private val sourceMuteRepository: SourceMuteRepository,
+    private val api: MorpheAPI,
     db: AppDatabase,
 ) {
     private val dao = db.patchBundleDao()
@@ -1311,6 +1315,23 @@ class PatchBundleRepository(
             ready.copy(sources = ready.sources.mutate { sources -> created.forEach { sources[it.uid] = it } })
         }
         return added.await()
+    }
+
+    /**
+     * The [urls] that do not serve a patch bundle manifest, so a source added from them would never
+     * load. Checked before [createRemotes], which saves nothing for them, so a bad address never
+     * becomes a source. Pull requests are left out: their bundle is only built on request.
+     */
+    suspend fun unreachableRemoteUrls(urls: List<String>): List<String> = coroutineScope {
+        urls.map { url ->
+            async(Dispatchers.IO) { url.takeUnless { hasPatchManifest(it) } }
+        }.awaitAll().filterNotNull()
+    }
+
+    private suspend fun hasPatchManifest(url: String): Boolean {
+        val endpoint = runCatching { normalizeRemoteBundleUrl(url) }.getOrNull() ?: return false
+        if (SourceInfo.from(endpoint) is SourceInfo.GitHubPullRequest) return true
+        return api.rawFileRequest<MorpheAsset>(endpoint) is APIResponse.Success
     }
 
     /**

@@ -181,6 +181,12 @@ class HomeViewModel(
     var showAndroid11Dialog by mutableStateOf(false)
     var showBundleManagementSheet by mutableStateOf(false)
     var showAddSourceDialog by mutableStateOf(false)
+
+    /** Whether the add dialog is reading the addresses it was given, before it closes. */
+    var addSourceChecking by mutableStateOf(false)
+
+    /** Why the addresses in the add dialog were not added, shown in the dialog until the next submit. */
+    var addSourceError by mutableStateOf<String?>(null)
     var bundleToRename by mutableStateOf<PatchBundleSource?>(null)
     var showRenameBundleDialog by mutableStateOf(false)
 
@@ -973,6 +979,28 @@ class HomeViewModel(
     }
 
     /**
+     * Adds the sources of [urls] from the add dialog. The dialog stays open, with a checking state,
+     * until the addresses are read: when one does not serve a patch bundle, nothing is added and the
+     * dialog says so.
+     */
+    fun submitRemoteSources(urls: List<String>, chooseApps: Boolean) = viewModelScope.launch {
+        addSourceError = null
+        addSourceChecking = true
+        val unreachable = try {
+            patchBundleRepository.unreachableRemoteUrls(urls)
+        } finally {
+            addSourceChecking = false
+        }
+        if (unreachable.isNotEmpty()) {
+            addSourceError = app.getString(R.string.sources_management_no_bundle)
+            return@launch
+        }
+        showAddSourceDialog = false
+        showBundleManagementSheet = false
+        createRemoteSources(urls, chooseApps)
+    }
+
+    /**
      * Queues the app list of each of [uids] that has apps to list as its patches load, then hints
      * at the swipe gestures of the source cards.
      *
@@ -1069,7 +1097,13 @@ class HomeViewModel(
     fun confirmDeepLinkBundle(chooseApps: Boolean) {
         val bundle = deepLinkPendingBundle ?: return
         deepLinkPendingBundle = null
-        createRemoteSources(listOf(bundle.url), chooseApps)
+        viewModelScope.launch {
+            if (patchBundleRepository.unreachableRemoteUrls(listOf(bundle.url)).isNotEmpty()) {
+                app.toast(app.getString(R.string.sources_management_no_bundle))
+                return@launch
+            }
+            createRemoteSources(listOf(bundle.url), chooseApps)
+        }
     }
 
     /** User dismissed the deep link confirmation dialog. */
