@@ -32,6 +32,9 @@ Oru is an Android app. It is not a ROM hack or a game.
 
 ## Why Oru
 
+Oru runs the same patch bundles as other patch managers. What differs is the app around them: it is built to be simple, beautiful and quick to understand.
+
+- **Beautiful.** Fluid motion, soft glass and one hexagon that fills as your app is patched.
 - **Simple and Expert.** In Simple, each app shows one sentence and one button. The Simple and Expert switch is on the bottom bar of the Home screen. Expert lets you choose the version, patches, options, installer and patch channel for each app.
 - **One patch source per app.** You choose it in Expert mode. Adding a source never changes the apps you already set up.
 - **One progress for the whole run.** A run shows the real stages and real counts, not invented progress.

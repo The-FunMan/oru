@@ -1053,6 +1053,20 @@ p:last-child {
   max-width: 68ch;
 }
 
+.why-list {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-width: 68ch;
+  color: var(--ink-muted);
+}
+
+.why-list strong {
+  color: var(--ink);
+}
+
 .panel-links {
   display: flex;
   flex-wrap: wrap;
