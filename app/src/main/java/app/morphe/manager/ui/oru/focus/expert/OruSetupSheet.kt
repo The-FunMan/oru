@@ -34,6 +34,8 @@ import app.morphe.manager.ui.oru.components.OruRow
 import app.morphe.manager.ui.oru.components.oruSlab
 import app.morphe.manager.ui.oru.focus.OruFocusViewModel
 import app.morphe.manager.ui.oru.focus.customize.oruBrandingTargets
+import app.morphe.manager.ui.oru.focus.oruFocusShowsInstalled
+import app.morphe.manager.ui.oru.home.OruHomePresenter
 import app.morphe.manager.ui.oru.sources.rememberOruAppSources
 import app.morphe.manager.ui.oru.theme.OruGroupInnerShape
 import app.morphe.manager.ui.oru.theme.OruGroupShape
@@ -70,13 +72,15 @@ internal data class OruSetup(
     val hasBranding: Boolean,
     /** A saved copy of the app is kept, so it can be patched again. */
     val hasSavedCopy: Boolean,
+    /** The app is installed, so [appVersion] is the next patch target, labelled as one. */
+    val appVersionIsNext: Boolean = false,
 )
 
 /** One part of the summary line. A part is left out when its value is not known. */
 internal sealed interface OruSetupPart {
     data class Source(val label: String, val patchVersion: String?) : OruSetupPart
     data class Channel(val summary: OruChannelSummary) : OruSetupPart
-    data class AppVersion(val version: String) : OruSetupPart
+    data class AppVersion(val version: String, val next: Boolean = false) : OruSetupPart
     data class Patches(val selected: Int, val total: Int) : OruSetupPart
     data class Installer(val label: String) : OruSetupPart
 }
@@ -85,7 +89,7 @@ internal sealed interface OruSetupPart {
 internal fun oruSetupParts(setup: OruSetup): List<OruSetupPart> = buildList {
     setup.sourceLabel?.let { add(OruSetupPart.Source(it, setup.patchVersion)) }
     setup.channel?.let { add(OruSetupPart.Channel(it)) }
-    setup.appVersion?.let { add(OruSetupPart.AppVersion(it)) }
+    setup.appVersion?.let { add(OruSetupPart.AppVersion(it, setup.appVersionIsNext)) }
     setup.selectedPatches?.let { add(OruSetupPart.Patches(it, setup.patchTotal)) }
     setup.installer?.let { add(OruSetupPart.Installer(it)) }
 }
@@ -137,6 +141,9 @@ internal fun rememberOruSetup(vm: OruFocusViewModel, home: HomeViewModel, item: 
         installer = vm.pickedInstaller?.label ?: vm.primaryInstallerLabel,
         hasBranding = branding.isNotEmpty(),
         hasSavedCopy = hasSavedCopy,
+        // Once the app is installed, the version the run would download is the next patch, not the one for this APK
+        appVersionIsNext = held == null &&
+            oruFocusShowsInstalled(OruHomePresenter.statusOf(item, handedOff = false, targets = null)),
     )
 }
 
@@ -165,7 +172,7 @@ private fun oruSetupPartText(part: OruSetupPart): String = when (part) {
         OruChannelSummary.PreRelease -> stringResource(R.string.oru_focus_channel_prerelease)
         is OruChannelSummary.Mixed -> stringResource(R.string.oru_focus_channel_mixed, summary.preRelease, summary.sources)
     }
-    is OruSetupPart.AppVersion -> part.version
+    is OruSetupPart.AppVersion -> if (part.next) stringResource(R.string.oru_focus_next_patch, part.version) else part.version
     is OruSetupPart.Patches -> stringResource(R.string.oru_focus_summary_patches, part.selected, part.total)
     is OruSetupPart.Installer -> part.label
 }
@@ -248,7 +255,9 @@ internal fun ColumnScope.OruSetupContent(
     ) {
         OruRow(
             title = stringResource(R.string.oru_focus_version),
-            value = setup.appVersion,
+            value = setup.appVersion?.let {
+                if (setup.appVersionIsNext) stringResource(R.string.oru_focus_next_patch, it) else it
+            },
             onClick = if (choosing) openVersion else null,
             shape = OruGroupInnerShape,
         )
