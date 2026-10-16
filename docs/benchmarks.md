@@ -17,7 +17,7 @@ On this test Oru finished in about 58% of the time, about 1.7 times faster. Oru'
 
 ## Setup
 
-- Emulator: Android 17 on an x86_64 AVD, 1344 by 2992, hardware accelerated, run headless on a Windows PC. No builds ran on the PC during the timed runs, only light work such as screenshots over adb.
+- Emulator: the Android Emulator with a Pixel 10 Pro XL device profile, Android 17 (API 37.2, 16 KB page size) on an x86_64 image, 4 GB of RAM, 4 CPU cores and a 512 MB app heap limit, 1344 by 2992, hardware accelerated, run headless on a Windows PC. No builds ran on the PC during the timed runs, only light work such as screenshots over adb.
 - Input: one stock APK of a video app, 206,810,938 bytes, SHA-256 `3b66f53a846e8a32268868c12c3072a69e305dc44a626ff5be63b3823dc6a823`. It is newer than the version the bundle lists as supported, so both apps were told to patch it anyway (experimental versions).
 - Patches: Morphe Patches 1.47.0 (stable) in both apps, 96 of 102 patches selected, the default selection of each app.
 - Oru: version 0.0.1 development build, the commit before the hexagon fix (`bd1df8ee`). Morphe Manager: the 1.35.0 release, which reports itself as 1.35.1-dev.1.

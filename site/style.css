@@ -1053,6 +1053,126 @@ p:last-child {
   max-width: 68ch;
 }
 
+/* ------------------------------------------------------------------ */
+/* Speed chart. Bars start at zero and are drawn to scale.            */
+/* ------------------------------------------------------------------ */
+
+.speed {
+  margin: 0;
+}
+
+.speed h2 {
+  font-size: clamp(2rem, 6vw, 3.25rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.speed .speed-lede {
+  max-width: 52ch;
+}
+
+.bars {
+  display: grid;
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.bar-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "name value"
+    "track track";
+  align-items: end;
+  gap: 8px 16px;
+}
+
+@media (min-width: 720px) {
+  .bar-row {
+    grid-template-columns: 9.5rem minmax(0, 1fr) 5.5rem;
+    grid-template-areas: "name track value";
+    align-items: center;
+    gap: 16px;
+  }
+}
+
+.bar-name {
+  grid-area: name;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.bar-track {
+  grid-area: track;
+  display: block;
+  height: 40px;
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--ink) 7%, transparent);
+  overflow: hidden;
+}
+
+.bar {
+  display: block;
+  height: 100%;
+  width: var(--w);
+  border-radius: 20px;
+}
+
+.bar-oru {
+  background: linear-gradient(90deg, var(--blob-1), var(--accent));
+  box-shadow: 0 0 24px var(--accent-glow);
+}
+
+.bar-other {
+  background: color-mix(in srgb, var(--ink) 22%, transparent);
+}
+
+.bar-value {
+  grid-area: value;
+  display: grid;
+  justify-items: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.bar-value strong {
+  font-size: 1.75rem;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.bar-value small {
+  color: var(--ink-muted);
+  font-size: 0.875rem;
+}
+
+.speed figcaption {
+  margin-top: 24px;
+  color: var(--ink-muted);
+  font-size: 0.875rem;
+  max-width: 68ch;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .bar {
+      transform-origin: left center;
+      animation: bar-grow linear both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 40%;
+    }
+
+    @keyframes bar-grow {
+      from {
+        transform: scaleX(0);
+      }
+      to {
+        transform: scaleX(1);
+      }
+    }
+  }
+}
+
 .why-list {
   display: grid;
   gap: 16px;
