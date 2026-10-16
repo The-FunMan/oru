@@ -113,6 +113,8 @@ data class OruHomeUiState(
     val expert: Boolean,
     val cards: List<OruHomeCard>,
     val banner: OruHomeBanner?,
+    /** No network connection, see [OruHomeInput.offline]. Read by the empty state only. */
+    val offline: Boolean = false,
 ) {
     /** No card to show and nothing left to load: the empty state. */
     val empty: Boolean get() = !loading && cards.isEmpty()
@@ -154,4 +156,6 @@ data class OruHomeInput(
     /** Packages Expert set up differently from the recommended setup, see [oruAppOverrides]. */
     val customized: Set<String> = emptySet(),
     val banner: OruBannerInput,
+    /** No network connection. An empty list with no connection is the network's fault, so the empty state says so. */
+    val offline: Boolean = false,
 )

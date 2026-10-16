@@ -35,6 +35,7 @@ object OruHomePresenter {
                 // The same apps the card badges and the batch queue pick, see HomeScreen's repatchableApps
                 repatchCount = items.count { it.showsUpdateBadge },
             ),
+            offline = input.offline,
         )
     }
 

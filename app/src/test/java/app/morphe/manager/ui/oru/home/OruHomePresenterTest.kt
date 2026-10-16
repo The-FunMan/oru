@@ -75,6 +75,7 @@ class OruHomePresenterTest {
         patchCounts: Map<String, Int> = emptyMap(),
         batch: OruBatchSignal = OruBatchSignal(OruBatchPhase.Idle),
         customized: Set<String> = emptySet(),
+        offline: Boolean = false,
     ) = OruHomeInput(
         items = items,
         installedAppsLoading = loading,
@@ -84,6 +85,7 @@ class OruHomePresenterTest {
         supportedVersions = supported,
         patchCounts = patchCounts,
         customized = customized,
+        offline = offline,
         banner = OruBannerInput(
             managerUpdate = null,
             sourcesAttention = false,
@@ -381,6 +383,14 @@ class OruHomePresenterTest {
         val state = OruHomePresenter.state(input(items = emptyList()))
         assertFalse(state.loading)
         assertTrue(state.empty)
+        assertFalse(state.offline)
+    }
+
+    @Test
+    fun `an empty list with no connection is the offline empty state`() {
+        val state = OruHomePresenter.state(input(items = emptyList(), offline = true))
+        assertTrue(state.empty)
+        assertTrue(state.offline)
     }
 
     @Test

@@ -21,6 +21,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import app.morphe.manager.R
+import app.morphe.manager.data.platform.NetworkInfo
 import app.morphe.manager.data.room.apps.installed.trackingKey
 import app.morphe.manager.domain.manager.OruVersion
 import app.morphe.manager.domain.batch.BatchTarget
@@ -96,6 +97,7 @@ fun OruHomeScreen(
     val installViewModel: InstallViewModel = koinViewModel()
     val updateViewModel: UpdateViewModel = koinViewModel()
     val activeRuns: ActiveRunTracker = koinInject()
+    val networkInfo: NetworkInfo = koinInject()
     val singleRunOwner: SingleRunOwner = koinInject()
     val sourcesLoadingText = stringResource(R.string.home_sources_are_loading)
     val batchInProgressText = stringResource(R.string.batch_patch_in_progress)
@@ -234,11 +236,16 @@ fun OruHomeScreen(
     val announcedVersion = homeViewModel.updatedManagerVersion
         ?.takeIf { useManagerPrereleases || OruVersion.parse(it)?.isDev != true }
 
+    // Read again whenever the list changes, which is when an empty list is judged. A connection that comes back shows
+    // up with the list the refresh loads
+    val offline = remember(homeAppState) { !networkInfo.isConnected() }
+
     val input = OruHomeInput(
         items = homeAppState?.visible,
         installedAppsLoading = homeAppState == null || homeViewModel.installedAppsLoading,
         expert = useExpertMode,
         handedOff = handedOff,
+        offline = offline,
         recommendedVersions = recommended,
         supportedVersions = supportedVersions,
         patchCounts = patchCounts,

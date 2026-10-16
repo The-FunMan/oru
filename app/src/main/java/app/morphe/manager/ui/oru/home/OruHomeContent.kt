@@ -246,7 +246,7 @@ fun OruHomeContent(
                                 }
                             } else if (state.empty) {
                                 item(key = "empty") {
-                                    HomeEmpty(onCheckUpdates = onCheckUpdates, onAddSource = onAddSource)
+                                    HomeEmpty(offline = state.offline, onCheckUpdates = onCheckUpdates, onAddSource = onAddSource)
                                 }
                             }
 
@@ -488,21 +488,29 @@ private fun HomeBanner(banner: OruHomeBanner, onAction: () -> Unit) {
     )
 }
 
+/**
+ * The empty list. Offline, the list is empty because the patch list could not be read, so the copy names the connection
+ * and the one action is to try again; a source cannot fix that.
+ */
 @Composable
-private fun HomeEmpty(onCheckUpdates: () -> Unit, onAddSource: () -> Unit) {
+private fun HomeEmpty(offline: Boolean, onCheckUpdates: () -> Unit, onAddSource: () -> Unit) {
     Column(
         modifier = Modifier.fillMaxWidth().padding(vertical = OruSpacing.XLarge),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(OruSpacing.Medium),
     ) {
         Text(
-            text = stringResource(R.string.oru_home_empty),
+            text = stringResource(if (offline) R.string.oru_error_no_connection else R.string.oru_home_empty),
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
         )
-        OruPrimaryButton(text = stringResource(R.string.oru_home_check_updates), onClick = onCheckUpdates)
-        OruOutlinedButton(text = stringResource(R.string.oru_home_add_source), onClick = onAddSource)
+        if (offline) {
+            OruPrimaryButton(text = stringResource(R.string.oru_action_try_again), onClick = onCheckUpdates)
+        } else {
+            OruPrimaryButton(text = stringResource(R.string.oru_home_check_updates), onClick = onCheckUpdates)
+            OruOutlinedButton(text = stringResource(R.string.oru_home_add_source), onClick = onAddSource)
+        }
     }
 }
 
