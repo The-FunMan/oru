@@ -69,12 +69,19 @@ mount_in_zygote_namespaces() {
   done
 }
 
-# A namespace can hold the patched APK more than once, so each one is unmounted until
-# the stock path no longer appears in its mount table.
+# Runs the command after the mount table while it lists the stock path, one layer per run. Bounded,
+# as a root that hides mounts can report each umount as done and hold the script there forever.
+lift_layers() {
+  table="$1"
+  shift
+  for _ in 1 2 3 4 5 6 7 8 9 10; do
+    grep -qF " $stock_path " "$table" && "$@" 2>/dev/null || return 0
+  done
+}
+
 unmount_from_zygote_namespaces() {
   for zpid in $(pidof zygote64) $(pidof zygote); do
-    while grep -qF " $stock_path " "/proc/$zpid/mountinfo" &&
-      nsenter -t "$zpid" -m -- umount -l "$stock_path" 2>/dev/null; do :; done
+    lift_layers "/proc/$zpid/mountinfo" nsenter -t "$zpid" -m -- umount -l "$stock_path"
   done
 }
 
@@ -93,8 +100,7 @@ replace_other_mounts() {
     sources="$(grep -F " $stock_path " "$mountinfo" | cut -d' ' -f4 | grep -vxF "$mount_source")" ||
       continue
     log_msg "Replacing $(echo $sources) in namespace of pid: $pid"
-    while grep -qF " $stock_path " "$mountinfo" &&
-      nsenter -t "$pid" -m -- umount -l "$stock_path" 2>/dev/null; do :; done
+    lift_layers "$mountinfo" nsenter -t "$pid" -m -- umount -l "$stock_path"
     nsenter -t "$pid" -m -- mount -o bind "$base_path" "$stock_path" 2>/dev/null
   done
 }
@@ -199,7 +205,7 @@ mount_patched() {
     log_msg "Failed to set SELinux context"
   fi
   unmount_from_zygote_namespaces
-  while grep -qF " $stock_path " /proc/self/mountinfo && umount -l "$stock_path" 2>/dev/null; do :; done
+  lift_layers /proc/self/mountinfo umount -l "$stock_path"
   if mount -o bind "$base_path" "$stock_path" 2>> "$log"; then
     log_msg "Mounted in root namespace"
   else
@@ -239,7 +245,7 @@ watch_framework_restarts() {
       if [ ! -f "$base_path" ] || [ -f "$module_dir/disable" ] || [ -f "$module_dir/remove" ]; then
         exit 0
       fi
-      while grep -qF " $stock_path " /proc/self/mountinfo && umount -l "$stock_path" 2>/dev/null; do :; done
+      lift_layers /proc/self/mountinfo umount -l "$stock_path"
       log_msg "Framework restarted, lifted the patched APK before the package scan"
       find_stock
       mount_patched

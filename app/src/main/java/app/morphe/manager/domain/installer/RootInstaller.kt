@@ -404,8 +404,7 @@ class RootInstaller(
                 grep -vF " "$${mountSource.shellQuote()}" "$$targetPath" " |
                 sed 's|/mountinfo:.*|/ns/mnt|' | sort -u | xargs stat -Lc '%i %n' 2>/dev/null |
                 grep -v "^$own_ns " | sort -u -k1,1 | cut -d/ -f3); do
-                while grep -qF " "$$targetPath" " "/proc/$pid/mountinfo" &&
-                    nsenter -t "$pid" -m -- umount -l $$targetPath 2>/dev/null; do :; done;
+                $${liftLayersOfPidCommand(targetPath)};
                 nsenter -t "$pid" -m -- mount -o bind $$sourcePath $$targetPath 2>/dev/null || true;
             done
         """.trimIndent()
@@ -440,13 +439,26 @@ class RootInstaller(
     private fun unmountBindCommands(targetPath: String) =
         $$"""
             for pid in $(pidof zygote64) $(pidof zygote) $${Process.myPid()}; do
-                while grep -qF " "$$targetPath" " "/proc/$pid/mountinfo" &&
-                    nsenter -t "$pid" -m -- umount -l $$targetPath 2>/dev/null; do :; done;
+                $${liftLayersOfPidCommand(targetPath)};
             done;
-            while grep -qF " "$$targetPath" " /proc/self/mountinfo &&
-                umount -l $$targetPath 2>/dev/null; do :; done;
+            $${liftLayersCommand(targetPath, "/proc/self/mountinfo", "umount -l $targetPath")};
             true
         """.trimIndent()
+
+    /**
+     * Runs [umount] while [mountTable] lists the quoted [targetPath], one layer per run. Bounded, as
+     * a root that hides mounts can report each umount as done and hold the shell there forever.
+     */
+    private fun liftLayersCommand(targetPath: String, mountTable: String, umount: String) =
+        "for _ in 1 2 3 4 5 6 7 8 9 10; do " +
+                "grep -qF \" \"$targetPath\" \" $mountTable && $umount 2>/dev/null || break; done"
+
+    /** [liftLayersCommand] in the namespace of the process the shell holds in `$pid`. */
+    private fun liftLayersOfPidCommand(targetPath: String) = liftLayersCommand(
+        targetPath,
+        mountTable = $$"\"/proc/$pid/mountinfo\"",
+        umount = $$"nsenter -t \"$pid\" -m -- umount -l $$targetPath"
+    )
 
     companion object {
         const val MODULES_PATH = "/data/adb/modules"
