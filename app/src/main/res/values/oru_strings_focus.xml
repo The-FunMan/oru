@@ -12,8 +12,7 @@
     <string name="oru_focus_needs">Needs %1$s %2$s.</string>
     <string name="oru_simple_reset">Reset to recommended</string>
     <string name="oru_simple_reset_done">Back to recommended</string>
-    <string name="oru_notice_unsupported_simple">%1$s %2$s is not supported. Get %3$s.</string>
-    <string name="oru_notice_unsupported_simple_none">%1$s %2$s is not supported.</string>
+    <string name="oru_notice_unsupported_older">Version %1$s is older than the patches. Find version %2$s to patch.</string>
     <string name="oru_action_edit">Edit</string>
     <string name="oru_focus_summary_patches">%1$d of %2$d patches</string>
     <string name="oru_setup_title">Setup</string>

@@ -17,5 +17,5 @@
     <string name="oru_source_fewer_patches">Fewer patches than Default patches</string>
     <string name="oru_focus_source_row_title">Source</string>
     <string name="oru_focus_source_row_value">%1$s v%2$s</string>
-    <string name="oru_notice_unsupported_none">Version %1$s is not supported yet. Pick another version.</string>
+    <string name="oru_notice_unsupported_none">Version %1$s is not supported. Pick another version.</string>
 </resources>

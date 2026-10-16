@@ -69,7 +69,9 @@ import app.morphe.manager.ui.oru.nav.oruTitleSharedKey
 import app.morphe.manager.ui.oru.nav.rememberOruPresence
 import app.morphe.manager.ui.oru.components.OruSwapText
 import app.morphe.manager.ui.oru.sources.OruAppSources
+import app.morphe.manager.ui.oru.sources.OruVersionSide
 import app.morphe.manager.ui.oru.sources.oruVersionGate
+import app.morphe.manager.ui.oru.sources.oruVersionSide
 import app.morphe.manager.ui.oru.sources.rememberOruAppSources
 import app.morphe.manager.ui.oru.theme.OruBlobShape
 import app.morphe.manager.ui.oru.theme.OruMotion
@@ -202,7 +204,6 @@ internal fun OruFocusShell(
                                 OruFocusNoticeCard(
                                     notice = notice,
                                     appName = appName,
-                                    expert = expert,
                                     onAct = { action ->
                                         if (action == OruFocusAction.UseAnother) {
                                             // "Use another file" opens the picker, as "Use a file" does, instead of starting the APK choice again
@@ -387,11 +388,10 @@ private fun focusDockItems(
 private fun OruFocusNoticeCard(
     notice: OruFocusNotice,
     appName: String,
-    expert: Boolean,
     onAct: (OruFocusAction) -> Unit,
 ) {
     OruNotice(
-        text = noticeText(notice, appName, expert),
+        text = noticeText(notice, appName),
         tone = notice.tone,
         actions = notice.actions.map { action ->
             OruNoticeAction(label = actionLabel(action, appName), onClick = { onAct(action) })
@@ -400,24 +400,21 @@ private fun OruFocusNoticeCard(
 }
 
 @Composable
-private fun noticeText(notice: OruFocusNotice, appName: String, expert: Boolean): String {
+private fun noticeText(notice: OruFocusNotice, appName: String): String {
     val context = LocalContext.current
     val version = notice.version.orEmpty()
     return when (notice.kind) {
         OruNoticeKind.WrongPackage -> stringResource(R.string.oru_error_wrong_app)
         OruNoticeKind.Split -> stringResource(R.string.oru_error_split)
         OruNoticeKind.InvalidSignature -> stringResource(R.string.oru_error_changed)
-        // Simple names the app and the version its source can patch at. Expert points to that version in its own words
-        OruNoticeKind.Unsupported -> when {
-            !expert -> notice.supportedVersion?.let {
-                stringResource(R.string.oru_notice_unsupported_simple, appName, version, it)
-            } ?: stringResource(R.string.oru_notice_unsupported_simple_none, appName, version)
-            notice.supportedVersion != null ->
-                stringResource(R.string.oru_notice_unsupported, version, notice.supportedVersion)
-            else -> stringResource(R.string.oru_notice_unsupported_none, version)
+        // One wording per state in both modes: newer or older than the patches, or no version to point to
+        OruNoticeKind.Unsupported -> when (oruVersionSide(version, notice.supportedVersion)) {
+            OruVersionSide.Newer -> stringResource(R.string.oru_notice_unsupported, version, notice.supportedVersion.orEmpty())
+            OruVersionSide.Older -> stringResource(R.string.oru_notice_unsupported_older, version, notice.supportedVersion.orEmpty())
+            OruVersionSide.Unknown -> stringResource(R.string.oru_notice_unsupported_none, version)
         }
         OruNoticeKind.ExperimentalOff -> stringResource(R.string.oru_notice_experimental_off, version, appName)
-        OruNoticeKind.ExperimentalOn -> stringResource(R.string.oru_notice_experimental_on, version, appName)
+        OruNoticeKind.ExperimentalOn -> stringResource(R.string.oru_notice_experimental_on, version)
         OruNoticeKind.NoCompatible -> stringResource(R.string.oru_error_generic)
         OruNoticeKind.LowStorage -> stringResource(
             R.string.oru_error_low_storage,

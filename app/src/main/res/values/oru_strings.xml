@@ -110,11 +110,11 @@
     <string name="oru_focus_dock_patch">Patch %1$s</string>
 
     <!-- Focus: notices -->
-    <string name="oru_notice_experimental_on">Version %1$s is newer than the patches were tested with, so it may not work. Experimental versions are on for %2$s.</string>
+    <string name="oru_notice_experimental_on">Version %1$s is experimental, so it may not work.</string>
     <string name="oru_notice_experimental_off">Version %1$s is newer than the patches were tested with, so it may not work. Experimental versions are off for %2$s.</string>
     <string name="oru_notice_action_pick_version">Pick another version</string>
     <string name="oru_notice_action_show_experimental">Show experimental versions</string>
-    <string name="oru_notice_unsupported">Version %1$s is not supported yet. Oru can patch %2$s instead.</string>
+    <string name="oru_notice_unsupported">Version %1$s is newer than the patches. Find version %2$s to patch.</string>
     <string name="oru_action_patch_version">Patch %1$s</string>
     <string name="oru_action_patch_anyway">Patch %1$s anyway</string>
 
