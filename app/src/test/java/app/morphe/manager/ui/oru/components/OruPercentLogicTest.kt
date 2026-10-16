@@ -84,4 +84,24 @@ class OruPercentLogicTest {
         val second = OruProgressHold()
         assertEquals(10, oruPercent(second.show(0.1f)))
     }
+
+    @Test
+    fun `a run is announced in steps of a quarter, rounded down`() {
+        assertEquals(0, oruAnnouncedPercent(0))
+        assertEquals(0, oruAnnouncedPercent(24))
+        assertEquals(25, oruAnnouncedPercent(25))
+        assertEquals(25, oruAnnouncedPercent(49))
+        assertEquals(50, oruAnnouncedPercent(50))
+        assertEquals(75, oruAnnouncedPercent(74))
+        assertEquals(75, oruAnnouncedPercent(99))
+        assertEquals(100, oruAnnouncedPercent(100))
+    }
+
+    @Test
+    fun `the announced percent is kept in range and changes only at a step`() {
+        assertEquals(0, oruAnnouncedPercent(-5))
+        assertEquals(100, oruAnnouncedPercent(140))
+        val steps = (0..100).map { oruAnnouncedPercent(it) }.distinct()
+        assertEquals(listOf(0, 25, 50, 75, 100), steps)
+    }
 }

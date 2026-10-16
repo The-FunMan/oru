@@ -49,6 +49,8 @@ import app.morphe.manager.ui.oru.components.OruFitMinSize
 import app.morphe.manager.ui.oru.components.OruFrostedDock
 import app.morphe.manager.ui.oru.components.OruHero
 import app.morphe.manager.ui.oru.components.OruHeroCounter
+import app.morphe.manager.ui.oru.components.oruAnnouncedPercent
+import app.morphe.manager.ui.oru.components.oruPercent
 import app.morphe.manager.ui.oru.components.OruMorphText
 import app.morphe.manager.ui.oru.components.OruOutlinedButton
 import app.morphe.manager.ui.oru.components.OruProgressHold
@@ -128,6 +130,12 @@ fun OruRunContent(
     // The percentage of this run never steps back: a retry that starts over holds the figure it had reached
     val hold = remember(runKey) { OruProgressHold() }
     val shownProgress = hold.show(run.progress)
+    // A working run is announced at each step of its percentage, not at each tick, see OruHero's description
+    val announced = if (working) {
+        stringResource(R.string.oru_run_progress_announce, oruAnnouncedPercent(oruPercent(shownProgress)))
+    } else {
+        null
+    }
     // The dock's first button is where the Patch button was, so a second tap of a double tap on Patch lands on Keep
     // going, which is harmless, and not on Cancel. Cancel still ignores taps for a moment after the layout is shown
     // (see OruTapGate).
@@ -150,6 +158,7 @@ fun OruRunContent(
                 shape = shape,
                 progress = { shownProgress },
                 compact = expert,
+                description = announced,
                 counter = counter,
                 applyingPatches = applyingPatches,
                 patchTotal = run.patchesTotal,

@@ -23,6 +23,13 @@ private const val PercentScale = 100f
 internal fun oruPercent(progress: Float): Int =
     if (progress.isNaN()) 0 else (progress.coerceIn(0f, 1f) * PercentScale).roundToInt()
 
+/** The percent a screen reader announces a run at: the whole percent rounded down to a [AnnouncePercentStep] step. */
+internal fun oruAnnouncedPercent(percent: Int): Int =
+    percent.coerceIn(0, MaxPercent) / AnnouncePercentStep * AnnouncePercentStep
+
+private const val AnnouncePercentStep = 25
+private const val MaxPercent = 100
+
 /**
  * The progress a run shows once [progress] is reported, given the [held] progress already shown. It is the larger of
  * the two, so the percentage it reads as never goes back. A NaN report keeps what was held.
