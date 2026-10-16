@@ -28,6 +28,7 @@ gh api repos/The-FunMan/oru/check-runs/<job id>/annotations --jq '.[].message'
 | "tag vX.Y.Z already exists: bump the version" (Dev prerelease) | `version` equals a stable tag | Bump `version` in `app/gradle.properties` to the next minor |
 | `sdkmanager could not install the SDK packages` | A package name changed | Compare with `sdkmanager --list`; update `.github/actions/setup-oru/action.yml` and `scripts/dev/setup-linux.sh` together |
 | Dependabot PR fails verification | `verification-metadata.xml` not updated | Run the build with `--write-verification-metadata sha256` and commit both files |
+| "Dependency verification failed" on a `*.gradle.plugin-*.pom` for a Kotlin plugin, only on some runs | The plugin portal and Maven Central serve different bytes for the same marker POM | Add the other repository's checksum as `<also-trust value="..."/>` inside that artifact's `<sha256>` in both `verification-metadata.xml` files. Fetch `https://plugins.gradle.org/m2/<path>` and `https://repo.maven.apache.org/maven2/<path>` and hash both. |
 | CI says `pending` for a long time with no jobs | The run waits for approval (first-time contributor) or for a queued runner | Approve it in the Actions tab, or wait |
 | A required approval is waiting | The `release` environment needs the owner | Approve it from the Actions tab or the phone |
 
