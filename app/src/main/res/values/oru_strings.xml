@@ -239,7 +239,7 @@
     <string name="oru_settings_animations">Animations</string>
     <string name="oru_settings_animations_helper">Turn off to switch screens with no motion.</string>
     <string name="oru_settings_wallpaper">Match my wallpaper colors</string>
-    <string name="oru_settings_wallpaper_helper">Needs Android 12 or later. Uses your wallpaper colors instead of Oru blue.</string>
+    <string name="oru_settings_wallpaper_helper">Uses your wallpaper colors instead of Oru blue.</string>
     <string name="oru_settings_language">Language</string>
     <string name="oru_settings_language_phone">Phone language</string>
     <string name="oru_settings_updates">Keep apps up to date</string>
