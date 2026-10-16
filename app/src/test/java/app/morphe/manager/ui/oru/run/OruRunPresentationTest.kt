@@ -146,6 +146,29 @@ class OruRunPresentationTest {
     }
 
     @Test
+    fun `a simple step shows the sum of its stages once every stage in it is done`() {
+        val stages = listOf(
+            stage(StepId.LOAD_PATCHES, OruStageState.DONE, durationMs = 1_000L),
+            stage(StepId.READ_APK, OruStageState.DONE, durationMs = 2_500L),
+            stage(StepId.EXECUTE_PATCHES, OruStageState.ACTIVE, durationMs = null),
+        )
+
+        assertEquals(3_500L, oruSimpleStepDurationMs(stages, OruSimpleStep.PREPARE))
+        assertNull(oruSimpleStepDurationMs(stages, OruSimpleStep.APPLY))
+        assertNull(oruSimpleStepDurationMs(stages, OruSimpleStep.FINISH))
+    }
+
+    @Test
+    fun `a done simple step with a stage that has no time shows none`() {
+        val stages = listOf(
+            stage(StepId.LOAD_PATCHES, OruStageState.DONE, durationMs = 1_000L),
+            stage(StepId.READ_APK, OruStageState.DONE, durationMs = null),
+        )
+
+        assertNull(oruSimpleStepDurationMs(stages, OruSimpleStep.PREPARE))
+    }
+
+    @Test
     fun `no graphs before the first sample`() {
         assertNull(usage().toGraphs())
     }

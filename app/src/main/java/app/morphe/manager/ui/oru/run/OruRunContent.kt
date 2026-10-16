@@ -202,11 +202,13 @@ fun OruRunContent(
                 )
             } else {
                 OruStageRail(
+                    // Simple shows no usage and no log lines. Each step keeps its name and, once done, its time
                     stages = oruSimpleSteps(run.stages).map { (step, state) ->
                         ComponentStageUi(
                             id = step.name,
                             name = stringResource(simpleStepLabelRes(step)),
                             state = state,
+                            duration = oruSimpleStepDurationMs(run.stages, step)?.let(OruRunFormat::stageDuration),
                         )
                     },
                     expandedId = null,

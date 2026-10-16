@@ -131,6 +131,18 @@ fun oruSimpleSteps(stages: List<OruStageUi>): List<Pair<OruSimpleStep, Component
         step to oruGroupState(states)
     }
 
+/**
+ * The time a Simple step took: the sum of its stages' times, shown only once every stage in it is done. A step that is
+ * still running or waiting, or one with a stage that has no time, has none, so a step never shows a partial time.
+ */
+internal fun oruSimpleStepDurationMs(stages: List<OruStageUi>, step: OruSimpleStep): Long? {
+    val group = stages.filter { it.id in step.stages }
+    if (group.isEmpty() || group.any { it.state != OruStageState.DONE }) return null
+    var total = 0L
+    for (stage in group) total += stage.durationMs ?: return null
+    return total
+}
+
 /** The rail state of a group of run stages, see [oruSimpleSteps]. */
 internal fun oruGroupState(states: List<OruStageState>): ComponentStageState = when {
     OruStageState.ERROR in states -> ComponentStageState.Error
