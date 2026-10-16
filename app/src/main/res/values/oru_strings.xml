@@ -133,7 +133,7 @@
     <string name="oru_run_title_upgrading">Upgrading</string>
     <string name="oru_run_starting">Starting</string>
     <string name="oru_run_elapsed">elapsed</string>
-    <string name="oru_run_keep_background">Keep going in background</string>
+    <string name="oru_run_keep_background">Keep going in the background</string>
     <string name="oru_run_ready">Ready</string>
     <string name="oru_run_ready_caption">%1$s %2$s, patched with %3$d patches.</string>
     <string name="oru_run_patch_count">Applying patches, %1$d of %2$d</string>

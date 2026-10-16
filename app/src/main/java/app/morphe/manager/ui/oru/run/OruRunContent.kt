@@ -55,6 +55,7 @@ import app.morphe.manager.ui.oru.components.OruRollingCount
 import app.morphe.manager.ui.oru.components.LocalOruAppTint
 import app.morphe.manager.ui.oru.components.OruStageRail
 import app.morphe.manager.ui.oru.components.OruTapGate
+import app.morphe.manager.ui.oru.components.OruTextButton
 import app.morphe.manager.ui.oru.components.OruSwapText
 import app.morphe.manager.ui.oru.components.OruStageUi as ComponentStageUi
 import app.morphe.manager.ui.oru.components.OruTileSource
@@ -86,6 +87,8 @@ import app.morphe.manager.ui.screen.shared.KeepScreenOn
  * @param usage the samples for the readout, see [OruRunUsage.of].
  * @param facts the output size and time of a finished run, null while it works.
  * @param runKey identifies the run. The percentage it shows never goes back, and a new key starts it from zero.
+ * @param onCancel called once the user confirms the cancel.
+ * @param onKeepInBackground leaves the screen and keeps the run going in the background.
  */
 @Composable
 fun OruRunContent(
@@ -97,6 +100,7 @@ fun OruRunContent(
     facts: OruRunFacts?,
     runKey: Any,
     onCancel: () -> Unit,
+    onKeepInBackground: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val working = run.hero == OruHeroState.WORKING
@@ -216,11 +220,22 @@ fun OruRunContent(
 
         if (working) {
             OruFrostedDock(frost = OruSurfaceFill.Solid) {
-                OruOutlinedButton(
-                    text = stringResource(R.string.oru_action_cancel),
-                    onClick = { if (cancelGate.accept()) confirmCancel = true },
+                Column(
                     modifier = Modifier.weight(1f),
-                )
+                    verticalArrangement = Arrangement.spacedBy(DockSpacing),
+                ) {
+                    OruOutlinedButton(
+                        text = stringResource(R.string.oru_run_keep_background),
+                        onClick = onKeepInBackground,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    OruTextButton(
+                        text = stringResource(R.string.oru_run_cancel_go),
+                        onClick = { if (cancelGate.accept()) confirmCancel = true },
+                        color = scheme.error,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
             }
         }
     }
@@ -382,6 +397,7 @@ private fun simpleStepLabelRes(step: OruSimpleStep): Int = when (step) {
 }
 
 private const val KbPerSecUnit = "KB/s"
+private val DockSpacing = 4.dp
 private val GutterDp = 16.dp
 private val TopSpacing = 8.dp
 private val SectionSpacing = 16.dp

@@ -181,6 +181,8 @@ internal fun OruFocusRunRoute(
                 runKey = currentPatcher.patchRun,
                 // OruRunContent asks for the confirm itself and calls this only once the user confirms
                 onCancel = { vm.cancelRun(currentPatcher) },
+                // Back leaves the Focus without cancelling, and the run stays active in SingleRunOwner
+                onKeepInBackground = onBack,
                 modifier = Modifier.fillMaxSize(),
             )
 
@@ -209,6 +211,7 @@ internal fun OruFocusRunRoute(
                         facts = null,
                         runKey = currentPatcher.patchRun,
                         onCancel = {},
+                        onKeepInBackground = onBack,
                         modifier = Modifier.fillMaxSize(),
                     )
                 } else {
