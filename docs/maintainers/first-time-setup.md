@@ -114,7 +114,7 @@ Run from the repository root. These are the commands CI runs (`ci.yml`) and the 
 - [ ] Unit tests and lint:
 
   ```sh
-  ./gradlew :app:testOruDebugUnitTest :app:testMorpheDebugUnitTest :app:lint --stacktrace
+  ./gradlew :app:testOruDebugUnitTest :app:lint --stacktrace
   ```
 
 - [ ] Patcher tests, API check and jar:

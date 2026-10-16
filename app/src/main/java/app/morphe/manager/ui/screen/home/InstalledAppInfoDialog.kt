@@ -52,7 +52,6 @@ import androidx.compose.ui.util.lerp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import app.morphe.manager.BuildConfig
 import app.morphe.manager.R
 import app.morphe.manager.data.room.apps.installed.*
 import app.morphe.manager.domain.bundles.AppVersionStatus
@@ -246,8 +245,8 @@ fun InstalledAppInfoDialog(
 
     // Export file name
     val exportFileName = remember(installedApp?.currentPackageName, appInfo?.versionName, appliedBundles) {
-        // ORU: the default save name carries the flavour's brand prefix
-        val app = installedApp ?: return@remember OruFileNames.patchedApk(BuildConfig.ORU_UX)
+        // The default save name carries the brand prefix
+        val app = installedApp ?: return@remember OruFileNames.patchedApk(true)
         ExportNameFormatter.format(null, PatchedAppExportData(
             appName = appInfo?.applicationInfo?.loadLabel(context.packageManager)?.toString(),
             packageName = app.currentPackageName,

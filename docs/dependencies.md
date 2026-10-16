@@ -6,7 +6,7 @@ Oru keeps its dependencies on the newest stable release. This page says how, and
 
 - Dependabot checks Gradle (the app and the patcher), Rust crates and GitHub Actions every day, and groups each kind into one pull request to `dev` (`.github/dependabot.yml`).
 - A Gradle update comes with its regenerated checksums in `gradle/verification-metadata.xml` and `patcher/gradle/verification-metadata.xml`. Run the Gradle build with `--write-verification-metadata sha256` and commit the result in the same pull request.
-- The pull request must pass the same checks as any change: unit tests for both flavours, lint, the patcher tests and the public API check, and the Rust tests.
+- The pull request must pass the same checks as any change: unit tests, lint, the patcher tests and the public API check, and the Rust tests.
 - Last full refresh: 16 October 2026, when every catalog was compared with Google Maven, Maven Central and the Gradle plugin portal and brought to the newest stable version.
 
 ## Held back on purpose

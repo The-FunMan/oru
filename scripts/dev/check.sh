@@ -2,7 +2,7 @@
 # The local version of the CI checks. Run it from the repository root before you push.
 #
 #   scripts/dev/check.sh quick   privacy scan, site check, Rust and Python tests, patcher tests (a few minutes)
-#   scripts/dev/check.sh full    quick, plus the app unit tests for both flavors, lint and the debug-signed Oru APK
+#   scripts/dev/check.sh full    quick, plus the app unit tests, lint and the debug-signed Oru APK
 #
 # Build tools come from the environment: source the env.sh that scripts/dev/setup-linux.sh wrote, or have JDK 21,
 # the Android SDK, Rust and GITHUB_ACTOR / GITHUB_TOKEN set up yourself.
@@ -27,8 +27,8 @@ step "Patcher tests, API check and jar"
 ./gradlew :patcher:test :patcher:apiCheck :patcher:jar --stacktrace
 
 if [ "$mode" = full ]; then
-  step "App unit tests (both flavors) and lint"
-  ./gradlew :app:testOruDebugUnitTest :app:testMorpheDebugUnitTest :app:lint --stacktrace
+  step "App unit tests and lint"
+  ./gradlew :app:testOruDebugUnitTest :app:lint --stacktrace
 
   step "Oru release APK, debug-signed"
   ./gradlew :app:assembleOruRelease -PsignAsDebug --stacktrace

@@ -1,32 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Oru flavor overlay. The morphe.software add-source link belongs to Morphe's website, so Oru
-  does not claim it. The main manifest's filter is removed here. The BATCH_PATCH filter and the
-  other intent filters stay as they are in the main manifest.
-
-  The Firebase messaging service is Morphe's push channel. Oru has no Firebase config and no
-  push feed, so the service is removed here as well.
+  Oru overlay. The Firebase messaging service is Morphe's push channel. Oru has no Firebase config and no
+  push feed, so the service is removed here.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
     <application>
         <service android:name="app.morphe.manager.service.MorpheFcmService" tools:node="remove" />
-        <activity
-            android:name="app.morphe.manager.MainActivity">
-
-            <intent-filter
-                android:autoVerify="false"
-                tools:node="remove">
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:scheme="https"
-                    android:host="morphe.software"
-                    android:pathPrefix="/add-source" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>

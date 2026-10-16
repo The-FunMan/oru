@@ -34,10 +34,8 @@ import app.morphe.manager.BuildConfig
 import app.morphe.manager.R
 import app.morphe.manager.ui.screen.shared.*
 import app.morphe.manager.ui.viewmodel.UpdateViewModel
-import app.morphe.manager.util.MANAGER_REPO_URL
 import app.morphe.manager.util.formatMegabytes
 import app.morphe.manager.util.isolateLtr
-import app.morphe.manager.util.releasePageUrl
 import app.morphe.manager.util.rememberSourceAccent
 import app.morphe.manager.util.withVersionPrefix
 import kotlinx.coroutines.delay
@@ -375,24 +373,11 @@ private fun UpdateDialogFooter(
         )
     }
 
-    // The release page stays at hand while the changelog is on screen or an install has failed
-    val offersReleasePage = state == UpdateViewModel.State.CAN_DOWNLOAD ||
-            state == UpdateViewModel.State.CAN_INSTALL ||
-            state == UpdateViewModel.State.FAILED
-
-    // The page of the update while there is one, else that of the newest release listed
-    // ORU: the release pages are Morphe's GitHub releases, so the oru flavour links none
-    val pageUrl = if (BuildConfig.ORU_UX) {
-        null
-    } else {
-        releaseInfo?.pageUrl
-            ?: updateViewModel.changelogEntries?.firstOrNull()?.version?.let { releasePageUrl(MANAGER_REPO_URL, it) }
-    }
-
+    // The release pages are Morphe's GitHub releases, so no release page is linked from here
     ChangelogFooter(
         actions = actions,
         translatable = translatable,
-        pageUrl = pageUrl.takeIf { offersReleasePage }
+        pageUrl = null
     )
 }
 

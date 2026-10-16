@@ -18,18 +18,15 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import app.morphe.manager.BuildConfig
 import app.morphe.manager.R
 import app.morphe.manager.ui.screen.shared.dialogSecondaryTextColor
 import app.morphe.manager.ui.screen.shared.AppDialog
 import app.morphe.manager.ui.screen.shared.AppDialogButtonRow
-import app.morphe.manager.ui.screen.shared.SelectionCheckRow
 
 /**
  * Confirmation for a batch patch run requested by another app.
  *
  * Patching ends in installing software, so an external trigger always stops here first.
- * The user can trust the calling app once, which stores it in the allowlist.
  */
 @Composable
 fun ExternalBatchPatchDialog(
@@ -38,7 +35,6 @@ fun ExternalBatchPatchDialog(
     onConfirm: (trustCaller: Boolean) -> Unit,
     onDismiss: () -> Unit
 ) {
-    var trustCaller by remember { mutableStateOf(false) }
     val caller = callerPackage ?: stringResource(R.string.external_batch_patch_unknown_caller)
 
     AppDialog(
@@ -49,7 +45,7 @@ fun ExternalBatchPatchDialog(
             AppDialogButtonRow(
                 primaryText = stringResource(R.string.continue_),
                 primaryIcon = Icons.Outlined.Check,
-                onPrimaryClick = { onConfirm(trustCaller && callerPackage != null) },
+                onPrimaryClick = { onConfirm(false) },
                 secondaryText = stringResource(android.R.string.cancel),
                 onSecondaryClick = onDismiss
             )
@@ -70,15 +66,6 @@ fun ExternalBatchPatchDialog(
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
-
-            // ORU: no "always allow" in oru for v1, each request gets its own confirm
-            if (callerPackage != null && !BuildConfig.ORU_UX) {
-                SelectionCheckRow(
-                    text = stringResource(R.string.external_batch_patch_trust_caller),
-                    checked = trustCaller,
-                    onCheckedChange = { trustCaller = it }
-                )
-            }
         }
     }
 }

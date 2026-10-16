@@ -253,7 +253,7 @@ class PreferencesManager(
             }
 
             // ORU: one-time oru defaults, after the strip step above so they win for older installs
-            if (OruSettingsMigration.shouldRun(BuildConfig.ORU_UX, oruUxMigrated.get())) {
+            if (OruSettingsMigration.shouldRun(true, oruUxMigrated.get())) {
                 disablePatchVersionCompatCheck.update(OruSettingsMigration.DISABLE_PATCH_VERSION_COMPAT_CHECK)
                 stripUnusedNativeLibs.update(OruSettingsMigration.STRIP_UNUSED_NATIVE_LIBS)
                 oruUxMigrated.update(true)
@@ -262,7 +262,7 @@ class PreferencesManager(
             // ORU: second step pins the settings the oru UI no longer shows. It runs before the
             // memory limit step below, which turns the unset limit into the limit for this device
             OruSettingsMigration.v2Pins(
-                oruFlavour = BuildConfig.ORU_UX,
+                oruFlavour = true,
                 alreadyMigrated = oruUxV2Migrated.get(),
                 processRuntimeDefault = defaultUseProcessRuntime(),
             )?.let { pins ->
@@ -566,7 +566,7 @@ class PreferencesManager(
         }
         // An imported override is ignored in the oru flavour
         snapshot.disablePatchVersionCompatCheck?.let {
-            disablePatchVersionCompatCheck.value = OruSettingsMigration.importedCompatCheck(it, BuildConfig.ORU_UX)
+            disablePatchVersionCompatCheck.value = OruSettingsMigration.importedCompatCheck(it, true)
         }
         snapshot.showGreetingPhrases?.let { showGreetingPhrases.value = it }
         snapshot.showRepatchNotice?.let { showRepatchNotice.value = it }

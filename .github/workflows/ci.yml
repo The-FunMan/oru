@@ -28,7 +28,7 @@ jobs:
           persist-credentials: false
       - uses: ./.github/actions/setup-oru
       - name: Unit tests and lint
-        run: ./gradlew :app:testOruDebugUnitTest :app:testMorpheDebugUnitTest :app:lint --stacktrace
+        run: ./gradlew :app:testOruDebugUnitTest :app:lint --stacktrace
       - name: Oru release APK, debug-signed, no secrets
         run: ./gradlew :app:assembleOruRelease -PsignAsDebug --stacktrace
       - name: Check the APK

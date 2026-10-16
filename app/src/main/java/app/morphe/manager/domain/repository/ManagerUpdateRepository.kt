@@ -5,9 +5,7 @@
 
 package app.morphe.manager.domain.repository
 
-import app.morphe.manager.BuildConfig
 import app.morphe.manager.network.api.OruUpdateSource
-import app.morphe.manager.network.api.MorpheAPI
 import app.morphe.manager.network.dto.MorpheAsset
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +21,6 @@ import kotlinx.coroutines.sync.withLock
  * so every surface announces and downloads exactly the release the others resolved.
  */
 class ManagerUpdateRepository(
-    private val morpheAPI: MorpheAPI,
     private val oruUpdates: OruUpdateSource,
 ) {
     private val _availableUpdate = MutableStateFlow<MorpheAsset?>(null)
@@ -78,9 +75,9 @@ class ManagerUpdateRepository(
         return pending.await()
     }
 
-    /** Oru builds check their own repository; the stock build checks Morphe's. */
+    /** The app checks its own Oru repository for a new release. */
     private suspend fun fetch(force: Boolean): MorpheAsset? =
-        (if (BuildConfig.UPSTREAM_SERVICES) morpheAPI.getAppUpdate() else oruUpdates.getAppUpdate(force)).also {
+        oruUpdates.getAppUpdate(force).also {
             _availableUpdate.value = it
             lastResolvedAt = System.currentTimeMillis()
         }

@@ -5,7 +5,6 @@
 
 package app.morphe.manager.util
 
-import app.morphe.manager.BuildConfig
 import app.morphe.manager.domain.bundles.PatchBundleSource
 import app.morphe.manager.domain.repository.PatchBundleRepository.Companion.DEFAULT_SOURCE_UID
 
@@ -14,27 +13,26 @@ import app.morphe.manager.domain.repository.PatchBundleRepository.Companion.DEFA
  *
  * The default source is stored with the upstream name, and that stored name is left alone: a
  * migration would be needed to change it, and exports and existing data carry it. Only what the
- * oru flavour shows changes, so the default source reads as [DEFAULT_LABEL] there. The morphe
- * flavour shows every name as it is stored.
+ * app shows changes, so the default source reads as [DEFAULT_LABEL].
  */
 object OruSourceNames {
-    /** Neutral name for the default patch source in the oru flavour. */
+    /** Neutral name for the default patch source. */
     const val DEFAULT_LABEL = "Default patches"
 
     /**
-     * The name to show for a source stored as [sourceName]. [oruUx] is `BuildConfig.ORU_UX`;
+     * The name to show for a source stored as [sourceName]. [oruUx] is true in the app;
      * tests pass it explicitly.
      */
     fun displayName(
         sourceName: String,
         isDefault: Boolean,
-        oruUx: Boolean = BuildConfig.ORU_UX,
+        oruUx: Boolean = true,
     ): String = if (oruUx && isDefault) DEFAULT_LABEL else sourceName
 }
 
 /**
  * ORU: the title a source is shown under. Same as [PatchBundleSource.displayTitle] except that the
- * default source reads as [OruSourceNames.DEFAULT_LABEL] in the oru flavour.
+ * default source reads as [OruSourceNames.DEFAULT_LABEL].
  */
 val PatchBundleSource.shownTitle: String
     get() = OruSourceNames.displayName(displayTitle, isDefault = uid == DEFAULT_SOURCE_UID)

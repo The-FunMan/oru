@@ -36,13 +36,9 @@ import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.role
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import app.morphe.manager.BuildConfig
 import app.morphe.manager.R
 import app.morphe.manager.domain.manager.PreferencesManager
 import app.morphe.manager.util.APK_EXTENSIONS
@@ -53,7 +49,6 @@ import app.morphe.manager.util.formatBytes
 import com.topjohnwu.superuser.Shell
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.compose.koinInject
 import java.io.File
@@ -231,7 +226,6 @@ fun FilePicker(
     val prefs: PreferencesManager = koinInject()
     val pm: PM = koinInject()
     val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
     val allowedExtensions = remember(mimeTypes) { resolveAllowedExtensions(mimeTypes) }
     val mppIcon = rememberMorpheLogoBitmap()
     val modDateFormat = remember { modDateFormat(context) }
@@ -245,16 +239,9 @@ fun FilePicker(
 
     var currentDir by remember { mutableStateOf(downloadsDir) }
     var refreshKey by remember { mutableIntStateOf(0) }
-    // Oru fixes the sort and hides hidden files (SETTINGS_IA rows 48-49), so it neither reads nor writes them
-    var sortMode by remember {
-        mutableStateOf(
-            if (BuildConfig.ORU_UX) SortMode.DATE_DESC
-            else initialSortMode(prefs.filePickerSortMode.getBlocking())
-        )
-    }
-    var showHiddenFiles by remember {
-        mutableStateOf(!BuildConfig.ORU_UX && prefs.filePickerShowHiddenFiles.getBlocking())
-    }
+    // The sort is fixed to newest first and hidden files stay hidden, so neither is read or written
+    val sortMode = SortMode.DATE_DESC
+    val showHiddenFiles = false
     var showViewMenu by remember { mutableStateOf(false) }
     val search = rememberSearchFieldState(searchable = currentDir != null)
     val checkedFiles = remember { mutableStateListOf<File>() }
@@ -368,35 +355,6 @@ fun FilePicker(
                     expanded = showViewMenu,
                     onDismissRequest = { showViewMenu = false }
                 ) {
-                    // Oru has no sort or hidden-file choice, so the menu keeps only Refresh there
-                    if (!BuildConfig.ORU_UX) {
-                        SortMode.entries.forEach { mode ->
-                            AppDropdownMenuItem(
-                                text = stringResource(mode.labelRes()),
-                                selected = sortMode == mode,
-                                onClick = {
-                                    sortMode = mode
-                                    showViewMenu = false
-                                    coroutineScope.launch { prefs.filePickerSortMode.update(mode.name) }
-                                }
-                            )
-                        }
-                        SettingsDivider(fullWidth = true)
-                        AppDropdownMenuItem(
-                            text = stringResource(R.string.file_picker_show_hidden_files),
-                            trailing = {
-                                SelectionCheckIndicator(
-                                    if (showHiddenFiles) ToggleableState.On else ToggleableState.Off
-                                )
-                            },
-                            modifier = Modifier.semantics { role = Role.Checkbox },
-                            onClick = {
-                                val next = !showHiddenFiles
-                                showHiddenFiles = next
-                                coroutineScope.launch { prefs.filePickerShowHiddenFiles.update(next) }
-                            }
-                        )
-                    }
                     // Picks up what changed on disk while the picker was open, such as a file
                     // just downloaded or access just granted
                     AppDropdownMenuItem(

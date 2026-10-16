@@ -6,8 +6,7 @@
 package app.morphe.manager.util
 
 /**
- * ORU: names of the files the manager saves, chosen per flavour. The morphe flavour keeps its
- * names. Pure, so tests pass the flavour in as [oruUx] (`BuildConfig.ORU_UX` in the app).
+ * ORU: names of the files the manager saves. Pure, so tests pass the brand in as [oruUx] (true in the app).
  *
  * Reading is not affected: imports detect the format from the content and the extension
  * (`keystore`, `bks`, `jks`, ...), never from the brand in the name, so files saved under either
@@ -27,7 +26,7 @@ object OruFileNames {
 
     /**
      * Extra passwords and aliases that a keystore import tries after the upstream ones. Oru creates
-     * its keystores with the alias and password "oru". Both are added in the oru flavour only.
+     * its keystores with the alias and password "oru".
      */
     fun extraKeystoreSecrets(oruUx: Boolean): Array<String> =
         if (oruUx) arrayOf("oru") else emptyArray()

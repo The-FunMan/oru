@@ -2,7 +2,7 @@
 
 ## Pieces
 
-- **App** (`app/`): Kotlin, Jetpack Compose, Koin for injection, a foreground worker for the run. The package is still `app.morphe.manager` because the code started as Morphe Manager. The Oru product id is `app.oru.manager`. Two flavors: `oru` (the product) and `morphe` (parity with upstream, so upstream changes can be compared and merged). Shared code is in `main`, Oru-only resources and manifest in `src/oru`, debug-only helpers in `src/oruDebug`.
+- **App** (`app/`): Kotlin, Jetpack Compose, Koin for injection, a foreground worker for the run. The package is still `app.morphe.manager` because the code started as Morphe Manager. The Oru product id is `app.oru.manager`. One flavor, `oru`, which is the product. Shared code is in `main`, Oru-only resources and manifest in `src/oru`, debug-only helpers in `src/oruDebug`.
 - **Patcher** (`patcher/`): a separate Gradle build, included from the root with `includeBuild`. It targets Java 11 and loads patch bundles. Patch bundles call its public API directly, so the API only grows. `:patcher:apiCheck` and `tools/parity/patch_api_guard.py` enforce that.
 - **Native** (`native/`, `native-packager/`): Rust. `native` is the JNI index used while patching. `native-packager` packs and signs, and has a parity suite against the Kotlin path. Built for the four Android targets with NDK 28 and CMake 3.22.1 (the versions are in `.github/actions/setup-oru/action.yml`).
 - **Site** (`site/`): static pages for GitHub Pages, deployed by `pages.yml` when `site/**` changes. `scripts/check-site.sh` guards links and forbidden words.

@@ -30,7 +30,6 @@ import app.morphe.manager.domain.apk.*
 import app.morphe.manager.domain.batch.BatchPatchCoordinator
 import app.morphe.manager.domain.batch.BatchRunState
 import app.morphe.manager.domain.batch.mergeNewlyAdded
-import app.morphe.manager.BuildConfig
 import app.morphe.manager.domain.bundles.*
 import app.morphe.manager.domain.repository.PatchBundleRepository.Companion.DEFAULT_SOURCE_UID
 import app.morphe.manager.domain.installer.InstallerManager
@@ -1377,32 +1376,6 @@ class HomeViewModel(
             return
         }
 
-        // In simple mode: if multiple bundles cover this package, ask the user to pick one
-        // before showing the APK selection dialog so the correct recommended version is used
-        // Oru answers the source in its Focus (see preselectSource), so this dialog is the old flavour's only
-        if (!BuildConfig.ORU_UX && !isExpertMode() && pendingSelectedBundleUid == null) {
-            val allBundlesForCheck = withContext(Dispatchers.IO) {
-                patchBundleRepository
-                    .offeredBundleInfoFlow(packageName, version = null)
-                    .first()
-            }
-            val candidates = allBundlesForCheck
-                .filter { it.enabled }
-                .map { bundle ->
-                    val patchNames = bundle.patchSequence(allowIncompatible = true)
-                        .filter { it.include }
-                        .mapTo(mutableSetOf()) { it.name }
-                    bundle to patchNames
-                }
-                .filter { (_, patches) -> patches.isNotEmpty() }
-
-            if (candidates.size > 1) {
-                simpleBundleSelectCandidates = candidates
-                showSimpleBundleSelectDialog = true
-                return
-            }
-        }
-
         continueApkSelectionFlow(packageName)
     }
 
@@ -1947,35 +1920,20 @@ class HomeViewModel(
             return
         }
 
-        // Show the unsupported-version warning when:
-        //   - version-specific patches exist for this package (incompatible list is non-empty)
-        //   - BUT none of them match this APK version (compatible list is empty)
-        //   - AND the user has NOT disabled the version compat check
-        // Universal patches do not suppress this warning - the user should still be informed
-        // that the APK version is not officially supported.
-        // Note: experimental versions are compatible (they pass the version check) but show an
-        // additional "Experimental" badge in the warning dialog.
-        // Oru answers this with the gate the Home card reads, for the source the app is patched from
-        // (see OruVersionGate). The other flavour keeps the check over every enabled bundle.
-        val oruGate = if (BuildConfig.ORU_UX) {
-            oruVersionGate(
-                selectedApp.version,
-                selectedApp.versionCode,
-                oruAppSourcesNow(this, selectedApp.packageName).effectiveVersions,
-            )
-        } else {
-            null
-        }
-        val versionMismatch = oruGate?.let { it == OruVersionGate.Unsupported } ?: (!hasCompatible && hasIncompatible)
+        // The version warnings are answered with the gate the Home card reads, for the source the
+        // app is patched from (see OruVersionGate).
+        val oruGate = oruVersionGate(
+            selectedApp.version,
+            selectedApp.versionCode,
+            oruAppSourcesNow(this, selectedApp.packageName).effectiveVersions,
+        )
+        val versionMismatch = oruGate == OruVersionGate.Unsupported
         // Experimental check is independent - a version can be experimental AND compatible
-        val isVersionExperimental = oruGate?.let {
-            it == OruVersionGate.ExperimentalAllowed || it == OruVersionGate.ExperimentalOff
-        } ?: enabledBundles.any { it.isVersionExperimental }
+        val isVersionExperimental = oruGate == OruVersionGate.ExperimentalAllowed ||
+            oruGate == OruVersionGate.ExperimentalOff
 
         // Check if the user has enabled experimental-version mode for this package's bundle
-        val experimentalEnabledUids = prefs.bundleExperimentalVersionsEnabled.getBlocking()
-        val isExperimentalModeEnabled = oruGate?.let { it == OruVersionGate.ExperimentalAllowed }
-            ?: enabledBundles.any { bundle -> bundle.uid.toString() in experimentalEnabledUids }
+        val isExperimentalModeEnabled = oruGate == OruVersionGate.ExperimentalAllowed
 
         if (versionMismatch && !allowIncompatible) {
             pendingSelectedApp = selectedApp
@@ -2080,22 +2038,18 @@ class HomeViewModel(
         }
         // Oru patches an app from one source only: the effective one, resolved from the same turned-down set the
         // Focus picker writes. The other sources are left out of the selection and of the saved selection.
-        val oruSourceUid = if (BuildConfig.ORU_UX) {
-            val facts = availableBundles.map { bundle ->
-                AppSourceFact(
-                    uid = bundle.uid,
-                    name = bundle.name,
-                    isDefault = bundle.uid == DEFAULT_SOURCE_UID,
-                    repositoryPath = null,
-                    patchVersion = null,
-                    patchCount = 0,
-                    recommendedVersion = null,
-                )
-            }
-            AppSourceChoice.effective(facts, turnedDown)?.uid
-        } else {
-            null
+        val facts = availableBundles.map { bundle ->
+            AppSourceFact(
+                uid = bundle.uid,
+                name = bundle.name,
+                isDefault = bundle.uid == DEFAULT_SOURCE_UID,
+                repositoryPath = null,
+                patchVersion = null,
+                patchCount = 0,
+                recommendedVersion = null,
+            )
         }
+        val oruSourceUid = AppSourceChoice.effective(facts, turnedDown)?.uid
         oruRunSourceUid = oruSourceUid
         val mutedSources = if (oruSourceUid != null) emptySet() else turnedDown
         // Every rule below reads this rather than the full list, so a source the app is kept from
@@ -2231,8 +2185,7 @@ class HomeViewModel(
             expertModeNewPatches = newPatchesMap
             showExpertModeDialog = true
         } else {
-            // Simple Mode: collect patches from all enabled bundles, then either use the sole result directly
-            // or ask the user to pick one if multiple bundles have applicable patches.
+            // Simple Mode: collect patches from all enabled bundles.
             // A patch is applicable if:
             //   - compatiblePackages == null (universal), OR
             //   - compatiblePackages contains this packageName
@@ -2295,15 +2248,7 @@ class HomeViewModel(
                 // Pre-selected bundle has no patches at all - fall through
             }
 
-            // Simple mode: if more than one bundle has applicable patches, ask the user which single bundle to use
-            if (!BuildConfig.ORU_UX && bundleWithPatches.size > 1) {
-                simpleBundleSelectApp = selectedApp
-                simpleBundleSelectCandidates = bundleWithPatches
-                showSimpleBundleSelectDialog = true
-                return
-            }
-
-            // Only one bundle has patches - use it directly (no prompt needed)
+            // Applicable patches from every bundle that has some are used directly (no prompt)
             val patches = bundleWithPatches
                 .associate { (bundle, patches) -> bundle.uid to patches }
                 .applyInstallerRules()

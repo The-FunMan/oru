@@ -13,7 +13,7 @@ Each entry says when the chore happens, who does it, the exact steps, how to ver
   4. Version catalog changes are in `gradle/libs.versions.toml`. The Morphe patcher version is `morphe-patcher` there, and the patcher's own version is in `patcher/gradle.properties`.
   5. `arsclib` is pinned to a commit of a MorpheApp fork (the comment in `libs.versions.toml`). Bumping it is a decision, not a routine update.
   6. Merge with a merge commit or squash, as `CONTRIBUTING.md` says for pull requests to `dev`.
-- **Verify:** `./gradlew :app:testOruDebugUnitTest :app:testMorpheDebugUnitTest` and `cd native && cargo test --locked`.
+- **Verify:** `./gradlew :app:testOruDebugUnitTest` and `cd native && cargo test --locked`.
 - **Time:** 15 to 60 minutes a week, depending on the number of updates.
 
 ## 2. Rust toolchain and NDK bumps

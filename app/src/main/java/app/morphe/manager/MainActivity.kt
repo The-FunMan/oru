@@ -24,18 +24,13 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
-import androidx.compose.ui.window.DialogWindowProvider
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
@@ -67,33 +62,21 @@ import app.morphe.manager.ui.oru.theme.rememberOruReducedMotion
 import app.morphe.manager.ui.oru.components.OruLaunchSplash
 import app.morphe.manager.ui.oru.nav.startOruRun
 import app.morphe.manager.ui.screen.BatchPatcherScreen
-import app.morphe.manager.ui.screen.HomeScreen
 import app.morphe.manager.ui.screen.PatcherScreen
-import app.morphe.manager.ui.screen.SettingsScreen
 import app.morphe.manager.ui.screen.home.*
-import app.morphe.manager.ui.screen.shared.AnimatedBackground
-import app.morphe.manager.ui.screen.shared.Animations
-import app.morphe.manager.ui.screen.shared.BackgroundType
 import app.morphe.manager.ui.screen.shared.RandomBackground
-import app.morphe.manager.ui.screen.shared.rememberRandomBackground
 import app.morphe.manager.ui.theme.*
 import app.morphe.manager.ui.viewmodel.HomeViewModel
 import app.morphe.manager.ui.viewmodel.MainViewModel
 import app.morphe.manager.ui.viewmodel.PatcherViewModel
 import app.morphe.manager.util.*
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeoutOrNull
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.context.GlobalContext
 import org.koin.core.parameter.parametersOf
-import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.seconds
 import org.koin.androidx.viewmodel.ext.android.getViewModel as getActivityViewModel
-
-private enum class OnboardingPhase { HOME, SHEET, SETTINGS, DONE }
 
 class MainActivity : AppCompatActivity() {
 
@@ -109,12 +92,8 @@ class MainActivity : AppCompatActivity() {
      * another does not keep the overrides the first one was created with.
      */
     override fun attachBaseContext(newBase: Context) {
-        // Koin is started in Application.onCreate, which has already run by the time an activity
-        // attaches. A scale that cannot be read must not take the launch down with it
-        // ORU: the oru flavor has no UI scale setting, so a stored value must not apply
-        val scale = if (BuildConfig.ORU_UX) UI_SCALE_DEFAULT else runCatching {
-            GlobalContext.get().get<PreferencesManager>().uiScale.getBlocking()
-        }.getOrDefault(UI_SCALE_DEFAULT)
+        // The oru flavor has no UI scale setting, so the default always applies
+        val scale = UI_SCALE_DEFAULT
 
         attachedLanguage = AppLocale.selected.value
         val overrides = Configuration().apply {
@@ -154,56 +133,17 @@ class MainActivity : AppCompatActivity() {
         }
 
         setContent {
-            val theme by vm.prefs.theme.getAsState()
-            val themeStyle by vm.prefs.themeStyle.getAsState()
-            val pureBlackTheme by vm.prefs.pureBlackTheme.getAsState()
-            val colorAccents by vm.prefs.colorAccents.getAsState()
-            val outlines by vm.prefs.outlines.getAsState()
-            val customAccentColor by vm.prefs.customAccentColor.getAsState()
-            val customThemeColor by vm.prefs.customThemeColor.getAsState()
-            val appCardColorMode by vm.prefs.appCardColorMode.getAsState()
-            val customAppCardColors by vm.prefs.customAppCardColors.getAsState()
-            val appCardColorValues = remember(customAppCardColors) {
-                AppCardColorDefaults.decodeColorValues(customAppCardColors)
-            }
-            val supportsDynamicColor = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
-            val effectiveThemeStyle = resolveThemeStyle(themeStyle, supportsDynamicColor)
-            val darkTheme = when (theme) {
-                Theme.LIGHT -> false
-                Theme.DARK -> true
-                Theme.SYSTEM -> isSystemInDarkTheme()
-            }
-
             // The Home quick toggles. Collected here so a change recomposes the whole theme at once
             val oruThemeMode by vm.prefs.oruThemeMode.getAsState()
             val oruGlassStyle by vm.prefs.oruGlassStyle.getAsState()
-            // ORU: the Settings switch Match my wallpaper colors reaches the theme here (it was stored but never read)
+            // The Settings switch Match my wallpaper colors reaches the theme here
             val oruWallpaperColors by vm.prefs.wallpaperColors.getAsState()
-            // ORU: the Settings switch Animations. Read once here; every reduced-motion check below follows it
+            // The Settings switch Animations. Read once here; every reduced-motion check below follows it
             val oruAnimations by vm.prefs.oruAnimations.getAsState()
 
-            // ORU: the oru flavor draws its own theme from the Home quick toggles and ignores the stored theme settings
-            if (BuildConfig.ORU_UX) {
-                CompositionLocalProvider(LocalOruAnimationsEnabled provides oruAnimations) {
-                    OruTheme(themeMode = oruThemeMode, glassStyle = oruGlassStyle, dynamicColor = oruWallpaperColors) {
-                        MorpheManager(vm)
-                    }
-                }
-            } else {
-                ManagerTheme(
-                    darkTheme = darkTheme,
-                    dynamicColor = effectiveThemeStyle == ThemeStyle.MATERIAL_YOU,
-                    pureBlackTheme = pureBlackTheme,
-                    traits = ThemeTraits(
-                        monochrome = effectiveThemeStyle == ThemeStyle.MONOCHROME,
-                        colorAccents = colorAccents,
-                        outlines = outlines
-                    ),
-                    accentColorHex = customAccentColor.takeUnless { it.isBlank() },
-                    themeColorHex = customThemeColor.takeUnless { it.isBlank() },
-                    appCardColorMode = appCardColorMode,
-                    appCardColorValues = appCardColorValues
-                ) {
+            // The oru theme is drawn from the Home quick toggles and ignores the stored theme settings
+            CompositionLocalProvider(LocalOruAnimationsEnabled provides oruAnimations) {
+                OruTheme(themeMode = oruThemeMode, glassStyle = oruGlassStyle, dynamicColor = oruWallpaperColors) {
                     MorpheManager(vm)
                 }
             }
@@ -229,11 +169,7 @@ class MainActivity : AppCompatActivity() {
             .onFailure { Log.w(tag, "Failed to report shortcut usage", it) }
     }
 
-    /**
-     * Handles add-source deep links from an explicit-package `intent://` fired by the website.
-     * Format: https://morphe.software/add-source?<github|gitlab>=owner/repo(&name=…)
-     * Only GitHub and GitLab URLs are accepted.
-     */
+    /** Records what an incoming intent asks for on the view model, to be handled by the screens. */
     private fun handleDeepLinkIntent(intent: Intent?, vm: MainViewModel) {
         reportShortcutUsage(intent)
 
@@ -342,29 +278,6 @@ class MainActivity : AppCompatActivity() {
             // Not .mpp - don't process further regardless
             return
         }
-
-        // ORU: the oru flavor does not declare the morphe.software add-source filter (src/oru/AndroidManifest.xml)
-        val isAddSource = !BuildConfig.ORU_UX &&
-                data.scheme == "https" &&
-                data.host == "morphe.software" &&
-                data.path?.startsWith(ADD_SOURCE_PATH) == true
-        if (!isAddSource) return
-
-        val name = data.getQueryParameter("name")?.takeIf { it.isNotBlank() }
-
-        val githubRepo = data.getQueryParameter("github")?.takeIf { it.isNotBlank() }
-        if (githubRepo != null) {
-            val url = "https://github.com/$githubRepo"
-            vm.pendingDeepLinkSource = MainViewModel.DeepLinkSource(url = url, name = name)
-            return
-        }
-
-        val gitlabRepo = data.getQueryParameter("gitlab")?.takeIf { it.isNotBlank() }
-        if (gitlabRepo != null) {
-            val url = "https://gitlab.com/$gitlabRepo"
-            vm.pendingDeepLinkSource = MainViewModel.DeepLinkSource(url = url, name = name)
-            return
-        }
     }
 
     companion object {
@@ -412,13 +325,6 @@ private fun MorpheManager(vm: MainViewModel) {
     val scope = rememberCoroutineScope()
     val prefs: PreferencesManager = koinInject()
     val homeAppButtonPrefs: HomeAppButtonPreferences = koinInject()
-    val backgroundType by prefs.backgroundType.getAsState()
-    val enableParallax by prefs.enableBackgroundParallax.getAsState()
-    val resolvedRandomBackground =
-        if (backgroundType == BackgroundType.RANDOM) rememberRandomBackground(prefs) else null
-    val seasonalThemes by prefs.seasonalThemes.getAsState()
-    // Read once per launch, so an event that begins while the app is open waits for the next one
-    val seasonalEvent = remember { SeasonalEvent.on() }
 
     // Patcher background speed - driven by PatcherViewModel when on patcher screen.
     // Exposed as top-level mutable state so PatcherScreen can write into it
@@ -429,15 +335,6 @@ private fun MorpheManager(vm: MainViewModel) {
     val homeViewModel: HomeViewModel = koinViewModel(
         viewModelStoreOwner = LocalActivity.current as ComponentActivity
     )
-
-    // Handle deep link source
-    LaunchedEffect(vm.pendingDeepLinkSource) {
-        vm.pendingDeepLinkSource?.let { bundle ->
-            navController.popBackStack(HomeScreen, false)
-            homeViewModel.handleDeepLinkAddSource(bundle.url, bundle.name)
-            vm.pendingDeepLinkSource = null
-        }
-    }
 
     // Handle .mpp file opened from file manager
     LaunchedEffect(vm.pendingMppUri) {
@@ -492,9 +389,7 @@ private fun MorpheManager(vm: MainViewModel) {
     LaunchedEffect(vm.pendingFocusPackage) {
         vm.pendingFocusPackage?.let { packageKey ->
             vm.pendingFocusPackage = null
-            if (BuildConfig.ORU_UX) {
-                navController.returnToOruFocus(packageKey)
-            }
+            navController.returnToOruFocus(packageKey)
         }
     }
 
@@ -543,128 +438,10 @@ private fun MorpheManager(vm: MainViewModel) {
     // Set by HomeViewModel.resolvePrePatchInstallerChoice()
     val usingMountInstallState = remember { mutableStateOf(false) }
 
-    // Unified onboarding
-    val wantsOnboardingTour = remember { mutableStateOf(false) }
-    var onboardingPhase by remember { mutableStateOf(OnboardingPhase.HOME) }
-    var phaseInitialStep by remember { mutableIntStateOf(0) }
-    // ORU: the tour is not mounted in oru, so nothing can wait on it
-    val showOnboarding = !BuildConfig.ORU_UX && wantsOnboardingTour.value && onboardingPhase != OnboardingPhase.DONE
-    var showOnboardingOverlay by remember { mutableStateOf(true) }
-    val homeOnboardingState = remember { OnboardingState() }
-    val globalOnboardingState = remember { GlobalOnboardingState() }
-
-    val homeSteps = remember(homeOnboardingState) {
-        listOf(
-            StepDef(
-                R.string.onboarding_swipe_title, R.string.onboarding_swipe_desc,
-                getBounds = { homeOnboardingState.firstAppCardBounds },
-                onShow = {
-                    homeOnboardingState.swipeActive = true
-                    homeViewModel.apps.triggerSwipeGestureHint()
-                }
-            ),
-            StepDef(
-                R.string.sources_management_title, R.string.onboarding_sources_desc,
-                getBounds = { homeOnboardingState.sourcesButtonBounds },
-                onShow = {
-                    homeOnboardingState.swipeActive = false
-                    homeViewModel.apps.markSwipeGestureHintShown()
-                }
-            )
-        )
-    }
-
-    val settingsSteps = remember(homeOnboardingState, globalOnboardingState) {
-        listOf(
-            StepDef(
-                R.string.settings, R.string.onboarding_settings_desc,
-                getBounds = { homeOnboardingState.settingsButtonBounds },
-                onShow = { navController.popBackStack(HomeScreen, false) }
-            ),
-            StepDef(
-                R.string.appearance, R.string.onboarding_appearance_tab_desc,
-                getBounds = { globalOnboardingState.appearanceTabBounds },
-                onShow = {
-                    scope.launch {
-                        navController.navigate(Settings) { launchSingleTop = true }
-                        // Wait for SettingsScreen to compose and register callbacks (skipped if already there)
-                        withTimeoutOrNull(2.seconds) {
-                            while (globalOnboardingState.onNavigateToAppearanceTab == null) {
-                                delay(16.milliseconds)
-                            }
-                        }
-                        globalOnboardingState.onNavigateToAppearanceTab?.invoke()
-                    }
-                }
-            ),
-            StepDef(
-                R.string.settings_appearance_theme, R.string.onboarding_appearance_theme_desc,
-                getBounds = { globalOnboardingState.themeSelectorBounds },
-                onShow = {
-                    globalOnboardingState.onNavigateToAppearanceTab?.invoke()
-                    globalOnboardingState.onScrollToThemeSelector?.invoke()
-                }
-            ),
-            StepDef(
-                R.string.settings_advanced_expert_mode, R.string.onboarding_expert_mode_desc,
-                getBounds = { globalOnboardingState.expertModeBounds },
-                onShow = { globalOnboardingState.onScrollToExpertMode?.invoke() }
-            ),
-            StepDef(
-                R.string.settings_system_process_runtime, R.string.onboarding_system_process_runtime_desc,
-                getBounds = { globalOnboardingState.processRuntimeBounds },
-                onShow = { globalOnboardingState.onScrollToProcessRuntime?.invoke() }
-            ),
-            StepDef(
-                R.string.onboarding_system_tab_title, R.string.onboarding_system_tab_desc,
-                getBounds = { globalOnboardingState.systemTabBounds },
-                onShow = { globalOnboardingState.onNavigateToSystemTab?.invoke() }
-            ),
-            StepDef(
-                R.string.installer, R.string.onboarding_system_installer_desc,
-                getBounds = { globalOnboardingState.installerSectionBounds },
-                onShow = { globalOnboardingState.onScrollToInstaller?.invoke() }
-            ),
-            StepDef(
-                R.string.settings_system_custom_file_picker, R.string.onboarding_system_file_picker_desc,
-                getBounds = { globalOnboardingState.filePickerBounds },
-                onShow = { globalOnboardingState.onScrollToFilePicker?.invoke() }
-            )
-        )
-    }
-
-    val sheetSteps = remember(globalOnboardingState) {
-        listOf(
-            StepDef(
-                titleRes = R.string.patches,
-                descRes = R.string.onboarding_sources_patches_desc,
-                getBounds = { globalOnboardingState.sourcesPatchesBounds },
-                onShow = { globalOnboardingState.onScrollToFirstSource?.invoke() }
-            ),
-            StepDef(
-                titleRes = R.string.changelog,
-                descRes = R.string.onboarding_sources_version_desc,
-                getBounds = { globalOnboardingState.sourcesVersionBounds }
-            ),
-            StepDef(
-                titleRes = R.string.sources_management_prerelease_toggle,
-                descRes = R.string.onboarding_sources_prerelease_desc,
-                getBounds = { globalOnboardingState.sourcesPrereleaseBounds },
-                onShow = { globalOnboardingState.onScrollToPrerelease?.invoke() }
-            )
-        )
-    }
-
-    val totalOnboardingSteps = homeSteps.size + sheetSteps.size + settingsSteps.size
-
-    // Every entry point starts the tour from its first step on the home screen
+    // The onboarding tour is not mounted in oru. Its entry points still clear the saved app-card
+    // filter, since the tour would otherwise point at cards the list does not show
     val startOnboardingTour: () -> Unit = {
-        // The tour points at app cards, which a saved filter could leave out of the list
         homeAppButtonPrefs.setFilterMode(null)
-        onboardingPhase = OnboardingPhase.HOME
-        phaseInitialStep = 0
-        showOnboardingOverlay = true
-        wantsOnboardingTour.value = true
     }
     val declineOnboardingTour: () -> Unit = {
         scope.launch { prefs.firstLaunch.update(false) }
@@ -676,37 +453,22 @@ private fun MorpheManager(vm: MainViewModel) {
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
-        // Show animated background. ORU: oru mounts none
-        if (!BuildConfig.ORU_UX) {
-            AnimatedBackground(
-                type = seasonalEvent.backgroundOver(backgroundType, seasonalThemes),
-                resolvedType = resolvedRandomBackground,
-                enableParallax = enableParallax,
-                speedMultiplier = { patcherBackgroundSpeed.floatValue },
-                patchingCompleted = { patchingCompleted.value }
-            )
-        }
-
-        // All content on top of background. ORU: the host is a SharedTransitionLayout in oru only
-        OruSharedTransitionHost(enabled = BuildConfig.ORU_UX) {
-            // ORU: screens fade and rise, they never scale (see oruScreenEnter)
-            val oruReduced = if (BuildConfig.ORU_UX) rememberOruReducedMotion() else false
+        // All content on top of background. The host is a SharedTransitionLayout
+        OruSharedTransitionHost(enabled = true) {
+            // Screens fade and rise, they never scale (see oruScreenEnter)
+            val oruReduced = rememberOruReducedMotion()
             NavHost(
                 navController = navController,
                 startDestination = HomeScreen,
-                enterTransition = { if (BuildConfig.ORU_UX) oruScreenEnter(oruReduced) else Animations.screenEnter },
-                exitTransition = { if (BuildConfig.ORU_UX) oruScreenExit(oruReduced) else Animations.screenExit },
-                popEnterTransition = { if (BuildConfig.ORU_UX) oruScreenEnter(oruReduced) else Animations.screenEnter },
-                popExitTransition = { if (BuildConfig.ORU_UX) oruScreenExit(oruReduced) else Animations.screenExit },
-                predictivePopEnterTransition = { if (BuildConfig.ORU_UX) oruScreenEnter(oruReduced) else Animations.screenEnter },
-                // ORU: a predictive back leaves the Focus the way a plain back does, so the gesture scrubs the same fade
-                predictivePopExitTransition = { if (BuildConfig.ORU_UX) oruScreenExit(oruReduced) else Animations.pushExit }
+                enterTransition = { oruScreenEnter(oruReduced) },
+                exitTransition = { oruScreenExit(oruReduced) },
+                popEnterTransition = { oruScreenEnter(oruReduced) },
+                popExitTransition = { oruScreenExit(oruReduced) },
+                predictivePopEnterTransition = { oruScreenEnter(oruReduced) },
+                // A predictive back leaves the Focus the way a plain back does, so the gesture scrubs the same fade
+                predictivePopExitTransition = { oruScreenExit(oruReduced) }
             ) {
                 composable<HomeScreen> { entry ->
-                    val bundleUpdateProgress by homeViewModel.bundleUpdateProgress.collectAsStateWithLifecycle(null)
-                    val patchTriggerPackage by entry.savedStateHandle.getStateFlow<String?>("patch_trigger_package", null)
-                        .collectAsStateWithLifecycle()
-
                     // If opened from an FCM notification, trigger an update check.
                     // vm.pendingUpdateCheck is set in onNewIntent() and reset here after handling.
                     LaunchedEffect(vm.pendingUpdateCheck) {
@@ -717,57 +479,25 @@ private fun MorpheManager(vm: MainViewModel) {
                         }
                     }
 
-                    // ORU: the oru Home replaces HomeScreen. A run it starts opens the Focus entry
-                    if (BuildConfig.ORU_UX) {
-                        OruDestinationScope(animatedVisibilityScope = this) {
-                            OruHomeScreen(
-                                homeViewModel = homeViewModel,
-                                onCardClick = { id -> navController.navigate(OruFocus(id)) { launchSingleTop = true } },
-                                onStartQuickPatch = { params ->
-                                    entry.lifecycleScope.launch { navController.startOruRun(params) }
-                                },
-                                onStartBatchPatch = { targets, useMount ->
-                                    entry.lifecycleScope.launch {
-                                        navController.navigateComplex(
-                                            BatchPatcher,
-                                            BatchPatcher.ViewModelParams(targets = targets, useMount = useMount)
-                                        )
-                                    }
-                                },
-                                onReturnToRun = { packageKey -> navController.returnToOruFocus(packageKey) },
-                            )
-                        }
-                        return@composable
-                    }
-
-                    HomeScreen(
-                        onSettingsClick = { navController.navigate(Settings) },
-                        onboardingState = if (showOnboarding && onboardingPhase == OnboardingPhase.HOME) homeOnboardingState else null,
-                        globalOnboardingState = if (showOnboarding) globalOnboardingState else null,
-                        onStartQuickPatch = { params ->
-                            entry.lifecycleScope.launch {
-                                navController.navigateComplex(Patcher, params)
-                            }
-                        },
-                        onStartBatchPatch = { targets, useMount ->
-                            entry.lifecycleScope.launch {
-                                navController.navigateComplex(
-                                    BatchPatcher,
-                                    BatchPatcher.ViewModelParams(
-                                        targets = targets,
-                                        useMount = useMount
+                    // The oru Home replaces HomeScreen. A run it starts opens the Focus entry
+                    OruDestinationScope(animatedVisibilityScope = this) {
+                        OruHomeScreen(
+                            homeViewModel = homeViewModel,
+                            onCardClick = { id -> navController.navigate(OruFocus(id)) { launchSingleTop = true } },
+                            onStartQuickPatch = { params ->
+                                entry.lifecycleScope.launch { navController.startOruRun(params) }
+                            },
+                            onStartBatchPatch = { targets, useMount ->
+                                entry.lifecycleScope.launch {
+                                    navController.navigateComplex(
+                                        BatchPatcher,
+                                        BatchPatcher.ViewModelParams(targets = targets, useMount = useMount)
                                     )
-                                )
-                            }
-                        },
-                        homeViewModel = homeViewModel,
-                        usingMountInstallState = usingMountInstallState,
-                        bundleUpdateProgress = bundleUpdateProgress,
-                        patchTriggerPackage = patchTriggerPackage,
-                        onPatchTriggerHandled = {
-                            entry.savedStateHandle["patch_trigger_package"] = null
-                        }
-                    )
+                                }
+                            },
+                            onReturnToRun = { packageKey -> navController.returnToOruFocus(packageKey) },
+                        )
+                    }
                 }
 
                 composable<BatchPatcher> { entry ->
@@ -811,169 +541,13 @@ private fun MorpheManager(vm: MainViewModel) {
                     )
                 }
 
-                // ORU: Focus and Advanced exist in the oru flavor only
-                if (BuildConfig.ORU_UX) oruDestinations(navController)
-
-                // ORU: the old tabbed Settings is not reachable in oru. Its settings live in the Settings sheet
-                if (!BuildConfig.ORU_UX) {
-                    composable<Settings>(
-                        enterTransition = { Animations.pushEnter },
-                        popExitTransition = { Animations.pushExit }
-                    ) {
-                        SettingsScreen(
-                            homeViewModel = homeViewModel,
-                            globalOnboardingState = if (showOnboarding) globalOnboardingState else null,
-                            onStartTour = if (!showOnboarding) {
-                                {
-                                    startOnboardingTour()
-                                    navController.popBackStack(HomeScreen, false)
-                                }
-                            } else null
-                        )
-                    }
-                }
+                // Focus and Advanced
+                oruDestinations(navController)
             }
         }
 
         // Launch splash, above the NavHost so Home composes underneath it. It plays only on a plain launcher start.
-        if (BuildConfig.ORU_UX) OruLaunchSplash(launchIntent = LocalActivity.current?.intent)
-
-        if (showOnboarding) {
-            val currentSteps = when (onboardingPhase) {
-                OnboardingPhase.HOME -> homeSteps
-                OnboardingPhase.SHEET -> sheetSteps
-                OnboardingPhase.SETTINGS -> settingsSteps
-                else -> null
-            }
-            if (currentSteps != null && showOnboardingOverlay) {
-                val phaseOffset = when (onboardingPhase) {
-                    OnboardingPhase.HOME -> 0
-                    OnboardingPhase.SHEET -> homeSteps.size
-                    OnboardingPhase.SETTINGS -> homeSteps.size + sheetSteps.size
-                    else -> 0
-                }
-                val onComplete: () -> Unit = {
-                    when (onboardingPhase) {
-                        OnboardingPhase.HOME -> {
-                            phaseInitialStep = 0
-                            homeOnboardingState.swipeActive = false
-                            homeViewModel.apps.markSwipeGestureHintShown()
-                            homeViewModel.showBundleManagementSheet = true
-                            globalOnboardingState.sheetOnboardingActive = true
-                            scope.launch {
-                                withTimeoutOrNull(3.seconds) {
-                                    while (globalOnboardingState.sourcesPatchesBounds == null) {
-                                        delay(16.milliseconds)
-                                    }
-                                }
-                                onboardingPhase = OnboardingPhase.SHEET
-                            }
-                        }
-                        OnboardingPhase.SHEET -> {
-                            phaseInitialStep = 0
-                            globalOnboardingState.sheetOnboardingActive = false
-                            homeViewModel.showBundleManagementSheet = false
-                            onboardingPhase = OnboardingPhase.SETTINGS
-                        }
-                        OnboardingPhase.SETTINGS -> {
-                            onboardingPhase = OnboardingPhase.DONE
-                            scope.launch {
-                                prefs.firstLaunch.update(false)
-                                navController.popBackStack(HomeScreen, false)
-                            }
-                        }
-                        else -> {}
-                    }
-                }
-                val phaseBack: (() -> Unit)? = when (onboardingPhase) {
-                    OnboardingPhase.SHEET -> {
-                        {
-                            scope.launch {
-                                showOnboardingOverlay = false
-                                globalOnboardingState.sheetOnboardingActive = false
-                                homeViewModel.showBundleManagementSheet = false
-                                delay(300.milliseconds)
-                                phaseInitialStep = homeSteps.size - 1
-                                onboardingPhase = OnboardingPhase.HOME
-                                showOnboardingOverlay = true
-                            }
-                        }
-                    }
-                    OnboardingPhase.SETTINGS -> {
-                        {
-                            scope.launch {
-                                showOnboardingOverlay = false
-                                navController.popBackStack(HomeScreen, false)
-                                delay(300.milliseconds)
-                                globalOnboardingState.sourcesPatchesBounds = null
-                                homeViewModel.showBundleManagementSheet = true
-                                globalOnboardingState.sheetOnboardingActive = true
-                                withTimeoutOrNull(3.seconds) {
-                                    while (globalOnboardingState.sourcesPatchesBounds == null) {
-                                        delay(16.milliseconds)
-                                    }
-                                }
-                                phaseInitialStep = sheetSteps.size - 1
-                                onboardingPhase = OnboardingPhase.SHEET
-                                showOnboardingOverlay = true
-                            }
-                        }
-                    }
-                    else -> null
-                }
-                val onSkip: () -> Unit = {
-                    homeOnboardingState.swipeActive = false
-                    homeViewModel.apps.markSwipeGestureHintShown()
-                    globalOnboardingState.sheetOnboardingActive = false
-                    homeViewModel.showBundleManagementSheet = false
-                    onboardingPhase = OnboardingPhase.DONE
-                    scope.launch {
-                        prefs.firstLaunch.update(false)
-                        navController.popBackStack(HomeScreen, false)
-                    }
-                }
-
-                if (onboardingPhase == OnboardingPhase.SHEET) {
-                    // Render in a Dialog window so the overlay appears above the sheet's popup window
-                    Dialog(
-                        onDismissRequest = {},
-                        properties = DialogProperties(
-                            usePlatformDefaultWidth = false,
-                            dismissOnBackPress = false,
-                            dismissOnClickOutside = false,
-                            decorFitsSystemWindows = false
-                        )
-                    ) {
-                        val dialogWindow = (LocalView.current.parent as? DialogWindowProvider)?.window
-                        SideEffect {
-                            dialogWindow?.setDimAmount(0f)
-                            dialogWindow?.setBackgroundDrawableResource(android.R.color.transparent)
-                        }
-                        OnboardingShowcase(
-                            steps = currentSteps,
-                            stepOffset = phaseOffset,
-                            totalStepsOverride = totalOnboardingSteps,
-                            initialStep = phaseInitialStep,
-                            onComplete = onComplete,
-                            onSkip = onSkip,
-                            onPhaseBack = phaseBack
-                        )
-                    }
-                } else {
-                    key(onboardingPhase) {
-                        OnboardingShowcase(
-                            steps = currentSteps,
-                            stepOffset = phaseOffset,
-                            totalStepsOverride = totalOnboardingSteps,
-                            initialStep = phaseInitialStep,
-                            onComplete = onComplete,
-                            onSkip = onSkip,
-                            onPhaseBack = phaseBack
-                        )
-                    }
-                }
-            }
-        }
+        OruLaunchSplash(launchIntent = LocalActivity.current?.intent)
     }
 }
 

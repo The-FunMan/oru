@@ -23,7 +23,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import app.morphe.manager.BuildConfig
 import app.morphe.manager.R
 import app.morphe.manager.domain.manager.HomeAppButtonPreferences
 import app.morphe.manager.domain.manager.KeystoreManager
@@ -438,8 +437,7 @@ class ImportExportViewModel(
      * Filename for the all-selections export file.
      */
     fun getAllSelectionsExportFileName(): String =
-        // ORU: brand prefix comes from the flavour (morphe_ or oru_)
-        FilenameUtils.timestamped("${OruFileNames.prefix(BuildConfig.ORU_UX)}_all_selections.json")
+        FilenameUtils.timestamped("${OruFileNames.prefix(true)}_all_selections.json")
 
     /**
      * Import patch selections and options from a file.
@@ -568,13 +566,11 @@ class ImportExportViewModel(
     fun getPackageBundleDataExportFileName(packageName: String, bundleUid: Int, bundleName: String?): String {
         val bundle = bundleName?.replace(" ", "_")?.take(20) ?: "bundle_$bundleUid"
         val pkg = packageName.substringAfterLast('.').take(15)
-        // ORU: brand prefix comes from the flavour (morphe_ or oru_)
-        return FilenameUtils.timestamped("${OruFileNames.prefix(BuildConfig.ORU_UX)}_${bundle}_${pkg}.json")
+        return FilenameUtils.timestamped("${OruFileNames.prefix(true)}_${bundle}_${pkg}.json")
     }
 
     val debugLogFileName: String
-        // ORU: brand prefix comes from the flavour (morphe_ or oru_)
-        get() = FilenameUtils.timestamped("${OruFileNames.prefix(BuildConfig.ORU_UX)}_logcat.log")
+        get() = FilenameUtils.timestamped("${OruFileNames.prefix(true)}_logcat.log")
 
     /**
      * Writes the debug log content to [writer]. Returns the logcat exit code.
@@ -586,8 +582,7 @@ class ImportExportViewModel(
             app.packageManager.getPackageInfo(app.packageName, 0).versionName
         }.getOrDefault("unknown")
 
-        // ORU: the header names the flavour's manager
-        val brand = if (BuildConfig.ORU_UX) "Oru" else "Morphe"
+        val brand = "Oru"
         writer.write("=== $brand Manager Debug Log ===\n")
         writer.write("Date       : ${LocalDateTime.now()}\n")
         writer.write("Version    : $versionName\n")
@@ -695,7 +690,7 @@ class ImportExportViewModel(
     fun exportKeystoreToDownloads() = viewModelScope.launch {
         uiSafe(app, R.string.settings_system_export_keystore_failed, "Failed to export keystore to Downloads") {
             withContext(Dispatchers.IO) {
-                val stream = openDownloadsOutputStream(OruFileNames.keystore(BuildConfig.ORU_UX), BIN_MIMETYPE)
+                val stream = openDownloadsOutputStream(OruFileNames.keystore(true), BIN_MIMETYPE)
                     ?: throw IllegalStateException("Cannot open Downloads output stream")
                 stream.use { keystoreManager.export(it) }
             }
@@ -710,9 +705,8 @@ class ImportExportViewModel(
         uiSafe(app, R.string.settings_system_export_manager_settings_fail, "Failed to export settings to Downloads") {
             val exportFile = managerSettingsExportFile()
             withContext(Dispatchers.IO) {
-                // ORU: brand prefix comes from the flavour (morphe_ or oru_)
                 val stream = openDownloadsOutputStream(
-                    "${OruFileNames.prefix(BuildConfig.ORU_UX)}_manager_settings.json",
+                    "${OruFileNames.prefix(true)}_manager_settings.json",
                     JSON_MIMETYPE
                 )
                     ?: throw IllegalStateException("Cannot open Downloads output stream")
@@ -752,10 +746,10 @@ class ImportExportViewModel(
          */
         internal val settingsJson = Json(json) { explicitNulls = false }
 
-        // ORU: oru keystores (alias and password) are tried too; the morphe list is unchanged
+        // Oru keystores (alias and password) are tried too
         private val knownPasswords = arrayOf("Morphe", "s3cur3p@ssw0rd") +
-                OruFileNames.extraKeystoreSecrets(BuildConfig.ORU_UX)
+                OruFileNames.extraKeystoreSecrets(true)
         private val aliases = arrayOf(KeystoreManager.DEFAULT, "alias", "Morphe Key") +
-                OruFileNames.extraKeystoreSecrets(BuildConfig.ORU_UX)
+                OruFileNames.extraKeystoreSecrets(true)
     }
 }

@@ -19,7 +19,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.InsertDriveFile
-import androidx.compose.material.icons.automirrored.outlined.OpenInNew
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -33,7 +32,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
@@ -44,7 +42,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import app.morphe.manager.BuildConfig
 import app.morphe.manager.R
 import app.morphe.manager.domain.bundles.APIPatchBundle
 import app.morphe.manager.domain.bundles.PatchBundleSource
@@ -105,46 +102,11 @@ fun AddSourceDialog(
         localFiles.count { it.check is LocalFileCheck.New || it.check is LocalFileCheck.Update }
     }
 
-    val uriHandler = LocalUriHandler.current
-    var showCommunityNotice by rememberSaveable { mutableStateOf(false) }
-
-    if (showCommunityNotice) {
-        ConfirmDialog(
-            title = stringResource(R.string.sources_dialog_community_notice_title),
-            message = stringResource(R.string.sources_dialog_community_notice_message),
-            primaryText = stringResource(R.string.open),
-            isPrimaryDestructive = false,
-            onDismiss = { showCommunityNotice = false },
-            onConfirm = {
-                showCommunityNotice = false
-                uriHandler.openUri(COMMUNITY_PATCHES_URL)
-            }
-        )
-    }
-
     AppDialog(
         onDismissRequest = onDismiss,
         title = stringResource(R.string.sources_dialog_add_source),
         footer = {
             Column(modifier = Modifier.fillMaxWidth()) {
-                // The website hands out remote URLs, so it has nothing to offer the local tab
-                // ORU: the community sources site is Morphe's, so the oru flavour offers no link to it
-                AnimatedVisibility(
-                    visible = selectedTab == 0 && !BuildConfig.ORU_UX,
-                    enter = Animations.expandFadeEnter,
-                    exit = Animations.shrinkFadeExit
-                ) {
-                    Column {
-                        // Nothing that website lists is reviewed by Morphe, so the disclaimer comes first
-                        AppDialogOutlinedButton(
-                            text = stringResource(R.string.sources_dialog_community),
-                            onClick = { showCommunityNotice = true },
-                            icon = Icons.AutoMirrored.Outlined.OpenInNew,
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                        Spacer(modifier = Modifier.height(Defaults.ContentPadding / 2))
-                    }
-                }
                 AppDialogButtonRow(
                     primaryText = when {
                         remoteChecking -> stringResource(R.string.sources_dialog_checking)
@@ -845,10 +807,9 @@ fun BundleChangelogDialog(
                 }
                 val entries = ChangelogParser.entriesFor(shownEntries, subject, generalChangesHeading)
 
-                // APIPatchBundle has endpoint="api" - use SOURCE_REPO_URL directly
-                // ORU: that repository is Morphe's, so the oru flavour links no release page for it
+                // APIPatchBundle has endpoint="api", so it has no release page to link to
                 val repoUrl = when (src) {
-                    is APIPatchBundle -> SOURCE_REPO_URL.takeUnless { BuildConfig.ORU_UX }
+                    is APIPatchBundle -> null
                     else -> RemotePatchBundle.inferPageUrlFromEndpoint(src.endpoint)
                 }
                 val latestPageUrl = entries.firstOrNull()?.version?.let { version ->
