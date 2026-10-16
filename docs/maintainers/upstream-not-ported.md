@@ -8,9 +8,9 @@ This is the list of upstream Morphe Manager features that Oru does not have. It 
 | Sharing patched APKs | skipped on purpose |
 | Patch update ignore | not ported |
 | Source management dialogs | not ported |
-| Root mount fixes | to port |
-| File picker, newest first | to port |
-| Completion sound | not ported. Oru uses the default notification sound |
+| Root mount fixes | ported |
+| File picker, newest first | ported |
+| Completion sound | ported as the default notification sound, no custom sound files |
 | Source pictures cache | not ported |
 | Dialog and sheet width and icon tweaks | not ported |
 
