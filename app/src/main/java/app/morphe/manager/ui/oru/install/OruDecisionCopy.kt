@@ -68,7 +68,8 @@ object OruDecisionCopy {
         )
 
         is InstallStep.ShowInstall -> DecisionCopy(
-            // Silent: "Installs with %1$s, without a prompt." Otherwise the system line or the Android line.
+            // Silent: a no-prompt line for Shizuku or root, a may-still-ask line for the system installer.
+            // Otherwise the system line or the Android line.
             body = installLine(step),
             primaryAction = R.string.oru_action_install,
             // Shown when a preferred installer was missing; the caller passes the fallback's label
@@ -103,7 +104,9 @@ object OruDecisionCopy {
         }
 
     private fun installLine(step: InstallStep.ShowInstall): Int = when {
-        step.silent -> R.string.oru_install_with_silent   // "Oru starts the install with %1$s. Android may still ask you to confirm."
+        // The system installer can still refuse a silent update, so its line keeps the prompt possible
+        step.silent && step.installer == InstallerChoice.SYSTEM -> R.string.oru_install_with_system_silent
+        step.silent -> R.string.oru_install_with_silent   // "Installs with %1$s, without a prompt."
         step.installer == InstallerChoice.SYSTEM -> R.string.oru_install_with_system
         else -> R.string.oru_install_with_android
     }

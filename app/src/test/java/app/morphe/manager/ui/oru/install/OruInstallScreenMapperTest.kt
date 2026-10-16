@@ -162,6 +162,12 @@ class OruInstallScreenMapperTest {
     }
 
     @Test
+    fun silentSystemLineKeepsThePromptPossible() {
+        val silentSystem = InstallStep.ShowInstall(InstallerChoice.SYSTEM, silent = true, fallbackFrom = null)
+        assertEquals(R.string.oru_install_with_system_silent, OruDecisionCopy.forStep(silentSystem).body)
+    }
+
+    @Test
     fun fallbackHintIsTheFallbackLine() {
         val fallback = InstallStep.ShowInstall(InstallerChoice.SYSTEM, silent = false, fallbackFrom = InstallerChoice.CUSTOM)
         assertEquals(R.string.oru_install_fallback, OruDecisionCopy.forStep(fallback).hint)
