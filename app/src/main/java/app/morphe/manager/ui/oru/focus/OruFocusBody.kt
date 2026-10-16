@@ -303,10 +303,14 @@ private fun focusLine(
             // The status is the Home card's, so the Focus does not say "Needs" for an app Home shows as installed.
             // The source is named by the Setup line, not here: the headline says what the APK has to be
             val installedStatus = OruHomePresenter.statusOf(item, handedOff = false, targets = null)
-            if (oruFocusShowsInstalled(installedStatus)) {
-                stringResource(R.string.oru_focus_installed_line, item.version)
-            } else {
-                needsLine(oruAppName(item.packageName, item.displayName), home, sources)
+            // A saved copy the sources patch is offered in the dock, so the line names its version, as the Home card does
+            val saved = home.pendingSavedApkInfo?.takeIf {
+                oruVersionGate(it.version, it.versionCode, sources.effectiveVersions).patchable
+            }
+            when {
+                oruFocusShowsInstalled(installedStatus) -> stringResource(R.string.oru_focus_installed_line, item.version)
+                saved != null -> stringResource(R.string.oru_focus_ready_patch, saved.version)
+                else -> needsLine(oruAppName(item.packageName, item.displayName), home, sources)
             }
         } else {
             val version = (home.pendingSelectedDownloadVersion ?: home.pendingRecommendedVersion)?.version
