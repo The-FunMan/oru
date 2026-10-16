@@ -106,10 +106,11 @@ class OruHomeActionRouterTest {
     }
 
     @Test
-    fun `get it opens focus on the download step, and the other actions keep the apk choice`() {
+    fun `get it and patch from saved copy open focus on their step, and the other actions keep the apk choice`() {
         assertEquals(OruFocusOpening.DownloadStep, OruFocusOpening.forAction(OruHomeAction.GetIt))
+        assertEquals(OruFocusOpening.SavedCopy, OruFocusOpening.forAction(OruHomeAction.PatchFromSaved))
         OruHomeAction.entries
-            .filter { it != OruHomeAction.GetIt }
+            .filter { it != OruHomeAction.GetIt && it != OruHomeAction.PatchFromSaved }
             .forEach { assertEquals(OruFocusOpening.Choice, OruFocusOpening.forAction(it), it.name) }
     }
 

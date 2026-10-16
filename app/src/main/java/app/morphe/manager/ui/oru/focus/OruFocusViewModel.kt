@@ -281,8 +281,8 @@ class OruFocusViewModel(private val deps: OruFocusDeps) : ViewModel() {
 
     /**
      * Moves the Focus to the step the card's primary action names, once the flow shows its APK choice. Only the step is
-     * set: the APKMirror link is not opened. Skipped when the flow went another way (a notice came up) or when the user
-     * has moved on.
+     * set: the APKMirror link is not opened, and a saved copy is picked but not run. Skipped when the flow went another
+     * way (a notice came up, or the saved copy was used on its own) or when the user has moved on.
      */
     private suspend fun openOnCardStep(item: HomeAppItem, supportedVersions: Set<String>, expert: Boolean) {
         val opening = OruFocusOpening.forAction(OruHomePresenter.primaryActionOf(item, supportedVersions, expert))
@@ -293,6 +293,7 @@ class OruFocusViewModel(private val deps: OruFocusDeps) : ViewModel() {
         if (held != null || home.pendingPackageName != item.packageName) return
         when (opening) {
             OruFocusOpening.DownloadStep -> findOnApkMirror()
+            OruFocusOpening.SavedCopy -> useSavedCopy()
             OruFocusOpening.Choice -> Unit
         }
     }

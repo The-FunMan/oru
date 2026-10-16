@@ -160,6 +160,9 @@ class OruHomePresenterTest {
         assertEquals(OruHomeAction.GetIt, OruHomePresenter.primaryActionOf(needsApk, null, expert = false))
         assertEquals(OruHomeAction.FindOnApkMirror, OruHomePresenter.primaryActionOf(needsApk, null, expert = true))
 
+        val saved = item(deleted = true, installed = installed(), savedFile = File("saved.apk"))
+        assertEquals(OruHomeAction.PatchFromSaved, OruHomePresenter.primaryActionOf(saved, null, expert = false))
+
         val ready = item(onDevice = true)
         assertEquals(OruHomeAction.Patch, OruHomePresenter.primaryActionOf(ready, setOf("1.0"), expert = false))
     }
