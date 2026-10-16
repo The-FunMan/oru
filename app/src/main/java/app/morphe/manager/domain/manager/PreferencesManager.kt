@@ -209,10 +209,10 @@ class PreferencesManager(
     /** Play a distinct notification sound when patching finishes. */
     val patcherCompletionSound = booleanPreference("patcher_completion_sound", true)
 
-    /** URI of a user-picked success tone. Empty falls back to the bundled `R.raw.success`. */
+    /** URI of a user-picked success tone. Empty falls back to the system's default notification sound. */
     val patcherSuccessSoundUri = stringPreference("patcher_success_sound_uri", "")
 
-    /** URI of a user-picked failure tone. Empty falls back to the bundled `R.raw.error`. */
+    /** URI of a user-picked failure tone. Empty falls back to the system's default notification sound. */
     val patcherErrorSoundUri = stringPreference("patcher_error_sound_uri", "")
 
     /** Patch source list ordering mode */

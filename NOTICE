@@ -71,8 +71,6 @@ dependencies are listed with their full text on the licences screen of the app
   SIL Open Font License 1.1. The wordmark uses app/src/main/res/font/yuji_boku_wordmark.ttf,
   a subset of the typeface that holds only the letters the wordmark needs. The file keeps the
   font's name and copyright notice.
-- Notification sounds app/src/main/res/raw/success.ogg and error.ogg: their origin and
-  licence are not recorded in this repository.
 - Android and Google libraries used by the app (AndroidX, Jetpack Compose, Room, WorkManager,
   DataStore, Navigation, the splash screen, Firebase Cloud Messaging and Google Play services
   base). The AndroidX and Firebase libraries are licensed under the Apache License 2.0. The
