@@ -162,9 +162,17 @@ class OruInstallScreenMapperTest {
     }
 
     @Test
-    fun silentSystemLineKeepsThePromptPossible() {
+    fun silentSystemLineSaysItInstallsAutomaticallyAndNeverAsksToConfirm() {
         val silentSystem = InstallStep.ShowInstall(InstallerChoice.SYSTEM, silent = true, fallbackFrom = null)
-        assertEquals(R.string.oru_install_with_system_silent, OruDecisionCopy.forStep(silentSystem).body)
+        assertEquals(R.string.oru_done_install_automatic, OruDecisionCopy.forStep(silentSystem).body)
+    }
+
+    @Test
+    fun aNonSilentInstallNamesTheAndroidConfirmationInstead() {
+        val system = InstallStep.ShowInstall(InstallerChoice.SYSTEM, silent = false, fallbackFrom = null)
+        val playStore = InstallStep.ShowInstall(InstallerChoice.PLAY_STORE, silent = false, fallbackFrom = null)
+        assertEquals(R.string.oru_install_with_system, OruDecisionCopy.forStep(system).body)
+        assertEquals(R.string.oru_install_with_android, OruDecisionCopy.forStep(playStore).body)
     }
 
     @Test
