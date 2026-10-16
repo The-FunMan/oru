@@ -17,36 +17,28 @@ Project page: <https://the-funman.github.io/oru/>
 
 </div>
 
-Oru patches Android apps on your own device. It takes an APK you already have, runs patch bundles on the phone, and installs the patched app.
+Patch your apps in one tap, right on your phone.
 
-Oru is an Android app. It is not a ROM hack or a game.
+Oru is an Android app. It patches apps you already have, on your own device.
 
 <div align="center">
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="site/assets/shots/split-start-done-dark.webp">
-  <img src="site/assets/shots/split-start-done-light.webp" width="880" alt="One Oru phone screen that melts from one state into another. The top half shows a run at the start, with an almost empty hexagon, under the words Tap once. The bottom half shows the finished run, a complete green hexagon with a check mark, under the words Signed here, installed here.">
-</picture>
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="site/assets/shots/split-progress-key-dark.webp">
-  <img src="site/assets/shots/split-progress-key-light.webp" width="880" alt="One Oru phone screen that melts from one state into another. The top half shows a run in progress with the real stages listed, under the words One progress. The bottom half shows the Settings sheet with theme, glass style, animations and wallpaper colors, under the words Make it yours.">
+  <source media="(prefers-color-scheme: dark)" srcset="site/assets/shots/apple-done-dark.webp">
+  <img src="site/assets/shots/apple-done-light.webp" width="880" alt="The words Your call. above the top of a phone. Its screen shows a complete green hexagon with a check mark and the word Installed.">
 </picture>
 
 </div>
 
 ## Why Oru
 
-Oru runs the same patch bundles as other patch managers. What differs is the app around them: it is built to be simple, beautiful and quick to understand.
+- **Simple.** One button for each app.
+- **Beautiful.** Soft glass. Smooth motion.
+- **Fast.** Up to 1.7&times; faster.<sup>1</sup>
+- **Private.** No account. No analytics. No uploads.
+- **Current.** Always on the newest stable dependencies. What is held back on purpose is listed in [docs/dependencies.md](docs/dependencies.md).
 
-- **Beautiful.** Fluid motion, soft glass and one hexagon that fills as your app is patched.
-- **Current.** Dependencies are checked every day and kept on the newest stable release. What is held back on purpose is listed in [docs/dependencies.md](docs/dependencies.md).
-- **Fast.** In one emulator test with the same input and the same 96 patches, Oru patched in about 90 seconds and another well-known patch manager in about 156. That is one small test, so read the [method and limits](docs/benchmarks.md).
-- **Simple and Expert.** In Simple, each app shows one sentence and one button. The Simple and Expert switch is on the bottom bar of the Home screen. Expert lets you choose the version, patches, options, installer and patch channel for each app.
-- **One patch source per app.** You choose it in Expert mode. Adding a source never changes the apps you already set up.
-- **One progress for the whole run.** A run shows the real stages and real counts, not invented progress.
-- **Your APK, selected in the app.** Pick an app installed on this device, or use an APK file you already have. Oru uses its own file list when All files access is allowed, and Android's picker when it is not.
-- **Everything on the device.** Patching runs on the phone. Oru has no accounts and no analytics, and it does not upload your APK files.
+<sub><sup>1</sup> Patching the same app with the same patches on the Android Emulator (Pixel 10 Pro XL profile, Android 17, 4 GB of RAM, 4 CPU cores). Oru took about 90 seconds; another well-known patch manager took about 156. Results vary by device. See the [method and limits](docs/benchmarks.md).</sub>
 
 ## Install
 
