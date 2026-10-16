@@ -11,7 +11,7 @@ Patch Android apps on your own device.
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 [![Latest release](https://img.shields.io/github/v/release/The-FunMan/oru)](https://github.com/The-FunMan/oru/releases/latest)
-[![CI](https://github.com/The-FunMan/oru/actions/workflows/ci.yml/badge.svg?branch=dev)](https://github.com/The-FunMan/oru/actions/workflows/ci.yml)
+[![CI](https://github.com/The-FunMan/oru/actions/workflows/ci.yml/badge.svg?branch=dev&event=push)](https://github.com/The-FunMan/oru/actions/workflows/ci.yml)
 
 Project page: <https://the-funman.github.io/oru/>
 
