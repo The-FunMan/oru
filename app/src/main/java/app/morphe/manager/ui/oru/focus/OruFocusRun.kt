@@ -18,18 +18,21 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.morphe.manager.R
+import app.morphe.manager.domain.manager.PreferencesManager
 import app.morphe.manager.ui.oru.components.OruTileSource
 import app.morphe.manager.ui.oru.home.oruAppName
 import app.morphe.manager.ui.oru.install.InstallStep
 import app.morphe.manager.ui.oru.install.OruInstallActions
 import app.morphe.manager.ui.oru.install.OruInstallContent
 import app.morphe.manager.ui.oru.install.OruInstallUi
+import app.morphe.manager.ui.oru.install.OruKeyNoticeDialog
 import app.morphe.manager.ui.oru.install.OruSignatureDecision
 import app.morphe.manager.ui.oru.install.postinstall.OruDoneFacts
 import app.morphe.manager.ui.oru.install.postinstall.oruElapsedMs
@@ -154,6 +157,16 @@ internal fun OruFocusRunRoute(
         null
     }
 
+    // The signing key is made by the first patch, so its notice shows once: on the Done of the first patch, then never again
+    val prefs: PreferencesManager = koinInject()
+    var keyNoticeOpen by rememberSaveable { mutableStateOf(false) }
+    LaunchedEffect(done) {
+        if (done && !prefs.oruKeyNoticeShown.get()) {
+            prefs.oruKeyNoticeShown.update(true)
+            keyNoticeOpen = true
+        }
+    }
+
     val appName = oruAppName(item.packageName, item.displayName)
     // The run screens sit under the status bar otherwise: the hero pieces and tiles drew over it
     Box(modifier = modifier.fillMaxSize().statusBarsPadding()) {
@@ -229,6 +242,15 @@ internal fun OruFocusRunRoute(
                     onImportKey = onImportKey,
                     onInstallAnyway = { scope.launch { vm.installer?.installIgnoringSignatureMismatch() } },
                     onDismiss = { scope.launch { vm.installer?.dismissDecision() } },
+                )
+            }
+            if (keyNoticeOpen && install?.decisionOpen != true) {
+                OruKeyNoticeDialog(
+                    onOpen = {
+                        keyNoticeOpen = false
+                        onImportKey()
+                    },
+                    onDismiss = { keyNoticeOpen = false },
                 )
             }
         }

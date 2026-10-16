@@ -142,6 +142,9 @@ class PreferencesManager(
     // ORU: the Settings switch Animations. Off makes every Oru screen, sheet and dialog appear at once
     val oruAnimations = booleanPreference("oru_animations", true)
 
+    // ORU: set once the signing key notice has shown on the Done of the first patch, see OruFocusRunRoute
+    val oruKeyNoticeShown = booleanPreference("oru_key_notice_shown", false)
+
     // ORU: guards the oru one-time defaults, see OruSettingsMigration
     private val oruUxMigrated = booleanPreference(OruSettingsMigration.FLAG_KEY, false)
     private val oruUxV2Migrated = booleanPreference(OruSettingsMigration.V2_FLAG_KEY, false)

@@ -218,6 +218,7 @@
     <!-- Done: signing key notice (first patch) -->
     <string name="oru_key_notice_title">Back up your signing key</string>
     <string name="oru_key_notice_body">Oru signs every patched app with one key, stored on this phone. Keep a copy. Without it, you can only update a patched app by uninstalling it first.</string>
+    <string name="oru_action_open_signing_key">Open signing key</string>
 
     <!-- Failed -->
     <string name="oru_failed_title">Patching stopped</string>

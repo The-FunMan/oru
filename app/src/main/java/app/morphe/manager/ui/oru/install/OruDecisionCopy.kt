@@ -77,11 +77,11 @@ object OruDecisionCopy {
         )
     }
 
-    /** Key notice on the first successful run (I10). Shown once; links to the signing key settings. */
+    /** Key notice on the first successful run (I10). Shown once; its action opens the signing key settings. */
     fun keyNotice(): DecisionCopy = DecisionCopy(
         title = R.string.oru_key_notice_title,
         body = R.string.oru_key_notice_body,
-        primaryAction = R.string.oru_settings_signing_key
+        primaryAction = R.string.oru_action_open_signing_key
     )
 
     private fun conflictCopy(step: InstallStep.ConflictNeedsUninstall): DecisionCopy =

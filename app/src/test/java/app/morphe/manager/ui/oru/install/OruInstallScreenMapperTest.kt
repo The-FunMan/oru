@@ -168,6 +168,14 @@ class OruInstallScreenMapperTest {
     }
 
     @Test
+    fun keyNoticeIsTheBackupCopyAndOpensTheSigningKey() {
+        val notice = OruDecisionCopy.keyNotice()
+        assertEquals(R.string.oru_key_notice_title, notice.title)
+        assertEquals(R.string.oru_key_notice_body, notice.body)
+        assertEquals(R.string.oru_action_open_signing_key, notice.primaryAction)
+    }
+
+    @Test
     fun fallbackHintIsTheFallbackLine() {
         val fallback = InstallStep.ShowInstall(InstallerChoice.SYSTEM, silent = false, fallbackFrom = InstallerChoice.CUSTOM)
         assertEquals(R.string.oru_install_fallback, OruDecisionCopy.forStep(fallback).hint)
