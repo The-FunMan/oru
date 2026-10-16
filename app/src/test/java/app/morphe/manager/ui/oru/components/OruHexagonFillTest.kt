@@ -7,6 +7,7 @@ package app.morphe.manager.ui.oru.components
 
 import app.morphe.manager.ui.oru.run.oruRunFill
 import kotlin.math.abs
+import kotlin.math.sqrt
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -20,6 +21,39 @@ class OruHexagonFillTest {
 
     private val ring = oruHexRingFor(PATCHES, SHARE)
     private val pieces = oruHexPieceCount(ring)
+    private val order = oruHexFillOrder(ring)
+
+    @Test
+    fun `the fill order lists every piece once`() {
+        assertEquals((0 until pieces).toList(), order.sorted())
+        assertEquals(order.toList(), oruHexFillOrder(ring).toList(), "the order is the same every time")
+    }
+
+    @Test
+    fun `the fill starts at the bottom of the hexagon and rises`() {
+        // Screen y grows downwards, so the bottom has the largest centroid y
+        for ((lower, higher) in order.zipWithNext()) {
+            assertTrue(
+                centroidY(lower) >= centroidY(higher) - ROW_EPSILON,
+                "piece $higher is lit after $lower but sits lower",
+            )
+        }
+    }
+
+    @Test
+    fun `at every fill the lit pieces lie below the unlit ones, so the lit area is one region`() {
+        val row = sqrt(3f) / 2f / ring
+        for (lit in 0..pieces) {
+            val litLowest = order.take(lit).minOfOrNull { centroidY(it) } ?: continue
+            val unlitHighest = order.drop(lit).maxOfOrNull { centroidY(it) } ?: continue
+            assertTrue(litLowest >= unlitHighest - row, "at $lit lit pieces a lit piece sits above an unlit one")
+        }
+    }
+
+    private fun centroidY(piece: Int): Float {
+        val triangle = oruHexTriangle(piece, ring)
+        return (triangle.a.y + triangle.b.y + triangle.c.y) / 3f
+    }
 
     @Test
     fun `the lit pieces never go back as the fill rises`() {
@@ -111,5 +145,7 @@ class OruHexagonFillTest {
         const val BEFORE_PATCHES = 0.09f
         const val FRAMES = 2000
         const val FRAME_MS = 16L
+        /** Float noise between two centroids of one row, in hexagon units. */
+        const val ROW_EPSILON = 1e-3f
     }
 }

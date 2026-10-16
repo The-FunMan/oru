@@ -42,6 +42,7 @@ import kotlin.math.ceil
 import kotlin.math.cos
 import kotlin.math.floor
 import kotlin.math.min
+import kotlin.math.roundToInt
 import kotlin.math.sin
 
 /*
@@ -50,7 +51,8 @@ import kotlin.math.sin
  * the hexagon radius, centred on the origin, with a point at the top, as in the prototype.
  *
  * The hexagon is the whole run: its fill is the run's fill (see oruRunFill), and the pieces light as the fill passes
- * them. The patch stage is cut one piece to a patch within its share of the fill, see [oruHexRingFor].
+ * them, from the bottom up (see [oruHexFillOrder]). The patch stage is cut one piece to a patch within its share of the
+ * fill, see [oruHexRingFor].
  *
  * The reveal is paced by the frame clock: each piece flies in over [OruMotion.PieceFlightMillis], and the starts are
  * spaced by the rules in OruComponentLogic.kt, so a fast run still reads one piece at a time. Before any patch
@@ -173,6 +175,28 @@ internal fun oruHexTriangle(index: Int, k: Int): OruHexTriangle {
     throw IllegalStateException("every piece of a $k ring is walked above")
 }
 
+/** Centroid coordinates are compared in steps of this many per hexagon radius, so float noise cannot reorder a row. */
+private const val OrderStepsPerRadius = 10_000f
+
+/**
+ * The order the pieces light in, for a hexagon cut into k by k triangles per wedge: entry k is the piece lit k-th. The
+ * pieces run from the bottom of the hexagon to the top, so the lit area rises like liquid in a glass and stays one
+ * connected region. Within a row the pieces run left to right, and ties are broken by index, so the order is fixed.
+ */
+internal fun oruHexFillOrder(ring: Int): IntArray {
+    val count = oruHexPieceCount(ring)
+    val heights = IntArray(count)
+    val offsets = IntArray(count)
+    for (piece in 0 until count) {
+        val triangle = oruHexTriangle(piece, ring)
+        heights[piece] = ((triangle.a.y + triangle.b.y + triangle.c.y) / 3f * OrderStepsPerRadius).roundToInt()
+        offsets[piece] = ((triangle.a.x + triangle.b.x + triangle.c.x) / 3f * OrderStepsPerRadius).roundToInt()
+    }
+    return (0 until count)
+        .sortedWith(compareByDescending<Int> { heights[it] }.thenBy { offsets[it] }.thenBy { it })
+        .toIntArray()
+}
+
 /**
  * Pseudo random number in [0, 1) for an index. The same index always gets the same value, so a piece keeps its
  * flight direction and its spin from one frame to the next.
@@ -261,7 +285,8 @@ private class HexPiece(
  * The run as a hexagon of pieces, lit by the run's [fill] (see oruRunFill), so it fills from the first step of the run to
  * the last. The pieces are cut for [patches] patches, one a patch across the patch stage, which is [patchShare] of the
  * whole. A piece flies in as the fill passes it, paced so a fast run still reads one piece at a time, and the pieces
- * lock in order. The piece being applied is the accent, finished pieces take the accent lightened a little. A full fill
+ * lock from the bottom of the hexagon up (see [oruHexFillOrder]). The piece being applied is the accent, finished
+ * pieces take the accent lightened a little. A full fill
  * of a run that did not fail settles the pieces to the success colour and draws a check over them. A failed run leaves
  * the next piece outside the hexagon in the error colour once the reveal reaches it, and the finished pieces dim.
  *
@@ -288,6 +313,8 @@ fun OruHexagonAssembly(
     val surface = MaterialTheme.colorScheme.surface
     val ring = oruHexRingFor(patches, oruHexSpread(patchShare))
     val pieceCount = oruHexPieceCount(ring)
+    // The k-th lit piece is order[k], so the reveal counts pieces lit and the piece's place comes from the order
+    val order = remember(ring) { oruHexFillOrder(ring) }
     val rest = oruHexRest(fill, pieceCount, failed)
     val real = rest.lit
     val ended = failed || fill >= 1f
@@ -392,22 +419,24 @@ fun OruHexagonAssembly(
                     drawPath(pieces[piece].path, color = accent, alpha = alpha)
                 }
             }
-            for (piece in 0 until pieceCount) {
+            // rank is the order a piece is lit in, and piece is where it sits in the hexagon
+            for (rank in 0 until pieceCount) {
+                val piece = order[rank]
                 val hex = pieces[piece]
                 val dx: Float
                 val dy: Float
                 val turn: Float
                 val color: Color
                 val alpha: Float
-                if (failedShown && piece == real) {
+                if (failedShown && rank == real) {
                     dx = OruHexFailX * radius
                     dy = OruHexFailY * radius
                     turn = OruHexFailTurn
                     color = failure
                     alpha = 1f
                 } else {
-                    if (piece >= shown) continue
-                    val travel = if (reduced) 0f else oruFlightTravel(now - track.starts[piece])
+                    if (rank >= shown) continue
+                    val travel = if (reduced) 0f else oruFlightTravel(now - track.starts[rank])
                     val landed = travel <= 0f
                     val angle = oruHexFlightAngle(piece)
                     dx = cos(angle) * flightRadius * travel
@@ -470,8 +499,9 @@ private fun buildHexPieces(
 }
 
 /**
- * The paced reveal of one hexagon: how many of its [count] pieces have begun to fly in, and the frame time each one began.
- * Pieces [shown] onward have not begun. The first [placed] pieces began long before the first frame, so they have landed.
+ * The paced reveal of one hexagon: how many of its [count] pieces have begun to fly in, and the frame time each one
+ * began, indexed by the order the pieces light in (see [oruHexFillOrder]). Ranks [shown] onward have not begun. The
+ * first [placed] ranks began long before the first frame, so they have landed.
  */
 private class OruRevealTrack(count: Int, placed: Int) {
     val starts = LongArray(count).also { it.fill(LandedBeforeFirstFrame, 0, placed) }
