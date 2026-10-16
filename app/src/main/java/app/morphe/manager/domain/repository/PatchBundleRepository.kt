@@ -584,8 +584,13 @@ class PatchBundleRepository(
 
     private fun PatchBundleEntity.load(): PatchBundleSource {
         val dir = directoryOf(uid)
-        val actualName =
-            name.ifEmpty { app.getString(if (uid == 0) R.string.home_app_info_patches_name_default else R.string.home_app_info_patches_name_fallback) }
+        val unnamed = app.getString(R.string.home_app_info_patches_name_fallback)
+        val actualName = name.ifEmpty { app.getString(if (uid == 0) R.string.home_app_info_patches_name_default else R.string.home_app_info_patches_name_fallback) }
+            // A remote source whose bundle was never read is shown by its repository, not as "Unnamed"
+            .let { shown ->
+                val repository = (source as? SourceInfo.Remote)?.url?.toString()?.let { AppSourceChoice.repositoryPathOf(it) }
+                if (shown == unnamed && repository != null) repository else shown
+            }
         val normalizedDisplayName = displayName?.takeUnless { it.isBlank() }
 
         return when (source) {
@@ -1349,7 +1354,8 @@ class PatchBundleRepository(
 
     /** Saves and loads a new remote source for [endpoint]. Do not use this outside an action. */
     private suspend fun createRemoteEntity(endpoint: String, autoUpdate: Boolean): RemotePatchBundle {
-        val src = createEntity("", SourceInfo.from(endpoint), autoUpdate).load() as RemotePatchBundle
+        // Named by its repository until the bundle is read, so a source that never loads is not shown as unnamed
+        val src = createEntity(AppSourceChoice.repositoryPathOf(endpoint).orEmpty(), SourceInfo.from(endpoint), autoUpdate).load() as RemotePatchBundle
 
         // Auto-enable prerelease if the URL explicitly targets the "dev" branch
         if (src is JsonPatchBundle && src.endpointBranch == "dev") {
@@ -1439,7 +1445,7 @@ class PatchBundleRepository(
     } catch (_: Exception) { null }
 
     fun normalizeRemoteBundleUrl(input: String): String {
-        val trimmed = withHttpsScheme(input)
+        val trimmed = withHttpsScheme(SourceUrl.canonical(input))
         val parsed = try {
             Url(trimmed)
         } catch (e: Exception) {
