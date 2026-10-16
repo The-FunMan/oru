@@ -190,11 +190,12 @@ fun OruHomeAction.style(): OruButtonStyle = when (this) {
     OruHomeAction.CheckAndPatch,
     OruHomeAction.ChooseFile,
     OruHomeAction.PatchFromSaved,
-    OruHomeAction.GetIt,
     OruHomeAction.Patch,
     OruHomeAction.Update,
     OruHomeAction.Open -> OruButtonStyle.Filled
-    OruHomeAction.FindOnApkMirror -> OruButtonStyle.Tonal
+    // A card that still needs its APK leads with the find step, so the ready apps keep the filled buttons
+    OruHomeAction.FindOnApkMirror,
+    OruHomeAction.GetIt -> OruButtonStyle.Tonal
     OruHomeAction.AppInfo,
     OruHomeAction.UseFile,
     OruHomeAction.OpenApkMirrorAgain,

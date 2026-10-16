@@ -436,10 +436,12 @@ class OruHomePresenterTest {
     }
 
     @Test
-    fun `only the find and choose actions are filled or tonal, the rest are outlined`() {
+    fun `the find step is tonal so the ready apps keep the filled buttons`() {
         assertEquals(OruButtonStyle.Tonal, OruHomeAction.FindOnApkMirror.style())
+        assertEquals(OruButtonStyle.Tonal, OruHomeAction.GetIt.style())
         assertEquals(OruButtonStyle.Filled, OruHomeAction.ChooseFile.style())
         assertEquals(OruButtonStyle.Filled, OruHomeAction.Patch.style())
+        assertEquals(OruButtonStyle.Filled, OruHomeAction.Update.style())
         assertEquals(OruButtonStyle.Outlined, OruHomeAction.UseFile.style())
         assertEquals(OruButtonStyle.Outlined, OruHomeAction.AppInfo.style())
     }
