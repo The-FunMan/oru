@@ -40,11 +40,12 @@ class OruHexagonFillTest {
     }
 
     @Test
-    fun `the hexagon is never complete before the final step`() {
-        // Before the install the run stops at its share, and the hexagon holds below full all the way there
+    fun `the hexagon is whole when the run is signed but settles only at the final step`() {
+        // The run's pieces are all lit once it is signed, and the install settles them with the check
         val beforeInstall = oruRunFill(1f, installAhead = true)
-        assertTrue(oruHexLit(beforeInstall, pieces) < pieces)
+        assertEquals(pieces, oruHexRest(beforeInstall, pieces, failed = false).lit)
         assertFalse(oruHexRest(beforeInstall, pieces, failed = false).settled)
+        assertTrue(oruHexRest(0.5f, pieces, failed = false).lit < pieces)
         for (step in 0..899) {
             assertFalse(oruHexRest(step / 1000f, pieces, failed = false).settled, "fill ${step / 1000f} settled")
         }

@@ -17,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameNanos
@@ -31,8 +32,10 @@ import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import app.morphe.manager.ui.oru.run.OruInstallShare
 import app.morphe.manager.ui.oru.theme.OruMotion
 import app.morphe.manager.ui.oru.theme.LocalOruStatusColors
+import kotlinx.coroutines.delay
 import kotlin.math.PI
 import kotlin.math.atan2
 import kotlin.math.ceil
@@ -96,6 +99,9 @@ internal fun oruHexRingFor(patches: Int, patchShare: Float): Int {
     return oruHexRingSize(wanted)
 }
 
+/** How long the fill may stand still before the sweep shows that the run is working. */
+private const val StallSweepMillis = 1_500L
+
 /** Slack for the float error of a fill that is exactly on a piece's edge, in pieces. */
 private const val LitRoundingSlack = 1e-3f
 
@@ -119,7 +125,14 @@ internal data class OruHexRest(val lit: Int, val settled: Boolean)
  * still has a step ahead, or one that failed, never reads as complete.
  */
 internal fun oruHexRest(fill: Float, pieceCount: Int, failed: Boolean): OruHexRest =
-    OruHexRest(lit = oruHexLit(fill, pieceCount), settled = !failed && fill >= 1f)
+    OruHexRest(lit = oruHexLit(oruHexSpread(fill), pieceCount), settled = !failed && fill >= 1f)
+
+/**
+ * The share of the pieces the run's [fill] lights. The run reaches [OruInstallShare] short of a full fill when the patch
+ * run is signed, and the install takes the rest. The pieces are the run's work, so they are all lit at that point and
+ * the install settles the hexagon with its check, rather than the hexagon waiting at nine tenths while the run is done.
+ */
+internal fun oruHexSpread(fill: Float): Float = if (fill.isNaN()) 0f else fill / (1f - OruInstallShare)
 
 /** Corner [index] of the hexagon, counted round from the top-right, at radius 1. */
 private fun oruHexCorner(index: Int): OruHexPoint {
@@ -273,7 +286,7 @@ fun OruHexagonAssembly(
     val success = LocalOruStatusColors.current.ok
     val failure = MaterialTheme.colorScheme.error
     val surface = MaterialTheme.colorScheme.surface
-    val ring = oruHexRingFor(patches, patchShare)
+    val ring = oruHexRingFor(patches, oruHexSpread(patchShare))
     val pieceCount = oruHexPieceCount(ring)
     val rest = oruHexRest(fill, pieceCount, failed)
     val real = rest.lit
@@ -293,7 +306,16 @@ fun OruHexagonAssembly(
         }
     }
     // The waiting sweep turns while the hexagon prepares. Its share fades it in and out, so the fill takes over softly
-    val sweeping = preparing && !reduced
+    // Quiet stretches, like a long write, light the sweep over the pieces still to come, so a run that is working reads
+    // as working. It lights no piece, so the fill stays the run's real progress
+    val stalled = remember { mutableStateOf(false) }
+    LaunchedEffect(fill, ended, reduced) {
+        stalled.value = false
+        if (ended || reduced) return@LaunchedEffect
+        delay(StallSweepMillis)
+        stalled.value = true
+    }
+    val sweeping = (preparing || stalled.value) && !reduced
     val sweepShare = remember { Animatable(if (sweeping) 1f else 0f) }
     val sweepAngle = remember { mutableFloatStateOf(0f) }
     LaunchedEffect(sweeping, reduced) {
