@@ -33,6 +33,9 @@ dependencyResolutionManagement {
         mavenCentral()
         google()
         maven("https://jitpack.io") {
+            // Only the libraries that are published there. Without this, every artifact that Central or Google does
+            // not serve is also looked up on JitPack, which makes builds depend on that host for no reason.
+            content { includeGroupByRegex("com\\.github\\..*") }
             metadataSources {
                 mavenPom()
                 artifact()
@@ -41,6 +44,8 @@ dependencyResolutionManagement {
         maven {
             // A repository must be specified for some reason. "registry" is a dummy.
             url = uri("https://maven.pkg.github.com/MorpheApp/registry")
+            // Only the Morphe libraries (the patcher and the library). Nothing else is asked from GitHub Packages.
+            content { includeGroup("app.morphe") }
             credentials {
                 val gprUser: String? = githubUser()
                 val gprKey: String? = githubToken()
