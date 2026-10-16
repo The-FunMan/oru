@@ -45,7 +45,6 @@ import app.morphe.manager.ui.theme.ThemeTraitsDefaults
 import app.morphe.manager.util.isRtl
 import app.morphe.manager.util.readableOn
 
-// Constants
 object Defaults {
     val CardElevation = 2.dp
     val CardCornerRadius = 16.dp
@@ -92,7 +91,6 @@ object Defaults {
     val ContentPaddingExpanded = 32.dp
     val ItemSpacing = 12.dp
 
-    // Animation durations
     /** Duration used for dialog enter/exit and overlay transitions. */
     const val ANIMATION_DURATION = 220
     /** Shorter fade duration used inside spring-based exit transitions. */
@@ -100,7 +98,6 @@ object Defaults {
     /** Duration used for screen-level enter transitions (navigation push). */
     const val SCREEN_ENTER_DURATION = 320
 
-    // Dialog animation scale
     /** Initial/target scale for dialog enter/exit scale animation. */
     const val DIALOG_SCALE = 0.95f
 

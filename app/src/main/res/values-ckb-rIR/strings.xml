@@ -344,8 +344,6 @@
     <string name="package_name">ناوی پاکەت</string>
     <string name="failed_to_mount">سەرکەوتوو نەبوو لە جێگیرکردنی: %s</string>
     <string name="failed_to_unmount">سەرکەوتوو نەبوو لە لابردنی جێگیری: %s</string>
-    <!-- Patcher Screen - Mini-games -->
-    <string name="mini_game_resume">بەردەوامبوون</string>
     <!-- Settings -->
     <string name="appearance">دەرکەوتن</string>
     <string name="advanced">پێشکەوتوو</string>

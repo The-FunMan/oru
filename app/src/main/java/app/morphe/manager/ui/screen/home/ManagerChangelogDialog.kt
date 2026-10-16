@@ -381,8 +381,13 @@ private fun UpdateDialogFooter(
             state == UpdateViewModel.State.FAILED
 
     // The page of the update while there is one, else that of the newest release listed
-    val pageUrl = releaseInfo?.pageUrl
-        ?: updateViewModel.changelogEntries?.firstOrNull()?.version?.let { releasePageUrl(MANAGER_REPO_URL, it) }
+    // ORU: the release pages are Morphe's GitHub releases, so the oru flavour links none
+    val pageUrl = if (BuildConfig.ORU_UX) {
+        null
+    } else {
+        releaseInfo?.pageUrl
+            ?: updateViewModel.changelogEntries?.firstOrNull()?.version?.let { releasePageUrl(MANAGER_REPO_URL, it) }
+    }
 
     ChangelogFooter(
         actions = actions,

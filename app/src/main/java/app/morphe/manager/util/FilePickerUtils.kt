@@ -24,6 +24,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import app.morphe.manager.BuildConfig
 import app.morphe.manager.R
 import app.morphe.manager.data.platform.Filesystem
 import app.morphe.manager.domain.manager.PreferencesManager
@@ -141,7 +142,9 @@ fun rememberFolderPickerWithPermission(
     val isTV = remember { context.isAndroidTv() }
     val fs: Filesystem = koinInject()
     val prefs: PreferencesManager = koinInject()
-    val useCustomPicker by prefs.useCustomFilePicker.getAsState()
+    // Oru always uses the system picker, so a stored choice cannot bring the in-app one back (SETTINGS_IA row 47)
+    val customPickerPref by prefs.useCustomFilePicker.getAsState()
+    val useCustomPicker = customPickerPref && !BuildConfig.ORU_UX
     val showPickerState = remember { mutableStateOf(false) }
 
     if (showPickerState.value) {
@@ -261,20 +264,24 @@ fun Context.isAndroidTv(): Boolean {
 
 /**
  * File picker that is Morphe's own [FilePicker] where it is chosen or on TV, else the system one.
- * [customPickerMimeTypes] filters the own picker more tightly. [onResult] is called exactly once
- * per launch, with null when nothing was picked, so callers never wait on a finished request.
+ * [customPickerMimeTypes] filters the own picker more tightly. [preferInAppPicker] opens the own
+ * picker whatever the stored choice is, and falls back to the system one when storage access is
+ * refused. [onResult] is called exactly once per launch, with null when nothing was picked, so
+ * callers never wait on a finished request.
  */
 @Composable
 fun rememberAdaptiveFilePicker(
     mimeTypes: Array<String>,
     customPickerMimeTypes: Array<String> = mimeTypes,
     onResult: (Uri?) -> Unit,
-    allowFolderSelection: Boolean = false
+    allowFolderSelection: Boolean = false,
+    preferInAppPicker: Boolean = false
 ): () -> Unit = rememberAdaptivePicker(
     mimeTypes = mimeTypes,
     customPickerMimeTypes = customPickerMimeTypes,
     multiple = false,
     allowFolderSelection = allowFolderSelection,
+    preferInAppPicker = preferInAppPicker,
     onResult = { uris -> onResult(uris.firstOrNull()) }
 )
 
@@ -292,6 +299,7 @@ fun rememberAdaptiveMultiFilePicker(
     customPickerMimeTypes = customPickerMimeTypes,
     multiple = true,
     allowFolderSelection = false,
+    preferInAppPicker = false,
     onResult = onResult
 )
 
@@ -329,19 +337,52 @@ fun rememberImagePicker(onLoaded: (Bitmap) -> Unit): () -> Unit {
     )
 }
 
+/** The picker a request opens: Morphe's own [FilePicker], or the system one. */
+internal enum class PickerKind { InApp, System }
+
+/**
+ * Which picker a request opens. TV always gets the own picker, as does a request that asks for it.
+ * Oru otherwise keeps the system picker whatever is stored (SETTINGS_IA row 47), and Morphe follows
+ * the stored choice.
+ */
+internal fun pickerKind(
+    preferInAppPicker: Boolean,
+    customPickerPref: Boolean,
+    isTv: Boolean,
+    oruUx: Boolean,
+): PickerKind = when {
+    isTv || preferInAppPicker -> PickerKind.InApp
+    oruUx -> PickerKind.System
+    customPickerPref -> PickerKind.InApp
+    else -> PickerKind.System
+}
+
+/**
+ * What to open once the storage access request has come back. The own picker when access was
+ * granted; the system picker when the own one was asked for but access was refused, so the user is
+ * never left without one; null otherwise, where the caller reports that nothing was picked.
+ */
+internal fun pickerAfterAccess(granted: Boolean, preferInAppPicker: Boolean): PickerKind? = when {
+    granted -> PickerKind.InApp
+    preferInAppPicker -> PickerKind.System
+    else -> null
+}
+
 @Composable
 private fun rememberAdaptivePicker(
     mimeTypes: Array<String>,
     customPickerMimeTypes: Array<String>,
     multiple: Boolean,
     allowFolderSelection: Boolean,
+    preferInAppPicker: Boolean,
     onResult: (List<Uri>) -> Unit
 ): () -> Unit {
     val context = LocalContext.current
     val isTV = remember { context.isAndroidTv() }
     val prefs: PreferencesManager = koinInject()
     val fs: Filesystem = koinInject()
-    val useCustomPicker by prefs.useCustomFilePicker.getAsState()
+    val customPickerPref by prefs.useCustomFilePicker.getAsState()
+    val kind = pickerKind(preferInAppPicker, customPickerPref, isTV, BuildConfig.ORU_UX)
 
     // SAF launchers for phones/tablets - always registered so the composable graph stays stable
     val singleLauncher = rememberLauncherForActivityResult(
@@ -354,10 +395,19 @@ private fun rememberAdaptivePicker(
     val (permissionContract, permissionName) = remember { fs.permissionContract() }
     val showPickerState = remember { mutableStateOf(false) }
 
+    val openSystemPicker = {
+        val type = if (mimeTypes.size == 1) mimeTypes[0] else "*/*"
+        if (multiple) multipleLauncher.launch(type) else singleLauncher.launch(type)
+    }
+
     // Every path reports back, including the ones that pick nothing. Callers track which
     // request is pending, and a silent exit would leave that state stuck on the last one
     val permissionLauncher = rememberLauncherForActivityResult(contract = permissionContract) { granted ->
-        if (granted) showPickerState.value = true else onResult(emptyList())
+        when (pickerAfterAccess(granted, preferInAppPicker)) {
+            PickerKind.InApp -> showPickerState.value = true
+            PickerKind.System -> openSystemPicker()
+            null -> onResult(emptyList())
+        }
     }
 
     if (showPickerState.value) {
@@ -376,17 +426,14 @@ private fun rememberAdaptivePicker(
         )
     }
 
-    return remember(isTV, useCustomPicker, multiple) {
+    return remember(kind, multiple) {
         {
-            when {
-                useCustomPicker || isTV -> {
+            when (kind) {
+                PickerKind.InApp -> {
                     if (fs.hasStoragePermission()) showPickerState.value = true
                     else permissionLauncher.launch(permissionName)
                 }
-                else -> {
-                    val type = if (mimeTypes.size == 1) mimeTypes[0] else "*/*"
-                    if (multiple) multipleLauncher.launch(type) else singleLauncher.launch(type)
-                }
+                PickerKind.System -> openSystemPicker()
             }
         }
     }

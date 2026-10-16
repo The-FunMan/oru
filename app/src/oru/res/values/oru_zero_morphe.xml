@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="adaptive_icon_guide_png_body">A logo on a transparent background works best, with the background color picked below. A picture without transparency fills the whole icon instead, and the themed and notification icons then keep the Oru logo.</string>
+    <string name="adaptive_icon_no_transparency_warning">This image has no transparent pixels, so the themed and notification icons keep the Oru logo</string>
+    <string name="home_app_filter_not_patched_description">Apps you have not patched in Oru yet</string>
+    <string name="home_app_filter_patched_description">Apps you have patched or saved with Oru</string>
+    <string name="home_app_filter_uninstalled_description">Apps patched with Oru that are no longer on this device</string>
+    <string name="settings_advanced_patch_options_custom_branding_custom_icon_instruction">"Folder with images to use as a custom icon.
+
+The folder must contain one or more of the following folders, depending on the DPI of the device:
+- mipmap-mdpi
+- mipmap-hdpi
+- mipmap-xhdpi
+- mipmap-xxhdpi
+- mipmap-xxxhdpi
+
+Each of the folders must contain all of the following files:
+morphe_adaptive_background_custom.png
+morphe_adaptive_foreground_custom.png
+
+The image dimensions must be as follows:
+- mipmap-mdpi: 108x108 px
+- mipmap-hdpi: 162x162 px
+- mipmap-xhdpi: 216x216 px
+- mipmap-xxhdpi: 324x324 px
+- mipmap-xxxhdpi: 432x432 px
+
+Optionally, the path contains a \'drawable\' folder with a monochrome icon file:
+morphe_adaptive_monochrome_custom.xml
+
+Optionally, the path contains a notification icon in one of the following formats:
+- XML vector drawable in \'drawable\':
+  morphe_notification_icon_custom.xml
+- PNG raster images in \'drawable-dpi\' folders:
+  drawable-mdpi/morphe_notification_icon_custom.png (24x24 px)
+  drawable-hdpi/morphe_notification_icon_custom.png (36x36 px)
+  drawable-xhdpi/morphe_notification_icon_custom.png (48x48 px)
+  drawable-xxhdpi/morphe_notification_icon_custom.png (72x72 px)
+  drawable-xxxhdpi/morphe_notification_icon_custom.png (96x96 px)"</string>
+    <string name="settings_advanced_patch_options_custom_header_instruction">"Folder with images to use as a custom header logo.
+
+The folder must contain one or more of the following folders, depending on the DPI of the device:
+- drawable-hdpi
+- drawable-xhdpi
+- drawable-xxhdpi
+- drawable-xxxhdpi
+
+Each of the folders must contain all of the following files:
+morphe_header_custom_light.png
+morphe_header_custom_dark.png
+
+The image dimensions must be as follows:
+- drawable-hdpi: 194x72 px
+- drawable-xhdpi: 258x96 px
+- drawable-xxhdpi: 387x144 px
+- drawable-xxxhdpi: 512x192 px"</string>
+    <string name="settings_appearance_app_icon_selector_description">How Oru looks on your home screen and in the app drawer</string>
+    <string name="tour_prompt_desc">Want a quick tour of Oru\'s key features?</string>
+</resources>

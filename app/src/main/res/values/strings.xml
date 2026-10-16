@@ -584,8 +584,6 @@ For the best results, this app recommends patching a &lt;b&gt;full APK&lt;/b&gt;
     <string name="patcher_field_value_kept">kept</string>
     <string name="patcher_patches_progress_format" translatable="false">%1$s / %2$s</string>
     <string name="patcher_percentage" translatable="false">%s%%</string>
-    <string name="patcher_tab_logs">Patcher logs</string>
-    <string name="patcher_tab_game">Games</string>
     <string name="patcher_logs_waiting">Waiting for log output…</string>
     <string name="patcher_logs_lost">Log output is not kept across app restarts</string>
     <string name="patcher_long_step_warning">This step may take a while. Please wait…</string>
@@ -615,7 +613,6 @@ Uninstalling will permanently erase all app data"</string>
     <string name="patcher_install_error_subtitle">Try uninstalling and installing again</string>
     <string name="patcher_ready_to_mount_subtitle">Press the button below to mount</string>
     <string name="patcher_patches_excluded_for_installer">Not available for this install method and excluded: %s</string>
-    <string name="patcher_back_to_game_hint">Tap %1$s to go back to your game</string>
     <string name="patcher_storage_permission_dialog_title">Cannot access storage path</string>
     <string name="patcher_incompatible_patcher_title">Update required</string>
     <string name="patcher_incompatible_patcher_description">The source &lt;b&gt;%1$s&lt;/b&gt; requires patcher &lt;b&gt;%2$s&lt;/b&gt; or newer. Update Morphe to use it</string>
@@ -721,48 +718,6 @@ Uninstalling will permanently erase all app data"</string>
     <string name="package_name">Package name</string>
     <string name="failed_to_mount">Failed to mount: %s</string>
     <string name="failed_to_unmount">Failed to unmount: %s</string>
-
-    <!-- Patcher Screen - Mini-games -->
-    <string name="mini_game_score">Score %s</string>
-    <string name="mini_game_best">Best %s</string>
-    <string name="mini_game_new_record">New record!</string>
-    <string name="mini_game_game_over">Game Over</string>
-    <string name="mini_game_try_again">Try Again</string>
-    <string name="mini_game_paused">Paused</string>
-    <string name="mini_game_resume">Continue</string>
-    <string name="mini_game_restart">Start over</string>
-    <string name="mini_game_change">Choose another game</string>
-
-    <string name="mini_game_2048" translatable="false">2048</string>
-    <string name="mini_game_2048_picker_subtitle">Slide tiles to merge</string>
-    <string name="mini_game_2048_win" translatable="false">2048!</string>
-
-    <string name="mini_game_flappy" translatable="false">Flappy</string>
-    <string name="mini_game_flappy_picker_subtitle">Tap to fly through pipes</string>
-    <string name="mini_game_flappy_tap_to_start">Tap to fly</string>
-
-    <string name="mini_game_snake" translatable="false">Snake</string>
-    <string name="mini_game_snake_picker_subtitle">Eat food, don\'t hit yourself</string>
-    <string name="mini_game_snake_swipe_to_start">Swipe to start</string>
-
-    <string name="mini_game_dino" translatable="false">Dino</string>
-    <string name="mini_game_dino_picker_subtitle">Tap to jump over cacti</string>
-    <string name="mini_game_dino_tap_to_start">Tap to run</string>
-
-    <string name="mini_game_blocks" translatable="false">Blocks</string>
-    <string name="mini_game_blocks_picker_subtitle">Fit the shapes, clear lines</string>
-    <string name="mini_game_blocks_tap_to_start">Tap to rotate, swipe to move, swipe down to drop</string>
-
-    <string name="mini_game_bricks" translatable="false">Bricks</string>
-    <string name="mini_game_bricks_picker_subtitle">Bounce the ball, clear the wall</string>
-    <string name="mini_game_bricks_tap_to_start">Drag to aim, tap to launch</string>
-
-    <string name="mini_game_miner" translatable="false">Miner</string>
-    <string name="mini_game_miner_picker_subtitle">Tap to open, hold to flag</string>
-    <string name="mini_game_miner_flags" translatable="false">%1$s/%2$s</string>
-
-    <string name="mini_game_pairs" translatable="false">Pairs</string>
-    <string name="mini_game_pairs_picker_subtitle">Flip cards, find the match</string>
 
     <!-- Settings -->
     <string name="appearance">Appearance</string>
@@ -945,7 +900,7 @@ Patches are not affected: enable pre-release patches for each source in the patc
     <string name="settings_advanced_expert_mode_dialog_title">Enable Expert mode?</string>
     <string name="settings_advanced_expert_mode_dialog_message">Expert mode gives more control over how patches are applied, but misconfiguring settings in expert mode can result in a non-functional app</string>
     <string name="settings_advanced_strip_unused_libs">Optimize for device architecture</string>
-    <string name="settings_advanced_strip_unused_libs_description">Removes unused CPU architecture libs and split APK modules</string>
+    <string name="settings_advanced_strip_unused_libs_description">Removes unused CPU architecture libs and split APK modules. The patched app then only runs on this device\'s CPU type</string>
 
     <!-- Settings - Advanced Tab - GitHub PAT Settings -->
     <string name="settings_advanced_github_pat" translatable="false">GitHub PAT</string>
@@ -1308,6 +1263,7 @@ Details: %2$s"</string>
     <!-- Settings - System Tab - About Section -->
     <string name="settings_system_about">About</string>
     <string name="settings_system_manager_description">An open-source project for modern, streamlined patching of popular Android apps, driven by community feedback and contributions</string>
+    <string name="oru_about_independent">This build is an independent project and is not endorsed by Google, YouTube, Reddit, APKMirror or any app developer.</string>
     <string name="credits">Credits</string>
     <string name="credits_current_development">Current development</string>
     <string name="credits_prior_development">Prior development</string>

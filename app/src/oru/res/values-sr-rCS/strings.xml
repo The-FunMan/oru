@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="adaptive_icon_guide_png_body">Najbolje funkcioniše logo na transparentnoj pozadini, sa bojom pozadine odabranom ispod. Slika bez transparentnosti umesto toga ispunjava celu ikonicu, a tematske ikonice i ikonice obaveštenja tada zadržavaju Oru logo.</string>
+    <string name="adaptive_icon_no_transparency_warning">Ova slika nema transparentnih piksela, pa tematske ikonice i ikonice obaveštenja zadržavaju Oru logo</string>
+    <string name="battery_optimization_dialog_description">Neki uređaji mogu zaustaviti program za zakrpljivanje kada je aplikacija minimizovana. Dopustite programu Oru da radi bez ograničenja potrošnje baterije kako biste osigurali pouzdano završavanje zakrpljivanja.</string>
+    <string name="deep_link_add_source_message">Da li želite da dodate ovaj izvor patch-a u Oru?</string>
+    <string name="external_batch_patch_description">%s želi da Oru zakrpi i instalira aplikacije</string>
+    <string name="home_apk_helper_description">Oru će zamoliti pomoćnu aplikaciju u nastavku da preuzme originalni APK i vrati datoteku</string>
+    <string name="home_apk_helper_installed_unavailable">Oru nije mogao da koristi instaliranu aplikaciju</string>
+    <string name="home_apk_helper_warning">Nastavite samo ako verujete ovoj pomoćnoj aplikaciji. Oru provere paket, verziju i potpis onošto primi pre krpljenja</string>
+    <string name="home_apk_helper_warning_unverified">Nastavite samo ako verujete ovoj pomoćnoj aplikaciji. Oru ne može da potvrdi potpis ovog APK-a, pa izmenjena datoteka ne bi bila otkrivena</string>
+    <string name="home_app_filter_not_patched_description">Aplikacije koje još niste zakrpili u aplikaciji Oru</string>
+    <string name="home_app_filter_patched_description">Aplikacije koje ste zakrpili ili sačuvali koristeći Oru</string>
+    <string name="home_app_filter_uninstalled_description">Aplikacije zakrpljene pomoću Oru-a koje više nisu na ovom uređaju</string>
+    <string name="home_app_info_app_deleted_description">Ova aplikacija je deinstalirana izvan Oru. Ponovo je instalirajte da bi obnovili funkcionalnost</string>
+    <string name="home_app_info_install_unverified">Oru ne može potvrditi da je instalirana aplikacija verzija koju je ispravio. Ponovite ispravljanje ili je ponovo instalirajte iz sačuvanog APK-a kako biste vratili njene funkcionalnosti</string>
+    <string name="home_app_info_not_patched_description">Instalirana je nezakrpana verzija ove aplikacije. Oru i dalje ima svoj prethodni zapis o zakrpi</string>
+    <string name="home_download_instructions_download_button_toast_6">Sada ste zvanični tester Oru dugmeta 🏅</string>
+    <string name="home_download_instructions_step2_search_note">Oru ne može da garantuje za ove veb sajtove. Preskočite one koji nude svoju prodavnicu aplikacija umesto APK datoteke</string>
+    <string name="home_download_instructions_step4">Nakon što se preuzimanje završi, vratite se na Oru</string>
+    <string name="home_download_instructions_step4_mount">Nakon instaliranja originalnog APK-a, vratite se na Oru</string>
+    <string name="home_held_back_title">Jedan izvor zakrpa je srušio Oru</string>
+    <string name="home_outdated_manager_title">Oru je zastareo</string>
+    <string name="home_update_available">Dostupno ažuriranje za Oru</string>
+    <string name="installer_shizuku_error_permission">Nedostaje dozvola Shizuku-a. Dajte dozvolu Oru-u i pokušajte ponovo</string>
+    <string name="installer_status_shizuku_permission">Dajte dozvolu Oru-u iz Shizuku aplikacije</string>
+    <string name="installing_manager_update_hint">Oru će se zatvoriti da bi završio ažuriranje</string>
+    <string name="launch_app_unverified">Oru nije mogao da potvrdi da je instalirana aplikacija verzija koju je zakrpio.</string>
+    <string name="notification_bundle_update_text_unversioned">Додирните да бисте отворили Oru и надоградили</string>
+    <string name="notification_channel_manager_updates">Oru ažuriranja</string>
+    <string name="notification_channel_manager_updates_description">Obaveštenja o novim Oru izdanjima</string>
+    <string name="notification_channel_patcher_description">Prikazuje se dok Oru zakrpava aplikaciju u pozadini</string>
+    <string name="notification_mount_replaced_text">v%1$s je zamenio zakrpljeni v%2$s. Otvori Oru da ga vratiš</string>
+    <string name="notification_permission_dialog_description">Oru треба дозволу за обавештења да вас упозори када су доступне надоградње у позадини</string>
+    <string name="onboarding_settings_desc">Prilagodite Oru: izgled, napredne opcije i sistemske alate.</string>
+    <string name="patcher_incompatible_patcher_description">Izvor &lt;b&gt;%1$s&lt;/b&gt; zahteva patcher &lt;b&gt;%2$s&lt;/b&gt; ili noviji. Ažurirajte Oru da biste ga koristili</string>
+    <string name="patcher_installed_conflict_body">"Oru potpisuje modifikovane aplikacije sopstvenim sertifikatom, koji se razlikuje od originalnog. Android zahteva uklanjanje postojeće verzije pre instalacije modifikovane aplikacije.
+
+Deinstalacija će trajno obrisati sve podatke aplikacije"</string>
+    <string name="patcher_storage_permission_description_api30">Jedna ili više opcija patch-a pokazuju na putanje koje Oru ne može da čita. Dajte dozvolu za skladište i dodirnite dugme, a zatim će se patching automatski pokrenuti</string>
+    <string name="patcher_storage_permission_hint">Savet: Premestite fajlove u /Android/data/app.oru.manager/files/ - ne potrebne su dodatne dopuštenja</string>
+    <string name="root_mount_module_unmount_warning">Ako KernelSU ima podrazumevano omogućene module za razmontiranje, otvorite KernelSU &gt; Superuser &gt; aplikaciju koju ste montirali &gt; Profil &gt; Prilagođeno i onemogućite module za razmontiranje. Inače, montirani ispravljeni APK možda neće stupiti na snagu, čak i ako Oru pokazuje da je montiran</string>
+    <string name="settings_advanced_expert_mode_description">Omogućava kompleksna podešavanja i opcije prilagođavanja patchovanja u aplikaciji Oru</string>
+    <string name="settings_advanced_github_pat_export_include_supporting">Додаје овај PAT у извозене подешавања Oru-а</string>
+    <string name="settings_advanced_patch_options_custom_branding_custom_icon_instruction">"Mapa sa slikama koje će se koristiti kao prilagođena ikona.
+
+Mapa mora da sadrži jednu ili više sledećih mapa, u zavisnosti od DPI uređaja:
+- mipmap-mdpi
+- mipmap-hdpi
+- mipmap-xhdpi
+- mipmap-xxhdpi
+- mipmap-xxxhdpi
+
+Svaka od mapa mora da sadrži sve sledeće datoteke:
+morphe_adaptive_background_custom.png
+morphe_adaptive_foreground_custom.png
+
+Dimenzije slike moraju biti sledeće:
+- mipmap-mdpi: 108x108 px
+- mipmap-hdpi: 162x162 px
+- mipmap-xhdpi: 216x216 px
+- mipmap-xxhdpi: 324x324 px
+- mipmap-xxxhdpi: 432x432 px
+
+Opciono, putanja sadrži mapu 'drawable' sa datotekom ikone u boji:
+morphe_adaptive_monochrome_custom.xml
+
+Opciono, putanja sadrži ikonu obaveštenja u jednom od sledećih formata:
+- XML vektorski crtež u 'drawable':
+  morphe_notification_icon_custom.xml
+- PNG rasturne slike u mape 'drawable-dpi':
+  drawable-mdpi/morphe_notification_icon_custom.png (24x24 px)
+  drawable-hdpi/morphe_notification_icon_custom.png (36x36 px)
+  drawable-xhdpi/morphe_notification_icon_custom.png (48x48 px)
+  drawable-xxhdpi/morphe_notification_icon_custom.png (72x72 px)
+  drawable-xxxhdpi/morphe_notification_icon_custom.png (96x96 px)"</string>
+    <string name="settings_advanced_updates_allow_metered_description">Omogućava preuzimanje ažuriranja aplikacije Oru i patchovanja putem mobilnih podataka</string>
+    <string name="settings_advanced_updates_manager_prereleases_description">Rani pristup novim Oru verzijama</string>
+    <string name="settings_advanced_updates_prerelease_warning_message">"Prerelease verzije Oru-a su još u razvoju i mogu biti nestabilne.
+
+Zakrpe nisu pogođene: omogućite prerelease zakrpe za svaki izvor na listi izvora zakrpa"</string>
+    <string name="settings_appearance_app_icon_selector_description">Kako Oru izgleda na vašem početnom ekranu i u fioci aplikacija</string>
+    <string name="settings_auto_uninstall_warning_message">Ako Android prijavljuje konflikt potpisa tokom Shizuku auto-instalacije, Oru će deinstalirati postojeću aplikaciju pre instaliranja popravljenog APK-a</string>
+    <string name="settings_system_apk_download_helper_warning">APK dolazi od pomoćne aplikacije, zato verujte samo aplikacijama koje poznajete. Oru i dalje proverava paket, verziju i potpis svake datoteke pre zakrpljivanja.</string>
+    <string name="settings_system_custom_file_picker_description">Koristite ugrađeni odabir datoteka u Oruu umesto fabričkog sistema</string>
+    <string name="settings_system_export_manager_settings_fail">Није успело извожење подешавања Oru-а: %s</string>
+    <string name="settings_system_export_manager_settings_success">Извезена су подешавања Oru-а</string>
+    <string name="settings_system_import_manager_settings_description">Pravi backup i vraća vaše podešavanje aplikacije Oru</string>
+    <string name="settings_system_import_manager_settings_fail">Није успело увожење подешавања Oru-а: %s</string>
+    <string name="settings_system_import_manager_settings_mode_title">Uvoz podešavanja Oru</string>
+    <string name="settings_system_import_manager_settings_success">Увезена су подешавања Oru-а</string>
+    <string name="settings_system_morphe_settings">Oru podešavanja</string>
+    <string name="settings_system_process_runtime_heap_limit_ignored">Ovaj uređaj je ignorisao ograničenje memorije pri poslednjem pokretanju, pa zakrpljivanje može da se vrati na izvršavanje unutar Oru-a.</string>
+    <string name="settings_system_signing_key_dialog_description">Svaka aplikacija koju Oru zakrpi potpisana je ovim ključem. Sačuvajte kopiju: bez njega, zakrpljene aplikacije se mogu ažurirati samo nakon deinstalacije.</string>
+    <string name="settings_system_signing_key_missing">Oru ga kreira pri vašoj prvoj zakrpi.</string>
+    <string name="settings_system_storage_open_app_info_description">Upravljajte ili očistite sve Oru podatke putem sistemskih postavki</string>
+    <string name="sources_dialog_community_notice_message">"Izvore zakrpa zajednice kreiraju i održavaju njihovi autori. Oru ne pregleda niti verifikuje zakrpe trećih strana i nije odgovoran za njihov sadržaj ili za ono što rade na vašem uređaju.
+
+Sve što dodate sa ove veb stranice koristite na sopstvenu odgovornost."</string>
+    <string name="sources_management_held_back_hint">Ovaj izvor je srušio Oru tokom učitavanja, pa se preskače. Ažurirajte ga ili ponovo uvezite da biste pokušali ponovo.</string>
+    <string name="sources_management_outdated_manager_badge">Ažuriraj Oru</string>
+    <string name="sources_management_outdated_manager_hint">Ovaj izvor je napravljen za patcher %1$s, ali Oru %2$s uključuje patcher %3$s. Ažuriraj Oru da bi ga koristio</string>
+    <string name="tour_prompt_desc">Želite brzu turu po ključnim funkcijama Oru?</string>
+    <string name="uninstall_app_unverified">Ostavljeno na mestu: Oru nije mogao da potvrdi da je instalirana aplikacija verzija koju je zakrpio.</string>
+</resources>

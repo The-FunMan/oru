@@ -10,6 +10,7 @@ import app.morphe.manager.domain.repository.PatchSelectionRepository
 import app.morphe.manager.patcher.patch.PatchInfo
 import app.morphe.manager.ui.screen.shared.CopySelectionCandidate
 import app.morphe.manager.util.AppDataResolver
+import app.morphe.manager.util.shownTitle
 import kotlinx.coroutines.flow.first
 import java.util.Locale
 
@@ -52,7 +53,7 @@ suspend fun loadCopySelectionCandidates(
 
             CopySelectionCandidate(
                 bundleUid = bundleUid,
-                bundleName = source.displayTitle,
+                bundleName = source.shownTitle,
                 packageName = packageName,
                 packageDisplayName = packageDisplayName,
                 sourceCount = sourcePatches.size,

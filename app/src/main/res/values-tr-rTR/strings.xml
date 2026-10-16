@@ -563,8 +563,6 @@ En iyi sonuçlar için bu uygulama, &lt;b&gt;tam APK&lt;/b&gt; dosyasını yamal
     <string name="patcher_field_value_stripped">kaldırıldı</string>
     <!-- Value of "Libraries": every library was left in the patched APK -->
     <string name="patcher_field_value_kept">korundu</string>
-    <string name="patcher_tab_logs">Patcher günlükleri</string>
-    <string name="patcher_tab_game">Oyunlar</string>
     <string name="patcher_logs_waiting">Log çıktısı bekleniyor…</string>
     <string name="patcher_logs_lost">Log çıktısı uygulama yeniden başlatıldığında korunmaz</string>
     <string name="patcher_long_step_warning">Bu adım biraz zaman alabilir. Lütfen bekleyin…</string>
@@ -594,7 +592,6 @@ Kaldırma işlemi tüm uygulama verilerini kalıcı olarak silecektir"</string>
     <string name="patcher_install_error_subtitle">Kaldırıp tekrar yüklemeyi deneyin</string>
     <string name="patcher_ready_to_mount_subtitle">Bağlamak için aşağıdaki düğmeye basın</string>
     <string name="patcher_patches_excluded_for_installer">Bu kurulum yöntemi için kullanılamıyor ve hariç tutuldu: %s</string>
-    <string name="patcher_back_to_game_hint">Geri dönmek için %1$s\'e dokunun</string>
     <string name="patcher_storage_permission_dialog_title">Depolama yoluna erişilemiyor</string>
     <string name="patcher_incompatible_patcher_title">Güncelleme gerekiyor</string>
     <string name="patcher_incompatible_patcher_description">&lt;b&gt;%1$s&lt;/b&gt; kaynağı, &lt;b&gt;%2$s&lt;/b&gt; veya daha yeni bir yamalayıcı sürümü gerektiriyor. Bu kaynağı kullanmak için Morphe’yi güncelleyin.</string>
@@ -691,29 +688,6 @@ Kaldırma işlemi tüm uygulama verilerini kalıcı olarak silecektir"</string>
     <string name="package_name">Paket adı</string>
     <string name="failed_to_mount">Bağlanamadı: %s</string>
     <string name="failed_to_unmount">Bağlama kaldırılamadı: %s</string>
-    <!-- Patcher Screen - Mini-games -->
-    <string name="mini_game_score">Puan %s</string>
-    <string name="mini_game_best">En İyi %s</string>
-    <string name="mini_game_new_record">Yeni rekor!</string>
-    <string name="mini_game_game_over">Oyun Bitti</string>
-    <string name="mini_game_try_again">Tekrar Dene</string>
-    <string name="mini_game_paused">Duraklatıldı</string>
-    <string name="mini_game_resume">Devam et</string>
-    <string name="mini_game_restart">Yeniden başla</string>
-    <string name="mini_game_change">Başka bir oyun seç</string>
-    <string name="mini_game_2048_picker_subtitle">Karoları birleştirmek için kaydır</string>
-    <string name="mini_game_flappy_picker_subtitle">Borulardan uçmak için dokun</string>
-    <string name="mini_game_flappy_tap_to_start">Uçmak için dokunun</string>
-    <string name="mini_game_snake_picker_subtitle">Yemek ye, kendine çarpma</string>
-    <string name="mini_game_snake_swipe_to_start">Başlamak için kaydırın</string>
-    <string name="mini_game_dino_picker_subtitle">Kaktüslerin üzerinden atlamak için dokun</string>
-    <string name="mini_game_dino_tap_to_start">Koşmak için dokunun</string>
-    <string name="mini_game_blocks_picker_subtitle">Şekilleri yerleştir, çizgileri temizle</string>
-    <string name="mini_game_blocks_tap_to_start">Döndürmek için dokunun, taşımak için kaydırın, düşürmek için aşağı kaydırın</string>
-    <string name="mini_game_bricks_picker_subtitle">Topu sektir, duvarı yok et</string>
-    <string name="mini_game_bricks_tap_to_start">Nişan almak için sürükle, fırlatmak için dokun</string>
-    <string name="mini_game_miner_picker_subtitle">Açmak için dokunun, işaretlemek için basılı tutun</string>
-    <string name="mini_game_pairs_picker_subtitle">Kartları çevirin, eşleşeni bulun</string>
     <!-- Settings -->
     <string name="appearance">Görünüm</string>
     <string name="advanced">Gelişmiş</string>

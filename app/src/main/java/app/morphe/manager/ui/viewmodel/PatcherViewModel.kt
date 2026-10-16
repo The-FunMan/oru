@@ -67,12 +67,14 @@ import java.io.IOException
 import java.util.UUID
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
+import app.morphe.manager.ui.oru.focus.SingleRunPatcher
 import kotlin.time.Duration.Companion.seconds
 
 @OptIn(SavedStateHandleSaveableApi::class)
 class PatcherViewModel(
-    private val input: Patcher.ViewModelParams
-) : ViewModel(), KoinComponent, StepProgressProvider {
+    private val input: Patcher.ViewModelParams,
+    private val savedStateHandle: SavedStateHandle = SavedStateHandle(),
+) : ViewModel(), KoinComponent, StepProgressProvider, SingleRunPatcher {
     private val app: Application by inject()
     private val fs: Filesystem by inject()
     private val pm: PM by inject()
@@ -85,7 +87,6 @@ class PatcherViewModel(
     private val patchOptionsPrefs: PatchOptionsPreferencesManager by inject()
     private val originalApkRepository: OriginalApkRepository by inject()
     private val installerManager: InstallerManager by inject()
-    private val savedStateHandle: SavedStateHandle = get()
 
     private var savedPatchedApp by savedStateHandle.saveableVar { false }
 
@@ -130,36 +131,18 @@ class PatcherViewModel(
     var patchingCompletedInForeground: Boolean = false
         private set
 
-    var showSuccessScreen: Boolean by mutableStateOf(false)
+    override var showSuccessScreen: Boolean by mutableStateOf(false)
         private set
 
-    // A finished run that arrived while the user was playing, waiting for them to be done
-    private var successScreenHeldBack = false
-    private var successScreenDeferred = false
-
-    // An auto-install waits for the success screen, so it never starts over a game still in play
+    // An auto-install waits for the success screen, so it never starts over a run still in progress
     private var autoInstallQueued = false
 
     fun showSuccess() {
-        successScreenHeldBack = false
         showSuccessScreen = true
         startQueuedAutoInstall()
     }
 
     fun hideSuccessScreen() { showSuccessScreen = false }
-
-    /**
-     * Holds the automatic switch to the success screen back while the user is busy with something
-     * the run has no right to interrupt, currently a mini-game, and releases it again afterward.
-     *
-     * A run that finishes meanwhile is not lost: the progress screen turns its own action bar into
-     * an install button, and the screen appears on its own once [defer] goes back to false,
-     * bringing an auto-install that was waiting for it along.
-     */
-    fun deferSuccessScreen(defer: Boolean) {
-        successScreenDeferred = defer
-        if (!defer && successScreenHeldBack) showSuccess()
-    }
 
     var isPatching: Boolean by mutableStateOf(true)
         private set
@@ -393,7 +376,7 @@ class PatcherViewModel(
         val globalBundles = patchBundleRepository.bundleInfoFlow.first()
         val scopedBundles = gatherScopedBundles()
         val sanitizedSelection = sanitizeSelection(appliedSelection, scopedBundles)
-        val displayNames = patchBundleRepository.sources.first().associate { it.uid to it.displayTitle }
+        val displayNames = patchBundleRepository.sources.first().associate { it.uid to it.shownTitle }
 
         return sanitizedSelection.keys.mapNotNull { uid ->
             val name = (displayNames[uid] ?: scopedBundles[uid]?.name ?: globalBundles[uid]?.name)
@@ -510,12 +493,16 @@ class PatcherViewModel(
     )
 
     val steps: List<Step> get() = patchRun.steps
-    val progress: Float get() = patchRun.progress
-    val patchesProgress get() = patchRun.patchesProgress
+    override val progress: Float get() = patchRun.progress
+    override val patchesProgress get() = patchRun.patchesProgress
 
     private val workManager = WorkManager.getInstance(app)
     private val _patcherSucceeded = MutableStateFlow<Boolean?>(null)
-    val patcherSucceeded: StateFlow<Boolean?> = _patcherSucceeded.asStateFlow()
+    override val patcherSucceeded: StateFlow<Boolean?> = _patcherSucceeded.asStateFlow()
+
+    // ORU: a cancelled worker is an outcome of its own, so the UI can leave the working state.
+    private val _patcherCancelled = MutableStateFlow(false)
+    override val patcherCancelled: StateFlow<Boolean> = _patcherCancelled.asStateFlow()
     private var observeWorkerJob: Job? = null
     private val handledFailureIds = mutableSetOf<UUID>()
     private var forceKeepLocalInput = false
@@ -537,7 +524,7 @@ class PatcherViewModel(
     val showLongStepWarning: StateFlow<Boolean> = patchRun.showLongStepWarning
 
     /** Notification and tour prompts raised after a successful install or export. */
-    val postPatchPrompts = PostPatchPrompts(app, prefs, viewModelScope)
+    val postPatchPrompts by lazy { PostPatchPrompts(app, prefs, viewModelScope) }
 
     init {
         restoreOutcome()
@@ -1002,6 +989,10 @@ class PatcherViewModel(
             },
             onProgress = patchRun::onProgress,
             patchSources = patchSourcesForLog,
+            onStageFraction = patchRun::onStageFraction,
+            packageKey = input.focusKey ?: input.targetPackageName ?: packageName,
+            // The Oru owner announces a finished run itself (SingleRunOwner), with the same notice and a tap to its Focus
+            announceCompletion = !BuildConfig.ORU_UX,
         )
     }
 
@@ -1063,6 +1054,13 @@ class PatcherViewModel(
                     WorkInfo.State.BLOCKED -> {
                         isPatching = true
                         _patcherSucceeded.value = null
+                        _patcherCancelled.value = false // ORU: a new attempt is not cancelled
+                    }
+                    // ORU: cancel ends the run without a result, so it leaves the working state
+                    WorkInfo.State.CANCELLED -> {
+                        patchRun.stopStallWatch()
+                        isPatching = false
+                        _patcherCancelled.value = true
                     }
                     else -> _patcherSucceeded.value = null
                 }
@@ -1079,7 +1077,7 @@ class PatcherViewModel(
 
     private fun scheduleSuccessScreen() = viewModelScope.launch {
         delay(successScreenDelay)
-        if (successScreenDeferred) successScreenHeldBack = true else showSuccess()
+        showSuccess()
     }
 
     /** Called once the installer has taken the auto-install over. */
@@ -1094,7 +1092,7 @@ class PatcherViewModel(
         if (!installerManager.autoInstallAllowed(target)) return@launch
         autoInstallPending = true
         // Started by the success screen rather than on a timer of its own: an install starting
-        // sooner puts the system dialog over a run still drawn as unfinished, or over a game
+        // sooner puts the system dialog over a run still drawn as unfinished
         autoInstallQueued = true
         if (showSuccessScreen) startQueuedAutoInstall()
     }
@@ -1183,7 +1181,7 @@ class PatcherViewModel(
      * Called when the user confirms cancellation so the worker stops before
      * the ViewModel is cleared, preventing background CPU/RAM usage that causes UI jank.
      */
-    fun cancelPatching() {
+    override fun cancelPatching() {
         patcherWorkerId?.uuid?.let(workManager::cancelWorkById)
     }
 
@@ -1202,6 +1200,11 @@ class PatcherViewModel(
      */
     fun stopCompletionSound() {
         PatcherWorker.stopCompletionSound()
+    }
+
+    /** Public cleanup for lifecycle owners managing this view model outside of a ViewModelStore. */
+    override fun destroy() {
+        onCleared()
     }
 
     override fun onCleared() {

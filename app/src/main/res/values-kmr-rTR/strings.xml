@@ -545,8 +545,6 @@ Ji bo mezgînî, ev sepan pêşniyar dike ku paketek &lt;b&gt;full APK&lt;/b&gt;
     <string name="patcher_field_value_stripped">jêbirî</string>
     <!-- Value of "Libraries": every library was left in the patched APK -->
     <string name="patcher_field_value_kept">hatine hilanîn</string>
-    <string name="patcher_tab_logs">Tovêrên patcherê</string>
-    <string name="patcher_tab_game">Lîstik</string>
     <string name="patcher_logs_waiting">Li bendê ne ku derketina logê bê nivîsîn…</string>
     <string name="patcher_logs_lost">Derketina logê piştî demekê winda dibe</string>
     <string name="patcher_long_step_warning">Ev gav dikare hinekî dem bigire. Heke...</string>
@@ -574,7 +572,6 @@ Neqişandin dê hemî daneyên serîlêdanê bi awayê daîmî tune bike"</strin
     <string name="patcher_install_error_subtitle">Heke hewce bike, saz bike û dîsa saz bike</string>
     <string name="patcher_ready_to_mount_subtitle">Ji bo avakirinê ser duxwe bikşînin</string>
     <string name="patcher_patches_excluded_for_installer">Ji bo rêbazê ku hatî hilbijartîn peyda nabe û tê derxistin: %s</string>
-    <string name="patcher_back_to_game_hint">Bikar bîne %1$s ji bo vegerîna lîstika te.    </string>
     <string name="patcher_storage_permission_dialog_title">Nabe sererît rêyê wergirtina separe</string>
     <string name="patcher_incompatible_patcher_title">Nûvekirin hewce ye</string>
     <string name="patcher_incompatible_patcher_description">Çavkanî &lt;b&gt;%1$s&lt;/b&gt; hewceyî patchker &lt;b&gt;%2$s&lt;/b&gt; an jî nûtir e. Ji bo ku bikar bîne, Morphe nûve bike.</string>
@@ -670,29 +667,6 @@ Neqişandin dê hemî daneyên serîlêdanê bi awayê daîmî tune bike"</strin
     <string name="package_name">Navê pakêtê</string>
     <string name="failed_to_mount">Serketina çêkirinê: %s</string>
     <string name="failed_to_unmount">Serketina nebûyîna çêkirinê: %s</string>
-    <!-- Patcher Screen - Mini-games -->
-    <string name="mini_game_score">Puan %s</string>
-    <string name="mini_game_best">Herî baş %s</string>
-    <string name="mini_game_new_record">Rekord nû!</string>
-    <string name="mini_game_game_over">Dawî</string>
-    <string name="mini_game_try_again">Carek din bicûrbîne</string>
-    <string name="mini_game_paused">Seikin</string>
-    <string name="mini_game_resume">Berde dewam bike</string>
-    <string name="mini_game_restart">Ji nû ve dest pê bike</string>
-    <string name="mini_game_change">Lîstikeke din hilbijêre</string>
-    <string name="mini_game_2048_picker_subtitle">Tile\'an bişîne da ku bikevin hev</string>
-    <string name="mini_game_flappy_picker_subtitle">Têke da ku ji boriyên derbas bî</string>
-    <string name="mini_game_flappy_tap_to_start">Têke da ku firî</string>
-    <string name="mini_game_snake_picker_subtitle">Xwarin bixwe, xwe negre</string>
-    <string name="mini_game_snake_swipe_to_start">Destpêkirinê da ku destpêbikî</string>
-    <string name="mini_game_dino_picker_subtitle">Têke da ku ji kaktûsan derbas bî</string>
-    <string name="mini_game_dino_tap_to_start">Têke da ku bixwe</string>
-    <string name="mini_game_blocks_picker_subtitle">Teşeyan bicîh bîne, xêzan paqij bike</string>
-    <string name="mini_game_blocks_tap_to_start">Bitekle ku bizivirîne, bikişîne ku bilivîne, ber bi jêr ve bikişîne ku bixe.</string>
-    <string name="mini_game_bricks_picker_subtitle">Topê bide peykan, dîwar paqij bike</string>
-    <string name="mini_game_bricks_tap_to_start">Ji bo armanckirinê bikişîne, ji bo avêtinê bitikîne.</string>
-    <string name="mini_game_miner_picker_subtitle">Bitekle ku vekî, bigre ku ala bike</string>
-    <string name="mini_game_pairs_picker_subtitle">Kartan bizivirîne, lihevhatinê bibîne</string>
     <!-- Settings -->
     <string name="appearance">Xwezî</string>
     <string name="advanced">Zor</string>

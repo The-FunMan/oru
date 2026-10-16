@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Oru floating island copy that is not in oru_strings.xml yet. English only (decision D6). Keys that already
+  exist in oru_strings.xml or strings.xml are reused, not repeated here (the Simple and Expert pair, Settings).
+-->
+<resources>
+    <string name="oru_island_apps">Apps</string>
+    <string name="oru_island_expanded">Expanded</string>
+    <string name="oru_island_collapsed">Collapsed</string>
+
+    <!-- Run accessory: the app being patched and how far along it is -->
+    <string name="oru_island_run_title">Patching %1$s</string>
+    <string name="oru_island_run_progress">%1$d of %2$d</string>
+    <string name="oru_island_run_description">Patching %1$s, %2$d of %3$d</string>
+    <!-- Run accessory of a finished run that waits to be installed: a tap opens the install -->
+    <string name="oru_island_run_ready_title">%1$s is ready to install</string>
+    <string name="oru_island_run_ready_hint">Tap to install</string>
+    <string name="oru_island_run_ready_description">%1$s is ready to install. Tap to install.</string>
+</resources>

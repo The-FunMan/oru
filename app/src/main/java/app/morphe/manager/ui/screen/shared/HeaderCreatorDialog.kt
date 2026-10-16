@@ -164,7 +164,6 @@ fun HeaderCreatorDialog(
     val failureMessage = stringResource(R.string.header_creator_failed)
     val isCreating = remember { mutableStateOf(false) }
 
-    // Folder picker for saving
     val openFolderPicker = rememberFolderPickerWithPermission { uri ->
         scope.launch {
             isCreating.value = true

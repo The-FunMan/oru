@@ -144,19 +144,3 @@ fun String?.toColorOrNull(): Color? {
         Color(hexValue.toColorInt())
     }.getOrNull()
 }
-
-/**
- * Parse color string to RGB float values (0-1 range)
- */
-fun parseColorToRgb(color: String): Triple<Float, Float, Float> {
-    return color.toColorOrNull()?.let {
-        Triple(it.red, it.green, it.blue)
-    } ?: Triple(0f, 0f, 0f)
-}
-
-/**
- * Convert RGB float values to hex string
- */
-fun rgbToHex(r: Float, g: Float, b: Float): String {
-    return Color(r, g, b).toHexString(includeAlpha = false)
-}

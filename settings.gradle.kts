@@ -17,18 +17,19 @@ fun githubToken(): String? =
         ?: providers.gradleProperty("gpr.key").orNull
         ?: System.getenv("GITHUB_TOKEN")
 
+// mavenLocal() is opt-in (-Poru.mavenLocal) and comes last, so a locally installed artifact can never shadow a
+// verified remote one in release builds.
 pluginManagement {
     repositories {
-        mavenLocal()
         mavenCentral()
         google()
         gradlePluginPortal()
+        if (providers.gradleProperty("oru.mavenLocal").isPresent) mavenLocal()
     }
 }
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        mavenLocal()
         mavenCentral()
         google()
         maven("https://jitpack.io") {
@@ -48,6 +49,7 @@ dependencyResolutionManagement {
                 password = gprKey.orEmpty()
             }
         }
+        if (providers.gradleProperty("oru.mavenLocal").isPresent) mavenLocal()
     }
 }
 
@@ -67,5 +69,12 @@ mapOf(
                 substitute(module(libraryName)).using(project(":"))
             }
         }
+    }
+}
+
+// The patcher lives in this repository (patcher/) and replaces the published morphe-patcher artifact.
+includeBuild("patcher") {
+    dependencySubstitution {
+        substitute(module("app.morphe:morphe-patcher")).using(project(":"))
     }
 }

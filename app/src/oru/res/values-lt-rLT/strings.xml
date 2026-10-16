@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="adaptive_icon_guide_png_body">Geriausiai tinka logotipas permatomame fone, o fono spalva pasirenkama žemiau. Paveikslėlis be permatomumo užpildo visą piktogramą, o teminė ir pranešimų piktogramos tada išlaiko „Oru“ logotipą.</string>
+    <string name="adaptive_icon_no_transparency_warning">Šis paveikslėlis neturi permatomų pikselių, todėl teminė ir pranešimų piktogramos išlaiko „Oru“ logotipą</string>
+    <string name="battery_optimization_dialog_description">Kai kurie prietaisai gali sustabdyti taisytoją kai programa yra sumažinama. Leiskite Oru veikti be baterijos apribojimų, kad pataisymas būtų įvykdytas patikimai</string>
+    <string name="deep_link_add_source_message">Ar norite pridėti šį pataisos šaltinį prie Oru?</string>
+    <string name="external_batch_patch_description">%s nori, kad „Oru“ pataisytų ir įdiegtų programas</string>
+    <string name="home_apk_helper_description">„Oru“ paprašys toliau nurodytos pagalbinės programos atsisiųsti originalų APK ir grąžinti failą</string>
+    <string name="home_apk_helper_installed_unavailable">„Oru“ nepavyko naudoti įdiegtos programos</string>
+    <string name="home_apk_helper_warning">Tęskite tik tuo atveju, jei pasitikite šia pagalbine programa. „Oru“ prieš pataisymą patikrina gauto failo paketą, versiją ir parašą</string>
+    <string name="home_apk_helper_warning_unverified">Tęskite tik tuo atveju, jei pasitikite šia pagalbine programa. „Oru“ negali patikrinti šio APK parašo, todėl pakeistas failas nebūtų aptiktas</string>
+    <string name="home_app_filter_not_patched_description">Programos, kurių dar nepataisėte „Oru“</string>
+    <string name="home_app_filter_patched_description">Programos, kurias pataisėte ar išsaugojote naudodami „Oru“</string>
+    <string name="home_app_filter_uninstalled_description">Programos, pataisytos naudojant „Oru“, kurių šiame įrenginyje jau nėra</string>
+    <string name="home_app_info_app_deleted_description">Ši programa buvo pašalinta nenaudojant Oru. Įdiekite ją iš naujo, kad atkurtumėte funkcionalumą</string>
+    <string name="home_app_info_install_unverified">„Oru“ negali patvirtinti, kad įdiegta programa yra ta kompiliacija, kurią jis pataisė. Pataisykite ją iš naujo arba įdiekite iš išsaugoto APK, kad atkurtumėte jos veiksmus</string>
+    <string name="home_app_info_not_patched_description">Įdiegta nepataisyta šios programos versija. „Oru“ vis dar turi ankstesnį jos pataisymo įrašą</string>
+    <string name="home_download_instructions_download_button_toast_6">Jūs dabar oficialus Oru mygtuko bandytojas 🏅</string>
+    <string name="home_download_instructions_step2_search_note">„Oru“ negali laiduoti už šias svetaines. Praleiskite tas, kurios siūlo savo programų parduotuvę, o ne APK failą</string>
+    <string name="home_download_instructions_step4">Po atsisiuntimo, grįžkite į Oru</string>
+    <string name="home_download_instructions_step4_mount">Po originalaus APK diegimo grįžkite į Oru</string>
+    <string name="home_held_back_title">Pataisų šaltinis sukėlė „Oru“ gedimą</string>
+    <string name="home_outdated_manager_title">„Oru“ pasenęs</string>
+    <string name="home_update_available">Oru atnaujinimas prieinamas</string>
+    <string name="installer_shizuku_error_permission">Trūksta „Shizuku“ leidimo. Suteikite leidimą „Oru“ ir bandykite dar kartą</string>
+    <string name="installer_status_shizuku_permission">Suteikite leidimą „Oru“ iš „Shizuku“ programos</string>
+    <string name="installing_manager_update_hint">„Oru“ užsidarys, kad užbaigtų naujinimą</string>
+    <string name="launch_app_unverified">„Oru“ negalėjo patikrinti, ar įdiegta programa yra ta kompiliacija, kurią jis pataisė</string>
+    <string name="notification_bundle_update_text_unversioned">Palieskite, kad atidarytumėte „Oru“ ir atnaujintumėte</string>
+    <string name="notification_channel_manager_updates">„Oru“ naujinimai</string>
+    <string name="notification_channel_manager_updates_description">Pranešimai apie naujus „Oru“ leidimus</string>
+    <string name="notification_channel_patcher_description">Rodoma, kai „Oru“ fone pataiso programą</string>
+    <string name="notification_mount_replaced_text">v%1$s pakeitė pataisytą v%2$s. Atidarykite Oru, kad ją atkurtumėte</string>
+    <string name="notification_permission_dialog_description">„Oru“ reikia pranešimų leidimo, kad įspėtų jus, kai fone bus prieinami naujinimai</string>
+    <string name="onboarding_settings_desc">Tinkinkite „Oru“: išvaizdą, išplėstines parinktis ir sistemos įrankius</string>
+    <string name="patcher_incompatible_patcher_description">Šaltinis &lt;b&gt;%1$s&lt;/b&gt; reikalauja &lt;b&gt;%2$s&lt;/b&gt; ar naujesnio pataisos įrankio. Atnaujinkite Oru, kad galėtumėte jį naudoti</string>
+    <string name="patcher_installed_conflict_body">"„Oru“ pasirašo pataisytas programas savo sertifikatu, kuris skiriasi nuo originalo. „Android“ sistemoje reikia pašalinti esamą versiją, kad būtų galima įdiegti pataisytą programą.
+
+Pašalinus bus visam laikui ištrinti visi programos duomenys."</string>
+    <string name="patcher_storage_permission_description_api30">Viena ar kelios pataisų parinktys nurodo kelius, kurių „Oru“ negali nuskaityti. Suteikite prieigą prie saugyklos ir palieskite mygtuką, tada pataisų diegimas prasidės automatiškai</string>
+    <string name="patcher_storage_permission_hint">Patarimas: perkelkite failus į /Android/data/app.oru.manager/files/ – jokių papildomų leidimų nereikia</string>
+    <string name="root_mount_module_unmount_warning">Jei „KernelSU“ pagal numatytuosius nustatymus įjungta parinktis „Unmount modules“, atidarykite „KernelSU“ &gt; „Superuser“ &gt; jūsų prijungtą programą &gt; „Profile“ &gt; „Custom“ ir išjunkite „Unmount modules“. Priešingu atveju prijungtas pataisytas APK gali neįsigalioti, net jei „Oru“ rodo jį kaip prijungtą</string>
+    <string name="settings_advanced_expert_mode_description">Įgalina sudėtingus „Oru“ pataisymo nustatymus ir tinkinimo parinktis</string>
+    <string name="settings_advanced_github_pat_export_include_supporting">Prideda šį PAT prie eksportuotų „Oru“ nustatymų</string>
+    <string name="settings_advanced_patch_options_custom_branding_custom_icon_instruction">"Aplankas su nuotraukomis, kurios bus naudojamos kaip piktograma.
+
+Aplankas turi turėti vieną ar daugiau toliau nurodytų aplankų, priklausomai nuo prietaiso DPI:
+- mipmap-mdpi
+- mipmap-hdpi
+- mipmap-xhdpi
+- mipmap-xxhdpi
+- mipmap-xxxhdpi
+
+Kiekvienas aplankas turi turėti visus toliau išvardintus failus:
+morphe_adaptive_background_custom.png
+morphe_adaptive_foreground_custom.png
+
+Paveikslų dimensijos turi būti tokios:
+- mipmap-mdpi: 108x108 px
+- mipmap-hdpi: 162x162 px
+- mipmap-xhdpi: 216x216 px
+- mipmap-xxhdpi: 324x324 px
+- mipmap-xxxhdpi: 432x432 px
+
+Pasirinktinai, nuoroda gali turėti 'drawable' aplanką su monochrominiu piktogramos failu:
+morphe_adaptive_monochrome_custom.xml
+
+Pasirinktinai, nuoroda gali turėti pranešimo piktogramą viename iš išvardintų formatų:
+- XML vektorių piešinį 'drawable':
+  morphe_notification_icon_custom.xml
+- PNG raster nuotraukas 'drawable-dpi' aplankuose:
+  drawable-mdpi/morphe_notification_icon_custom.png (24x24 px)
+  drawable-hdpi/morphe_notification_icon_custom.png (36x36 px)
+  drawable-xhdpi/morphe_notification_icon_custom.png (48x48 px)
+  drawable-xxhdpi/morphe_notification_icon_custom.png (72x72 px)
+  drawable-xxxhdpi/morphe_notification_icon_custom.png (96x96 px)"</string>
+    <string name="settings_advanced_patch_options_custom_header_instruction">"Aplankas su vaizdais, naudojamais kaip pasirinktinis antraštės logotipas.
+
+Aplanke turi būti vienas ar daugiau iš šių aplankų, priklausomai nuo įrenginio DPI:
+- drawable-hdpi
+- drawable-xhdpi
+- drawable-xxhdpi
+- drawable-xxxhdpi
+
+Kiekviename iš šių aplankų turi būti visi šie failai:
+morphe_header_custom_light.png
+morphe_header_custom_dark.png
+
+Vaizdų matmenys turi būti tokie:
+- drawable-hdpi: 194x72 px
+- drawable-xhdpi: 258x96 px
+- drawable-xxhdpi: 387x144 px
+- drawable-xxxhdpi: 512x192 px"</string>
+    <string name="settings_advanced_updates_allow_metered_description">Laidžia Oru ir pataisymų atnaujinimus siųsti per mobiliuosius duomenis</string>
+    <string name="settings_advanced_updates_manager_prereleases_description">Ankstyva prieiga prie naujų „Oru“ versijų</string>
+    <string name="settings_advanced_updates_prerelease_warning_message">"Išankstinės „Oru“ versijos vis dar kuriamos ir gali būti nestabilios.
+
+Pataisoms tai įtakos neturi: įjunkite išankstines pataisas kiekvienam šaltiniui pataisų šaltinių sąraše"</string>
+    <string name="settings_appearance_app_icon_selector_description">Kaip „Oru“ atrodo pradiniame ekrane ir programų stalčiuje</string>
+    <string name="settings_auto_uninstall_warning_message">Jei „Android“ praneša apie parašo konfliktą automatinio diegimo per „Shizuku“ metu, „Oru“ pašalins esamą programą prieš įdiegdamas pataisytą APK</string>
+    <string name="settings_system_apk_download_helper_warning">APK gaunamas iš pagalbinės programos, todėl pasitikėkite tik jums žinomomis programomis. „Oru“ vis tiek prieš pataisymą patikrina kiekvieno failo paketą, versiją ir parašą</string>
+    <string name="settings_system_custom_file_picker_description">Naršykite saugyklą naudodami įtaisytąjį „Oru“ failų parinkiklį, o ne sistemos numatytąjį</string>
+    <string name="settings_system_export_manager_settings_fail">Nepavyko eksportuoti „Oru“ nustatymų: %s</string>
+    <string name="settings_system_export_manager_settings_success">„Oru“ nustatymai eksportuoti</string>
+    <string name="settings_system_import_manager_settings_description">Kuria atsargines kopijas ir atkuria jūsų „Oru“ nustatymus</string>
+    <string name="settings_system_import_manager_settings_fail">Nepavyko importuoti „Oru“ nustatymų: %s</string>
+    <string name="settings_system_import_manager_settings_mode_title">Importuoti Oru nustatymus</string>
+    <string name="settings_system_import_manager_settings_success">„Oru“ nustatymai importuoti</string>
+    <string name="settings_system_morphe_settings">„Oru“ nustatymai</string>
+    <string name="settings_system_process_runtime_heap_limit_ignored">Šis įrenginys nepaisė atminties limito paskutinio paleidimo metu, todėl pataisymas gali grįžti prie vykdymo „Oru“ viduje</string>
+    <string name="settings_system_signing_key_dialog_description">Kiekviena „Oru“ pataisyta programa yra pasirašyta šiuo raktu. Pasilikite kopiją: be jos pataisytas programas bus galima atnaujinti tik jas pašalinus</string>
+    <string name="settings_system_signing_key_missing">„Oru“ sukurs jį su pirmąja jūsų pataisa</string>
+    <string name="settings_system_storage_open_app_info_description">Tvarkykite arba išvalykite visus „Oru“ duomenis per sistemos nustatymus</string>
+    <string name="sources_dialog_community_notice_message">"Bendruomenės pataisų šaltinius kuria ir prižiūri jų autoriai. „Oru“ neperžiūri ir neverifikuoja trečiųjų šalių pataisų ir neatsako už jų turinį ar už tai, ką jos daro jūsų įrenginyje.
+
+Viskas, ką pridėsite iš šios svetainės, naudojama jūsų pačių rizika"</string>
+    <string name="sources_management_held_back_hint">Šis šaltinis sukėlė „Oru“ gedimą įkėlimo metu, todėl jis praleidžiamas. Atnaujinkite arba iš naujo importuokite jį, kad bandytumėte dar kartą</string>
+    <string name="sources_management_outdated_manager_badge">Atnaujinti „Oru“</string>
+    <string name="sources_management_outdated_manager_hint">Šis šaltinis sukurtas pataisymo įrankiui %1$s, o „Oru“ %2$s apima pataisymo įrankį %3$s. Atnaujinkite „Oru“, kad galėtumėte jį naudoti</string>
+    <string name="tour_prompt_desc">Ar norite greitai apžvelgti pagrindines „Oru“ funkcijas?</string>
+    <string name="uninstall_app_unverified">Palikta vietoje: „Oru“ negalėjo patikrinti, ar įdiegta programa yra ta kompiliacija, kurią jis pataisė</string>
+</resources>

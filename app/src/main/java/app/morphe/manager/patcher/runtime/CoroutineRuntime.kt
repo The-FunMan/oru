@@ -17,6 +17,8 @@ import app.morphe.manager.patcher.patch.PatchBundle
 import app.morphe.manager.patcher.patch.applyPatchOptions
 import app.morphe.manager.patcher.split.SplitApkPreparer
 import app.morphe.manager.patcher.worker.ProgressEventHandler
+import app.morphe.manager.patcher.worker.StageFractionHandler
+import app.morphe.manager.ui.model.StepId
 import app.morphe.manager.ui.model.State
 import app.morphe.manager.util.Options
 import app.morphe.manager.util.PatchSelection
@@ -39,7 +41,8 @@ class CoroutineRuntime(private val context: Context) : Runtime(context) {
         stripUnusedNativeLibs: Boolean,
         onMergedApkReady: (suspend (File) -> Unit)?,
         // This runtime patches in the app's own process and gets one attempt at it
-        onRestart: suspend () -> Unit
+        onRestart: suspend () -> Unit,
+        onStageFraction: StageFractionHandler,
     ): Int? {
         ResourceMonitor.startPolling(logger)
 
@@ -97,7 +100,8 @@ class CoroutineRuntime(private val context: Context) : Runtime(context) {
                     stripUnusedNativeLibs = stripUnusedNativeLibs,
                     onPatchCompleted = onPatchCompleted,
                     onPatchFailed = onPatchFailed,
-                    onProgress = onProgress
+                    onProgress = onProgress,
+                    onWriteFraction = { fraction -> onStageFraction(StepId.WRITE_PATCHED_APK, fraction) }
                 ).use { session ->
                     session.run(
                         File(outputFile),

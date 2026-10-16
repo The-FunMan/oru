@@ -1,4 +1,4 @@
-* text=auto
+* text=auto eol=lf
 
 # Ensure the Gradle wrapper uses LF endings so CI can execute it
 gradlew text eol=lf
@@ -8,3 +8,6 @@ app/src/main/assets/root/*.sh text eol=lf
 
 # Keep Windows batch wrappers with CRLF endings
 *.bat text eol=crlf
+
+# Workflow helper scripts run on the Linux runners and on the owner machine: keep LF endings
+.github/scripts/*.sh text eol=lf

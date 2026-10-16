@@ -30,7 +30,6 @@ import androidx.compose.material.icons.outlined.InstallMobile
 import androidx.compose.material.icons.outlined.Link
 import androidx.compose.material.icons.outlined.LinkOff
 import androidx.compose.material.icons.outlined.Source
-import androidx.compose.material.icons.outlined.SportsEsports
 import androidx.compose.material.icons.outlined.Update
 import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.*
@@ -287,7 +286,6 @@ fun PatchingSuccess(
     installActions: InstallResultActions,
     excludedPatches: List<String> = emptyList(),
     isExpertMode: Boolean = false,
-    showBackToGameHint: Boolean = false,
     onConfigureAppLinks: (() -> Unit)? = null,
     onHomeClick: () -> Unit,
     onLogsClick: () -> Unit,
@@ -335,7 +333,6 @@ fun PatchingSuccess(
             )
         },
         bottomBar = { horizontalPadding ->
-            BackToGameCallout(visible = showBackToGameHint && !status.failed)
             PatcherBottomActionBar(
                 horizontalPadding = horizontalPadding,
                 showCancelButton = false,
@@ -693,23 +690,6 @@ private fun ResultSummary(version: String?, patchCount: Int, sources: List<Patch
             )
         }
     }
-}
-
-/**
- * Callout pointing at the button that leads back to the mini-game this screen took the place of.
- * It sits on the button because the way back is not obvious from a label reading "Logs".
- */
-@Composable
-private fun BackToGameCallout(visible: Boolean) {
-    if (!visible) return
-
-    BottomActionCallout(
-        text = stringResource(R.string.patcher_back_to_game_hint, stringResource(R.string.logs)),
-        // Logs comes first in a bar of Logs, Home and Save
-        slot = 0,
-        slots = 3,
-        icon = Icons.Outlined.SportsEsports
-    )
 }
 
 /** A [Notice] explaining the result, easing in and out as [text] comes and goes. */

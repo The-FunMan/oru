@@ -26,6 +26,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.work.Data
 import androidx.work.ForegroundInfo
+import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import app.morphe.manager.BuildConfig
@@ -52,6 +53,7 @@ import app.morphe.manager.patcher.runtime.heapLimitMebibytes
 import app.morphe.manager.patcher.split.SplitApkPreparer
 import app.morphe.manager.ui.model.SelectedApp
 import app.morphe.manager.ui.model.State
+import app.morphe.manager.ui.model.StepId
 import app.morphe.manager.util.*
 import app.morphe.manager.util.PatchSelectionUtils.restrictTo
 import com.topjohnwu.superuser.Shell
@@ -66,6 +68,9 @@ import java.nio.file.StandardCopyOption
 import kotlin.time.measureTime
 
 typealias ProgressEventHandler = (name: String?, state: State?, message: String?) -> Unit
+
+/** Receives the fraction [0, 1] of a stage that reports its own progress, see [PatchRunProgress.onStageFraction]. */
+typealias StageFractionHandler = (stage: StepId, fraction: Float) -> Unit
 
 class PatcherWorker(
     context: Context,
@@ -104,7 +109,11 @@ class PatcherWorker(
          */
         val announceCompletion: Boolean = true,
         /** Apps already done and the queue total, null for a single run. */
-        val queuePosition: Pair<Int, Int>? = null
+        val queuePosition: Pair<Int, Int>? = null,
+        /** Fractions of the stages that report their own progress, see [StageFractionHandler]. */
+        val onStageFraction: StageFractionHandler = { _, _ -> },
+        /** The Oru Focus package key, carried to deep-link the completion notification back into Focus. */
+        val packageKey: String? = null,
     ) {
         val packageName get() = input.packageName
     }
@@ -139,6 +148,13 @@ class PatcherWorker(
         contentText: String? = null,
     ): Notification {
         val pendingIntent = mainActivityPendingIntent()
+        val cancelPendingIntent = WorkManager.getInstance(applicationContext).createCancelPendingIntent(id)
+        val cancelAction = Notification.Action.Builder(
+            Icon.createWithResource(applicationContext, R.drawable.ic_notification),
+            applicationContext.getString(R.string.oru_action_cancel),
+            cancelPendingIntent
+        ).build()
+
         return Notification.Builder(applicationContext, UpdateNotificationManager.CHANNEL_PATCHER)
             .setContentTitle(
                 stepName ?: applicationContext.getString(R.string.patcher_notification_title)
@@ -148,6 +164,7 @@ class PatcherWorker(
                     ?: queueLabel
                     ?: applicationContext.getText(R.string.patcher_notification_text)
             )
+            .addAction(cancelAction)
             .apply {
                 if (patchProgress != null) {
                     val (completed, total) = patchProgress
@@ -193,7 +210,10 @@ class PatcherWorker(
         // Android won't visually switch from indeterminate → determinate on the same notification
         // ID unless we first post a brief non-indeterminate update. Post the real notification
         // directly - the determinate bar replaces the spinning one cleanly this way
-        notificationManager.notify(NOTIFICATION_ID, createNotification(stepName, patchProgress, contentText))
+        try {
+            notificationManager.notify(NOTIFICATION_ID, createNotification(stepName, patchProgress, contentText))
+        } catch (_: SecurityException) {
+        }
     }
 
     private fun showCompletionNotification(
@@ -202,6 +222,7 @@ class PatcherWorker(
         playSound: Boolean,
         successSoundUri: String,
         errorSoundUri: String,
+        packageKey: String? = null,
     ) {
         if (playSound) CompletionSound.play(
             applicationContext,
@@ -214,12 +235,32 @@ class PatcherWorker(
         if (succeeded && autoInstallPending) return
         // Don't notify when the app is in the foreground - user sees the result on screen
         if (ManagerApplication.isInForeground) return
-        val notification = Notification.Builder(applicationContext, UpdateNotificationManager.CHANNEL_PATCHER)
-            .setContentTitle(
-                applicationContext.getString(
-                    if (succeeded) R.string.patcher_complete_title else R.string.patcher_failed_title
-                )
+
+        val targetKey = packageKey
+        val pendingIntent = if (targetKey != null) {
+            val intent = Intent(applicationContext, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                action = MainActivity.ACTION_OPEN_FOCUS
+                putExtra(MainActivity.EXTRA_FOCUS_PACKAGE, targetKey)
+            }
+            PendingIntent.getActivity(
+                applicationContext,
+                0,
+                intent,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
+        } else {
+            mainActivityPendingIntent()
+        }
+
+        val title = if (succeeded) {
+            applicationContext.getString(R.string.oru_notification_ready_to_install)
+        } else {
+            applicationContext.getString(R.string.patcher_failed_title)
+        }
+
+        val notification = Notification.Builder(applicationContext, UpdateNotificationManager.CHANNEL_PATCHER)
+            .setContentTitle(title)
             .setContentText(applicationContext.getText(R.string.patcher_notification_text))
             .setSmallIcon(
                 Icon.createWithResource(
@@ -232,11 +273,14 @@ class PatcherWorker(
                     if (succeeded) R.color.notification_success else R.color.notification_failure
                 )
             )
-            .setContentIntent(mainActivityPendingIntent())
+            .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .build()
-        applicationContext.getSystemService(NotificationManager::class.java)
-            .notify(COMPLETION_NOTIFICATION_ID, notification)
+        try {
+            applicationContext.getSystemService(NotificationManager::class.java)
+                .notify(COMPLETION_NOTIFICATION_ID, notification)
+        } catch (_: SecurityException) {
+        }
     }
 
     override suspend fun doWork(): Result {
@@ -484,7 +528,8 @@ class PatcherWorker(
                     ::updateProgress,
                     stripNativeLibs,
                     onMergedApkReady,
-                    onRestart
+                    onRestart,
+                    args.onStageFraction,
                 )
             } catch (e: Exception) {
                 val fallbackReason = when {
@@ -513,13 +558,16 @@ class PatcherWorker(
                     ::updateProgress,
                     stripNativeLibs,
                     onMergedApkReady,
-                    onRestart
+                    onRestart,
+                    args.onStageFraction,
                 )
             }
 
             updatePatcherNotification(stepName = signingApkLabel, patchProgress = null)
             val signTime = measureTime {
-                keystoreManager.sign(patchedApk)
+                keystoreManager.sign(patchedApk) { fraction ->
+                    args.onStageFraction(StepId.SIGN_PATCHED_APK, fraction)
+                }
                 withContext(Dispatchers.IO) {
                     Files.move(patchedApk.toPath(), File(args.output).toPath(), StandardCopyOption.REPLACE_EXISTING)
                 }
@@ -609,7 +657,8 @@ class PatcherWorker(
                 autoInstallPending,
                 completionSoundEnabled,
                 successSoundUri,
-                errorSoundUri
+                errorSoundUri,
+                args.packageKey,
             )
         }
     }

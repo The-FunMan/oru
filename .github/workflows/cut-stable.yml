@@ -1,0 +1,202 @@
+name: Cut stable release
+
+# Run from the Actions tab (web or mobile app) on the dev branch. It checks the version, makes sure CI passed on the
+# dev head, opens or reuses the pull request dev -> main, merges it with a merge commit, tags the merge commit
+# vX.Y.Z and starts release-stable.yml for that tag. release-stable.yml then waits for the release environment.
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Stable version X.Y.Z, without v and without -dev. Run it on the dev branch.'
+        required: true
+        type: string
+      dry_run:
+        description: 'Run every check and show the plan in the job summary. Opens, merges and tags nothing.'
+        required: true
+        type: boolean
+        default: true
+      notes:
+        description: 'Release notes (Markdown). Optional: without them the notes are the commits since the last stable tag.'
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cut-stable
+  cancel-in-progress: false
+
+jobs:
+  plan:
+    if: github.repository == 'The-FunMan/oru' && github.actor == github.repository_owner && github.ref == 'refs/heads/dev'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    outputs:
+      tag: ${{ steps.check.outputs.tag }}
+      version: ${{ steps.check.outputs.version }}
+      sha: ${{ steps.check.outputs.sha }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - id: check
+        env:
+          VERSION: ${{ inputs.version }}
+          NOTES: ${{ inputs.notes }}
+        run: .github/scripts/validate-stable-version.sh
+      - name: Plan
+        env:
+          TAG: ${{ steps.check.outputs.tag }}
+          SHA: ${{ steps.check.outputs.sha }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          NOTES: ${{ inputs.notes }}
+        run: |
+          {
+            echo "### Cut stable release plan"
+            echo
+            echo "- Tag: $TAG"
+            echo "- Commit on dev: $SHA"
+            echo "- Dry run: $DRY_RUN"
+            echo "- Release notes: $([ -n "${NOTES:-}" ] && echo "written to release-notes/$TAG.md" || echo "from the commit log")"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  notes:
+    if: >-
+      github.repository == 'The-FunMan/oru' && github.actor == github.repository_owner &&
+      github.ref == 'refs/heads/dev' && inputs.dry_run == false && inputs.notes != ''
+    needs: plan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write   # pushes the notes file to dev with the workflow token; the push starts no other workflow
+    outputs:
+      sha: ${{ steps.commit.outputs.sha }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: dev
+          persist-credentials: true
+      - id: commit
+        env:
+          TAG: ${{ needs.plan.outputs.tag }}
+          NOTES: ${{ inputs.notes }}
+        run: |
+          mkdir -p release-notes
+          printf '%s\n' "$NOTES" > "release-notes/$TAG.md"
+          git add "release-notes/$TAG.md"
+          # a re-run finds the file already committed and commits nothing
+          if ! git diff --cached --quiet; then
+            git -c user.name='github-actions[bot]' \
+              -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
+              commit -m "docs: release notes for $TAG"
+            git push origin HEAD:dev
+          fi
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+  ci:
+    if: >-
+      always() && github.repository == 'The-FunMan/oru' && github.actor == github.repository_owner &&
+      github.ref == 'refs/heads/dev' && needs.plan.result == 'success' &&
+      (needs.notes.result == 'success' || needs.notes.result == 'skipped')
+    needs: [plan, notes]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    permissions:
+      actions: write   # starts ci.yml on dev when it has not run for the commit
+      checks: read     # reads the check runs of the commit
+      contents: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      SHA: ${{ needs.notes.outputs.sha || needs.plan.outputs.sha }}
+      DRY_RUN: ${{ inputs.dry_run }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Required CI checks on the release commit
+        run: |
+          if [ "$DRY_RUN" = true ]; then
+            .github/scripts/ci-gate.sh "$SHA" plan
+          else
+            .github/scripts/ci-gate.sh "$SHA" dispatch
+          fi
+
+  cut:
+    if: >-
+      always() && github.repository == 'The-FunMan/oru' && github.actor == github.repository_owner &&
+      github.ref == 'refs/heads/dev' && needs.ci.result == 'success'
+    needs: [plan, notes, ci]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    environment: release   # the owner approves here, from the web or the phone, before anything is merged or tagged
+    permissions:
+      actions: write        # starts release-stable.yml
+      contents: write       # merges the pull request and creates the tag
+      pull-requests: write  # opens the pull request
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      VERSION: ${{ needs.plan.outputs.version }}
+      TAG: ${{ needs.plan.outputs.tag }}
+      SHA: ${{ needs.notes.outputs.sha || needs.plan.outputs.sha }}
+      DRY_RUN: ${{ inputs.dry_run }}
+    steps:
+      - name: Dry run stops here
+        if: inputs.dry_run == true
+        run: |
+          {
+            echo "### Dry run: nothing is opened, merged or tagged"
+            echo
+            echo "A real run would:"
+            echo "1. open or reuse the pull request dev -> main titled \"Release $TAG\""
+            echo "2. merge it with a merge commit when $SHA is the head, which needs the required checks to pass"
+            echo "3. create the tag $TAG on the merge commit"
+            echo "4. start release-stable.yml for $TAG, which waits for the release environment"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Open or reuse the pull request dev -> main
+        if: inputs.dry_run == false
+        run: |
+          # a re-run reuses the open pull request, or the merged one when the merge already happened
+          pr=$(gh pr list --base main --head dev --state open --json number --jq '.[0].number // empty')
+          if [ -z "$pr" ]; then
+            pr=$(gh pr list --base main --head dev --state merged --json number --jq '.[0].number // empty')
+          fi
+          if [ -z "$pr" ]; then
+            gh pr create --base main --head dev --title "Release $TAG" \
+              --body "Stable release $TAG. Opened and merged by the Cut stable release workflow."
+            pr=$(gh pr list --base main --head dev --state open --json number --jq '.[0].number')
+          fi
+          echo "PR_NUMBER=$pr" >> "$GITHUB_ENV"
+          echo "pull request #$pr"
+
+      - name: Merge with a merge commit
+        if: inputs.dry_run == false
+        run: |
+          state=$(gh pr view "$PR_NUMBER" --json state --jq '.state')
+          if [ "$state" != MERGED ]; then
+            gh pr merge "$PR_NUMBER" --merge --match-head-commit "$SHA"
+          fi
+          merge_sha=$(gh api "repos/$GH_REPO/pulls/$PR_NUMBER" --jq '.merge_commit_sha')
+          echo "MERGE_SHA=$merge_sha" >> "$GITHUB_ENV"
+
+      - name: Create the tag on the merge commit
+        if: inputs.dry_run == false
+        run: |
+          if gh api "repos/$GH_REPO/git/ref/tags/$TAG" >/dev/null 2>&1; then
+            echo "TAG_EXISTED=true" >> "$GITHUB_ENV"
+            echo "$TAG already exists, so this run does not start a release build"
+          else
+            gh api -X POST "repos/$GH_REPO/git/refs" -f "ref=refs/tags/$TAG" -f "sha=$MERGE_SHA" >/dev/null
+            echo "TAG_EXISTED=false" >> "$GITHUB_ENV"
+            echo "created $TAG on $MERGE_SHA"
+          fi
+
+      - name: Start the stable release build
+        if: inputs.dry_run == false && env.TAG_EXISTED == 'false'
+        run: gh workflow run release-stable.yml --ref main -f tag="$TAG"

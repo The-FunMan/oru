@@ -1,0 +1,17 @@
+{
+  "uniqueId": "com.mikepenz:aboutlibraries-compose-core",
+  "name": "AboutLibraries",
+  "developers": [
+    {
+      "name": "Mike Penz"
+    }
+  ],
+  "website": "https://github.com/mikepenz/AboutLibraries",
+  "scm": {
+    "connection": "scm:git:https://github.com/mikepenz/AboutLibraries.git",
+    "url": "https://github.com/mikepenz/AboutLibraries"
+  },
+  "licenses": [
+    "Apache-2.0"
+  ]
+}

@@ -547,8 +547,6 @@
     <string name="patcher_field_value_stripped">حذف‌شده</string>
     <!-- Value of "Libraries": every library was left in the patched APK -->
     <string name="patcher_field_value_kept">نگه‌داشته‌شده</string>
-    <string name="patcher_tab_logs">گزارش‌های پچر</string>
-    <string name="patcher_tab_game">بازی‌ها</string>
     <string name="patcher_logs_waiting">در انتظار خروجی گزارش…</string>
     <string name="patcher_logs_lost">خروجی گزارش پس از راه‌اندازی دوبارهٔ برنامه حفظ نمی‌شود</string>
     <string name="patcher_long_step_warning">این مرحله ممکن است کمی طول بکشد. لطفاً منتظر بمانید…</string>
@@ -576,7 +574,6 @@
     <string name="patcher_install_error_subtitle">برنامه را حذف و دوباره نصب کنید</string>
     <string name="patcher_ready_to_mount_subtitle">برای مانت، دکمهٔ زیر را بزنید</string>
     <string name="patcher_patches_excluded_for_installer">برای این روش نصب در دسترس نیست و کنار گذاشته شد: %s</string>
-    <string name="patcher_back_to_game_hint">برای بازگشت به بازی، %1$s را بزنید</string>
     <string name="patcher_storage_permission_dialog_title">دسترسی به مسیر ذخیره‌سازی ممکن نیست</string>
     <string name="patcher_incompatible_patcher_title">به‌روزرسانی لازم است</string>
     <string name="patcher_incompatible_patcher_description">منبع &lt;b&gt;%1$s&lt;/b&gt; به وصله‌کننده‌ی &lt;b&gt;%2$s&lt;/b&gt; یا جدیدتر نیاز دارد. برای استفاده از آن، Morphe را به‌روزرسانی کنید</string>
@@ -672,29 +669,6 @@
     <string name="package_name">نام بسته</string>
     <string name="failed_to_mount">مانت ناموفق بود: %s</string>
     <string name="failed_to_unmount">لغو مانت ناموفق بود: %s</string>
-    <!-- Patcher Screen - Mini-games -->
-    <string name="mini_game_score">امتیاز %s</string>
-    <string name="mini_game_best">بهترین %s</string>
-    <string name="mini_game_new_record">رکورد جدید!</string>
-    <string name="mini_game_game_over">بازی تمام شد</string>
-    <string name="mini_game_try_again">دوباره تلاش کنید</string>
-    <string name="mini_game_paused">متوقف‌شده</string>
-    <string name="mini_game_resume">ادامه</string>
-    <string name="mini_game_restart">شروع دوباره</string>
-    <string name="mini_game_change">انتخاب بازی دیگر</string>
-    <string name="mini_game_2048_picker_subtitle">مهره‌ها را بلغزانید تا ادغام شوند</string>
-    <string name="mini_game_flappy_picker_subtitle">برای پرواز از میان لوله‌ها ضربه بزنید</string>
-    <string name="mini_game_flappy_tap_to_start">برای پرواز ضربه بزنید</string>
-    <string name="mini_game_snake_picker_subtitle">غذا بخورید و به خودتان نزنید</string>
-    <string name="mini_game_snake_swipe_to_start">برای شروع بکشید</string>
-    <string name="mini_game_dino_picker_subtitle">برای پریدن از روی کاکتوس‌ها ضربه بزنید</string>
-    <string name="mini_game_dino_tap_to_start">برای دویدن ضربه بزنید</string>
-    <string name="mini_game_blocks_picker_subtitle">شکل‌ها را جا بده، خطوط را پاک کن</string>
-    <string name="mini_game_blocks_tap_to_start">برای چرخاندن ضربه بزنید، برای حرکت بکشید، برای رها کردن به پایین بکشید</string>
-    <string name="mini_game_bricks_picker_subtitle">توپ را به حرکت درآور، دیوار را پاک کن</string>
-    <string name="mini_game_bricks_tap_to_start">برای نشانه‌گیری بکشید، برای پرتاب ضربه بزنید</string>
-    <string name="mini_game_miner_picker_subtitle">برای باز کردن ضربه بزنید، برای علامت‌گذاری نگه دارید</string>
-    <string name="mini_game_pairs_picker_subtitle">کارت‌ها را برگردانید، جفت را پیدا کنید</string>
     <!-- Settings -->
     <string name="appearance">ظاهر</string>
     <string name="advanced">پیشرفته</string>

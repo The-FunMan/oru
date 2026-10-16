@@ -1,0 +1,25 @@
+[package]
+name = "native-packager"
+version = "0.1.0"
+edition = "2021"
+publish = false
+description = "Single-pass APK writer with APK Signature Scheme v2 signing"
+
+[dependencies]
+anyhow = "1"
+crc32fast = "1"
+flate2 = "1"
+memmap2 = "0.9"
+p256 = { version = "0.13", features = ["ecdsa", "pkcs8", "pem"] }
+pem = "3"
+rsa = { version = "0.9", features = ["pem"] }
+sha2 = { version = "0.10", features = ["oid"] }
+zip = { version = "2", default-features = false, features = ["deflate"] }
+
+
+[workspace]
+members = [".", "jni"]
+
+[profile.release]
+debug = 0
+strip = "symbols"

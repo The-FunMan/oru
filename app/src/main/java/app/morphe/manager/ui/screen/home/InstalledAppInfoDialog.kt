@@ -52,9 +52,11 @@ import androidx.compose.ui.util.lerp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import app.morphe.manager.BuildConfig
 import app.morphe.manager.R
 import app.morphe.manager.data.room.apps.installed.*
 import app.morphe.manager.domain.bundles.AppVersionStatus
+import app.morphe.manager.domain.repository.PatchBundleRepository.Companion.DEFAULT_SOURCE_UID
 import app.morphe.manager.domain.bundles.RemotePatchBundle
 import app.morphe.manager.domain.bundles.versionStatus
 import app.morphe.manager.domain.links.AppLinksStatus
@@ -105,7 +107,10 @@ fun resolveAppliedBundleAttribution(
 ): AppliedBundleAttribution = AppliedBundleAttribution(
     title = sourceTitle?.takeUnless { it.isBlank() }
         ?: bundleName?.takeUnless { it.isBlank() }
-        ?: recorded?.bundleName?.takeUnless { it.isBlank() }
+        // ORU: a name recorded for the default source is shown with the oru label
+        ?: recorded?.bundleName?.takeUnless { it.isBlank() }?.let { name ->
+            OruSourceNames.displayName(name, isDefault = recorded?.bundleUid == DEFAULT_SOURCE_UID)
+        }
         ?: fallbackTitle,
     version = storedVersion?.takeUnless { it.isBlank() }
         ?: recorded?.bundleVersion?.takeUnless { it.isBlank() }
@@ -241,7 +246,8 @@ fun InstalledAppInfoDialog(
 
     // Export file name
     val exportFileName = remember(installedApp?.currentPackageName, appInfo?.versionName, appliedBundles) {
-        val app = installedApp ?: return@remember "morphe_export.apk"
+        // ORU: the default save name carries the flavour's brand prefix
+        val app = installedApp ?: return@remember OruFileNames.patchedApk(BuildConfig.ORU_UX)
         ExportNameFormatter.format(null, PatchedAppExportData(
             appName = appInfo?.applicationInfo?.loadLabel(context.packageManager)?.toString(),
             packageName = app.currentPackageName,
@@ -276,7 +282,6 @@ fun InstalledAppInfoDialog(
         } else if (hadMountOperation) {
             hadMountOperation = false
             viewModel.refreshCurrentAppState()
-            installedApp?.currentPackageName?.let(homeViewModel.apps::notifyAppStateChanged)
         }
     }
 
@@ -570,12 +575,12 @@ fun InstalledAppInfoDialog(
                     )
                 }
             }
-            // Installs the saved patched build the way the primary installer does, warning first
-            // when that installer and the record differ on mounting
+            // Installs the saved patched build. A mount build is always mounted, while any other
+            // one warns first when the primary installer is mount
             val installSavedCopy: () -> Unit = {
                 viewModel.savedApkFile()?.let { savedFile ->
                     val installAction = {
-                        if (viewModel.primaryInstallerIsMount && installedApp.supportsMount) {
+                        if (installedApp.reinstallsByMount(viewModel.primaryInstallerIsMount)) {
                             reinstallSavedMount()
                         } else {
                             // The install result handler records the install type once it lands
@@ -586,7 +591,7 @@ fun InstalledAppInfoDialog(
                             )
                         }
                     }
-                    if (viewModel.primaryInstallerIsMount != (installedApp.installType == InstallType.MOUNT)) {
+                    if (viewModel.primaryInstallerIsMount && installedApp.installType != InstallType.MOUNT) {
                         pendingMountWarningAction.value = installAction
                         showMountWarningDialog.value = true
                     } else {

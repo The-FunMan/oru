@@ -27,6 +27,9 @@ import app.morphe.manager.domain.installer.InstallResult
 import app.morphe.manager.domain.installer.InstallerManager
 import app.morphe.manager.domain.installer.SessionInstaller
 import app.morphe.manager.domain.manager.PreferencesManager
+import app.morphe.manager.domain.manager.oruApkName
+import app.morphe.manager.domain.manager.parseSha256Sums
+import app.morphe.manager.domain.manager.signersMatch
 import app.morphe.manager.domain.repository.ManagerUpdateRepository
 import app.morphe.manager.network.api.MorpheAPI
 import app.morphe.manager.network.dto.MorpheAsset
@@ -54,6 +57,7 @@ class UpdateViewModel : ViewModel(), KoinComponent {
     private val fs: Filesystem by inject()
     private val prefs: PreferencesManager by inject()
     private val installerManager: InstallerManager by inject()
+    private val pm: PM by inject()
 
     private var pendingExternalInstall: InstallerManager.InstallPlan.External? = null
     private var externalInstallTimeoutJob: Job? = null
@@ -123,7 +127,8 @@ class UpdateViewModel : ViewModel(), KoinComponent {
     private fun resolveUpdate() = viewModelScope.launch {
         isCheckingForUpdate = true
         try {
-            uiSafe(app, R.string.failed_to_download_update, "Failed to download Morphe Manager") {
+            // ORU: the log line names the flavour's manager (the toast is a resource)
+            uiSafe(app, R.string.failed_to_download_update, "Failed to download ${if (BuildConfig.ORU_UX) "Oru" else "Morphe"} Manager") {
                 releaseInfo = managerUpdateRepository.getOrRefresh()
             }
         } finally {
@@ -180,6 +185,13 @@ class UpdateViewModel : ViewModel(), KoinComponent {
                     )
                 }
                 requireApkArchive(location)
+                // A Oru download is installed only once it checks out, see verifyOruDownload
+                val problem = if (BuildConfig.UPSTREAM_SERVICES) null else verifyOruDownload(release, location)
+                if (problem != null) {
+                    location.delete()
+                    failInstall(problem)
+                    return@uiSafe
+                }
                 installUpdate().join()
             } catch (error: Exception) {
                 resetToDownload()
@@ -199,6 +211,46 @@ class UpdateViewModel : ViewModel(), KoinComponent {
         val size = runCatching { location.length() }.getOrDefault(0L)
         runCatching { location.delete() }
         throw IOException("The downloaded update is not an APK (size=$size)")
+    }
+
+    /**
+     * Checks a Oru download before it reaches the installer. The file must match the SHA-256 that the release's
+     * checksum list gives for it, name this app as its package, and be signed by exactly the certificates the
+     * installed app is signed with. Returns the reason to refuse the file, or null when it passes. Fails closed:
+     * a list that cannot be fetched or read refuses the file.
+     */
+    private suspend fun verifyOruDownload(release: MorpheAsset, apk: File): String? = withContext(Dispatchers.IO) {
+        val checksumsUrl = release.checksumsUrl
+            ?: return@withContext app.getString(R.string.oru_update_error_no_checksums)
+        val checksumsFile = fs.tempDir.resolve("updater-checksums.txt")
+        try {
+            assetDownloader.downloadToFile(downloadUrl = checksumsUrl, saveLocation = checksumsFile)
+            val sums = parseSha256Sums(checksumsFile.readText())
+                ?: return@withContext app.getString(R.string.oru_update_error_checksums_unreadable)
+            val expected = sums[oruApkName(release.version)]
+                ?: return@withContext app.getString(R.string.oru_update_error_checksum_missing)
+            if (apk.sha256OrNull() != expected) {
+                return@withContext app.getString(R.string.oru_update_error_checksum_mismatch)
+            }
+            if (pm.getPackageInfo(apk)?.packageName != app.packageName) {
+                return@withContext app.getString(R.string.oru_update_error_package_mismatch)
+            }
+            if (!signersMatch(
+                    archive = pm.getApkFileSignatureHashes(apk),
+                    installed = pm.getInstalledSignatureHashes(app.packageName),
+                )
+            ) {
+                return@withContext app.getString(R.string.oru_update_error_signer_mismatch)
+            }
+            null
+        } catch (error: CancellationException) {
+            throw error
+        } catch (error: Exception) {
+            Log.e(tag, "Could not verify the Oru download", error)
+            app.getString(R.string.oru_update_error_verify_failed)
+        } finally {
+            checksumsFile.delete()
+        }
     }
 
     fun installUpdate() = viewModelScope.launch {

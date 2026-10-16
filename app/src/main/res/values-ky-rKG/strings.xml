@@ -79,7 +79,6 @@
     <!-- Expert patcher Screen -->
     <!-- "%1$s" is the share of the memory limit the patcher is using, already formatted as a percentage. "%2$s" is that limit in megabytes. -->
     <!-- Patcher Screen - Other hidden strings -->
-    <!-- Patcher Screen - Mini-games -->
     <!-- Settings -->
     <!-- Settings - Appearance Tab - Background animation -->
     <string name="settings_appearance_background_none">Эч бири</string>

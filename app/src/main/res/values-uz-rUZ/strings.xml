@@ -547,8 +547,6 @@ Eng yaxshi natijalar uchun ushbu ilova to‘liq &lt;b&gt;APK&lt;/b&gt;ni patchla
     <string name="patcher_field_value_stripped">olib tashlangan</string>
     <!-- Value of "Libraries": every library was left in the patched APK -->
     <string name="patcher_field_value_kept">saqlangan</string>
-    <string name="patcher_tab_logs">Patcher jurnallari</string>
-    <string name="patcher_tab_game">Kechirdi</string>
     <string name="patcher_logs_waiting">Jurnal chiqishini kutish…</string>
     <string name="patcher_logs_lost">Jurnal chiqishi ilovani qayta ishga tushirgandan keyin saqlanmaydi</string>
     <string name="patcher_long_step_warning">Kutib o‘tiring, bu biroz vaqt olishi mumkin…</string>
@@ -575,7 +573,6 @@ O‘rnatish barcha ilova ma'lumotlarini o‘chiradi"</string>
     <string name="patcher_install_error_subtitle">Qayta o‘chirishni va o‘rnatishni urinib ko‘ring</string>
     <string name="patcher_ready_to_mount_subtitle">Ulanish uchun quyidagi tugmani bosing</string>
     <string name="patcher_patches_excluded_for_installer">Ushbu oʻrnatish usuli uchun mavjud emas va istisno qilingan: %s</string>
-    <string name="patcher_back_to_game_hint">O\'yiningizga qaytish uchun %1$s ni bosing</string>
     <string name="patcher_storage_permission_dialog_title">Haqida</string>
     <string name="patcher_incompatible_patcher_title">Yangilash talab qilinadi</string>
     <string name="patcher_incompatible_patcher_description">&lt;b&gt;%1$s&lt;/b&gt; manbasi &lt;b&gt;%2$s&lt;/b&gt; yoki undan yangiroq patcher’ni talab qiladi. Undan foydalanish uchun Morphe’ni yangilang</string>
@@ -671,29 +668,6 @@ O‘rnatish barcha ilova ma'lumotlarini o‘chiradi"</string>
     <string name="package_name">Paket nomi</string>
     <string name="failed_to_mount">Ulanishda xatolik: %s</string>
     <string name="failed_to_unmount">Ulanishi bekor qilinishida xatolik: %s</string>
-    <!-- Patcher Screen - Mini-games -->
-    <string name="mini_game_score">Hisob %s</string>
-    <string name="mini_game_best">Eng yaxshisi %s</string>
-    <string name="mini_game_new_record">Yangi rekord!</string>
-    <string name="mini_game_game_over">O‘yin tugadi</string>
-    <string name="mini_game_try_again">Qayta urinish</string>
-    <string name="mini_game_paused">To‘xtatildi</string>
-    <string name="mini_game_resume">Davom etish</string>
-    <string name="mini_game_restart">Qaytadan boshlash</string>
-    <string name="mini_game_change">Boshqa o‘yin tanlash</string>
-    <string name="mini_game_2048_picker_subtitle">Agar ustiga siljitmang</string>
-    <string name="mini_game_flappy_picker_subtitle">Kaktusning ustidan o‘tish uchun bosing</string>
-    <string name="mini_game_flappy_tap_to_start">Yugurish uchun bosing</string>
-    <string name="mini_game_snake_picker_subtitle">Yangi rekord!</string>
-    <string name="mini_game_snake_swipe_to_start">O‘yinlar</string>
-    <string name="mini_game_dino_picker_subtitle">Kaktuslarning ustidan sakrab o‘tish uchun teging</string>
-    <string name="mini_game_dino_tap_to_start">O‘rnatilgan ilovalarni tanlang</string>
-    <string name="mini_game_blocks_picker_subtitle">Shakllarni moslang, qatorlarni tozalang</string>
-    <string name="mini_game_blocks_tap_to_start">Aylantirish uchun bosing, harakatlantirish uchun suring, tushirish uchun pastga suring</string>
-    <string name="mini_game_bricks_picker_subtitle">To‘pni sakratib, devorni tozalang</string>
-    <string name="mini_game_bricks_tap_to_start">Nishonga olish uchun suring, uchirish uchun bosing</string>
-    <string name="mini_game_miner_picker_subtitle">Ochish uchun bosing, bayroq qo‘yish uchun ushlab turing</string>
-    <string name="mini_game_pairs_picker_subtitle">Kartalarni aylantiring, juftini toping</string>
     <!-- Settings -->
     <string name="appearance">Ko‘rinish</string>
     <string name="advanced">Qo‘shimcha</string>

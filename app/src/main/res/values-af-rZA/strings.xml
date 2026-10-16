@@ -563,8 +563,6 @@ Vir die beste resultate beveel hierdie app aan om 'n &lt;b&gt;volle APK&lt;/b&gt
     <string name="patcher_field_value_stripped">gestroop</string>
     <!-- Value of "Libraries": every library was left in the patched APK -->
     <string name="patcher_field_value_kept">behou</string>
-    <string name="patcher_tab_logs">Patcher-logboeke</string>
-    <string name="patcher_tab_game">Speletjies</string>
     <string name="patcher_logs_waiting">Wag vir log-uitvoer…</string>
     <string name="patcher_logs_lost">Log-uitvoer word nie tussen app-herstarte gehou nie</string>
     <string name="patcher_long_step_warning">Hierdie stap kan \'n rukkie neem. Wag asseblief…</string>
@@ -594,7 +592,6 @@ Deïnstallering sal alle toepassingsdata permanent uitwis."</string>
     <string name="patcher_install_error_subtitle">Probeer deïnstalleer en weer installeer</string>
     <string name="patcher_ready_to_mount_subtitle">Druk op die knoppie hieronder om te monteer</string>
     <string name="patcher_patches_excluded_for_installer">Nie beskikbaar vir hierdie installasiemethode en uitgesluit: %s</string>
-    <string name="patcher_back_to_game_hint">Tik op %1$s om terug te gaan na jou speletjie</string>
     <string name="patcher_storage_permission_dialog_title">Kan nie toegang tot stoorpad verkry nie</string>
     <string name="patcher_incompatible_patcher_title">Opdatering vereis</string>
     <string name="patcher_incompatible_patcher_description">Die bron &lt;b&gt;%1$s&lt;/b&gt; vereis patcher &lt;b&gt;%2$s&lt;/b&gt; of nuwer. Dateer Morphe op om dit te gebruik</string>
@@ -691,29 +688,6 @@ Deïnstallering sal alle toepassingsdata permanent uitwis."</string>
     <string name="package_name">Pakketnaam</string>
     <string name="failed_to_mount">Kon nie monteer nie: %s</string>
     <string name="failed_to_unmount">Kon nie dedemonteer nie: %s</string>
-    <!-- Patcher Screen - Mini-games -->
-    <string name="mini_game_score">Punt %s</string>
-    <string name="mini_game_best">Beste %s</string>
-    <string name="mini_game_new_record">Nuwe rekord!</string>
-    <string name="mini_game_game_over">Speletjie Einde</string>
-    <string name="mini_game_try_again">Probeer weer</string>
-    <string name="mini_game_paused">Pauze</string>
-    <string name="mini_game_resume">Gaan voort</string>
-    <string name="mini_game_restart">Begin oor</string>
-    <string name="mini_game_change">Kies \'n ander speletjie</string>
-    <string name="mini_game_2048_picker_subtitle">Skuif teëls om te saamsmelt</string>
-    <string name="mini_game_flappy_picker_subtitle">Tik om deur die pype te vlieg</string>
-    <string name="mini_game_flappy_tap_to_start">Tik om te vlieg</string>
-    <string name="mini_game_snake_picker_subtitle">Eet kos, moenie jouself tref nie</string>
-    <string name="mini_game_snake_swipe_to_start">Swipe om te begin</string>
-    <string name="mini_game_dino_picker_subtitle">Tik om oor kaktusse te spring</string>
-    <string name="mini_game_dino_tap_to_start">Tik om te hardloop</string>
-    <string name="mini_game_blocks_picker_subtitle">Pas die vorms, maak lyne skoon</string>
-    <string name="mini_game_blocks_tap_to_start">Tik om te draai, vee om te skuif, vee af om te laat val</string>
-    <string name="mini_game_bricks_picker_subtitle">Bons die bal, breek die muur</string>
-    <string name="mini_game_bricks_tap_to_start">Sleep om te mik, tik om te lanseer</string>
-    <string name="mini_game_miner_picker_subtitle">Tik om oop te maak, hou om te vlag</string>
-    <string name="mini_game_pairs_picker_subtitle">Draai kaarte om, vind die paar</string>
     <!-- Settings -->
     <string name="appearance">Voorkoms</string>
     <string name="advanced">Gevorderd</string>

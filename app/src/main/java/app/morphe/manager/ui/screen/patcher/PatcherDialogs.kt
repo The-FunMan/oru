@@ -55,6 +55,10 @@ import app.morphe.manager.util.requestIgnoreBatteryOptimizations
  */
 private const val ErrorInfoLabelMaxFraction = 0.45f
 
+// ORU: the storage hint's folder path is written with the upstream package name. That name is
+// swapped for the package of this build, which is the folder the app really uses.
+private const val UPSTREAM_PACKAGE_NAME = "app.morphe.manager"
+
 /**
  * Shown when a patch bundle requires a newer version of morphe-patcher than the one
  * bundled in this version of the manager. The update button hands over to the in-app
@@ -385,7 +389,8 @@ fun UnusableOptionPathsDialog(
             // Show hint so user knows the workaround even if they dismiss
             if (storageAccessCanHelp) {
                 Notice(
-                    text = stringResource(R.string.patcher_storage_permission_hint),
+                    text = stringResource(R.string.patcher_storage_permission_hint)
+                        .replace(UPSTREAM_PACKAGE_NAME, context.packageName),
                     tone = SemanticTone.Warning,
                     icon = Icons.Outlined.FolderOff
                 )

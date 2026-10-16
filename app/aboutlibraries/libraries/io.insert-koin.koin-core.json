@@ -1,0 +1,17 @@
+{
+  "uniqueId": "io.insert-koin:koin-core",
+  "name": "Koin Core",
+  "developers": [
+    {
+      "name": "Koin contributors"
+    }
+  ],
+  "website": "https://insert-koin.io",
+  "scm": {
+    "connection": "scm:git:https://github.com/InsertKoinIO/koin.git",
+    "url": "https://github.com/InsertKoinIO/koin"
+  },
+  "licenses": [
+    "Apache-2.0"
+  ]
+}

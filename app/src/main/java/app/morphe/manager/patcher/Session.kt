@@ -17,9 +17,11 @@ import app.morphe.manager.patcher.util.NativeLibs
 import app.morphe.manager.ui.model.State
 import app.morphe.patcher.Patcher
 import app.morphe.patcher.PatcherConfig
-import app.morphe.patcher.apk.ApkUtils.applyTo
+import app.morphe.patcher.WriteProgressListener
+import app.morphe.patcher.apk.ApkUtils.applyToWithProgress
 import app.morphe.patcher.patch.Patch
 import app.morphe.patcher.patch.PatchResult
+import app.morphe.patcher.util.PhaseProfiler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.Closeable
@@ -40,7 +42,9 @@ class Session(
     stripUnusedNativeLibs: Boolean,
     private val onPatchCompleted: suspend (String) -> Unit,
     private val onPatchFailed: (String) -> Unit,
-    private val onProgress: (name: String?, state: State?, message: String?) -> Unit
+    private val onProgress: (name: String?, state: State?, message: String?) -> Unit,
+    /** Fraction [0, 1] of the write stage done, at each phase the patcher finishes while writing. */
+    private val onWriteFraction: (Float) -> Unit = {}
 ) : Closeable {
     private fun updateProgress(name: String? = null, state: State? = null, message: String? = null) =
         onProgress(name, state, message)
@@ -51,6 +55,10 @@ class Session(
     // when it starts, and not the cache root to avoid colliding with the other caches there
     private val fileWorkspace =
         androidContext.cacheDir.resolve("patch-workspace").also { it.mkdirs() }
+
+    init {
+        NativeLibrary.configure(androidContext)
+    }
 
     private val patcher = Patcher(
         PatcherConfig(
@@ -119,6 +127,7 @@ class Session(
         }
 
         logger.info("Writing patched files...")
+        patcher.writeProgress = WriteProgressListener { fraction -> onWriteFraction(fraction) }
         val (result, compileTime) = withContext(Dispatchers.Default) {
             // patcher.get() writes dex files, then encodes resources, so run on default pool
             // instead of main thread.
@@ -134,13 +143,15 @@ class Session(
 
             withContext(Dispatchers.Default) {
                 // Run on default pool instead of I/O since we're processing large files in our own code
-                result.applyTo(patched)
+                result.applyToWithProgress(patched, patcher.writeProgress)
             }
 
             withContext(Dispatchers.IO) {
                 Files.move(patched.toPath(), output.toPath(), StandardCopyOption.REPLACE_EXISTING)
             }
         }
+        PhaseProfiler.mark("write and align")
+        PhaseProfiler.report()
 
         logger.info(
             "Patched apk saved to $output (patch=${patchTime.inWholeMilliseconds}ms " +

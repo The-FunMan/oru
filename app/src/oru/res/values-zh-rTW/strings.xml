@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="adaptive_icon_guide_png_body">透明背景上的標誌效果最佳，背景顏色請在下方挑選。沒有透明度的圖片反而會填滿整個圖示，而主題與通知圖示就會保留 Oru 標誌。</string>
+    <string name="adaptive_icon_no_transparency_warning">此影像沒有透明像素，因此主題和通知圖示會保留 Oru 標誌</string>
+    <string name="battery_optimization_dialog_description">部份裝置可能在應用程式縮小時停止修補程式。允許 Oru 在沒有電池限制的情況下執行，以確保修補程式可靠完成。</string>
+    <string name="deep_link_add_source_message">確定要將這個修補來源新增至 Oru 嗎？</string>
+    <string name="external_batch_patch_description">%s 想要 Oru 修補和安裝應用程式</string>
+    <string name="home_apk_helper_description">Oru 會要求下方的輔助應用程式下載原始 APK 並交回檔案</string>
+    <string name="home_apk_helper_installed_unavailable">Oru 無法使用已安裝的應用程式</string>
+    <string name="home_apk_helper_warning">僅在您信任此輔助應用程式時才繼續。Oru 在修補之前會檢查其接收到的套件、版本和簽章</string>
+    <string name="home_apk_helper_warning_unverified">僅在您信任此輔助應用程式時才繼續。Oru 無法驗證此 APK 的簽章，因此無法偵測到已修改的檔案</string>
+    <string name="home_app_filter_not_patched_description">您尚未在 Oru 中修補的應用程式</string>
+    <string name="home_app_filter_patched_description">您已使用 Oru 修補或儲存的應用程式</string>
+    <string name="home_app_filter_uninstalled_description">已使用 Oru 修補但已不在這部裝置上的應用程式</string>
+    <string name="home_app_info_app_deleted_description">此應用程式已在 Oru 外部被解除安裝。重新修補以還原功能</string>
+    <string name="home_app_info_install_unverified">Oru 無法確認已安裝的應用程式是其修補過的版本。請從已儲存的 APK 重新修補或重新安裝，以還原其操作。</string>
+    <string name="home_app_info_not_patched_description">已安裝此應用程式的未修補版本。Oru 仍保留其先前的修補記錄。</string>
+    <string name="home_download_instructions_download_button_toast_6">您現在是 Oru 官方按鈕測試員 🏅</string>
+    <string name="home_download_instructions_step2_search_note">Oru 無法為這些網站擔保。請略過那些提供自家應用程式商店而不是 APK 檔案的網站</string>
+    <string name="home_download_instructions_step4">下載完成後，回到 Oru</string>
+    <string name="home_download_instructions_step4_mount">安裝原始 APK 後，回到 Oru</string>
+    <string name="home_held_back_title">修補檔來源導致 Oru 當機</string>
+    <string name="home_outdated_manager_title">Oru 要更新</string>
+    <string name="home_update_available">有可用的 Oru 更新</string>
+    <string name="installer_shizuku_error_permission">缺少 Shizuku 權限。請授予 Oru 權限並重試</string>
+    <string name="installer_status_shizuku_permission">請從 Shizuku 應用程式授予 Oru 權限</string>
+    <string name="installing_manager_update_hint">Oru 將關閉以完成更新</string>
+    <string name="launch_app_unverified">Oru 無法驗證安裝的應用程式是它所修補的版本。</string>
+    <string name="notification_bundle_update_text_unversioned">輕觸以開啟 Oru 並更新</string>
+    <string name="notification_channel_manager_updates">Oru 更新</string>
+    <string name="notification_channel_manager_updates_description">關於新 Oru 版本的通知</string>
+    <string name="notification_channel_patcher_description">在 Oru 於背景修補應用程式時顯示</string>
+    <string name="notification_mount_replaced_text">v%1$s 取代了已修補的 v%2$s。開啟 Oru 去進行還原</string>
+    <string name="notification_permission_dialog_description">Oru 需要通知權限才能在背景有可用更新時提醒您</string>
+    <string name="onboarding_settings_desc">自訂 Oru：外觀、進階選項和系統工具</string>
+    <string name="patcher_incompatible_patcher_description">來源 &lt;b&gt;%1$s&lt;/b&gt; 需要修補程式 &lt;b&gt;%2$s&lt;/b&gt; 或更新版本。更新 Oru 以使用它</string>
+    <string name="patcher_installed_conflict_body">"Oru 會使用其自己的憑證來簽署已修補的應用程式，這與原始憑證不同。Android 要求在安裝已修補的應用程式之前移除現有版本。
+
+解除安裝將永久刪除所有應用程式資料"</string>
+    <string name="patcher_storage_permission_description_api30">一個或多個修補選項指向 Oru 無法讀取的路徑。授予儲存空間存取權限並輕觸按鈕，修補將自動開始</string>
+    <string name="patcher_storage_permission_hint">提示：將檔案移至 /Android/data/app.oru.manager/files/ - 不需要額外權限</string>
+    <string name="root_mount_module_unmount_warning">若 KernelSU 已開啟「預設卸載模組」功能，請開啟 KernelSU &gt; 超級使用者  &gt; 找到您掛載的應用程式  &gt; 設定檔  &gt; 自訂，並將「卸載模組」關閉。否則，即使 Oru 顯示已掛載，修補後的 APK 仍可能無法生效。</string>
+    <string name="settings_advanced_expert_mode_description">啟用複雜的 Oru 修補設定和自訂選項</string>
+    <string name="settings_advanced_github_pat_export_include_supporting">將此 PAT 新增至匯出的 Oru 設定</string>
+    <string name="settings_advanced_patch_options_custom_branding_custom_icon_instruction">"\"包含要作為自訂圖示使用的影像的資料夾。
+
+資料夾必須包含下列一或多個資料夾，取決於裝置的 DPI：
+- mipmap-mdpi
+- mipmap-hdpi
+- mipmap-xhdpi
+- mipmap-xxhdpi
+- mipmap-xxxhdpi
+
+每個資料夾必須包含下列所有檔案：
+morphe_adaptive_background_custom.png
+morphe_adaptive_foreground_custom.png
+
+影像尺寸必須如下：
+- mipmap-mdpi: 108x108 px
+- mipmap-hdpi: 162x162 px
+- mipmap-xhdpi: 216x216 px
+- mipmap-xxhdpi: 324x324 px
+- mipmap-xxxhdpi: 432x432 px
+
+可選，路徑可包含帶有單色圖示檔案的 'drawable' 資料夾：
+morphe_adaptive_monochrome_custom.xml
+
+可選，路徑可包含以下格式之一的通知圖示：
+- 在 'drawable' 中的 XML 向量圖形：
+  morphe_notification_icon_custom.xml
+- 在 'drawable-dpi' 資料夾中的 PNG 點陣影像：
+  drawable-mdpi/morphe_notification_icon_custom.png (24x24 px)
+  drawable-hdpi/morphe_notification_icon_custom.png (36x36 px)
+  drawable-xhdpi/morphe_notification_icon_custom.png (48x48 px)
+  drawable-xxhdpi/morphe_notification_icon_custom.png (72x72 px)
+  drawable-xxxhdpi/morphe_notification_icon_custom.png (96x96 px)\""</string>
+    <string name="settings_advanced_patch_options_custom_header_instruction">"\"包含要作為自訂標頭標誌使用的影像的資料夾。
+
+資料夾必須包含下列一或多個資料夾，取決於裝置的 DPI：
+- drawable-hdpi
+- drawable-xhdpi
+- drawable-xxhdpi
+- drawable-xxxhdpi
+
+每個資料夾必須包含下列所有檔案：
+morphe_header_custom_light.png
+morphe_header_custom_dark.png
+
+影像尺寸必須如下：
+- drawable-hdpi: 194x72 px
+- drawable-xhdpi: 258x96 px
+- drawable-xxhdpi: 387x144 px
+- drawable-xxxhdpi: 512x192 px\""</string>
+    <string name="settings_advanced_updates_allow_metered_description">允許 Oru 和修補更新在使用行動數據時進行下載</string>
+    <string name="settings_advanced_updates_manager_prereleases_description">搶先取得新版 Oru</string>
+    <string name="settings_advanced_updates_prerelease_warning_message">"Oru 的預發佈版本仍在開發中，可能不穩定。
+
+修補程式不受影響：請在修補程式來源清單中為每個來源啟用預發佈修補程式"</string>
+    <string name="settings_appearance_app_icon_selector_description">Oru 在您的主畫面與應用程式抽屜中的外觀</string>
+    <string name="settings_auto_uninstall_warning_message">若 Android 在 Shizuku 自動安裝期間回報簽名衝突，Oru 將在安裝已修補的 APK 之前先解除安裝現有的應用程式</string>
+    <string name="settings_system_apk_download_helper_warning">APK 來自輔助應用程式，因此請只信任你認識的應用程式。Oru 仍會在修補前檢查每個檔案的套件、版本與簽章。</string>
+    <string name="settings_system_custom_file_picker_description">改用 Oru 內建檔案選擇器，而不是系統預設值</string>
+    <string name="settings_system_export_manager_settings_fail">無法匯出 Oru 設定：%s</string>
+    <string name="settings_system_export_manager_settings_success">已匯出 Oru 設定</string>
+    <string name="settings_system_import_manager_settings_description">備份和還原您的 Oru 設定</string>
+    <string name="settings_system_import_manager_settings_fail">無法匯入 Oru 設定：%s</string>
+    <string name="settings_system_import_manager_settings_mode_title">匯入 Oru 設定</string>
+    <string name="settings_system_import_manager_settings_success">已匯入 Oru 設定</string>
+    <string name="settings_system_morphe_settings">Oru 設定</string>
+    <string name="settings_system_process_runtime_heap_limit_ignored">此裝置在上次執行時忽略了記憶體限制，因此修補可能會改為在 Oru 內執行。</string>
+    <string name="settings_system_signing_key_dialog_description">Oru 所修補的每個應用程式都會以這把金鑰簽署。請保留一份副本：少了它，修補過的應用程式只能先解除安裝後才能更新。</string>
+    <string name="settings_system_signing_key_missing">Oru 會在您首次修補時產生一把金鑰</string>
+    <string name="settings_system_storage_open_app_info_description">透過系統設定管理或清除所有 Oru 資料</string>
+    <string name="sources_dialog_community_notice_message">"社群修補程式來源由其各自的作者製作和維護。Oru 不會審查或驗證第三方修補程式，亦不對其內容或它們在您裝置上的行為負責。
+
+您從本網站新增的任何內容均由您自行承擔風險"</string>
+    <string name="sources_management_held_back_hint">此來源在載入時導致 Oru 當機，因此已被略過。請更新或重新匯入再試一次。</string>
+    <string name="sources_management_outdated_manager_badge">更新 Oru</string>
+    <string name="sources_management_outdated_manager_hint">此來源是為修補程式 %1$s 建置的，但 Oru %2$s 包含修補程式 %3$s。更新 Oru 以使用它。</string>
+    <string name="tour_prompt_desc">想要快速導覽 Oru 的主要功能嗎？</string>
+    <string name="uninstall_app_unverified">保留在原地：Oru 無法驗證安裝的應用程式是它所修補的版本。</string>
+</resources>

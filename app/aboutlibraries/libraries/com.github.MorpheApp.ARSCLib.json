@@ -1,0 +1,17 @@
+{
+  "uniqueId": "com.github.MorpheApp:ARSCLib",
+  "name": "ARSCLib",
+  "developers": [
+    {
+      "name": "REAndroid"
+    }
+  ],
+  "website": "https://github.com/MorpheApp/ARSCLib",
+  "scm": {
+    "connection": "scm:git:https://github.com/MorpheApp/ARSCLib.git",
+    "url": "https://github.com/MorpheApp/ARSCLib"
+  },
+  "licenses": [
+    "Apache-2.0"
+  ]
+}

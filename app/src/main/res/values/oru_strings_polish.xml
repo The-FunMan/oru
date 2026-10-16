@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Short labels for the Focus dock. A dock button is one line, and the secondary buttons share a row, so
+  these are the labels that fit half a row at font scale 1.3. English only (decision D6).
+-->
+<resources>
+    <string name="oru_focus_dock_find_short">Find APK</string>
+    <string name="oru_focus_dock_open_again">Open again</string>
+    <string name="oru_focus_dock_saved">Patch from saved copy</string>
+    <string name="oru_focus_dock_installed">Use installed app</string>
+</resources>

@@ -563,8 +563,6 @@ Pro nejlepší výsledky doporučujeme záplatovat &lt;b&gt;úplný APK&lt;/b&gt
     <string name="patcher_field_value_stripped">odstraněno</string>
     <!-- Value of "Libraries": every library was left in the patched APK -->
     <string name="patcher_field_value_kept">Zachováno</string>
-    <string name="patcher_tab_logs">Protokoly záplat</string>
-    <string name="patcher_tab_game">Hry</string>
     <string name="patcher_logs_waiting">Čekání na výstup logu…</string>
     <string name="patcher_logs_lost">Výstup logu není uchováván mezi restartováním aplikace</string>
     <string name="patcher_long_step_warning">Tento krok může chvíli trvat. Počkejte prosím…</string>
@@ -594,7 +592,6 @@ Odinstalace trvale smaže všechna data aplikace"</string>
     <string name="patcher_install_error_subtitle">Zkuste odinstalovat a nainstalovat znovu</string>
     <string name="patcher_ready_to_mount_subtitle">Stiskněte tlačítko níže pro zavedení</string>
     <string name="patcher_patches_excluded_for_installer">Není k dispozici pro tuto metodu instalace a je vyloučeno: %s</string>
-    <string name="patcher_back_to_game_hint">Klepněte na %1$s pro návrat do hry</string>
     <string name="patcher_storage_permission_dialog_title">Nelze přistupovat k cestě úložiště</string>
     <string name="patcher_incompatible_patcher_title">Aktualizace požadována</string>
     <string name="patcher_incompatible_patcher_description">Zdroj &lt;b&gt;%1$s&lt;/b&gt; vyžaduje patcher &lt;b&gt;%2$s&lt;/b&gt; nebo novější. Aktualizujte Morphe, abyste jej mohli použít</string>
@@ -691,29 +688,6 @@ Odinstalace trvale smaže všechna data aplikace"</string>
     <string name="package_name">Název balíčku</string>
     <string name="failed_to_mount">Selhalo připojení: %s</string>
     <string name="failed_to_unmount">Selhalo odejmutí: %s</string>
-    <!-- Patcher Screen - Mini-games -->
-    <string name="mini_game_score">Skóre %s</string>
-    <string name="mini_game_best">Nejlepší %s</string>
-    <string name="mini_game_new_record">Nový rekord!</string>
-    <string name="mini_game_game_over">Konec hry</string>
-    <string name="mini_game_try_again">Zkusit znovu</string>
-    <string name="mini_game_paused">Pozastaveno</string>
-    <string name="mini_game_resume">Pokračovat</string>
-    <string name="mini_game_restart">Začít znovu</string>
-    <string name="mini_game_change">Vybrat jinou hru</string>
-    <string name="mini_game_2048_picker_subtitle">Skládejte dlaždice, abyste je spojili</string>
-    <string name="mini_game_flappy_picker_subtitle">Klepnutím proleťte trubkami</string>
-    <string name="mini_game_flappy_tap_to_start">Klepnutím pro létání</string>
-    <string name="mini_game_snake_picker_subtitle">Jezte jídlo, nenarážejte do sebe</string>
-    <string name="mini_game_snake_swipe_to_start">Přejeďte prstem a začněte</string>
-    <string name="mini_game_dino_picker_subtitle">Klepnutím přeskočte kaktusy</string>
-    <string name="mini_game_dino_tap_to_start">Klepnutím pro běh</string>
-    <string name="mini_game_blocks_picker_subtitle">Sestav tvary, vyčisti řady</string>
-    <string name="mini_game_blocks_tap_to_start">Klepnutím otočíte, tažením posunete, přejetím dolů shodíte</string>
-    <string name="mini_game_bricks_picker_subtitle">Odrážej míč, zboř zeď</string>
-    <string name="mini_game_bricks_tap_to_start">Táhni pro zamíření, klepni pro odpálení</string>
-    <string name="mini_game_miner_picker_subtitle">Klepnutím otevřete, podržením umístíte vlajku</string>
-    <string name="mini_game_pairs_picker_subtitle">Otočte karty, najděte shodu</string>
     <!-- Settings -->
     <string name="appearance">Vzhled</string>
     <string name="advanced">Pokročilé</string>

@@ -1,0 +1,17 @@
+{
+  "uniqueId": "io.coil-kt:coil-compose",
+  "name": "Coil",
+  "developers": [
+    {
+      "name": "Coil contributors"
+    }
+  ],
+  "website": "https://coil-kt.github.io/coil/",
+  "scm": {
+    "connection": "scm:git:https://github.com/coil-kt/coil.git",
+    "url": "https://github.com/coil-kt/coil"
+  },
+  "licenses": [
+    "Apache-2.0"
+  ]
+}

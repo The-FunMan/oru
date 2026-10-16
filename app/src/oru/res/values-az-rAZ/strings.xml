@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="adaptive_icon_guide_png_body">Ən yaxşı nəticə üçün şəffaf fonda simvol, fon rəngi aşağıda seçilir. Şəffaflığı olmayan şəkil isə bütün simvolu doldurur, bu halda koloritə uyğun simvollar və bildiriş simvolları Oru simvolunu saxlayır.</string>
+    <string name="adaptive_icon_no_transparency_warning">Bu şəkilin şəffaf pikselləri yoxdur, buna görə də koloritə uyğun simvollar və bildiriş nişanları Oru simvolunu saxlayır</string>
+    <string name="battery_optimization_dialog_description">Bəzi cihazlar tətbiqi qısanda yamaqlayıcını dayandıra bilər. Etibarlı tamamlanan yamaqlanmaya əmin olmaq üçün Oru-ni batareya məhdudiyyətləri olmadan işlətməyə icazə ver</string>
+    <string name="deep_link_add_source_message">Bu yamaq mənbəyin Oru-yə əlavə etmək istəyirsiniz?</string>
+    <string name="external_batch_patch_description">%s Oru-nin tətbiqləri yamaqlamasını və quraşdırmasını istəyir</string>
+    <string name="home_apk_helper_description">Oru orijinal APK-nı yükləmək və faylı geri vermək üçün aşağıdakı köməkçi tətbiqə sorğu göndərəcək</string>
+    <string name="home_apk_helper_installed_unavailable">Oru quraşdırılmış tətbiqi istifadə edə bilmədi</string>
+    <string name="home_apk_helper_warning">Yalnız bu köməkçi tətbiqə etibar edirsinizsə davam edin. Oru yamaqlamazdan əvvəl qəbul etdiyi hər şeyin paketini, versiyasını və imzasını yoxlayır</string>
+    <string name="home_apk_helper_warning_unverified">Yalnız bu köməkçi tətbiqə etibar edirsinizsə davam edin. Oru bu APK-nın imzasını təsdiqləyə bilmir, buna görə də dəyişdirilmiş fayl aşkarlanmayacaq</string>
+    <string name="home_app_filter_not_patched_description">Oru-də hələ yamaqlamadığınız tətbiqlər</string>
+    <string name="home_app_filter_patched_description">Oru ilə yamaqladığınız və ya saxladığınız tətbiqlər</string>
+    <string name="home_app_filter_uninstalled_description">Oru ilə yamaqlanmış, artıq bu cihazda olmayan tətbiqlər</string>
+    <string name="home_app_info_app_deleted_description">Bu tətbiq Oru xarici silindi. Funksionallığı qaytarmaq üçün onu təkrar quraşdır</string>
+    <string name="home_app_info_install_unverified">Oru quraşdırılmış tətbiqin öz yamaqladığı qurulma olduğunu təsdiqləyə bilmir. Fəaliyyətlərini bərpa etmək üçün onu saxlanılan APK-dan yenidən yamaqla yaxud quraşdır</string>
+    <string name="home_app_info_not_patched_description">Bu tətbiqin yamaqlanmamış versiyası quraşdırılıb. Oru-də hələ də əvvəlki yamaq qeydi qalır</string>
+    <string name="home_download_instructions_download_button_toast_6">Artıq rəsmi Oru düyməsi sınaqçısısınız 🏅</string>
+    <string name="home_download_instructions_step2_search_note">Oru bu veb saytlara zəmanət verə bilməz. APK faylı əvəzinə öz tətbiq mağazasını təklif edənləri ötür</string>
+    <string name="home_download_instructions_step4">Yükləmə bitəndən sonra Oru-yə qayıt</string>
+    <string name="home_download_instructions_step4_mount">Əsil APK-nı quraşdırandan sonra, Oru-yə qayıt</string>
+    <string name="home_held_back_title">Yamaq mənbəyi Oru-ni xətaya saldı</string>
+    <string name="home_outdated_manager_title">Oru köhnəlib</string>
+    <string name="home_update_available">Əlçatan Oru yenilənməsi</string>
+    <string name="installer_shizuku_error_permission">Shizuku icazəsi yoxdur. Oru üçün icazəni qəbul et və təkrar cəhd et</string>
+    <string name="installer_status_shizuku_permission">Shizuku tətbiqindən Oru üçün icazəni qəbul et</string>
+    <string name="installing_manager_update_hint">Oru yeniləməni tamamlamaq üçün qapanacaq</string>
+    <string name="launch_app_unverified">Oru quraşdırılmış tətbiqin öz yamaqladığı qurulma olduğunu təsdiqləyə bilmədi</string>
+    <string name="notification_bundle_update_text_unversioned">Oru-ni açmaq və yeniləmək üçün toxun</string>
+    <string name="notification_channel_manager_updates">Oru yenilənmələri</string>
+    <string name="notification_channel_manager_updates_description">Yeni Oru buraxılışları haqqında bildirişlər</string>
+    <string name="notification_channel_patcher_description">Oru tətbiqi fonda yamaqlayarkən görünür</string>
+    <string name="notification_mount_replaced_text">v%1$s yamaqlanmış v%2$s ilə əvəzləndi. Onu bərpa etmək üçün Oru-ni aç</string>
+    <string name="notification_permission_dialog_description">Oru fonda yeniləmələr əlçatan olduqda sizə bildirmək üçün bildiriş icazəsi istəyir</string>
+    <string name="onboarding_settings_desc">Oru-ni fərdiləşdir: görünüş, qabaqcıl seçimlər və sistem alətləri</string>
+    <string name="patcher_incompatible_patcher_description">&lt;b&gt;%1$s&lt;/b&gt; mənbəsi &lt;b&gt;%2$s&lt;/b&gt; və ya daha yeni yamaqlayıcı tələb edir. Onu istifadə etmək üçün Oru-ni yenilə</string>
+    <string name="patcher_installed_conflict_body">"Oru, yamaqlanan tətbiqləri orijinaldan fərqlənən öz sertifikatı ilə imzalayır. Android yamaqlanan tətbiqi quraşdıra bilməsi öncəsi mövcud versiyanı silməyi tələb edir.
+
+Quraşdırma ləğvi bütün tətbiq məlumatını qalıcı siləcək"</string>
+    <string name="patcher_storage_permission_description_api30">Bir və ya daha çox yamaq seçimi Oru-nin oxuya bilmədiyi yolları işarə edir. Saxlanc girişin qəbul et və düyməyə toxun, sonra yamaqlanma birbaşa başlayacaq</string>
+    <string name="patcher_storage_permission_hint">İpucu: Faylları /Android/data/app.oru.manager/files/ -a köçür - əlavə icazələrə ehtiyac yoxdur</string>
+    <string name="root_mount_module_unmount_warning">KernelSU-nun modullarını ilkin olaraq çıxarmaq aktivdirsə, KernelSU &gt; Superuser &gt; montaj etdiyiniz tətbiq &gt; Profil &gt; Fərdi bölməsini açın və modulların çıxarılmasını qapadın. Əks halda, Oru onu montajlanmış kimi göstərsə belə, montajlanmış yamaqlı APK işləməyə bilər</string>
+    <string name="settings_advanced_expert_mode_description">Qəliz Oru yamaqlanma tənzimləmələrin və fərdiləşdirmə seçimlərin aktivləşdirir</string>
+    <string name="settings_advanced_github_pat_export_include_supporting">Bu PAT-ı ixrac edilən Oru tənzimləmələrinə əlavə edir</string>
+    <string name="settings_advanced_patch_options_custom_branding_custom_icon_instruction">"Fərdi simvol kimi istifadə etməyə şəkillər olan qovluq.
+
+Cihazın DPI-dən asılı olaraq, qovluq aşağıdakı qovluqlardan birini və ya daha çoxunu ehtiva etməlidir:
+- mipmap-mdpi
+- mipmap-hdpi
+- mipmap-xhdpi
+- mipmap-xxhdpi
+- mipmap-xxxhdpi
+
+Qovluqlardan hər biri aşağıdakı faylların hamısın saxlamalıdır:
+morphe_adaptive_background_custom.png
+morphe_adaptive_foreground_custom.png
+
+Şəkil ölçüləri aşağıdakı kimi olmalıdır:
+- mipmap-mdpi: 108x108 px
+- mipmap-hdpi: 162x162 px
+- mipmap-xhdpi: 216x216 px
+- mipmap-xxhdpi: 324x324 px
+- mipmap-xxxhdpi: 432x432 px
+
+Əlavə olaraq, keçid saya simvol faylı olan \"drawable\" qovluq saxlayır:
+morphe_adaptive_monochrome_custom.xml
+
+Əlavə olaraq, keçid aşağıdakı formatlardan birində bildiriş simvolun saxlayır:
+- 'Drawable' daxilində drawable XML vektoru: 
+  morphe_notification_icon_custom.xml
+- 'drawable-dpi' qovluqlarında PNG raster şəkilləri:
+  drawable-mdpi/morphe_notification_icon_custom.png (24x24 px)
+  drawable-hdpi/morphe_notification_icon_custom.png (36x36 px)
+  drawable-xhdpi/morphe_notification_icon_custom.png (48x48 px)
+  drawable-xxhdpi/morphe_notification_icon_custom.png (72x72 px)
+  drawable-xxxhdpi/morphe_notification_icon_custom.png (96x96 px)"</string>
+    <string name="settings_advanced_patch_options_custom_header_instruction">"Xüsusi sərlövhə simvolu kimi istifadə ediləcək şəkilləri olan qovluq.
+
+Cihazın DPI-dən asılı olaraq, qovluq aşağıdakı qovluqların birini və ya daha çoxunu əhatə etməlidir:
+- drawable-hdpi
+- drawable-xhdpi
+- drawable-xxhdpi
+- drawable-xxxhdpi
+
+Qovluqların hər biri aşağıdakı faylların hamısın əhatə etməlidir:
+morphe_header_custom_light.png morphe_header_custom_dark.png
+
+Şəkil ölçüləri aşağıdakı kimi olmalıdır:
+- drawable-hdpi: 194x72 px
+- drawable-xhdpi: 258x96 px
+- drawable-xxhdpi: 387x144 px
+- drawable-xxxhdpi: 512x192 px"</string>
+    <string name="settings_advanced_updates_allow_metered_description">Oru və yamaq yeniləmələrini mobil məlumat üzərindən yükləməyə icazə verilir</string>
+    <string name="settings_advanced_updates_manager_prereleases_description">Yeni Oru versiyalarına erkən keçid</string>
+    <string name="settings_advanced_updates_prerelease_warning_message">"Oru-nin ilkin buraxılış versiyaları hələ inkişaf mərhələsindədir və qeyri-sabit ola bilər.
+
+​Yamaqlar təsirlənmir: yamaq mənbələri siyahısındakı hər bir mənbə üçün ilkin buraxılış yamaqlarını aktivləşdir"</string>
+    <string name="settings_appearance_app_icon_selector_description">Oru-nin əsas ekranınızda və tətbiq bölməsində necə göründüyü</string>
+    <string name="settings_auto_uninstall_warning_message">Android Shizuku avtomatik quraşdırılması zamanı imza münaqişəsini bildirərsə, Oru yamaqlanmış APK-nı quraşdırmadan əvvəl mövcud tətbiqi siləcək</string>
+    <string name="settings_system_apk_download_helper_warning">APK köməkçi tətbiqdən əldə edilir, buna görə də yalnız tanıdığınız tətbiqlərə etibar edin. Oru yamaqlamadan əvvəl hər bir faylın paketini, versiyasını və imzasını yoxlayır</string>
+    <string name="settings_system_custom_file_picker_description">Sistem standartı əvəzinə Oru-nin qurulu fayl seçicisi ilə saxlama yerini araşdır</string>
+    <string name="settings_system_export_manager_settings_fail">Oru tənzimləmələrin ixrac etmək olmadı: %s</string>
+    <string name="settings_system_export_manager_settings_success">Oru tənzimləmələri ixrac olundu</string>
+    <string name="settings_system_import_manager_settings_description">Oru tənzimləmələrinizi nüsxələyir və bərpa edir</string>
+    <string name="settings_system_import_manager_settings_fail">Oru tənzimləmələrin idxal etmək olmadı: %s</string>
+    <string name="settings_system_import_manager_settings_mode_title">Oru tənzimləmələrin idxal et</string>
+    <string name="settings_system_import_manager_settings_success">Oru tənzimləmələri idxal edildi</string>
+    <string name="settings_system_morphe_settings">Oru tənzimləmələri</string>
+    <string name="settings_system_process_runtime_heap_limit_ignored">Bu cihaz sonuncu icra zamanı yaddaş məhdudiyyətinə məhəl qoymadı, buna görə də yamaqlama Oru daxilində icraya keçə bilər</string>
+    <string name="settings_system_signing_key_dialog_description">Oru yamaqları üzrə hər bir tətbiq bu açarla imzalanır. Bir nüsxəsini saxla: onsuz, yamaqlanmış tətbiqlər yalnız silindikdən sonra yenilənə bilər</string>
+    <string name="settings_system_signing_key_missing">Oru ilk yamaqla birini yaradır</string>
+    <string name="settings_system_storage_open_app_info_description">Bütün Oru məlumatlarını sistem tənzimləmələri vasitəsilə idarə et və ya təmizlə</string>
+    <string name="sources_dialog_community_notice_message">"İcma yamaq mənbələri öz müəllifləri tərəfindən yaradılır və saxlanılır. Oru üçüncü tərəf yamaqlarını nəzərdən keçirmir, yoxlamır və onların məzmununa və ya cihazınızda etdiklərinə görə məsuliyyət daşımır.
+
+Bu veb saytdan əlavə etdiyiniz hər şey öz riskinizlə istifadə olunur"</string>
+    <string name="sources_management_held_back_hint">Bu mənbə yüklənərkən Oru-nin çökməsinə səbəb oldu, buna görə də ötürülür. Təkrar cəhd etmək üçün onu yenilə və ya təkrar idxal et</string>
+    <string name="sources_management_outdated_manager_badge">Oru-ni Yenilə</string>
+    <string name="sources_management_outdated_manager_hint">Bu mənbə %1$s yamaqlayıcısı üçün qurulmuşdur, lakin Oru %2$s versiyası %3$s yamaqlayıcısını ehtiva edir. İstifadə etmək üçün Oru-ni yenilə</string>
+    <string name="tour_prompt_desc">Oru-nin əsas xüsusiyyətlərinə qısa baxış istəyirsiniz?</string>
+    <string name="uninstall_app_unverified">Yerində saxlanıldı: Oru quraşdırılmış tətbiqin öz yamaqladığı qurulma olduğunu təsdiqləyə bilmədi</string>
+</resources>

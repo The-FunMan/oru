@@ -563,8 +563,6 @@
     <string name="patcher_field_value_stripped">বাদ দেওয়া হয়েছে</string>
     <!-- Value of "Libraries": every library was left in the patched APK -->
     <string name="patcher_field_value_kept">রাখা হয়েছে</string>
-    <string name="patcher_tab_logs">প্যাচার লগ</string>
-    <string name="patcher_tab_game">গেমস</string>
     <string name="patcher_logs_waiting">লগ আউটপুটের জন্য অপেক্ষা করা হচ্ছে…</string>
     <string name="patcher_logs_lost">অ্যাপ পুনরায় চালু করলে লগ আউটপুট সংরক্ষণ করা হবে না</string>
     <string name="patcher_long_step_warning">এই ধাপটি সম্পন্ন হতে কিছু সময় লাগতে পারে। অনুগ্রহ করে অপেক্ষা করুন…</string>
@@ -594,7 +592,6 @@
     <string name="patcher_install_error_subtitle">আনইনস্টল করে আবার ইনস্টল করার চেষ্টা করুন</string>
     <string name="patcher_ready_to_mount_subtitle">মাউন্ট করতে নিচের বোতামটি টিপুন</string>
     <string name="patcher_patches_excluded_for_installer">এটি এই ইনস্টল পদ্ধতি এবং বাদ দেওয়ার জন্য পাওয়া যাচ্ছে না: %s</string>
-    <string name="patcher_back_to_game_hint">আপনার গেমে ফিরে যেতে %1$s ট্যাপ করুন</string>
     <string name="patcher_storage_permission_dialog_title">স্টোরেজ পথে অ্যাক্সেস করতে পারেনি</string>
     <string name="patcher_incompatible_patcher_title">আপডেট প্রয়োজন</string>
     <string name="patcher_incompatible_patcher_description">উৎস &lt;b&gt;%1$s&lt;/b&gt;-এর জন্য প্যাচার &lt;b&gt;%2$s&lt;/b&gt; বা তার চেয়ে নতুন সংস্করণ প্রয়োজন। এটি ব্যবহার করতে Morphe আপডেট করুন</string>
@@ -691,29 +688,6 @@
     <string name="package_name">প্যাকেজের নাম</string>
     <string name="failed_to_mount">মাউন্ট করতে ব্যর্থ: %s</string>
     <string name="failed_to_unmount">আনমাউন্ট করতে ব্যর্থ: %s</string>
-    <!-- Patcher Screen - Mini-games -->
-    <string name="mini_game_score">স্কোর %s</string>
-    <string name="mini_game_best">সেরা %s</string>
-    <string name="mini_game_new_record">নতুন রেকর্ড!</string>
-    <string name="mini_game_game_over">গেম ওভার</string>
-    <string name="mini_game_try_again">আবার চেষ্টা করুন</string>
-    <string name="mini_game_paused">বিরতি</string>
-    <string name="mini_game_resume">এগিয়ে যান</string>
-    <string name="mini_game_restart">নতুন করে শুরু করুন</string>
-    <string name="mini_game_change">অন্য একটি গেম বেছে নিন</string>
-    <string name="mini_game_2048_picker_subtitle">একসাথে মার্জ করার জন্য টাইলস স্লাইড করুন</string>
-    <string name="mini_game_flappy_picker_subtitle">পাইপের মধ্যে দিয়ে উড়তে ট্যাপ করুন</string>
-    <string name="mini_game_flappy_tap_to_start">উড়তে ট্যাপ করুন</string>
-    <string name="mini_game_snake_picker_subtitle">খাবার খান, নিজের সাথে আঘাত করবেন না</string>
-    <string name="mini_game_snake_swipe_to_start">শুরু করতে সোয়াইপ করুন</string>
-    <string name="mini_game_dino_picker_subtitle">ক্যাকটাসের উপর দিয়ে লাফ দিতে ট্যাপ করুন</string>
-    <string name="mini_game_dino_tap_to_start">দৌড়াতে ট্যাপ করুন</string>
-    <string name="mini_game_blocks_picker_subtitle">আকৃতি মিলান, লাইন পরিষ্কার করুন</string>
-    <string name="mini_game_blocks_tap_to_start">ঘোরাতে ট্যাপ করুন, সরাতে সোয়াইপ করুন, ফেলতে নিচে সোয়াইপ করুন</string>
-    <string name="mini_game_bricks_picker_subtitle">বলটি বাউন্স করুন, প্রাচীর পরিষ্কার করুন</string>
-    <string name="mini_game_bricks_tap_to_start">লক্ষ্য করতে টেনে আনুন, ছুড়তে ট্যাপ করুন</string>
-    <string name="mini_game_miner_picker_subtitle">খুলতে ট্যাপ করুন, ফ্ল্যাগ করতে ধরে রাখুন</string>
-    <string name="mini_game_pairs_picker_subtitle">কার্ড উল্টান, মিল খুঁজুন</string>
     <!-- Settings -->
     <string name="appearance">রূপ</string>
     <string name="advanced">উন্নত</string>

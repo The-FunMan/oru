@@ -563,8 +563,6 @@ Norint gauti geriausią rezultatą, ši programa rekomenduoja pataisyti &lt;b&gt
     <string name="patcher_field_value_stripped">pašalintos</string>
     <!-- Value of "Libraries": every library was left in the patched APK -->
     <string name="patcher_field_value_kept">išlaikytos</string>
-    <string name="patcher_tab_logs">Patcher žurnalai</string>
-    <string name="patcher_tab_game">Žaidimai</string>
     <string name="patcher_logs_waiting">Laukiama žurnalo išvesties…</string>
     <string name="patcher_logs_lost">Žurnalo išvestis neišsaugoma perkraunant programą</string>
     <string name="patcher_long_step_warning">Šis žingsnis gali užtrukti. Palaukite…</string>
@@ -594,7 +592,6 @@ Pašalinus bus visam laikui ištrinti visi programos duomenys."</string>
     <string name="patcher_install_error_subtitle">Pabandykite išdiegti ir vėl įdiekti</string>
     <string name="patcher_ready_to_mount_subtitle">Paspauskite žemiau esantį mygtuką, kad montuotimete</string>
     <string name="patcher_patches_excluded_for_installer">Neprieinama šiam diegimo metodui ir neįtraukta: %s</string>
-    <string name="patcher_back_to_game_hint">Palieskite %1$s, kad grįžtumėte į savo žaidimą</string>
     <string name="patcher_storage_permission_dialog_title">Nepavyksta pasiekti saugyklos kelio</string>
     <string name="patcher_incompatible_patcher_title">Būtina atnaujinti</string>
     <string name="patcher_incompatible_patcher_description">Šaltinis &lt;b&gt;%1$s&lt;/b&gt; reikalauja &lt;b&gt;%2$s&lt;/b&gt; ar naujesnio pataisos įrankio. Atnaujinkite Morphe, kad galėtumėte jį naudoti</string>
@@ -691,29 +688,6 @@ Pašalinus bus visam laikui ištrinti visi programos duomenys."</string>
     <string name="package_name">Pakuotės pavadinimas</string>
     <string name="failed_to_mount">Nepavyko prijungti: %s</string>
     <string name="failed_to_unmount">Nepavyko atjungti: %s</string>
-    <!-- Patcher Screen - Mini-games -->
-    <string name="mini_game_score">Rezultatas %s</string>
-    <string name="mini_game_best">Geriausias %s</string>
-    <string name="mini_game_new_record">Naujas rekordas!</string>
-    <string name="mini_game_game_over">Žaidimas baigtas</string>
-    <string name="mini_game_try_again">Bandyti dar kartą</string>
-    <string name="mini_game_paused">Pristabdyta</string>
-    <string name="mini_game_resume">Tęsti</string>
-    <string name="mini_game_restart">Pradėti iš naujo</string>
-    <string name="mini_game_change">Pasirinkti kitą žaidimą</string>
-    <string name="mini_game_2048_picker_subtitle">Slinkite plyteles, kad jas sujungtumėte</string>
-    <string name="mini_game_flappy_picker_subtitle">Palieskite, kad skristumėte per vamzdžius</string>
-    <string name="mini_game_flappy_tap_to_start">Palieskite, kad skristumėte</string>
-    <string name="mini_game_snake_picker_subtitle">Valgykite maistą, neatsitrenkite į save</string>
-    <string name="mini_game_snake_swipe_to_start">Braukite, kad pradėtumėte</string>
-    <string name="mini_game_dino_picker_subtitle">Palieskite, kad peršoktumėte kaktusus</string>
-    <string name="mini_game_dino_tap_to_start">Palieskite, kad bėgtumėte</string>
-    <string name="mini_game_blocks_picker_subtitle">Sudėkite figūras, išvalykite eilutes</string>
-    <string name="mini_game_blocks_tap_to_start">Palieskite, kad pasuktumėte, braukite, kad judėtumėte, braukite žemyn, kad nuleistumėte</string>
-    <string name="mini_game_bricks_picker_subtitle">Atmuškite kamuoliuką, išvalykite sieną</string>
-    <string name="mini_game_bricks_tap_to_start">Vilkite, kad nusitaikytumėte, palieskite, kad paleistumėte</string>
-    <string name="mini_game_miner_picker_subtitle">Palieskite, kad atidarytumėte, laikykite, kad pažymėtumėte vėliavėle</string>
-    <string name="mini_game_pairs_picker_subtitle">Apverskite korteles, raskite poras</string>
     <!-- Settings -->
     <string name="appearance">Išvaizda</string>
     <string name="advanced">Išplėstiniai</string>

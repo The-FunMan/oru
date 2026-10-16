@@ -91,6 +91,16 @@ suspend fun loadRemoteAvatar(url: String): Bitmap? = withContext(Dispatchers.IO)
 }
 
 /**
+ * Loads [primary] and asks for [fallback] only when the primary yields nothing, so a healthy
+ * primary costs one request.
+ */
+suspend fun <T : Any> loadWithFallback(
+    primary: String?,
+    fallback: String?,
+    load: suspend (String) -> T?
+): T? = primary?.let { load(it) } ?: fallback?.let { load(it) }
+
+/**
  * Avatars that failed to load lately. Rows show the same avatar again each time they scroll back
  * into view, and a dead address would otherwise cost its full timeout on every pass. Entries
  * expire, so an avatar missed while offline is tried again later in the same session.

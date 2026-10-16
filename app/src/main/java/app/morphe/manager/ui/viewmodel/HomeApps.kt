@@ -19,6 +19,7 @@ import app.morphe.manager.domain.apk.*
 import app.morphe.manager.domain.bundles.*
 import app.morphe.manager.domain.bundles.PatchBundleSource.Extensions.asRemoteOrNull
 import app.morphe.manager.domain.bundles.PatchBundleSource.Extensions.avatarUrls
+import app.morphe.manager.domain.installer.RootInstaller
 import app.morphe.manager.domain.manager.*
 import app.morphe.manager.domain.repository.*
 import app.morphe.manager.domain.repository.PatchBundleRepository.Companion.DEFAULT_SOURCE_UID
@@ -128,7 +129,8 @@ class HomeApps(
     private val homeAppButtonPrefs: HomeAppButtonPreferences,
     private val appDataResolver: AppDataResolver,
     versionCatalog: AppVersionCatalog,
-    private val localApkSources: LocalApkSources
+    private val localApkSources: LocalApkSources,
+    private val rootInstaller: RootInstaller
 ) {
     // Updates available for installed apps, null until the first check lands
     private val _appUpdatesAvailable = MutableStateFlow<Map<String, AppPatchUpdate>?>(null)
@@ -218,22 +220,28 @@ class HomeApps(
             .filter { it.isNotEmpty() }
             .collectLatest { pending ->
                 delay(PACKAGE_CHANGE_DEBOUNCE_MS.milliseconds)
-                pending.forEach {
-                    appDataResolver.invalidate(it)
-                }
-                markTrackedPackagesPending(pending, invalidateCache = true)
-                _appStateTicker.update { it + 1 }
+                refreshPackages(pending)
                 pendingPackageChanges.value = emptySet()
             }
     }
 
     /** Rechecks only tracked evidence when storage management removes a retained patched APK. */
     private fun observeSavedPatchedApkChanges() = scope.launch {
-        installedAppRepository.savedPatchedApkChanges.collect { packageNames ->
-            packageNames.forEach(appDataResolver::invalidate)
-            markTrackedPackagesPending(packageNames, invalidateCache = true)
-            _appStateTicker.update { it + 1 }
+        installedAppRepository.savedPatchedApkChanges.collect(::refreshPackages)
+    }
+
+    /** A mount swaps the APK behind a package without a broadcast, so it joins the package changes. */
+    private fun observeMountChanges() = scope.launch {
+        rootInstaller.mountChanges.collect { packageName ->
+            pendingPackageChanges.update { it + packageName }
         }
+    }
+
+    /** Drops what is known about [packageNames] and rebuilds the home state around them. */
+    private fun refreshPackages(packageNames: Set<String>) {
+        packageNames.forEach(appDataResolver::invalidate)
+        markTrackedPackagesPending(packageNames, invalidateCache = true)
+        _appStateTicker.update { it + 1 }
     }
 
     /**
@@ -508,6 +516,7 @@ class HomeApps(
 
         // One query for installed packages instead of one per card
         val installedPackages = pm.getInstalledPackages().mapTo(HashSet()) { it.packageName }
+        val patchedNames = patchedPackageNamesByApp(enabledInfo.values.flatMap { it.patches })
 
         suspend fun buildItem(slot: HomeAppSlot): HomeAppItem {
             val packageName = slot.packageName
@@ -519,9 +528,18 @@ class HomeApps(
             val installedData = (installedApp?.currentPackageName ?: slot.id)
                 .takeIf { it in installedPackages }
                 ?.let { appDataResolver.resolveInstalled(it) }
+            // With the app itself gone, a patched copy of it that another manager made still is the app on the phone
+            val patchedElsewhere = if (installedApp == null && installedData == null) {
+                patchedInstallOf(
+                    installedPatchedCopies(packageName, patchedNames[packageName].orEmpty(), installedPackages)
+                )
+            } else {
+                null
+            }
             // The record's patch-time label first, it outlives the artifacts and the bundle
             val displayName = installedApp?.appLabel
                 ?: installedData?.displayName
+                ?: patchedElsewhere?.displayName
                 ?: bundleMeta?.displayName
                 ?: allMetadata[packageName]?.displayName
                 ?: KnownApps.getAppName(packageName)
@@ -563,7 +581,7 @@ class HomeApps(
                 installedPackageInfo = trackedSnapshot?.installedPackageInfo,
                 savedPackageInfo = savedPackageInfo,
                 // A record not judged yet shows its own version rather than the device's
-                untrackedPackageInfo = installedData?.packageInfo.takeIf { installedApp == null }
+                untrackedPackageInfo = (installedData ?: patchedElsewhere)?.packageInfo.takeIf { installedApp == null }
             )
 
             return HomeAppItem(
@@ -577,7 +595,7 @@ class HomeApps(
                 isPinnedByDefault = knownApp?.isPinnedByDefault == true,
                 isInstalledOnDevice = (trackedPresentation?.showsInstalledPackage == true) ||
                         isUninspectedInstall ||
-                        (installedApp == null && installedData != null),
+                        (installedApp == null && (installedData != null || patchedElsewhere != null)),
                 isDeleted = trackedPresentation?.isDeleted == true,
                 isInstallStateNotPatched = trackedPresentation?.isNotPatched == true,
                 isInstallStateUnknown = trackedPresentation?.isUnknown == true,
@@ -592,7 +610,8 @@ class HomeApps(
                     ignoredVersion = ignoredVersions[packageName]
                 ),
                 patchCount = 0,
-                isClone = slot.isClone
+                isClone = slot.isClone,
+                installedPatchedPackage = patchedElsewhere?.packageName,
             )
         }
 
@@ -632,6 +651,17 @@ class HomeApps(
         )
         scope.launch(homeCardCacheWrites) { homeCardCache.write(cards) }
         return cards
+    }
+
+    /**
+     * The data of the first of [copies] the device resolves, or null when none does. [copies] are the installed
+     * patched packages from [installedPatchedCopies], already in the order they are tried.
+     */
+    private suspend fun patchedInstallOf(copies: List<String>): ResolvedAppData? {
+        for (packageName in copies) {
+            appDataResolver.resolveInstalled(packageName)?.let { return it }
+        }
+        return null
     }
 
     /**
@@ -695,7 +725,7 @@ class HomeApps(
                     }
                     val source = sources[info.uid]
                     val avatarUrls = source?.avatarUrls
-                    val sourceName = source?.displayTitle
+                    val sourceName = source?.shownTitle
                         ?.takeUnless { it.isBlank() }
                         ?: info.name.takeUnless { it.isBlank() }
                         ?: "#${info.uid}"
@@ -772,11 +802,7 @@ class HomeApps(
      * Invalidates AppDataResolver cache for [packageName] and forces homeAppState recomputation.
      * Call this after any install/uninstall operation that doesn't change the DB record.
      */
-    fun notifyAppStateChanged(packageName: String) {
-        appDataResolver.invalidate(packageName)
-        markTrackedPackagesPending(setOf(packageName), invalidateCache = true)
-        _appStateTicker.update { it + 1 }
-    }
+    fun notifyAppStateChanged(packageName: String) = refreshPackages(setOf(packageName))
 
     /** Triggers the swipe gesture hint whenever a custom bundle is added. */
     val showSwipeGestureHint = MutableStateFlow(false)
@@ -823,6 +849,7 @@ class HomeApps(
         )
         observePackageChanges()
         observeSavedPatchedApkChanges()
+        observeMountChanges()
         observeTrackedApps()
         observeInstalledAppUpdates()
     }

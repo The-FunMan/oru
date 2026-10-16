@@ -48,6 +48,8 @@ data object Patcher : ComplexParameter<Patcher.ViewModelParams> {
      *   the app's own, which is not something [selectedApp] can say.
      * @param allowIncompatible Whether patches outside the APK's version were offered, kept so
      *   the selection reopened after a failed run offers the same ones.
+     * @param focusKey The Oru Focus the run belongs to (its card's id), set by the owner of the run. It is what a
+     *   completion notification opens, which a clone's [targetPackageName] would not match.
      */
     @Parcelize
     data class ViewModelParams(
@@ -55,6 +57,7 @@ data object Patcher : ComplexParameter<Patcher.ViewModelParams> {
         val selectedPatches: PatchSelection,
         val options: @RawValue Options,
         val targetPackageName: String? = null,
-        val allowIncompatible: Boolean = false
+        val allowIncompatible: Boolean = false,
+        val focusKey: String? = null,
     ) : Parcelable
 }

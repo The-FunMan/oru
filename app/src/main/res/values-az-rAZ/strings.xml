@@ -562,8 +562,6 @@ Davam etmək istədiyinizə əminsiniz?"</string>
     <string name="patcher_field_value_stripped">təmizlənmiş</string>
     <!-- Value of "Libraries": every library was left in the patched APK -->
     <string name="patcher_field_value_kept">saxlanıldı</string>
-    <string name="patcher_tab_logs">Yamaqlayıcı qeydləri</string>
-    <string name="patcher_tab_game">Oyunlar</string>
     <string name="patcher_logs_waiting">Qeyd çıxarışı gözlənilir…</string>
     <string name="patcher_logs_lost">Qeyd çıxarışı tətbiq yenidən başladıldıqda saxlanılmır</string>
     <string name="patcher_long_step_warning">Bu keçid bir müddət çəkə bilər. Zəhmət olmasa, gözləyin...</string>
@@ -593,7 +591,6 @@ Quraşdırma ləğvi bütün tətbiq məlumatını qalıcı siləcək"</string>
     <string name="patcher_install_error_subtitle">Silməyə və təkrar quraşdırmağa çalış</string>
     <string name="patcher_ready_to_mount_subtitle">Montajlamaq üçün aşağıdakı düyməyə toxun</string>
     <string name="patcher_patches_excluded_for_installer">Bu quraşdırma üsulu üçün əlçatan deyil və xaric edilib: %s</string>
-    <string name="patcher_back_to_game_hint">Oyununuza qayıtmaq üçün %1$s kliklə</string>
     <string name="patcher_storage_permission_dialog_title">Saxlanc keçidinə keçmək olmur</string>
     <string name="patcher_incompatible_patcher_title">Yenilənmə tələb olundu</string>
     <string name="patcher_incompatible_patcher_description">&lt;b&gt;%1$s&lt;/b&gt; mənbəsi &lt;b&gt;%2$s&lt;/b&gt; və ya daha yeni yamaqlayıcı tələb edir. Onu istifadə etmək üçün Morphe-ni yenilə</string>
@@ -690,29 +687,6 @@ Quraşdırma ləğvi bütün tətbiq məlumatını qalıcı siləcək"</string>
     <string name="package_name">Paket adı</string>
     <string name="failed_to_mount">Montajlama uğursuzdu: %s</string>
     <string name="failed_to_unmount">Montajı silmək olmadı: %s</string>
-    <!-- Patcher Screen - Mini-games -->
-    <string name="mini_game_score">Hesab %s</string>
-    <string name="mini_game_best">Ən yaxşı %s</string>
-    <string name="mini_game_new_record">Yeni rekord!</string>
-    <string name="mini_game_game_over">Oyun Bitdi</string>
-    <string name="mini_game_try_again">Təkrar cəhd et</string>
-    <string name="mini_game_paused">Fasilə edildi</string>
-    <string name="mini_game_resume">Davam et</string>
-    <string name="mini_game_restart">Yenidən başla</string>
-    <string name="mini_game_change">Başqa bir oyun seç</string>
-    <string name="mini_game_2048_picker_subtitle">Birləşdirmək üçün xanaları sürüşdür</string>
-    <string name="mini_game_flappy_picker_subtitle">Borular arasından uçmaq üçün toxun</string>
-    <string name="mini_game_flappy_tap_to_start">Uçmaq üçün toxun</string>
-    <string name="mini_game_snake_picker_subtitle">Qida ye, özünü toqquşdurma</string>
-    <string name="mini_game_snake_swipe_to_start">Başlamaq üçün sürüşdür</string>
-    <string name="mini_game_dino_picker_subtitle">Kaktusların üstündən hoppanmaq üçün toxun</string>
-    <string name="mini_game_dino_tap_to_start">Qaçmaq üçün toxun</string>
-    <string name="mini_game_blocks_picker_subtitle">Fiqurları uyğunlaşdır, cərgələri təmizlə</string>
-    <string name="mini_game_blocks_tap_to_start">Döndərmək üçün toxun, köçürmək üçün sürüşdür, endirmək üçün aşağı sürüşdür</string>
-    <string name="mini_game_bricks_picker_subtitle">Topu sıçrat, divarı təmizlə</string>
-    <string name="mini_game_bricks_tap_to_start">Nişan almaq üçün dart, buraxmaq üçün toxun</string>
-    <string name="mini_game_miner_picker_subtitle">Açmaq üçün toxun, nişanlamaq üçün basıb saxla</string>
-    <string name="mini_game_pairs_picker_subtitle">Kartları çevir, cütünü tap</string>
     <!-- Settings -->
     <string name="appearance">Görünüş</string>
     <string name="advanced">Qabaqcıl</string>

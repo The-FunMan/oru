@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.toArgb
 import app.morphe.manager.data.room.apps.installed.InstalledApp
 import app.morphe.manager.domain.bundles.AppVersionStatus
 import app.morphe.manager.ui.model.HomeAppItem
+import app.morphe.manager.util.moveReplacing
 import app.morphe.manager.util.tag
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -51,9 +52,13 @@ internal class HomeCardCache(private val file: File) {
         runCatching {
             file.parentFile?.mkdirs()
             val temp = File(file.path + ".tmp")
-            temp.writeText(json.encodeToString(CachedHome.serializer(), cached))
-            // Atomic swap, so a killed write keeps the previous file
-            if (!temp.renameTo(file)) error("Could not replace ${file.name}")
+            try {
+                temp.writeText(json.encodeToString(CachedHome.serializer(), cached))
+                // Atomic swap, so a killed write keeps the previous file
+                if (!moveReplacing(temp, file)) error("Could not replace ${file.name}")
+            } finally {
+                temp.delete()
+            }
             lastWritten = cached
         }.onFailure { Log.w(tag, "Could not keep the home cards", it) }
     }
@@ -103,7 +108,8 @@ internal data class CachedCard(
     val hasUpdate: Boolean,
     val versionStatus: CachedVersionStatus?,
     val isClone: Boolean,
-    val nameSuffix: String?
+    val nameSuffix: String?,
+    val installedPatchedPackage: String? = null,
 ) {
     constructor(item: HomeAppItem) : this(
         id = item.id,
@@ -121,7 +127,8 @@ internal data class CachedCard(
         hasUpdate = item.hasUpdate,
         versionStatus = item.versionStatus?.let(::CachedVersionStatus),
         isClone = item.isClone,
-        nameSuffix = item.nameSuffix
+        nameSuffix = item.nameSuffix,
+        installedPatchedPackage = item.installedPatchedPackage,
     )
 
     fun toItem(records: Map<String, InstalledApp>) = HomeAppItem(
@@ -145,7 +152,8 @@ internal data class CachedCard(
         versionStatus = versionStatus?.toStatus(),
         patchCount = 0,
         isClone = isClone,
-        nameSuffix = nameSuffix
+        nameSuffix = nameSuffix,
+        installedPatchedPackage = installedPatchedPackage,
     )
 }
 

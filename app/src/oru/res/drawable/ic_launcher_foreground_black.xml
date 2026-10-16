@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Oru mark: an open ring with the brand dot in its gap. Original artwork for the Oru project. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:pathData="M70.79,42.24 A20.5,20.5 0 1 1 45.34,35.42"
+        android:strokeColor="#1F2433"
+        android:strokeWidth="9.61"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M63.62,35.90 L63.64,35.90"
+        android:strokeColor="#1F2433"
+        android:strokeWidth="12.0"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+</vector>

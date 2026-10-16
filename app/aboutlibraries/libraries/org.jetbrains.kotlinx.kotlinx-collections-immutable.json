@@ -1,0 +1,17 @@
+{
+  "uniqueId": "org.jetbrains.kotlinx:kotlinx-collections-immutable",
+  "name": "kotlinx.collections.immutable",
+  "developers": [
+    {
+      "name": "JetBrains"
+    }
+  ],
+  "website": "https://github.com/Kotlin/kotlinx.collections.immutable",
+  "scm": {
+    "connection": "scm:git:https://github.com/Kotlin/kotlinx.collections.immutable.git",
+    "url": "https://github.com/Kotlin/kotlinx.collections.immutable"
+  },
+  "licenses": [
+    "Apache-2.0"
+  ]
+}

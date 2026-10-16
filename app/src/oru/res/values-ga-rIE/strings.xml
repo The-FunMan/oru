@@ -1,0 +1,120 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="adaptive_icon_guide_png_body">Is fearr a oibríonn lógó ar chúlra trédhearcach, leis an dath cúlra roghnaithe thíos. Líonann íomhá gan trédhearcacht an deilbhín iomlán ina ionad sin, agus coinníonn na deilbhíní téamaithe agus na deilbhíní fógraí lógó Oru ansin.</string>
+    <string name="adaptive_icon_no_transparency_warning">Níl picteilíní trédhearcacha ar bith san íomhá seo, mar sin coinníonn na deilbhíní téamaithe agus na deilbhíní fógraí lógó Oru</string>
+    <string name="battery_optimization_dialog_description">D\'fhéadfadh roinnt feistí an paiste a stopadh nuair a íoslaghdaítear an aip. Lig do Oru rith gan srianta ceallraí chun a chinntiú go gcríochnaítear an paiste go hiontaofa</string>
+    <string name="deep_link_add_source_message">Ar mhaith leat an foinse paiste seo a chur le Oru?</string>
+    <string name="external_batch_patch_description">Ba mhaith le %s go ndéanfadh Oru paistí agus aipeanna a shuiteáil</string>
+    <string name="home_apk_helper_description">Iarrfaidh Oru ar an aip chúnta thíos an APK bunaidh a íoslódáil agus an comhad a thabhairt ar ais.</string>
+    <string name="home_apk_helper_installed_unavailable">Ní raibh Oru in ann an aip suiteáilte a úsáid</string>
+    <string name="home_apk_helper_warning">Ná lean ar aghaidh ach amháin má tá muinín agat as an aip chúnta seo. Seiceálann Oru an pacáiste, an leagan agus an síniú ar cibé rud a fhaigheann sé sula ndéantar paisteáil air.</string>
+    <string name="home_apk_helper_warning_unverified">Ná lean ar aghaidh ach amháin má tá muinín agat as an aip chúnta seo. Ní féidir le Oru síniú an APK seo a fhíorú, mar sin ní bhraithfí comhad modhnaithe.</string>
+    <string name="home_app_filter_not_patched_description">Aipeanna nár phaisteáil tú i Oru go fóill</string>
+    <string name="home_app_filter_patched_description">Aipeanna atá paisteáilte nó sábháilte agat le Oru</string>
+    <string name="home_app_filter_uninstalled_description">Aipeanna atá paisteáilte le Oru nach bhfuil ar an ngléas seo a thuilleadh</string>
+    <string name="home_app_info_app_deleted_description">Díshuiteáladh an aip seo lasmuigh de Oru. Athphaisteáil í chun feidhmiúlacht a athbhunú.</string>
+    <string name="home_app_info_install_unverified">Ní féidir le Oru a dhearbhú gurb é an aip atá suiteáilte an leagan a phaisteáladh. Athphaisteáil nó athshuiteáil é ón APK sábháilte chun a ghníomhartha a athbhunú.</string>
+    <string name="home_app_info_not_patched_description">Tá leagan neamhphaiste den aip seo suiteáilte. Tá taifead paiste roimhe seo Oru fós.</string>
+    <string name="home_download_instructions_download_button_toast_6">Is tástálaí oifigiúil cnaipe Oru thú anois 🏅</string>
+    <string name="home_download_instructions_step2_search_note">Ní féidir le Oru na suíomhanna gréasáin seo a dhearbhú. Seachain na cinn a thairgeann a siopa aipeanna féin in ionad comhad APK.</string>
+    <string name="home_download_instructions_step4">Tar éis don íoslódáil a bheith críochnaithe, téigh ar ais chuig Oru</string>
+    <string name="home_download_instructions_step4_mount">Tar éis an APK bunaidh a shuiteáil, téigh ar ais chuig Oru</string>
+    <string name="home_held_back_title">Thuar foinse paiste Oru</string>
+    <string name="home_outdated_manager_title">Tá Oru as dáta</string>
+    <string name="home_update_available">Nuashonrú Oru ar fáil</string>
+    <string name="installer_shizuku_error_permission">Tá cead Shizuku ar iarraidh. Tabhair cead do Oru agus déan iarracht arís.</string>
+    <string name="installer_status_shizuku_permission">Tabhair cead do Oru ón aip Shizuku</string>
+    <string name="installing_manager_update_hint">Dúnfaidh Oru chun an nuashonrú a chríochnú</string>
+    <string name="launch_app_unverified">Níorbh fhéidir le Oru a fhíorú gurb é an aip suiteáilte an leagan a phaisteáladh</string>
+    <string name="notification_bundle_update_text_unversioned">Tapáil chun Oru a oscailt agus a nuashonrú</string>
+    <string name="notification_channel_manager_updates">Nuashonruithe Oru</string>
+    <string name="notification_channel_manager_updates_description">Fógraí faoi eisiúintí nua Oru</string>
+    <string name="notification_channel_patcher_description">Taispeántar é agus Oru ag paisteáil aip sa chúlra</string>
+    <string name="notification_mount_replaced_text">Tháinig v%1$s in ionad an v%2$s paisteáilte. Oscail Oru chun é a chur ar ais</string>
+    <string name="notification_permission_dialog_description">Teastaíonn cead fógra ó Oru chun foláireamh a thabhairt duit nuair a bhíonn nuashonruithe ar fáil sa chúlra</string>
+    <string name="onboarding_settings_desc">Saincheap Oru: cuma, roghanna ardleibhéil, agus uirlisí córais</string>
+    <string name="patcher_incompatible_patcher_description">Éilíonn an fhoinse &lt;b&gt;%1$s&lt;/b&gt; paitseálaí &lt;b&gt;%2$s&lt;/b&gt; nó níos nuaí. Nuashonraigh Oru chun é a úsáid</string>
+    <string name="patcher_installed_conflict_body">"Síníonn Oru aipeanna paisteáilte lena theastas féin, atá difriúil ón mbunleagan. Éilíonn Android an leagan atá ann cheana a bhaint sula bhféadfar an aip phaisteáilte a shuiteáil.
+
+Scriosfaidh díshuiteáil gach sonraí aip go buan."</string>
+    <string name="patcher_storage_permission_description_api30">Léiríonn rogha paiste amháin nó níos mó cosáin nach féidir le Oru a léamh. Deonaigh rochtain stórála agus tapáil an cnaipe ansin tosóidh an paisteáil go huathoibríoch.</string>
+    <string name="patcher_storage_permission_hint">Leid: Bog comhaid go /Android/data/app.oru.manager/files/ - níl aon cheadanna breise ag teastáil</string>
+    <string name="root_mount_module_unmount_warning">Má tá Díshuiteáil modúil cumasaithe de réir réamhshocraithe ag KernelSU, oscail KerneSU &gt; Superuser &gt; an aip a shuiteáil tú &gt; Profile &gt; Custom agus díchumasaigh Díshuiteáil modúil. Seachas sin, ní bheidh éifeacht leis an APK paiste suite, fiú má thaispeánann Oru é mar shuiteáilte.</string>
+    <string name="settings_advanced_expert_mode_description">Cumasaíonn sé socruithe casta paiste Oru agus roghanna saincheaptha</string>
+    <string name="settings_advanced_github_pat_export_include_supporting">Cuireann an PAT seo le socruithe Oru onnmhairithe</string>
+    <string name="settings_advanced_patch_options_custom_branding_custom_icon_instruction">"Fillteán le híomhánna le húsáid mar dheilbhín saincheaptha. Caithfidh ceann amháin nó níos mó de na fillteáin seo a leanas a bheith sa fhillteán, ag brath ar DPI an fheiste:
+- mipmap-mdpi
+- mipmap-hdpi
+- mipmap-xhdpi
+- mipmap-xxhdpi
+- mipmap-xxxhdpi
+
+Ní mór na comhaid seo a leanas a bheith i ngach fillteán:
+morphe_adaptive_background_custom.png
+morphe_adaptive_foreground_custom.png
+
+Ní mór toisí na híomhá a bheith mar seo a leanas:
+- mipmap-mdpi: 108x108 px
+- mipmap-hdpi: 162x162 px
+- mipmap-xhdpi: 216x216 px
+- mipmap-xxhdpi: 324x324 px
+- mipmap-xxxhdpi: 432x432 px
+
+De rogha air sin, tá fillteán 'intarraingthe' le deilbhín monacrómach sa chonair. comhad:
+morphe_adaptive_monochrome_custom.xml
+
+De rogha air sin, tá deilbhín fógra sa chonair i gceann de na formáidí seo a leanas:
+- Veicteoir XML intarraingthe i 'drawable':
+morphe_notification_icon_custom.xml
+- Íomhánna rastair PNG i bhfillteáin 'drawable-dpi':
+drawable-mdpi/morphe_notification_icon_custom.png (24x24 px)
+drawable-hdpi/morphe_notification_icon_custom.png (36x36 px)
+drawable-xhdpi/morphe_notification_icon_custom.png (48x48 px)
+drawable-xxhdpi/morphe_notification_icon_custom.png (72x72 px)
+drawable-xxxhdpi/morphe_notification_icon_custom.png (96x96 px)"</string>
+    <string name="settings_advanced_patch_options_custom_header_instruction">"Fillteán le híomhánna le húsáid mar lógó ceanntásca saincheaptha.
+
+Ní mór ceann amháin nó níos mó de na fillteáin seo a leanas a bheith sa fhillteán, ag brath ar DPI an fheiste:
+- drawable-hdpi
+- drawable-xhdpi
+- drawable-xxhdpi
+- drawable-xxxhdpi
+
+Ní mór na comhaid seo a leanas a bheith i ngach fillteán:
+morphe_header_custom_light.png
+morphe_header_custom_dark.png
+
+Ní mór toisí na híomhá a bheith mar seo a leanas:
+- drawable-hdpi: 194x72 px
+- drawable-xhdpi: 258x96 px
+- drawable-xxhdpi: 387x144 px
+- drawable-xxxhdpi: 512x192 px"</string>
+    <string name="settings_advanced_updates_allow_metered_description">Ceadaíonn sé nuashonruithe Oru agus paistí a íoslódáil thar shonraí soghluaiste</string>
+    <string name="settings_advanced_updates_manager_prereleases_description">Rochtain luath ar leaganacha nua de Oru</string>
+    <string name="settings_advanced_updates_prerelease_warning_message">"Tá leaganacha réamh-eisiúna de Oru fós á bhforbairt agus is féidir leo a bheith éagobhsaí.
+
+Níl tionchar ar phaistí: cumasaigh paistí réamh-eisiúna do gach foinse sa liosta foinsí paistí"</string>
+    <string name="settings_appearance_app_icon_selector_description">An chaoi a bhfuil cuma ar Oru ar do scáileán baile agus i dtarraiceán na n-aip</string>
+    <string name="settings_auto_uninstall_warning_message">Má thuairiscíonn Android coimhlint shínithe le linn uath-shuiteáil Shizuku, díshuiteálfaidh Oru an aip atá ann cheana sula suiteálfar an APK paiste.</string>
+    <string name="settings_system_apk_download_helper_warning">Tagann an APK ón aip chabhrach, mar sin ná cuir muinín ach in aipeanna a bhfuil aithne agat orthu. Seiceálann Oru fós an pacáiste, an leagan agus an síniú de gach comhad roimh phaisteáil.</string>
+    <string name="settings_system_custom_file_picker_description">Brabhsáil stóras le roghnóir comhad ionsuite Oru in ionad an roghnóra réamhshocraithe córais</string>
+    <string name="settings_system_export_manager_settings_fail">Theip ar shocruithe Oru a easpórtáil: %s</string>
+    <string name="settings_system_export_manager_settings_success">Socruithe Oru onnmhairithe</string>
+    <string name="settings_system_import_manager_settings_description">Déanann sé cúltaca de do shocruithe Oru agus athchóiríonn sé iad</string>
+    <string name="settings_system_import_manager_settings_fail">Theip ar shocruithe Oru a iompórtáil: %s</string>
+    <string name="settings_system_import_manager_settings_mode_title">Iompórtáil socruithe Oru</string>
+    <string name="settings_system_import_manager_settings_success">Socruithe Oru allmhairithe</string>
+    <string name="settings_system_morphe_settings">Socruithe Oru</string>
+    <string name="settings_system_process_runtime_heap_limit_ignored">Thug an gléas seo neamhaird ar an teorainn cuimhne le linn an rith dheireanaigh, mar sin d’fhéadfadh sé go mbeadh ar an bpróiseas paisteála filleadh ar rith laistigh de Oru.</string>
+    <string name="settings_system_signing_key_dialog_description">Déantar gach aip a phatchálann Oru a shíniú leis an eochair seo. Coinnigh cóip di: gan í, ní féidir aipeanna patcháilte a nuashonrú ach amháin tar éis iad a dhíshuiteáil</string>
+    <string name="settings_system_signing_key_missing">Cruthaíonn Oru ceann leis an gcéad phaiste agat</string>
+    <string name="settings_system_storage_open_app_info_description">Bainistigh nó glan na sonraí Oru go léir trí shocruithe an chórais</string>
+    <string name="sources_dialog_community_notice_message">"Is iad a n-údair féin a dhéanann agus a chothaíonn foinsí paistí pobail. Ní dhéanann Oru athbhreithniú ná fíorú ar phaistí tríú páirtí, agus níl sé freagrach as a n-ábhar ná as a ndéanann siad ar do ghléas.
+
+Úsáidtear aon rud a chuireann tú leis ón suíomh Gréasáin seo ar do phriacal féin."</string>
+    <string name="sources_management_held_back_hint">Bhuail an fhoinse seo le Oru agus é á luchtú, mar sin tá sé á scipeáil. Nuashonraigh nó athiompórtáil é chun triail eile a bhaint as</string>
+    <string name="sources_management_outdated_manager_badge">Nuashonraigh Oru</string>
+    <string name="sources_management_outdated_manager_hint">Tá an foinse seo tógtha don phaisteoir %1$s, ach tá an paisteoir %3$s san áireamh i Oru %2$s. Nuashonraigh Oru chun é a úsáid.</string>
+    <string name="tour_prompt_desc">Ar mhaith leat turas gairid a fháil ar phríomhghnéithe Oru?</string>
+    <string name="uninstall_app_unverified">Fágtha ina áit: Níorbh fhéidir le Oru a fhíorú gurb é an aip suiteáilte an leagan a phaisteáladh</string>
+</resources>

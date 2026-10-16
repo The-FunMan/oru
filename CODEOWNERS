@@ -1,0 +1,10 @@
+# Code owners. The maintainer reviews every change by default.
+*                    @The-FunMan
+
+# Native code and the compatibility surface that patch bundles call.
+/native/             @The-FunMan
+/native-packager/    @The-FunMan
+/patcher/api/        @The-FunMan
+
+# Workflows hold the release environment.
+/.github/            @The-FunMan

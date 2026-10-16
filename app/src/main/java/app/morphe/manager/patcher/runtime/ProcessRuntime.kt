@@ -24,6 +24,8 @@ import app.morphe.manager.patcher.runtime.process.*
 import app.morphe.manager.patcher.split.SplitApkPreparer
 import app.morphe.manager.patcher.split.SplitPreparationEvent
 import app.morphe.manager.patcher.worker.ProgressEventHandler
+import app.morphe.manager.patcher.worker.StageFractionHandler
+import app.morphe.manager.ui.model.StepId
 import app.morphe.manager.ui.model.State
 import app.morphe.manager.util.AppCoroutineScope
 import app.morphe.manager.util.Options
@@ -38,6 +40,7 @@ import org.koin.core.component.inject
 import java.io.File
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
+import kotlin.math.roundToInt
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
@@ -141,6 +144,20 @@ fun coerceMemoryLimit(context: Context, limit: Int) =
     limit.coerceIn(PROCESS_RUNTIME_MEMORY_MINIMUM, maxMemoryLimit(context))
 
 /**
+ * The stops between the ends of a slider over [PROCESS_RUNTIME_MEMORY_MINIMUM] to [maximum], one per
+ * [PROCESS_RUNTIME_MEMORY_STEP]. Every slider that edits the limit takes its stops from here.
+ */
+fun memoryLimitSliderSteps(maximum: Int) =
+    (maximum - PROCESS_RUNTIME_MEMORY_MINIMUM) / PROCESS_RUNTIME_MEMORY_STEP - 1
+
+/** Snaps a slider position to the nearest step of the range, staying between its ends. */
+fun snapMemoryLimit(position: Float, maximum: Int): Int {
+    val stops = ((position - PROCESS_RUNTIME_MEMORY_MINIMUM) / PROCESS_RUNTIME_MEMORY_STEP).roundToInt()
+    return (PROCESS_RUNTIME_MEMORY_MINIMUM + stops * PROCESS_RUNTIME_MEMORY_STEP)
+        .coerceIn(PROCESS_RUNTIME_MEMORY_MINIMUM, maximum)
+}
+
+/**
  * The limit to fall back to after a kill: one slider step down, or two in the extended range,
  * where a single step barely changes the footprint.
  */
@@ -150,6 +167,59 @@ fun lowerMemoryLimit(limit: Int): Int {
 
     return (limit - step).coerceAtLeast(PROCESS_RUNTIME_MEMORY_MINIMUM)
 }
+
+/**
+ * Marker file in the app's files directory. Its presence turns on the patcher's phase profile, and each
+ * `key=value` line it holds passes one of the switches in [PROFILE_SWITCH_VALUES] on to the patcher.
+ */
+const val PROFILE_MARKER_FILE = "oru-profile.enabled"
+
+/** Per-run profile lines are appended here, in the app's external files directory. */
+const val PROFILE_OUTPUT_FILE = "oru-profile.jsonl"
+
+/** The only switches the marker file can pass on, with the values each accepts. Developer use only. */
+private val PROFILE_SWITCH_VALUES = mapOf(
+    "oru.patcher.overlap" to setOf("true", "false"),
+    "oru.patcher.lazyXml" to setOf("true", "false"),
+    "oru.packager" to setOf("jvm"),
+)
+
+/** The `-D` properties the lines of [markerFile] ask for. A file that cannot be read asks for none. */
+private fun profileSwitches(markerFile: File): List<String> =
+    runCatching { markerFile.readLines() }.getOrDefault(emptyList()).mapNotNull { line ->
+        val key = line.substringBefore('=').trim()
+        val value = line.substringAfter('=', "").trim()
+        if (value in PROFILE_SWITCH_VALUES[key].orEmpty()) "-D$key=$value" else null
+    }
+
+/**
+ * The system properties for app_process that switch on the patcher's phase profile. Nothing is
+ * returned unless [markerFile] exists, so a normal run is unchanged. [outputDir] is only asked for
+ * when profiling is on.
+ */
+internal fun patcherProfileProperties(markerFile: File, outputDir: () -> File?): List<String> {
+    if (!markerFile.exists()) return emptyList()
+
+    return buildList {
+        add("-Doru.profile=true")
+        outputDir()?.let { add("-Doru.profile.out=${File(it, PROFILE_OUTPUT_FILE).absolutePath}") }
+        addAll(profileSwitches(markerFile))
+    }
+}
+
+/**
+ * The ART heap properties the patcher process runs with. The limits come from [heapSizeString].
+ * The free-space bounds are fixed because the patcher keeps hundreds of megabytes alive: devices
+ * that ship `heapminfree=512k` and `heapmaxfree=8m` collect again after every few hundred kilobytes
+ * of allocation (an emulator run spent about 75 s of 100 s in GC), while a phone shipping
+ * `8m` and `32m` collects a handful of times.
+ */
+internal fun patcherHeapProperties(heapSizeString: String): Map<String, String> = mapOf(
+    "PROP_dalvik.vm.heapgrowthlimit" to heapSizeString,
+    "PROP_dalvik.vm.heapsize" to heapSizeString,
+    "PROP_dalvik.vm.heapminfree" to "8m",
+    "PROP_dalvik.vm.heapmaxfree" to "32m",
+)
 
 /**
  * Runs the patcher in another process by using the app_process binary and IPC.
@@ -166,8 +236,15 @@ class ProcessRuntime(
         val binderFuture = CompletableDeferred<IPatcherProcess>()
         val receiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
-                val binder =
-                    intent.getBundleExtra(INTENT_BUNDLE_KEY)?.getBinder(BUNDLE_BINDER_KEY)!!
+                // Failing the future rather than throwing keeps a broken connect from crashing the app
+                // inside the receiver, and lets the awaiting run report it
+                val binder = intent.getBundleExtra(INTENT_BUNDLE_KEY)?.getBinder(BUNDLE_BINDER_KEY)
+                if (binder == null) {
+                    binderFuture.completeExceptionally(
+                        IllegalStateException("Patcher process connected without a binder")
+                    )
+                    return
+                }
 
                 binderFuture.complete(IPatcherProcess.Stub.asInterface(binder))
             }
@@ -199,7 +276,8 @@ class ProcessRuntime(
         onProgress: ProgressEventHandler,
         stripUnusedNativeLibs: Boolean,
         onMergedApkReady: (suspend (File) -> Unit)?,
-        onRestart: suspend () -> Unit
+        onRestart: suspend () -> Unit,
+        onStageFraction: StageFractionHandler,
     ): Int? {
         var memoryMB = coerceMemoryLimit(context, prefs.patcherProcessMemoryLimit.get())
         var retries = 0
@@ -218,7 +296,8 @@ class ProcessRuntime(
                     onPatchCompleted,
                     onPatchFailed,
                     onProgress,
-                    onMergedApkReady
+                    onMergedApkReady,
+                    onStageFraction
                 )
 
                 return memoryMB.takeIf { retries > 0 }
@@ -246,13 +325,6 @@ class ProcessRuntime(
     }
 
     /**
-     * Whether a smaller heap stands a chance. These are kills from the outside: the pressure
-     * came from the system, and giving the process less to hold makes it a smaller target.
-     */
-    private fun Exception.isReclaimableMemoryFailure() = this is ProcessExitException &&
-            (exitCode == OOM_EXIT_CODE || exitCode == SIGKILL_EXIT_CODE || exitCode == SIGSEGV_EXIT_CODE)
-
-    /**
      * Restates a heap the patcher filled on its own as [HeapExhaustedException]. Shrinking that
      * heap only reaches the same wall sooner, so it is reported rather than retried.
      */
@@ -276,9 +348,12 @@ class ProcessRuntime(
         onPatchFailed: (String) -> Unit,
         onProgress: ProgressEventHandler,
         onMergedApkReady: (suspend (File) -> Unit)?,
+        onStageFraction: StageFractionHandler,
     ) = coroutineScope {
         // Get the location of our own Apk
-        val managerBaseApk = pm.getPackageInfo(context.packageName)!!.applicationInfo!!.sourceDir
+        val managerBaseApk = checkNotNull(pm.getPackageInfo(context.packageName)?.applicationInfo?.sourceDir) {
+            "Cannot resolve the install path of ${context.packageName}"
+        }
         val propOverride = resolvePropOverride(context)?.absolutePath
 
         val heapSizeString = "${memoryLimit}M"
@@ -288,14 +363,18 @@ class ProcessRuntime(
                 if (propOverride != null) {
                     // Override the props used by ART to set the memory limit
                     put("LD_PRELOAD", propOverride)
-                    put("PROP_dalvik.vm.heapgrowthlimit", heapSizeString)
-                    put("PROP_dalvik.vm.heapsize", heapSizeString)
+                    putAll(patcherHeapProperties(heapSizeString))
                 } else {
                     Log.w(tag, "Skipping prop override on Android ${Build.VERSION.SDK_INT}")
                 }
             }
 
         val appProcessBin = resolveAppProcessBin(context)
+        // The marker sits in the external files dir so it can be created with adb on a release build too
+        val profileDir = context.getExternalFilesDir(null)
+        val profileProperties = patcherProfileProperties(File(profileDir ?: context.filesDir, PROFILE_MARKER_FILE)) {
+            profileDir
+        }
 
         // Determine merged APK path before launching the process so it is accessible
         // after patching.await() to invoke onMergedApkReady in the coroutineScope.
@@ -314,6 +393,7 @@ class ProcessRuntime(
             val result = process(
                 appProcessBin,
                 "-Djava.io.tmpdir=$cacheDir", // The process will use /tmp if this isn't set, which is a problem because that folder is not accessible on Android
+                *profileProperties.toTypedArray(),
                 "/", // The unused cmd-dir parameter
                 "--nice-name=${context.packageName}:Patcher",
                 PatcherProcess::class.java.name, // The class with the main function
@@ -390,6 +470,11 @@ class ProcessRuntime(
                     }
                 }
 
+                override fun stageFraction(stage: String?, fraction: Float) {
+                    val id = StepId.entries.firstOrNull { it.name == stage } ?: return
+                    onStageFraction(id, fraction)
+                }
+
                 override fun finished(exceptionStackTrace: String?) {
                     runCatching { binder.exit() }
 
@@ -461,6 +546,13 @@ class ProcessRuntime(
         const val INTENT_BUNDLE_KEY = "BUNDLE"
         const val BUNDLE_BINDER_KEY = "BINDER"
 
+        /**
+         * Whether a smaller heap stands a chance. These are kills from the outside: the pressure
+         * came from the system, and giving the process less to hold makes it a smaller target.
+         */
+        internal fun Exception.isReclaimableMemoryFailure() = this is ProcessExitException &&
+                (exitCode == OOM_EXIT_CODE || exitCode == SIGKILL_EXIT_CODE || exitCode == SIGSEGV_EXIT_CODE)
+
         private fun resolvePropOverride(context: Context) = findPropOverrideLibrary(context)
         private fun resolveAppProcessBin(context: Context): String {
             val preferred = if (is64BitRuntime(context)) APP_PROCESS_BIN_PATH_64 else APP_PROCESS_BIN_PATH_32
@@ -473,7 +565,8 @@ class ProcessRuntime(
      *
      * @param originalStackTrace The stack trace of the original [Exception].
      */
-    class RemoteFailureException(val originalStackTrace: String) : Exception()
+    class RemoteFailureException(val originalStackTrace: String) :
+        Exception("The patcher process failed with an exception: ${originalStackTrace.lineSequence().first()}")
 
     /**
      * @param exitCode The nonzero code the patcher process exited with.

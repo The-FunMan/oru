@@ -11,6 +11,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.io.File
+import java.io.IOException
+import java.io.InputStream
+import java.nio.file.AtomicMoveNotSupportedException
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 import java.util.UUID
 
 /**
@@ -65,5 +70,52 @@ fun File.purgeDirectoryAsync(
                     ?.forEach { it.deleteRecursively() }
             }
         }
+    }
+}
+
+/**
+ * Moves [source] over [target] in one step where the filesystem allows it, so a reader sees either
+ * the old file or the new one. Returns false when the move fails and leaves [source] in place.
+ *
+ * Unlike a bare [File.renameTo], this also replaces a read-only [target]: installed bundles are
+ * read-only, and Windows refuses to replace such a file, so it is made writable first.
+ */
+fun moveReplacing(source: File, target: File): Boolean {
+    if (target.exists()) runCatching { target.setWritable(true, true) }
+    val from = source.toPath()
+    val to = target.toPath()
+    return runCatching {
+        try {
+            Files.move(from, to, StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING)
+        } catch (_: AtomicMoveNotSupportedException) {
+            Files.move(from, to, StandardCopyOption.REPLACE_EXISTING)
+        }
+    }.isSuccess
+}
+
+/**
+ * Passes through at most [limit] bytes of [input] and fails past that. An archive entry declares
+ * its own size, which a hostile archive can set to a small value while the data expands far beyond it.
+ */
+class BoundedInputStream(private val input: InputStream, private val limit: Long) : InputStream() {
+    private var consumed = 0L
+
+    override fun read(): Int {
+        val byte = input.read()
+        if (byte != -1) countConsumed(1)
+        return byte
+    }
+
+    override fun read(b: ByteArray, off: Int, len: Int): Int {
+        val count = input.read(b, off, len)
+        if (count > 0) countConsumed(count)
+        return count
+    }
+
+    override fun close() = input.close()
+
+    private fun countConsumed(count: Int) {
+        consumed += count
+        if (consumed > limit) throw IOException("Stream is larger than $limit bytes")
     }
 }

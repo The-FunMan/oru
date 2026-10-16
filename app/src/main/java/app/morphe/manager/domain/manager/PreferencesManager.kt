@@ -21,6 +21,9 @@ import app.morphe.manager.domain.repository.PatchBundleRepository.Companion.DEFA
 import app.morphe.manager.patcher.runtime.PROCESS_RUNTIME_MEMORY_NOT_SET
 import app.morphe.manager.patcher.runtime.coerceMemoryLimit
 import app.morphe.manager.patcher.runtime.initialMemoryLimit
+import app.morphe.manager.ui.oru.settings.OruSettingsMigration
+import app.morphe.manager.ui.oru.theme.OruGlassStyle
+import app.morphe.manager.ui.oru.theme.OruThemeMode
 import app.morphe.manager.ui.screen.shared.BackgroundType
 import app.morphe.manager.ui.theme.SeasonalEvent
 import app.morphe.manager.ui.theme.Theme
@@ -124,7 +127,27 @@ class PreferencesManager(
 
     val useExpertMode = booleanPreference("use_expert_mode", false)
 
-    val stripUnusedNativeLibs = booleanPreference("strip_unused_native_libs", false)
+    val stripUnusedNativeLibs = booleanPreference("strip_unused_native_libs", true)
+
+    /** Guards the one-shot step that keeps stripping off for installs made before it became the default. */
+    private val stripDefaultMigrated = booleanPreference("strip_unused_native_libs_default_migrated", false)
+
+    // ORU: the one dynamic colour switch of the oru flavour (API 31+). Keeps its key from the old toggle.
+    val wallpaperColors = booleanPreference("dynamic_color", false)
+
+    // ORU: the Home quick toggles. An unknown stored name falls back to the default, see EnumPreference
+    val oruThemeMode = enumPreference("oru_theme_mode", OruThemeMode.System)
+    val oruGlassStyle = enumPreference("oru_glass_style", OruGlassStyle.Frosted)
+
+    // ORU: the Settings switch Animations. Off makes every Oru screen, sheet and dialog appear at once
+    val oruAnimations = booleanPreference("oru_animations", true)
+
+    // ORU: set once the signing key notice has shown on the Done of the first patch, see OruFocusRunRoute
+    val oruKeyNoticeShown = booleanPreference("oru_key_notice_shown", false)
+
+    // ORU: guards the oru one-time defaults, see OruSettingsMigration
+    private val oruUxMigrated = booleanPreference(OruSettingsMigration.FLAG_KEY, false)
+    private val oruUxV2Migrated = booleanPreference(OruSettingsMigration.V2_FLAG_KEY, false)
 
     // System tab
     val installerPrimary = stringPreference("installer_primary", InstallerPreferenceTokens.INTERNAL)
@@ -141,9 +164,7 @@ class PreferencesManager(
 
     val useProcessRuntime = booleanPreference(
         "process_runtime", // Old key was 'use_process_runtime' and may have the wrong default for some devices.
-        // Process runtime fails for Android 10 and lower.
-        // ARMv7 silently fails and nobody has researched why.
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !isArmV7()
+        defaultUseProcessRuntime()
     )
     val patcherProcessMemoryLimit = intPreference("use_process_runtime_memory_limit", PROCESS_RUNTIME_MEMORY_NOT_SET)
 
@@ -179,7 +200,7 @@ class PreferencesManager(
     val trustedApkDownloadHelpers = stringSetPreference("trusted_apk_download_helpers", emptySet())
 
     val lastFilePickerPath = stringPreference("last_file_picker_path", "")
-    val filePickerSortMode = stringPreference("file_picker_sort_mode", "NAME_ASC")
+    val filePickerSortMode = stringPreference("file_picker_sort_mode", "DATE_DESC")
     val filePickerShowHiddenFiles = booleanPreference("file_picker_show_hidden_files", false)
 
     /** Persist the pre-patch APK so it can be reused for repatching without asking the user to reselect it. */
@@ -191,10 +212,10 @@ class PreferencesManager(
     /** Play a distinct notification sound when patching finishes. */
     val patcherCompletionSound = booleanPreference("patcher_completion_sound", true)
 
-    /** URI of a user-picked success tone. Empty falls back to the bundled `R.raw.success`. */
+    /** URI of a user-picked success tone. Empty falls back to the system's default notification sound. */
     val patcherSuccessSoundUri = stringPreference("patcher_success_sound_uri", "")
 
-    /** URI of a user-picked failure tone. Empty falls back to the bundled `R.raw.error`. */
+    /** URI of a user-picked failure tone. Empty falls back to the system's default notification sound. */
     val patcherErrorSoundUri = stringPreference("patcher_error_sound_uri", "")
 
     /** Patch source list ordering mode */
@@ -206,24 +227,53 @@ class PreferencesManager(
     /** Tracks whether the user has explicitly toggled the custom file picker preference. */
     val customFilePickerUserConfigured = booleanPreference("custom_file_picker_user_configured", false)
 
-    // Mini-game high scores
-    val miniGame2048HighScore   = intPreference("mini_game_2048_high_score", 0)
-    val miniGameFlappyHighScore = intPreference("mini_game_flappy_high_score", 0)
-    val miniGameSnakeHighScore  = intPreference("mini_game_snake_high_score", 0)
-    val miniGameDinoHighScore   = intPreference("mini_game_dino_high_score", 0)
-    val miniGameBlocksHighScore = intPreference("mini_game_blocks_high_score", 0)
-    val miniGameBricksHighScore = intPreference("mini_game_bricks_high_score", 0)
-    val miniGameMinerHighScore  = intPreference("mini_game_miner_high_score", 0)
-    val miniGamePairsHighScore  = intPreference("mini_game_pairs_high_score", 0)
-
-    /** Set once the user has found the way back to a mini-game, which retires the hint for it. */
-    val backToGameHintSeen = booleanPreference("back_to_game_hint_seen", false)
-
     /**  Hidden preference to track if prerelease was auto-enabled. */
     private val prereleaseAutoEnabled = booleanPreference("prerelease_auto_enabled", false)
 
+    /**
+     * Process runtime is on where the device can run it. Process runtime fails for Android 10 and
+     * lower, and ARMv7 silently fails and nobody has researched why.
+     */
+    private fun defaultUseProcessRuntime(): Boolean =
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !isArmV7()
+
     init {
         runBlocking {
+            // A store that already holds anything comes from an earlier install, which keeps the old default
+            if (!stripDefaultMigrated.get()) {
+                val existingInstall = dataStore.data.first().asMap().isNotEmpty()
+                val strippingKey = booleanPreferencesKey("strip_unused_native_libs")
+                if (existingInstall && dataStore.data.first()[strippingKey] == null) {
+                    stripUnusedNativeLibs.update(false)
+                }
+                stripDefaultMigrated.update(true)
+            }
+
+            // ORU: one-time oru defaults, after the strip step above so they win for older installs
+            if (OruSettingsMigration.shouldRun(BuildConfig.ORU_UX, oruUxMigrated.get())) {
+                disablePatchVersionCompatCheck.update(OruSettingsMigration.DISABLE_PATCH_VERSION_COMPAT_CHECK)
+                stripUnusedNativeLibs.update(OruSettingsMigration.STRIP_UNUSED_NATIVE_LIBS)
+                oruUxMigrated.update(true)
+            }
+
+            // ORU: second step pins the settings the oru UI no longer shows. It runs before the
+            // memory limit step below, which turns the unset limit into the limit for this device
+            OruSettingsMigration.v2Pins(
+                oruFlavour = BuildConfig.ORU_UX,
+                alreadyMigrated = oruUxV2Migrated.get(),
+                processRuntimeDefault = defaultUseProcessRuntime(),
+            )?.let { pins ->
+                autoInstallAfterPatching.update(pins.autoInstallWithShizuku)
+                installerCustomComponents.update(pins.installerCustomComponents)
+                installerHiddenComponents.update(pins.installerHiddenComponents)
+                useCustomFilePicker.update(pins.useCustomFilePicker)
+                updateCheckInterval.update(pins.updateCheckInterval)
+                stripUnusedNativeLibs.update(pins.stripUnusedNativeLibs)
+                useProcessRuntime.update(pins.useProcessRuntime)
+                patcherProcessMemoryLimit.update(pins.patcherProcessMemoryLimit)
+                oruUxV2Migrated.update(true)
+            }
+
             if (installationTime.get() == 0L) {
                 val now = System.currentTimeMillis()
                 installationTime.update(now)
@@ -395,6 +445,18 @@ class PreferencesManager(
                 homeAppButtons = homeAppButtons.takeIf { home }
             )
         }
+
+        /**
+         * The part of this snapshot a settings file may carry. The keystore alias and passwords stay
+         * out in every case: they sit in plaintext in a file the user can share, and the keystore has
+         * its own explicit export. The GitHub token keeps its separate opt in.
+         */
+        fun forExport(sections: Set<SettingsSection>): SettingsSnapshot =
+            restrictedTo(sections).copy(
+                keystoreAlias = null,
+                keystorePass = null,
+                keystorePassword = null
+            )
     }
 
     suspend fun exportSettings() = SettingsSnapshot(
@@ -499,7 +561,10 @@ class PreferencesManager(
             if (enabled) current.add(officialUid) else current.remove(officialUid)
             bundleExperimentalVersionsEnabled.value = current
         }
-        snapshot.disablePatchVersionCompatCheck?.let { disablePatchVersionCompatCheck.value = it }
+        // An imported override is ignored in the oru flavour
+        snapshot.disablePatchVersionCompatCheck?.let {
+            disablePatchVersionCompatCheck.value = OruSettingsMigration.importedCompatCheck(it, BuildConfig.ORU_UX)
+        }
         snapshot.showGreetingPhrases?.let { showGreetingPhrases.value = it }
         snapshot.showRepatchNotice?.let { showRepatchNotice.value = it }
         snapshot.backgroundType?.let { backgroundType.value = it }

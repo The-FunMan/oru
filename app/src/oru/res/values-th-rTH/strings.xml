@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="adaptive_icon_guide_png_body">โลโก้บนพื้นหลังโปร่งใสจะดีที่สุด โดยเลือกสีพื้นหลังได้จากด้านล่าง รูปภาพที่ไม่มีความโปร่งใสจะเต็มทั้งไอคอนแทน และไอคอนตามธีมและไอคอนการแจ้งเตือนจึงคงโลโก้ Oru ไว้</string>
+    <string name="adaptive_icon_no_transparency_warning">รูปภาพนี้ไม่มีพิกเซลโปร่งใส ดังนั้นไอคอนตามธีมและไอคอนการแจ้งเตือนจึงคงโลโก้ Oru ไว้</string>
+    <string name="battery_optimization_dialog_description">อุปกรณ์บางเครื่องอาจหยุดโปรแกรมปรับแก้เมื่อแอปพลิเคชันถูกลดขนาด อนุญาตให้ Oru ทำงานโดยไม่มีข้อจำกัดด้านแบตเตอรี่เพื่อให้แน่ใจว่าการปรับแก้เสร็จสมบูรณ์ได้อย่างน่าเชื่อถือ</string>
+    <string name="deep_link_add_source_message">คุณต้องการเพิ่มแหล่งที่มาแพตช์นี้ไปยัง Oru หรือไม่?</string>
+    <string name="external_batch_patch_description">%s ต้องการให้ Oru แพตช์และติดตั้งแอป</string>
+    <string name="home_apk_helper_description">Oru จะขอให้แอปตัวช่วยด้านล่างดาวน์โหลด APK ต้นฉบับและส่งคืนไฟล์</string>
+    <string name="home_apk_helper_installed_unavailable">Oru ไม่สามารถใช้แอปที่ติดตั้งอยู่ได้</string>
+    <string name="home_apk_helper_warning">ดำเนินการต่อหากคุณเชื่อถือแอปตัวช่วยนี้เท่านั้น Oru จะตรวจสอบแพ็คเกจ เวอร์ชัน และลายเซ็นของสิ่งที่ได้รับก่อนทำการแพตช์</string>
+    <string name="home_apk_helper_warning_unverified">ดำเนินการต่อหากคุณเชื่อถือแอปตัวช่วยนี้เท่านั้น Oru ไม่สามารถยืนยันลายเซ็นของ APK นี้ ดังนั้นจึงจะตรวจไม่พบไฟล์ที่แก้ไข</string>
+    <string name="home_app_filter_not_patched_description">แอปที่คุณยังไม่ได้แพตช์ใน Oru</string>
+    <string name="home_app_filter_patched_description">แอปที่คุณแพตช์หรือบันทึกด้วย Oru แล้ว</string>
+    <string name="home_app_filter_uninstalled_description">แอปที่แพตช์ด้วย Oru ซึ่งไม่ได้อยู่บนอุปกรณ์นี้แล้ว</string>
+    <string name="home_app_info_app_deleted_description">แอปนี้ถูกลบออกนอก Oru. แพตช์อีกครั้งเพื่อฟื้นฟูฟังก์ชัน</string>
+    <string name="home_app_info_install_unverified">Oru ไม่สามารถยืนยันได้ว่าแอปที่ติดตั้งนั้นเป็นรุ่นที่ได้รับการแพตช์แล้ว แพตช์หรือติดตั้งใหม่จาก APK ที่บันทึกไว้เพื่อคืนค่าการดำเนินการ</string>
+    <string name="home_app_info_not_patched_description">แอปเวอร์ชันที่ไม่ได้รับการแพตช์ถูกติดตั้งไว้ Oru ยังคงมีบันทึกแพตช์ก่อนหน้า</string>
+    <string name="home_download_instructions_download_button_toast_6">ตอนนี้คุณเป็นผู้ทดสอบปุ่ม Oru อย่างเป็นทางการแล้ว 🏅</string>
+    <string name="home_download_instructions_step2_search_note">Oru ไม่สามารถรับรองเว็บไซต์เหล่านี้ได้ ข้ามเว็บไซต์ที่เสนอแอปสโตร์ของตัวเองแทนไฟล์ APK</string>
+    <string name="home_download_instructions_step4">หลังจากที่การดาวน์โหลดเสร็จสิ้น ให้กลับมาที่ Oru</string>
+    <string name="home_download_instructions_step4_mount">หลังจากติดตั้ง APK ต้นฉบับเสร็จสิ้น กลับมาที่ Oru</string>
+    <string name="home_held_back_title">แหล่งแพตช์หนึ่งทำให้ Oru เกิดข้อขัดข้อง</string>
+    <string name="home_outdated_manager_title">Oru ล้าสมัย</string>
+    <string name="home_update_available">มีการอัปเดต Oru พร้อมใช้งาน</string>
+    <string name="installer_shizuku_error_permission">สิทธิ์ Shizuku หายไป อนุญาตสิทธิ์ให้ Oru และลองอีกครั้ง</string>
+    <string name="installer_status_shizuku_permission">อนุญาตให้ Oru จากแอป Shizuku</string>
+    <string name="installing_manager_update_hint">Oru จะปิดเพื่อเสร็จสิ้นการอัปเดต</string>
+    <string name="launch_app_unverified">Oru ไม่สามารถยืนยันได้ว่าแอปที่ติดตั้งนั้นเป็นรุ่นที่ได้รับการแพตช์แล้ว</string>
+    <string name="notification_bundle_update_text_unversioned">แตะเพื่อเปิด Oru และอัปเดต</string>
+    <string name="notification_channel_manager_updates">การอัปเดต Oru</string>
+    <string name="notification_channel_manager_updates_description">การแจ้งเตือนเกี่ยวกับ Oru เวอร์ชันใหม่</string>
+    <string name="notification_channel_patcher_description">แสดงขณะที่ Oru กำลังแพตช์แอปพลิเคชันในพื้นหลัง</string>
+    <string name="notification_mount_replaced_text">v%1$s แทนที่ v%2$s ที่ถูกแพตช์ เปิด Oru เพื่อกู้คืน</string>
+    <string name="notification_permission_dialog_description">Oru ต้องการสิทธิ์การแจ้งเตือนเพื่อแจ้งให้คุณทราบเมื่อมีการอัปเดตพร้อมใช้งานในพื้นหลัง</string>
+    <string name="onboarding_settings_desc">ปรับแต่ง Oru: รูปลักษณ์ ตัวเลือกขั้นสูง และเครื่องมือระบบ</string>
+    <string name="patcher_incompatible_patcher_description">แหล่งที่มา &lt;b&gt;%1$s&lt;/b&gt; ต้องใช้แพตเชอร์ &lt;b&gt;%2$s&lt;/b&gt; หรือใหม่กว่า อัปเดต Oru เพื่อใช้งาน</string>
+    <string name="patcher_installed_conflict_body">"Oru ลงนามแอปที่แพตช์ด้วยใบรับรองของตัวเอง ซึ่งแตกต่างจากใบรับรองเดิม Android กำหนดให้ถอนการติดตั้งแอปเวอร์ชันเดิมก่อนจึงจะสามารถติดตั้งแอปที่แพตช์แล้วได้
+
+การถอนการติดตั้งจะลบข้อมูลแอปทั้งหมดอย่างถาวร"</string>
+    <string name="patcher_storage_permission_description_api30">ตัวเลือกแพตช์อย่างน้อยหนึ่งรายการชี้ไปยังพาธที่ Oru ไม่สามารถอ่านได้ ให้สิทธิ์การเข้าถึงพื้นที่เก็บข้อมูลและแตะปุ่ม จากนั้นการแพตช์จะเริ่มทำงานโดยอัตโนมัติ</string>
+    <string name="patcher_storage_permission_hint">คำแนะนำ: ย้ายไฟล์ไปยัง /Android/data/app.oru.manager/files/ - ไม่จำเป็นต้องมีสิทธิ์พิเศษอื่น</string>
+    <string name="root_mount_module_unmount_warning">หาก KernelSU เปิดใช้งาน Unmount modules ไว้โดยค่าเริ่มต้น ให้เปิด KernelSU &gt; Superuser &gt; แอปที่คุณติดตั้ง &gt; Profile &gt; Custom แล้วปิดใช้งาน Unmount modules มิเช่นนั้น APK ที่แพตช์แล้วที่ติดตั้งอาจไม่มีผล แม้ว่า Oru จะแสดงว่าติดตั้งแล้วก็ตาม</string>
+    <string name="settings_advanced_expert_mode_description">เปิดใช้งานการตั้งค่าการแพตช์และการปรับแต่งขั้นสูงของ Oru</string>
+    <string name="settings_advanced_github_pat_export_include_supporting">เพิ่ม PAT นี้ในการตั้งค่า Oru ที่ส่งออก</string>
+    <string name="settings_advanced_patch_options_custom_branding_custom_icon_instruction">"โฟลเดอร์ที่มีรูปภาพสำหรับใช้เป็นไอคอนแบบกำหนดเอง
+
+โฟลเดอร์ต้องมีโฟลเดอร์อย่างน้อยหนึ่งโฟลเดอร์ต่อไปนี้ ขึ้นอยู่กับ DPI ของอุปกรณ์:
+- mipmap-mdpi
+- mipmap-hdpi
+- mipmap-xhdpi
+- mipmap-xxhdpi
+- mipmap-xxxhdpi
+
+แต่ละโฟลเดอร์ต้องมีไฟล์ต่อไปนี้ทั้งหมด:
+morphe_adaptive_background_custom.png
+morphe_adaptive_foreground_custom.png
+
+ขนาดของรูปภาพต้องเป็นดังนี้:
+- mipmap-mdpi: 108x108 px
+- mipmap-hdpi: 162x162 px
+- mipmap-xhdpi: 216x216 px
+- mipmap-xxhdpi: 324x324 px
+- mipmap-xxxhdpi: 432x432 px
+
+ทางเลือก: พาธอาจมีโฟลเดอร์ 'drawable' พร้อมไฟล์ไอคอนขาวดำ:
+morphe_adaptive_monochrome_custom.xml
+
+ทางเลือก: พาธอาจมีไอคอนการแจ้งเตือนในรูปแบบใดรูปแบบหนึ่งต่อไปนี้:
+- รูปภาพเวกเตอร์ XML ใน 'drawable':
+  morphe_notification_icon_custom.xml
+- รูปภาพ raster PNG ในโฟลเดอร์ 'drawable-dpi':
+  drawable-mdpi/morphe_notification_icon_custom.png (24x24 px)
+  drawable-hdpi/morphe_notification_icon_custom.png (36x36 px)
+  drawable-xhdpi/morphe_notification_icon_custom.png (48x48 px)
+  drawable-xxhdpi/morphe_notification_icon_custom.png (72x72 px)
+  drawable-xxxhdpi/morphe_notification_icon_custom.png (96x96 px)"</string>
+    <string name="settings_advanced_patch_options_custom_header_instruction">"โฟเดอร์ที่มีไฟล์ที่ใช้เป็นโลโก้หัวหน้าแบบกำหนดเอง
+
+โฟเดอร์ต้องมีอยู่เหลือต่อไปนี้:
+- drawable-hdpi
+- drawable-xhdpi
+- drawable-xxhdpi
+- drawable-xxxhdpi
+
+แต่ละแต่ละของโฟเดอร์ต้องมีทั้งหมดของไฟล์ต่อไปนี้:
+morphe_header_custom_light.png
+morphe_header_custom_dark.png
+
+ขนาดของไฟล์ต้องเป็นดังค์เหลือดังต่อไปนี้:
+- drawable-hdpi: 194x72 px
+- drawable-xhdpi: 258x96 px
+- drawable-xxhdpi: 387x144 px
+- drawable-xxxhdpi: 512x192 px"</string>
+    <string name="settings_advanced_updates_allow_metered_description">อนุญาตให้ Oru และการอัปเดตแพตช์ดาวน์โหลดผ่านข้อมูลมือถือได้</string>
+    <string name="settings_advanced_updates_manager_prereleases_description">การเข้าถึง Oru เวอร์ชันใหม่ก่อนเผยแพร่</string>
+    <string name="settings_advanced_updates_prerelease_warning_message">"เวอร์ชันก่อนเผยแพร่ของ Oru ยังอยู่ในระหว่างการพัฒนาและอาจไม่เสถียร
+
+แพตช์ไม่ได้รับผลกระทบ: เปิดใช้งานแพตช์ก่อนเผยแพร่สำหรับแต่ละแหล่งที่มาในรายการแหล่งที่มาของแพตช์"</string>
+    <string name="settings_appearance_app_icon_selector_description">หน้าตาของ Oru บนหน้าจอหลักและในลิ้นชักแอป</string>
+    <string name="settings_auto_uninstall_warning_message">หาก Android รายงานข้อขัดแย้งของลายเซ็นระหว่างการติดตั้งอัตโนมัติของ Shizuku, Oru จะถอนการติดตั้งแอปที่มีอยู่ก่อนที่จะติดตั้ง APK ที่แพตช์แล้ว</string>
+    <string name="settings_system_apk_download_helper_warning">APK มาจากแอปตัวช่วย ดังนั้นให้ไว้วางใจเฉพาะแอปที่คุณรู้จักเท่านั้น Oru ยังคงตรวจสอบแพ็กเกจ เวอร์ชัน และลายเซ็นของทุกไฟล์ก่อนแพตช์</string>
+    <string name="settings_system_custom_file_picker_description">เรียกดูพื้นที่จัดเก็บด้วยตัวเลือกไฟล์ในตัวของ Oru แทนค่าเริ่มต้นของระบบ</string>
+    <string name="settings_system_export_manager_settings_fail">ไม่สามารถส่งออกการตั้งค่า Oru ได้: %s</string>
+    <string name="settings_system_export_manager_settings_success">ส่งออกการตั้งค่า Oru สำเร็จ</string>
+    <string name="settings_system_import_manager_settings_description">สำรองและกู้คืนการตั้งค่า Oru ของคุณ</string>
+    <string name="settings_system_import_manager_settings_fail">ไม่สามารถนำเข้าการตั้งค่า Oru ได้: %s</string>
+    <string name="settings_system_import_manager_settings_mode_title">นำเข้าการตั้งค่า Oru</string>
+    <string name="settings_system_import_manager_settings_success">นำเข้าการตั้งค่า Oru สำเร็จ</string>
+    <string name="settings_system_morphe_settings">การตั้งค่า Oru</string>
+    <string name="settings_system_process_runtime_heap_limit_ignored">อุปกรณ์นี้เพิกเฉยต่อขีดจำกัดหน่วยความจำในการรันครั้งล่าสุด ดังนั้นการแพตช์อาจย้อนกลับไปทำงานภายใน Oru</string>
+    <string name="settings_system_signing_key_dialog_description">แอปทุกตัวที่ Oru แพตช์จะเซ็นชื่อด้วยคีย์นี้ เก็บสำเนาไว้ เพราะหากไม่มีคีย์นี้ แอปที่แพตช์แล้วจะอัปเดตได้ก็ต่อเมื่อถอนการติดตั้งออกก่อนเท่านั้น</string>
+    <string name="settings_system_signing_key_missing">Oru จะสร้างคีย์ขึ้นมาเมื่อคุณแพตช์ครั้งแรก</string>
+    <string name="settings_system_storage_open_app_info_description">จัดการหรือล้างข้อมูล Oru ทั้งหมดผ่านการตั้งค่าระบบ</string>
+    <string name="sources_dialog_community_notice_message">"แหล่งที่มาแพตช์ชุมชนถูกสร้างและดูแลโดยผู้เขียนของตนเอง Oru ไม่ได้ตรวจสอบหรือยืนยันแพตช์ของบุคคลที่สาม และไม่รับผิดชอบต่อเนื้อหาหรือสิ่งที่เกิดขึ้นกับอุปกรณ์ของคุณ
+
+สิ่งที่คุณเพิ่มจากเว็บไซต์นี้ใช้ด้วยความเสี่ยงของคุณเอง"</string>
+    <string name="sources_management_held_back_hint">แหล่งนี้ทำให้ Oru เกิดข้อขัดข้องระหว่างการโหลด จึงถูกข้ามไป อัปเดตหรือนำเข้าแหล่งนี้ใหม่เพื่อลองอีกครั้ง</string>
+    <string name="sources_management_outdated_manager_badge">อัปเดต Oru</string>
+    <string name="sources_management_outdated_manager_hint">แหล่งที่มานี้สร้างขึ้นสำหรับตัวแพตช์ %1$s แต่ Oru %2$s มีตัวแพตช์ %3$s อัปเดต Oru เพื่อใช้งาน</string>
+    <string name="tour_prompt_desc">ต้องการทัวร์อย่างรวดเร็วเกี่ยวกับคุณสมบัติหลักของ Oru หรือไม่</string>
+    <string name="uninstall_app_unverified">ทิ้งไว้ที่เดิม: Oru ไม่สามารถยืนยันได้ว่าแอปที่ติดตั้งนั้นเป็นรุ่นที่ได้รับการแพตช์แล้ว</string>
+</resources>

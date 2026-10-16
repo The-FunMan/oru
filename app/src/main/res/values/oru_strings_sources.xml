@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Oru copy for the patch source choice: the Home chip, the source list of an app, the Focus line and the Expert
+  source row. One app is patched from one source; these strings name that source and the version it needs.
+-->
+<resources>
+    <string name="oru_source_title">Patch source</string>
+    <string name="oru_source_picker_body">One source patches this app. Pick the one to use. Your choice is kept for this app.</string>
+    <string name="oru_source_built_in">Built in</string>
+    <string name="oru_source_patch_version">Patches v%1$s</string>
+    <plurals name="oru_source_patch_count">
+        <item quantity="one">%1$d patch for %2$s</item>
+        <item quantity="other">%1$d patches for %2$s</item>
+    </plurals>
+    <string name="oru_source_needs">Needs %1$s %2$s</string>
+    <string name="oru_focus_source_row_title">Source</string>
+    <string name="oru_focus_source_row_value">%1$s v%2$s</string>
+    <string name="oru_notice_unsupported_none">Version %1$s is not supported yet. Pick another version.</string>
+</resources>

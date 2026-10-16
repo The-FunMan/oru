@@ -11,6 +11,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import app.morphe.manager.BuildConfig
 import app.morphe.manager.domain.batch.BatchPatchCoordinator
 import app.morphe.manager.domain.batch.BatchPlanResolver
 import app.morphe.manager.domain.batch.BatchTarget
@@ -64,6 +65,9 @@ class MainViewModel(
      */
     var pendingExternalApkUri: Uri? by mutableStateOf(null)
 
+    /** ORU: production rules for the external trigger; the flavour decides trust. */
+    private val externalBatchGate: ExternalBatchGate = FlavorExternalBatchGate(BuildConfig.ORU_UX)
+
     /** Batch patch request received from another app, waiting to be gated. */
     var pendingBatchPatch: BatchPatchRequest? by mutableStateOf(null)
 
@@ -72,6 +76,9 @@ class MainViewModel(
 
     /** Package a per-app launcher shortcut wants the patch dialog opened for. */
     var pendingPatchPackage: String? by mutableStateOf(null)
+
+    /** ORU: Package that a completed run or deep link notification wants to return Focus to. */
+    var pendingFocusPackage: String? by mutableStateOf(null)
 
     /** Set when an automatic re-patch notification asks to reopen its queue. */
     var pendingBatchResult by mutableStateOf(false)
@@ -96,13 +103,16 @@ class MainViewModel(
     fun onExternalBatchRequest(request: BatchPatchRequest) {
         pendingBatchPatch = null
         viewModelScope.launch {
-            if (!prefs.externalBatchPatchEnabled.get()) return@launch
-
-            val caller = request.callerPackage
-            if (caller != null && caller in prefs.externalBatchPatchAllowlist.get()) {
-                approvedBatchPatch = request
-            } else {
-                batchPatchConfirmation = request
+            // ORU: the verdict rules live in ExternalBatchGate so they can be unit tested
+            val verdict = externalBatchGate.verdict(
+                switchOn = prefs.externalBatchPatchEnabled.get(),
+                callerPackage = request.callerPackage,
+                allowlist = prefs.externalBatchPatchAllowlist.get()
+            )
+            when (verdict) {
+                ExternalBatchVerdict.IGNORE -> Unit
+                ExternalBatchVerdict.APPROVE -> approvedBatchPatch = request
+                ExternalBatchVerdict.CONFIRM -> batchPatchConfirmation = request
             }
         }
     }
@@ -115,7 +125,8 @@ class MainViewModel(
         batchPatchConfirmation = null
         viewModelScope.launch {
             val caller = request.callerPackage
-            if (trustCaller && caller != null) {
+            // ORU: oru never stores a trusted caller, so the allowlist only ever shrinks there
+            if (trustCaller && caller != null && externalBatchGate.mayTrustCaller()) {
                 prefs.externalBatchPatchAllowlist.update(
                     prefs.externalBatchPatchAllowlist.get() + caller
                 )
@@ -175,4 +186,37 @@ class MainViewModel(
         val targets: List<BatchTarget>,
         val callerPackage: String?
     )
+}
+
+/** What happens to one external batch request. */
+enum class ExternalBatchVerdict { IGNORE, CONFIRM, APPROVE }
+
+/**
+ * ORU: rules of the external batch trigger, free of Android types so they can be unit tested.
+ * [MainViewModel] reads the preferences and asks this gate what to do with each request.
+ */
+interface ExternalBatchGate {
+    /** Decides a request. The switch off ignores everything; trusted callers skip the dialog only where allowed. */
+    fun verdict(switchOn: Boolean, callerPackage: String?, allowlist: Set<String>): ExternalBatchVerdict
+
+    /** Whether "always allow" may store a caller in the allowlist. */
+    fun mayTrustCaller(): Boolean
+}
+
+/**
+ * ORU: the gate used in the app. [oruUx] is `BuildConfig.ORU_UX`; tests pass it explicitly.
+ * With it false (Morphe) the rules are the original ones.
+ */
+class FlavorExternalBatchGate(private val oruUx: Boolean) : ExternalBatchGate {
+    override fun verdict(
+        switchOn: Boolean,
+        callerPackage: String?,
+        allowlist: Set<String>
+    ): ExternalBatchVerdict = when {
+        !switchOn -> ExternalBatchVerdict.IGNORE
+        !oruUx && callerPackage != null && callerPackage in allowlist -> ExternalBatchVerdict.APPROVE
+        else -> ExternalBatchVerdict.CONFIRM
+    }
+
+    override fun mayTrustCaller(): Boolean = !oruUx
 }

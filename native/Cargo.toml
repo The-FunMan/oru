@@ -1,0 +1,19 @@
+[package]
+name = "oru-patcher"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[lib]
+name = "oru_patcher"
+crate-type = ["cdylib", "rlib"]
+path = "src/lib.rs"
+
+[dependencies]
+jni = "0.21"
+memmap2 = "0.9"
+rayon = "1.10"
+
+[profile.release]
+debug = 0
+strip = "symbols"

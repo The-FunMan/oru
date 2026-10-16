@@ -1,0 +1,15 @@
+[package]
+name = "oru-packager-jni"
+version = "0.1.0"
+edition = "2021"
+publish = false
+description = "JNI entry points of native-packager for the Oru patcher"
+
+[lib]
+name = "oru_packager"
+crate-type = ["cdylib"]
+path = "src/lib.rs"
+
+[dependencies]
+jni = "0.21"
+native-packager = { path = ".." }

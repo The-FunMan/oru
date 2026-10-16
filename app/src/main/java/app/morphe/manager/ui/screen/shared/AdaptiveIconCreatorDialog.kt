@@ -217,7 +217,6 @@ fun AdaptiveIconCreatorDialog(
     )
     val logoFallback = morpheLogo.takeIf { foreground.value?.isOpaque == true }
 
-    // Folder picker for saving
     val openFolderPicker = rememberFolderPickerWithPermission { uri ->
         val picked = foreground.value ?: return@rememberFolderPickerWithPermission
         scope.launch {

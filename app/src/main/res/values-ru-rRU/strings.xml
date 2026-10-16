@@ -563,8 +563,6 @@
     <string name="patcher_field_value_stripped">Удалены</string>
     <!-- Value of "Libraries": every library was left in the patched APK -->
     <string name="patcher_field_value_kept">Оставлены</string>
-    <string name="patcher_tab_logs">Журналы патчера</string>
-    <string name="patcher_tab_game">Игры</string>
     <string name="patcher_logs_waiting">Ожидание вывода логов…</string>
     <string name="patcher_logs_lost">Вывод логов не сохраняется после перезапуска приложения</string>
     <string name="patcher_long_step_warning">Этот шаг может занять некоторое время. Пожалуйста, подождите…</string>
@@ -594,7 +592,6 @@
     <string name="patcher_install_error_subtitle">Попробуйте удалить и установить заново</string>
     <string name="patcher_ready_to_mount_subtitle">Нажмите кнопку ниже, чтобы смонтировать</string>
     <string name="patcher_patches_excluded_for_installer">Недоступно для данного метода установки и исключено: %s</string>
-    <string name="patcher_back_to_game_hint">Нажмите %1$s, чтобы вернуться в игру</string>
     <string name="patcher_storage_permission_dialog_title">Невозможно получить доступ к пути хранения</string>
     <string name="patcher_incompatible_patcher_title">Требуется обновление</string>
     <string name="patcher_incompatible_patcher_description">Источник &lt;b&gt;%1$s&lt;/b&gt; требует патчер &lt;b&gt;%2$s&lt;/b&gt; или новее. Обновите Morphe, чтобы использовать его</string>
@@ -691,29 +688,6 @@
     <string name="package_name">Имя пакета</string>
     <string name="failed_to_mount">Не удалось смонтировать: %s</string>
     <string name="failed_to_unmount">Не удалось размонтировать: %s</string>
-    <!-- Patcher Screen - Mini-games -->
-    <string name="mini_game_score">Счет %s</string>
-    <string name="mini_game_best">Лучший результат: %s</string>
-    <string name="mini_game_new_record">Новый рекорд!</string>
-    <string name="mini_game_game_over">Игра окончена</string>
-    <string name="mini_game_try_again">Попробовать снова</string>
-    <string name="mini_game_paused">Пауза</string>
-    <string name="mini_game_resume">Продолжить</string>
-    <string name="mini_game_restart">Начать заново</string>
-    <string name="mini_game_change">Выбрать другую игру</string>
-    <string name="mini_game_2048_picker_subtitle">Сдвигайте плитки, чтобы объединять их</string>
-    <string name="mini_game_flappy_picker_subtitle">Касайтесь экрана, чтобы пролетать сквозь трубы</string>
-    <string name="mini_game_flappy_tap_to_start">Касайтесь экрана, чтобы лететь</string>
-    <string name="mini_game_snake_picker_subtitle">Ешьте еду, не ударяйтесь о себя</string>
-    <string name="mini_game_snake_swipe_to_start">Смахните, чтобы начать</string>
-    <string name="mini_game_dino_picker_subtitle">Касайтесь экрана, чтобы перепрыгивать кактусы</string>
-    <string name="mini_game_dino_tap_to_start">Касайтесь экрана, чтобы бежать</string>
-    <string name="mini_game_blocks_picker_subtitle">Подгонка форм, четкие линии</string>
-    <string name="mini_game_blocks_tap_to_start">Коснитесь, чтобы повернуть, свайп, чтобы переместить, свайп вниз, чтобы опустить</string>
-    <string name="mini_game_bricks_picker_subtitle">Отбей мяч, расчисти стену</string>
-    <string name="mini_game_bricks_tap_to_start">Перетащите, чтобы прицелиться, коснитесь, чтобы запустить</string>
-    <string name="mini_game_miner_picker_subtitle">Нажмите, чтобы открыть, удерживайте для отметки</string>
-    <string name="mini_game_pairs_picker_subtitle">Переверните карты, найти соответствие</string>
     <!-- Settings -->
     <string name="appearance">Внешний вид</string>
     <string name="advanced">Дополнительно</string>

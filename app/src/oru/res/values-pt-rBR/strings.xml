@@ -1,0 +1,123 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="adaptive_icon_guide_png_body">Um logotipo com fundo transparente funciona melhor, com a cor de fundo escolhida abaixo. Uma imagem sem transparência, em vez disso, preenche o ícone inteiro, e os ícones temáticos e de notificação mantêm o logotipo do Oru.</string>
+    <string name="adaptive_icon_no_transparency_warning">Esta imagem não tem pixels transparentes, então os ícones temáticos e de notificação mantêm o logotipo do Oru</string>
+    <string name="battery_optimization_dialog_description">Alguns dispositivos podem fechar o patcher quando minimizado. Permita que o Oru seja executado sem restrições de bateria para garantir que a aplicação de patches seja concluída de forma confiável</string>
+    <string name="deep_link_add_source_message">Quer adicionar essa fonte de patches ao Oru?</string>
+    <string name="external_batch_patch_description">%s quer que o Oru aplique patches e instale aplicativos</string>
+    <string name="home_apk_helper_description">O Oru solicitará ao app auxiliar abaixo para fazer o download do APK original e devolver o arquivo</string>
+    <string name="home_apk_helper_installed_unavailable">O Oru não conseguiu usar o aplicativo instalado</string>
+    <string name="home_apk_helper_warning">Apenas continue se você confiar neste app auxiliar. O Oru verifica o pacote, a versão e a assinatura de tudo o que receber antes de aplicar os patches</string>
+    <string name="home_apk_helper_warning_unverified">Apenas continue se você confiar neste app auxiliar. O Oru não pode verificar a assinatura deste APK, portanto, um arquivo modificado não seria detectado</string>
+    <string name="home_app_filter_not_patched_description">Aplicativos que você ainda não aplicou um patch no Oru</string>
+    <string name="home_app_filter_patched_description">Aplicativos que você aplicou um patch ou salvou com o Oru</string>
+    <string name="home_app_filter_uninstalled_description">Aplicativos com patch do Oru que não estão mais neste dispositivo</string>
+    <string name="home_app_info_app_deleted_description">Esse aplicativo foi desinstalado fora do Oru. Refaça os patches para restaurar a funcionalidade</string>
+    <string name="home_app_info_install_unverified">O Oru não pode confirmar se o aplicativo instalado é a versão em que aplicou patch. Reaplique o patch ou reinstale-o a partir do APK salvo para restaurar suas ações</string>
+    <string name="home_app_info_not_patched_description">Uma versão não patcheada deste aplicativo está instalada. O Oru ainda tem seu registro de patch anterior</string>
+    <string name="home_download_instructions_download_button_toast_6">Agora você é um testador oficial do Oru 🏅</string>
+    <string name="home_download_instructions_step2_search_note">O Oru não se responsabiliza por esses sites. Ignore os que oferecem uma loja de aplicativos própria em vez de um arquivo APK</string>
+    <string name="home_download_instructions_step4">Depois da conclusão do download, volte para o Oru</string>
+    <string name="home_download_instructions_step4_mount">Depois de instalar o APK original, volte para o Oru</string>
+    <string name="home_held_back_title">Uma fonte de patches causou a falha do Oru</string>
+    <string name="home_outdated_manager_title">O Oru está desatualizado</string>
+    <string name="home_update_available">Atualização do Oru disponível</string>
+    <string name="installer_shizuku_error_permission">A permissão do Shizuku está ausente. Conceda permissão ao Oru e tente novamente</string>
+    <string name="installer_status_shizuku_permission">Conceda permissão do Shizuku ao Oru a partir do aplicativo Shizuku</string>
+    <string name="installing_manager_update_hint">Oru fechará para concluir a atualização.</string>
+    <string name="launch_app_unverified">O Oru não pôde verificar que o aplicativo instalado é a versão que ele aplicacou o patch.</string>
+    <string name="notification_bundle_update_text_unversioned">Toque para abrir o Oru e atualizar</string>
+    <string name="notification_channel_manager_updates">Atualizações do Oru</string>
+    <string name="notification_channel_manager_updates_description">Notificações sobre novas versões do Oru</string>
+    <string name="notification_channel_patcher_description">Exibido enquanto o Oru aplica patches em um aplicativo em segundo plano</string>
+    <string name="notification_mount_replaced_text">v%1$s substituiu o v%2$s corrigido. Abra o Oru para restaurá-lo</string>
+    <string name="notification_permission_dialog_description">O Oru precisa de permissão de notificação para alertá-lo quando as atualizações estiverem disponíveis em segundo plano</string>
+    <string name="onboarding_settings_desc">Personalize o Oru: aparência, opções avançadas e ferramentas do sistema</string>
+    <string name="patcher_incompatible_patcher_description">A origem &lt;b&gt;%1$s&lt;/b&gt; requer o patcher &lt;b&gt;%2$s&lt;/b&gt; ou mais recente. Atualize o Oru para usá-lo</string>
+    <string name="patcher_installed_conflict_body">"O Oru assina os aplicativos patcheados com um certificado próprio, que difere do original. O Android exige a remoção da versão existente antes que o aplicativo patcheado possa ser instalado.
+
+
+A desinstalação apagará permanentemente todos os dados do aplicativo"</string>
+    <string name="patcher_storage_permission_description_api30">Uma ou mais opções de patch apontam para caminhos que o Oru não consegue ler. Conceda acesso de armazenamento e toque no botão e a aplicação começará automaticamente</string>
+    <string name="patcher_storage_permission_hint">Dica: Mova os arquivos para /Android/data/app.oru.manager/files/ - sem permissão extra necessária</string>
+    <string name="root_mount_module_unmount_warning">Se o KernelSU tiver os módulos de Desmontagem ativados por padrão, abra o KernelSU &gt; Superusuário &gt; o aplicativo que você montou &gt; Perfil &gt; Personalizado e desative os módulos de Desmontagem. Caso contrário, o APK montado e patcheado pode não ter efeito, mesmo que o Oru mostre que ele está montado</string>
+    <string name="settings_advanced_expert_mode_description">Habilita configurações e opções de personalização avançadas do Oru</string>
+    <string name="settings_advanced_github_pat_export_include_supporting">Adiciona este PAT às configurações exportadas do Oru</string>
+    <string name="settings_advanced_patch_options_custom_branding_custom_icon_instruction">"Pasta com imagens para usar como um ícone personalizado.
+
+A pasta deve conter um ou mais dos seguintes diretórios, dependendo da DPI do dispositivo:
+- mipmap-mdpi
+- mipmap-hdpi
+- mipmap-xhdpi
+- mipmap-xxhdpi
+- mipmap-xxxhdpi
+
+Cada um dos diretórios deve conter todos os seguintes arquivos:
+morphe_adaptive_background_custom.png
+morphe_adaptive_foreground_custom.png
+
+As dimensões da imagem devem ser as seguintes:
+- mipmap-mdpi: 108x108 px
+- mipmap-hdpi: 162x162 px
+- mipmap-xhdpi: 216x216 px
+- mipmap-xxhdpi: 324x324 px
+- mipmap-xxxhdpi: 432x432 px
+
+Opcionalmente, o caminho contém uma pasta 'drawable' com um arquivo de ícone monocromático:
+morphe_adaptive_monochrome_custom.xml
+
+Opcionalmente, o caminho contém um ícone de notificação em um dos seguintes formatos:
+- Drawable vetorial XML em 'drawable':
+  morphe_notification_icon_custom.xml
+- Imagens rasterizadas PNG em pastas 'drawable-dpi':
+  drawable-mdpi/morphe_notification_icon_custom.png (24x24 px)
+  drawable-hdpi/morphe_notification_icon_custom.png (36x36 px)
+  drawable-xhdpi/morphe_notification_icon_custom.png (48x48 px)
+  drawable-xxhdpi/morphe_notification_icon_custom.png (72x72 px)
+  drawable-xxxhdpi/morphe_notification_icon_custom.png (96x96 px)"</string>
+    <string name="settings_advanced_patch_options_custom_header_instruction">"Pasta com imagens para usar como logo personalizado no cabeçalho.
+
+A pasta deve conter uma ou mais das seguintes pastas, de acordo com a DPI do dispositivo:
+- drawable-hdpi
+- drawable-xhdpi
+- drawable-xxhdpi
+- drawable-xxxhdpi
+
+Cada uma das pastas deve conter todos os seguintes arquivos:
+morphe_header_custom_light.png
+morphe_header_custom_dark.png
+
+As dimensões das imagens devem ser as seguintes:
+- drawable-hdpi: 194x72 px
+- drawable-xhdpi: 258x96 px
+- drawable-xxhdpi: 387x144 px
+- drawable-xxxhdpi: 512x192 px"</string>
+    <string name="settings_advanced_updates_allow_metered_description">Permite que o Oru e as atualizações de patch baixem pelos dados móveis</string>
+    <string name="settings_advanced_updates_manager_prereleases_description">Acesso antecipado a novas versões do Oru</string>
+    <string name="settings_advanced_updates_prerelease_warning_message">"As versões de pré-lançamento do Oru ainda estão em desenvolvimento e podem ser instáveis.
+
+Os patches não são afetados: ative os patches de pré-lançamento para cada fonte na lista de fontes de patches"</string>
+    <string name="settings_appearance_app_icon_selector_description">Como o Oru aparece na tela inicial e na gaveta de aplicativos</string>
+    <string name="settings_auto_uninstall_warning_message">Se o Android relatar um conflito de assinatura durante a instalação automática do Shizuku, o Oru desinstalará o app existente antes de instalar o APK corrigido</string>
+    <string name="settings_system_apk_download_helper_warning">O APK vem do aplicativo auxiliar, portanto confie apenas em aplicativos que você conhece. O Oru ainda verifica o pacote, a versão e a assinatura de cada arquivo antes de aplicar o patch.</string>
+    <string name="settings_system_custom_file_picker_description">Navegue pelo armazenamento com o seletor de arquivos integrado do Oru, em vez do padrão do sistema.</string>
+    <string name="settings_system_export_manager_settings_fail">Falha ao exportar as configurações do Oru: %s</string>
+    <string name="settings_system_export_manager_settings_success">Configurações do Oru exportadas</string>
+    <string name="settings_system_import_manager_settings_description">Faz backup e restaura suas configurações do Oru</string>
+    <string name="settings_system_import_manager_settings_fail">Falha ao importar as configurações do Oru: %s</string>
+    <string name="settings_system_import_manager_settings_mode_title">Importar configurações do Oru</string>
+    <string name="settings_system_import_manager_settings_success">Configurações do Oru importadas</string>
+    <string name="settings_system_morphe_settings">Configurações do Oru</string>
+    <string name="settings_system_process_runtime_heap_limit_ignored">Este dispositivo ignorou o limite de memória na última execução, então a aplicação de patches pode recorrer à execução dentro do Oru</string>
+    <string name="settings_system_signing_key_dialog_description">Todo aplicativo que o Oru modifica é assinado com esta chave. Guarde uma cópia: sem ela, os aplicativos modificados só podem ser atualizados após serem desinstalados</string>
+    <string name="settings_system_signing_key_missing">O Oru cria uma com seu primeiro patch</string>
+    <string name="settings_system_storage_open_app_info_description">Gerenciar ou limpar todos os dados do Oru pelas configurações do sistema</string>
+    <string name="sources_dialog_community_notice_message">"As fontes de patches da comunidade são criadas e mantidas por seus próprios autores. O Oru não analisa nem verifica patches de terceiros e não se responsabiliza pelo conteúdo deles ou pelo que fazem em seu dispositivo.
+
+Tudo o que você adicionar a partir deste site é por sua conta e risco"</string>
+    <string name="sources_management_held_back_hint">Esta fonte causou a falha do Oru durante o carregamento, por isso está sendo ignorada. Atualize ou reimporte para tentar novamente</string>
+    <string name="sources_management_outdated_manager_badge">Atualize o Oru</string>
+    <string name="sources_management_outdated_manager_hint">Esta fonte foi criada para o patcher %1$s, mas o Oru %2$s já inclui o patcher %3$s. Atualize o Oru para usá-la</string>
+    <string name="tour_prompt_desc">Quer um tour rápido dos principais recursos do Oru?</string>
+    <string name="uninstall_app_unverified">Mantido no lugar: O Oru não pôde verificar que o aplicativo instalado é a versão que ele aplicou o patch</string>
+</resources>

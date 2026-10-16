@@ -6,6 +6,7 @@
 package app.morphe.manager.ui.model
 
 import app.morphe.manager.patcher.patch.PatchInfo
+import app.morphe.manager.util.KnownApps
 import app.morphe.manager.util.PatchSelection
 
 /**
@@ -17,6 +18,78 @@ const val PACKAGE_NAME_OPTION_KEY = "packageName"
 /** Whether this patch is one that builds the app under a package name of its own. */
 val PatchInfo.declaresPackageName: Boolean
     get() = options?.any { it.key == PACKAGE_NAME_OPTION_KEY } == true
+
+/** The shape of a package name, as the bundle's own clone patch checks one. Rules out the "Default" sentinel. */
+private val PACKAGE_NAME_SHAPE = Regex("^[a-z]\\w*(\\.[a-z]\\w*)+$")
+
+/**
+ * The package names an app's patched builds are given, keyed by the stock package the app goes by.
+ *
+ * Read from the [PACKAGE_NAME_OPTION_KEY] default of each patch that renames one app: that default is the
+ * name the patcher gives the app's builds, so it is the name an install of such a build carries. A patch
+ * compatible with several apps has a single default for all of them, so it names none of them. A default
+ * that is not a package name, such as the "Default" a clone patch ships to mean "the name the patch picks",
+ * names nothing either.
+ *
+ * Most bundles declare no such option (the YouTube and YouTube Music GmsCore patches name their builds in
+ * code), so [fallbackPatchedPackageNames] covers the rest.
+ */
+fun patchedPackageNamesByApp(patches: Iterable<PatchInfo>): Map<String, Set<String>> {
+    val names = mutableMapOf<String, MutableSet<String>>()
+    for (patch in patches) {
+        val packages = patch.compatiblePackages?.mapNotNullTo(mutableSetOf()) { it.packageName } ?: continue
+        val packageName = packages.singleOrNull() ?: continue
+        val default = patch.options?.firstOrNull { it.key == PACKAGE_NAME_OPTION_KEY }?.default as? String
+        if (default == null || default == packageName || !PACKAGE_NAME_SHAPE.matches(default)) continue
+        names.getOrPut(packageName) { mutableSetOf() } += default
+    }
+    return names
+}
+
+private const val GOOGLE_APP_PREFIX = "com.google.android."
+private const val MORPHE_GOOGLE_APP_PREFIX = "app.morphe.android."
+
+/** The Google apps whose GmsCore support patch renames them, in the bundle's patch code. */
+private val GMS_CORE_RENAMED_APPS = setOf(KnownApps.YOUTUBE, KnownApps.YOUTUBE_MUSIC)
+
+/**
+ * The package names a patched build of [stockPackageName] carries when no patch declares one in its options,
+ * derived from the rules the Morphe patches apply in code (checked against patches-1.44.0-dev.4 and the
+ * morphe-patches source):
+ *
+ * 1. GmsCore support renames YouTube and YouTube Music, replacing the leading `com.google.android.` with
+ *    `app.morphe.android.`: `com.google.android.youtube` gives `app.morphe.android.youtube` and
+ *    `com.google.android.apps.youtube.music` gives `app.morphe.android.apps.youtube.music`.
+ * 2. Clone app is universal. With its package name left at its default it builds every app under
+ *    `<stock>.morphe`, so Reddit's build is `com.reddit.frontpage.morphe`. Rule 2 also covers YouTube and
+ *    YouTube Music when GmsCore support is not selected.
+ *
+ * Nothing here says whether a candidate is installed. Callers look only at candidates that are.
+ */
+fun fallbackPatchedPackageNames(stockPackageName: String): List<String> = buildList {
+    if (stockPackageName in GMS_CORE_RENAMED_APPS && stockPackageName.startsWith(GOOGLE_APP_PREFIX)) {
+        add(MORPHE_GOOGLE_APP_PREFIX + stockPackageName.removePrefix(GOOGLE_APP_PREFIX))
+    }
+    add("$stockPackageName.morphe")
+}
+
+/**
+ * The patched copies of [stockPackageName] that are installed, in the order they are tried: the names the
+ * bundles declare in their options first (sorted), then the names [fallbackPatchedPackageNames] gives.
+ *
+ * Nothing is looked up while the stock app itself is installed. That install is the app the card is for, and
+ * a patched copy of it must not take the card over.
+ */
+fun installedPatchedCopies(
+    stockPackageName: String,
+    declaredNames: Set<String>,
+    installedPackages: Set<String>
+): List<String> {
+    if (stockPackageName in installedPackages) return emptyList()
+    return (declaredNames.sorted() + fallbackPatchedPackageNames(stockPackageName))
+        .distinct()
+        .filter { it != stockPackageName && it in installedPackages }
+}
 
 /**
  * Whether this patch names the app it builds without being asked to, so selecting it is by itself

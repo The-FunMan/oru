@@ -41,7 +41,12 @@ data class HomeAppItem(
     val patchCount: Int,
     val isClone: Boolean,
     /** What tells the card from another app of the same name, see [withNameSuffixes]. */
-    val nameSuffix: String? = null
+    val nameSuffix: String? = null,
+    /**
+     * The package a patched copy of the app is installed under, when the app itself is not on the phone and
+     * this manager did not make that copy, so it keeps no record of it. The card's [packageInfo] is that copy's.
+     */
+    val installedPatchedPackage: String? = null,
 ) {
     val hasSavedCopy: Boolean get() = savedApkFile != null
 

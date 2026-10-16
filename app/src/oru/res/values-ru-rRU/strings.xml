@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="adaptive_icon_guide_png_body">Логотип на прозрачном фоне подходит лучше всего, а цвет фона выбирается ниже. Изображение без прозрачности заполняет весь значок, и тогда тематический значок и значок уведомления сохраняют логотип Oru.</string>
+    <string name="adaptive_icon_no_transparency_warning">В этом изображении нет прозрачных пикселей, поэтому тематический значок и значок уведомления сохраняют логотип Oru</string>
+    <string name="battery_optimization_dialog_description">На некоторых устройствах патчер может быть остановлен, когда приложение свернуто. Разрешите Oru работать без ограничений заряда батареи, чтобы гарантировать надежное завершение патчинга.</string>
+    <string name="deep_link_add_source_message">Вы хотите добавить этот источник патча в Oru?</string>
+    <string name="external_batch_patch_description">%s хочет, чтобы Oru пропатчил и установил приложения</string>
+    <string name="home_apk_helper_description">Oru запросит у вспомогательного приложения, указанного ниже, загрузить исходный APK и передать файл обратно</string>
+    <string name="home_apk_helper_installed_unavailable">Oru не смог использовать установленное приложение</string>
+    <string name="home_apk_helper_warning">Продолжайте только в том случае, если вы доверяете этому вспомогательному приложению. Oru проверяет пакет, версию и подпись любого полученного файла перед применением патча</string>
+    <string name="home_apk_helper_warning_unverified">Продолжайте только в том случае, если вы доверяете этому вспомогательному приложению. Oru не может проверить подпись этого APK, поэтому измененный файл не будет обнаружен</string>
+    <string name="home_app_filter_not_patched_description">Приложения, которые вы ещё не пропатчили в Oru</string>
+    <string name="home_app_filter_patched_description">Приложения, которые вы пропатчили или сохранили с помощью Oru</string>
+    <string name="home_app_filter_uninstalled_description">Приложения, пропатченные с помощью Oru, которых больше нет на этом устройстве</string>
+    <string name="home_app_info_app_deleted_description">Это приложение было удалено вне устройства Oru. Переустановите его, чтобы восстановить работоспособность.</string>
+    <string name="home_app_info_install_unverified">Oru не может подтвердить, что установленное приложение является той самой сборкой, которую оно патчило. Перепатчите или переустановите его из сохраненного APK, чтобы восстановить его функции</string>
+    <string name="home_app_info_not_patched_description">Установлена непатченная версия этого приложения. Oru по-прежнему имеет свою предыдущую запись о патче.</string>
+    <string name="home_download_instructions_download_button_toast_6">Теперь вы официальный тестер кнопки Oru 🏅</string>
+    <string name="home_download_instructions_step2_search_note">Oru не может поручиться за эти сайты. Пропустите те, которые предлагают собственный магазин приложений вместо APK-файла</string>
+    <string name="home_download_instructions_step4">После завершения загрузки, вернитесь в Oru</string>
+    <string name="home_download_instructions_step4_mount">После установки оригинального APK, вернитесь в Oru</string>
+    <string name="home_held_back_title">Источник патчей вызвал сбой Oru</string>
+    <string name="home_outdated_manager_title">Oru устарел</string>
+    <string name="home_update_available">Доступно обновление Oru</string>
+    <string name="installer_shizuku_error_permission">Разрешение Shizuku отсутствует. Предоставьте разрешение Oru и повторите попытку.</string>
+    <string name="installer_status_shizuku_permission">Предоставьте разрешение Oru от приложения Shizuku</string>
+    <string name="installing_manager_update_hint">Oru закроется, чтобы завершить обновление</string>
+    <string name="launch_app_unverified">Oru не удалось проверить, что установленное приложение является сборкой, которую он пропатчил.</string>
+    <string name="notification_bundle_update_text_unversioned">Нажмите, чтобы открыть Oru и обновить</string>
+    <string name="notification_channel_manager_updates">Oru обновления</string>
+    <string name="notification_channel_manager_updates_description">Уведомления о новых релизах Oru</string>
+    <string name="notification_channel_patcher_description">Отображается во время установки Oru патча для приложения в фоновом режиме</string>
+    <string name="notification_mount_replaced_text">v%1$s заменила пропатченную v%2$s. Откройте Oru, чтобы восстановить его</string>
+    <string name="notification_permission_dialog_description">Oru требует разрешения на уведомление, чтобы сообщать вам о доступных обновлениях в фоновом режиме</string>
+    <string name="onboarding_settings_desc">Настройте Oru: внешний вид, дополнительные параметры и системные инструменты</string>
+    <string name="patcher_incompatible_patcher_description">Источник &lt;b&gt;%1$s&lt;/b&gt; требует патчер &lt;b&gt;%2$s&lt;/b&gt; или новее. Обновите Oru, чтобы использовать его</string>
+    <string name="patcher_installed_conflict_body">"Oru подписывает пропатченные приложения своим собственным сертификатом, который отличается от оригинального. Android требует удаления существующей версии перед установкой пропатченного приложения.
+
+Удаление приведет к безвозвратному удалению всех данных приложения"</string>
+    <string name="patcher_storage_permission_description_api30">Один или несколько параметров патча указывают на пути, которые Oru не может прочесть. Предоставьте доступ к хранилищу и нажмите кнопку, после чего патч начнется автоматически</string>
+    <string name="patcher_storage_permission_hint">Совет: переместите файлы в /Android/data/app.oru.manager/files/ - дополнительные разрешения не требуются</string>
+    <string name="root_mount_module_unmount_warning">Если в KernelSU по умолчанию включена функция \"Размонтировать модули\" (Unmount modules), откройте KernelSU &gt; Суперпользователь &gt; приложение, которое вы примонтировали &gt; Профиль &gt; Пользовательское (Custom) и отключите \"Размонтировать модули\". В противном случае примонтированный пропатченный APK может не вступить в силу, даже если Oru показывает его как примонтированный</string>
+    <string name="settings_advanced_expert_mode_description">Включает расширенные настройки патчей Oru и больше вариантов кастомизации</string>
+    <string name="settings_advanced_github_pat_export_include_supporting">Добавляет этот Токен к экспортируемым настройкам Oru</string>
+    <string name="settings_advanced_patch_options_custom_branding_custom_icon_instruction">"Папка с изображениями для использования в качестве пользовательского значка.
+
+Папка должна содержать одну или несколько из следующих папок, в зависимости от DPI устройства:
+- mipmap-mdpi
+- mipmap-hdpi
+- mipmap-xhdpi
+- mipmap-xxhdpi
+- mipmap-xxxhdpi
+
+Каждая из папок должна содержать все следующие файлы:
+morphe_adaptive_background_custom.png
+morphe_adaptive_foreground_custom.png
+
+Размеры изображений должны быть следующими:
+- mipmap-mdpi: 108x108 px
+- mipmap-hdpi: 162x162 px
+- mipmap-xhdpi: 216x216 px
+- mipmap-xxhdpi: 324x324 px
+- mipmap-xxxhdpi: 432x432 px
+
+Необязательно, путь содержит папку 'drawable' с монохромным файлом значка:
+morphe_adaptive_monochrome_custom.xml
+
+Необязательно, путь содержит значок уведомления в одном из следующих форматов:
+- XML векторный значок в 'drawable':
+  morphe_notification_icon_custom.xml
+- PNG растровые изображения в папках 'drawable-dpi':
+  drawable-mdpi/morphe_notification_icon_custom.png (24x24 px)
+  drawable-hdpi/morphe_notification_icon_custom.png (36x36 px)
+  drawable-xhdpi/morphe_notification_icon_custom.png (48x48 px)
+  drawable-xxhdpi/morphe_notification_icon_custom.png (72x72 px)
+  drawable-xxxhdpi/morphe_notification_icon_custom.png (96x96 px)"</string>
+    <string name="settings_advanced_patch_options_custom_header_instruction">"Папка с изображениями для использования в качестве своего заголовка.
+
+Папка должна содержать один или несколько из следующих папок, в зависимости от DPI устройства:
+- drawable-hdpi
+- drawable-xhdpi
+- drawable-xxhdpi
+- drawable-xxxhdpi
+
+В каждой из папок должны присутствовать следующие файлы:
+morphe_header_custom_light.png
+morphe_header_custom_dark.png
+
+Размеры изображений должны соответствовать следующим требованиям:
+- drawable-hdpi: 194x72 пикс.
+- drawable-xhdpi: 258x96 пикс.
+- drawable-xxhdpi: 387x144 пикс.
+- drawable-xxxhdpi: 512x192 пикс"</string>
+    <string name="settings_advanced_updates_allow_metered_description">Разрешает загрузку обновлений Oru и патчей через мобильные данные</string>
+    <string name="settings_advanced_updates_manager_prereleases_description">Ранний доступ к новым версиям Oru</string>
+    <string name="settings_advanced_updates_prerelease_warning_message">"Предварительные версии Oru все еще находятся в разработке и могут быть нестабильными.
+
+Патчи не затрагиваются: включите предварительные патчи для каждого источника в списке источников патчей"</string>
+    <string name="settings_appearance_app_icon_selector_description">Как Oru выглядит на главном экране и в панели приложений</string>
+    <string name="settings_auto_uninstall_warning_message">Если Android сообщает о конфликте подписей во время автоматической установки Shizuku, Oru удалит существующее приложение перед установкой исправленного APK.</string>
+    <string name="settings_system_apk_download_helper_warning">APK поступает из вспомогательного приложения, поэтому доверяйте только тем приложениям, которые вы знаете. Oru по-прежнему проверяет пакет, версию и подпись каждого файла перед наложением патча.</string>
+    <string name="settings_system_custom_file_picker_description">Использовать встроенный файловый менеджер Oru вместо системного по умолчанию</string>
+    <string name="settings_system_export_manager_settings_fail">Не удалось экспортировать настройки Oru: %s</string>
+    <string name="settings_system_export_manager_settings_success">Oru настройки экспортированы</string>
+    <string name="settings_system_import_manager_settings_description">Создает резервные копии и восстанавливает настройки Oru</string>
+    <string name="settings_system_import_manager_settings_fail">Не удалось импортировать настройки Oru: %s</string>
+    <string name="settings_system_import_manager_settings_mode_title">Импортировать настройки Oru</string>
+    <string name="settings_system_import_manager_settings_success">Oru настройки импортированы</string>
+    <string name="settings_system_morphe_settings">Настройки Oru</string>
+    <string name="settings_system_process_runtime_heap_limit_ignored">Это устройство проигнорировало ограничение памяти при последнем запуске, поэтому патчинг может вернуться к выполнению внутри Oru.</string>
+    <string name="settings_system_signing_key_dialog_description">Каждое приложение, которое патчит Oru, подписано этим ключом. Сохраните копию: без неё пропатченные приложения можно обновить только после их удаления.</string>
+    <string name="settings_system_signing_key_missing">Oru создаёт его при первом патче</string>
+    <string name="settings_system_storage_open_app_info_description">Управление или очистка всех данных Oru через системные настройки</string>
+    <string name="sources_dialog_community_notice_message">"Источники патчей сообщества создаются и поддерживаются их авторами. Oru не проверяет и не верифицирует сторонние патчи и не несет ответственности за их содержимое или за то, что они делают на вашем устройстве.
+
+Все, что вы добавляете с этого сайта, используется на ваш собственный риск."</string>
+    <string name="sources_management_held_back_hint">Этот источник вызвал сбой Oru во время загрузки, поэтому он пропускается. Обновите его или импортируйте заново, чтобы повторить попытку</string>
+    <string name="sources_management_outdated_manager_badge">Обновить Oru</string>
+    <string name="sources_management_outdated_manager_hint">Этот источник собран для патчера %1$s, но Oru %2$s включает патчер %3$s. Обновите Oru, чтобы использовать его</string>
+    <string name="tour_prompt_desc">Хотите быстро ознакомиться с основными функциями Oru?</string>
+    <string name="uninstall_app_unverified">Оставлено на месте: Oru не удалось проверить, что установленное приложение является сборкой, которую он пропатчил.</string>
+</resources>

@@ -6,6 +6,7 @@
 package app.morphe.manager.util
 
 import android.util.Log
+import app.morphe.manager.BuildConfig
 import com.google.firebase.messaging.FirebaseMessaging
 
 /**
@@ -55,6 +56,8 @@ fun syncFcmTopics(
     useManagerPrereleases: Boolean,
     usePatchesPrereleases: Boolean = false,
 ) {
+    // Firebase is only configured for Morphe's own builds
+    if (!BuildConfig.UPSTREAM_SERVICES) return
     val messaging = FirebaseMessaging.getInstance()
 
     if (!notificationsEnabled) {

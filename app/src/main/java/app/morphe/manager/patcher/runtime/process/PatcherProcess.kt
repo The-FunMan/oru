@@ -29,10 +29,13 @@ import app.morphe.manager.patcher.runtime.ResourceMonitor
 import app.morphe.manager.patcher.runtime.heapLimitMebibytes
 import app.morphe.manager.patcher.split.SplitApkPreparer
 import app.morphe.manager.patcher.split.SplitPreparationEvent
+import app.morphe.manager.ui.model.StepId
 import app.morphe.manager.ui.model.State
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import java.io.File
 import java.nio.file.Files
@@ -51,7 +54,7 @@ class PatcherProcess(private val context: Context) : IPatcherProcess.Stub() {
             // Try to send the exception information to the main app
             eventBinder?.let {
                 try {
-                    it.finished(throwable.stackTraceToString())
+                    it.finished(truncateForIpc(throwable.stackTraceToString()))
                     return@CoroutineExceptionHandler
                 } catch (_: Exception) {
                 }
@@ -70,7 +73,7 @@ class PatcherProcess(private val context: Context) : IPatcherProcess.Stub() {
         scope.launch {
             val logger = object : Logger() {
                 override fun log(level: LogLevel, message: String) =
-                    events.log(level.name, message)
+                    events.log(level.name, truncateForIpc(message))
             }
 
             ResourceMonitor.startPolling(logger)
@@ -79,27 +82,35 @@ class PatcherProcess(private val context: Context) : IPatcherProcess.Stub() {
             logger.info("$LOG_PROCESS_PREFIX_PROCESS_HEAP ${heapLimitMb}MB")
             events.heapLimit(heapLimitMb)
 
-            val allPatches = PatchBundle.Loader.patches(parameters.configurations.map { it.bundle }, parameters.packageName)
-            val patchList = parameters.configurations.flatMap { config ->
-                val bundlePatches = allPatches[config.bundle] ?: return@flatMap emptyList()
+            // Bundle loading and split preparation share only the package name, so they run together
+            val (patchList, preparation) = loadAndPrepareConcurrently(
+                load = {
+                    val allPatches = PatchBundle.Loader.patches(parameters.configurations.map { it.bundle }, parameters.packageName)
+                    val patchList = parameters.configurations.flatMap { config ->
+                        val bundlePatches = allPatches[config.bundle] ?: return@flatMap emptyList()
 
-                bundlePatches.applyPatchOptions(config.options, logger)
+                        bundlePatches.applyPatchOptions(config.options, logger)
 
-                bundlePatches.filterKeys { it in config.patches }.values
-            }
+                        bundlePatches.filterKeys { it in config.patches }.values
+                    }
 
-            events.progress(null, State.COMPLETED.name, null) // Loading patches
-
-            val preparation = SplitApkPreparer.prepareIfNeeded(
-                source = File(parameters.inputFile),
-                workspace = File(parameters.cacheDir),
-                logger = logger,
-                skipUnneededSplits = parameters.stripUnusedNativeLibs,
-                onEvent = { event ->
-                    // Forward raw event over IPC; main process resolves the localized
-                    // label and logs it so the app locale is used, not the system locale
-                    events.splitProgress(event.wireType, (event as? SplitPreparationEvent.Merging)?.apkName)
-                }
+                    events.progress(null, State.COMPLETED.name, null) // Loading patches
+                    patchList
+                },
+                prepare = {
+                    SplitApkPreparer.prepareIfNeeded(
+                        source = File(parameters.inputFile),
+                        workspace = File(parameters.cacheDir),
+                        logger = logger,
+                        skipUnneededSplits = parameters.stripUnusedNativeLibs,
+                        onEvent = { event ->
+                            // Forward raw event over IPC; main process resolves the localized
+                            // label and logs it so the app locale is used, not the system locale
+                            events.splitProgress(event.wireType, (event as? SplitPreparationEvent.Merging)?.apkName)
+                        }
+                    )
+                },
+                cleanup = { it.cleanup() }
             )
 
             val failure = try {
@@ -132,6 +143,9 @@ class PatcherProcess(private val context: Context) : IPatcherProcess.Stub() {
                     onPatchFailed = { patchName -> events.patchFailed(patchName) },
                     onProgress = { name, state, message ->
                         events.progress(name, state?.name, message)
+                    },
+                    onWriteFraction = { fraction ->
+                        events.stageFraction(StepId.WRITE_PATCHED_APK.name, fraction)
                     }
                 ).use {
                     it.run(File(parameters.outputFile), patchList)
@@ -145,7 +159,7 @@ class PatcherProcess(private val context: Context) : IPatcherProcess.Stub() {
                 preparation.cleanup()
             }
             ResourceMonitor.stopPolling(logger)
-            events.finished(failure?.stackTraceToString())
+            events.finished(failure?.stackTraceToString()?.let(::truncateForIpc))
         }
     }
 
@@ -199,5 +213,65 @@ class PatcherProcess(private val context: Context) : IPatcherProcess.Stub() {
             Looper.loop()
             exitProcess(1) // Shouldn't happen
         }
+    }
+}
+
+/** Largest text, in UTF-8 bytes, sent in one oneway event call. Longer text keeps its head. */
+internal const val MAX_IPC_TEXT_BYTES = 16 * 1024
+
+private const val TRUNCATED_MARKER = "...(truncated)"
+
+/**
+ * Returns [text] unchanged when it fits in [maxBytes] UTF-8 bytes. Otherwise keeps the longest
+ * prefix of whole code points that leaves room for [TRUNCATED_MARKER] and appends the marker.
+ */
+internal fun truncateForIpc(text: String, maxBytes: Int = MAX_IPC_TEXT_BYTES): String {
+    if (text.toByteArray(Charsets.UTF_8).size <= maxBytes) {
+        return text
+    }
+
+    val budget = maxBytes - TRUNCATED_MARKER.toByteArray(Charsets.UTF_8).size
+    val head = StringBuilder()
+    var used = 0
+    var index = 0
+    while (index < text.length) {
+        val codePoint = text.codePointAt(index)
+        val size = when {
+            codePoint < 0x80 -> 1
+            codePoint < 0x800 -> 2
+            codePoint < 0x10000 -> 3
+            else -> 4
+        }
+        if (used + size > budget) {
+            break
+        }
+        head.appendCodePoint(codePoint)
+        used += size
+        index += Character.charCount(codePoint)
+    }
+    return head.append(TRUNCATED_MARKER).toString()
+}
+
+/**
+ * Runs [load] and [prepare] at the same time and returns both results once both have finished.
+ * A failure in either one cancels the other and rethrows that failure. A [prepare] result that
+ * is not returned, because [load] failed after it completed, is passed to [cleanup].
+ */
+internal suspend fun <P, R : Any> loadAndPrepareConcurrently(
+    load: suspend () -> P,
+    prepare: suspend () -> R,
+    cleanup: (R) -> Unit
+): Pair<P, R> {
+    // Written by the prepare child, which coroutineScope joins before it returns or throws
+    var prepared: R? = null
+    try {
+        return coroutineScope {
+            val loading = async { load() }
+            val preparing = async { prepare().also { prepared = it } }
+            loading.await() to preparing.await()
+        }
+    } catch (e: Throwable) {
+        prepared?.let(cleanup)
+        throw e
     }
 }

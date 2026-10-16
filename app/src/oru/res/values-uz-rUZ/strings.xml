@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="battery_optimization_dialog_description">Ba\'zi moslamalar ilovani minimallashtirganda patcherni to‘xtatishi mumkin. Patchlash ishonchli bajarilishini ta\'minlash uchun Oru batareyani cheklashsiz ishlay olishiga ruxsat bering</string>
+    <string name="deep_link_add_source_message">Ushbu patch manbasi Oru\'ga qo‘shilsinmi?</string>
+    <string name="external_batch_patch_description">%s Oru ga ilovalarni ta’mirlash va o‘rnatishni boshlashni xohlaydi</string>
+    <string name="home_apk_helper_description">Oru quyidagi yordamchi ilovadan asl APK ni yuklab olishni soʻraydi va faylni qaytarib beradi</string>
+    <string name="home_apk_helper_installed_unavailable">Oru o\'rnatilgan ilovadan foydalana olmadi.</string>
+    <string name="home_apk_helper_warning">Agar ushbu yordamchi ilovaga ishonmasangiz, davom etmang. Oru patch yamoqni qoʻllashdan oldin olgan narsaning paketini, versiyasini va imzosini tekshiradi</string>
+    <string name="home_apk_helper_warning_unverified">Agar ushbu yordamchi ilovaga ishonmasangiz, davom etmang. Oru ushbu APK ning imzosini tasdiqlay olmaydi, shuning uchun oʻzgartirilgan fayl aniqlanmaydi</string>
+    <string name="home_app_filter_not_patched_description">Oru\'da hali yamalmagan ilovalar</string>
+    <string name="home_app_filter_patched_description">Oru bilan yamalgan yoki saqlangan ilovalar</string>
+    <string name="home_app_filter_uninstalled_description">Oru yordamida yamalgan, endi bu qurilmada mavjud bo\'lmagan ilovalar</string>
+    <string name="home_app_info_app_deleted_description">Ushbu ilova Oru tashqarisida o\'rnatilmagan. Funksiyalarni qayta tiklash uchun patchlang</string>
+    <string name="home_app_info_install_unverified">Oru oʻrnatilgan ilova u patch qilgan build ekanligini tasdiqlay olmaydi. Saqlangan APKdan qayta patch qiling yoki qayta oʻrnating, uning harakatlarini tiklash uchun.</string>
+    <string name="home_app_info_not_patched_description">Ushbu ilovaning patch qilinmagan versiyasi oʻrnatilgan. Oru hali ham avvalgi patch yozuviga ega.</string>
+    <string name="home_download_instructions_download_button_toast_6">Siz endi Oru tugmachasini sinovdan o\'tkazuvchi edingiz 🏅</string>
+    <string name="home_download_instructions_step2_search_note">Oru bu veb-saytlarga kafolat bera olmaydi. APK fayl o\'rniga o\'z ilovalar do\'konini taklif qiladiganlarini o\'tkazib yuboring</string>
+    <string name="home_download_instructions_step4">Yuklab olish tugagandan so\'ng, Oru ga qayting</string>
+    <string name="home_download_instructions_step4_mount">Asl APKni o\'rnatgandan so\'ng Oru ga qayting</string>
+    <string name="home_held_back_title">Patch manbai Oru’ni ishdan chiqardi</string>
+    <string name="home_outdated_manager_title">Oru eskirgan</string>
+    <string name="home_update_available">Oru\'da yangilanish mavjud</string>
+    <string name="installer_shizuku_error_permission">Shizuku ruxsati yo‘q. Oru ga ruxsat bering va yana urinib ko‘ring</string>
+    <string name="installer_status_shizuku_permission">Oru dan Shizuku ilovasidan ruxsat bering</string>
+    <string name="installing_manager_update_hint">Yangilanishni yakunlash uchun Oru yopiladi</string>
+    <string name="launch_app_unverified">Oru o\'rnatilgan ilova u yamagan build ekanligini tasdiqlay olmadi.</string>
+    <string name="notification_bundle_update_text_unversioned">Oru ni ochish uchun tugmani bosing va yangilanishni o\'rnating</string>
+    <string name="notification_channel_manager_updates">Oru yangilanishlari</string>
+    <string name="notification_channel_manager_updates_description">Oru’ning yangi versiyalari haqidagi bildirishnomalar</string>
+    <string name="notification_channel_patcher_description">Oru orqa fonda ilovani patchlayotganda ko\'rsatildi</string>
+    <string name="notification_permission_dialog_description">Oru sizga yangilanishlar mavjud bo\'lganda bildirishnoma olish uchun bildirishnoma ruxsatini olishi kerak</string>
+    <string name="onboarding_settings_desc">Oru ni moslashtiring: ko\'rinish, kengaytirilgan opsiyalar va tizim vositalari</string>
+    <string name="patcher_incompatible_patcher_description">&lt;b&gt;%1$s&lt;/b&gt; manbasi &lt;b&gt;%2$s&lt;/b&gt; yoki undan yangiroq patcher’ni talab qiladi. Undan foydalanish uchun Oru’ni yangilang</string>
+    <string name="patcher_installed_conflict_body">"Oru patchlangan ilovalarni o‘z sertifikati bilan imzolaydi, bu aslidan farq qiladi. Android patchlangan ilovani o‘rnatishdan oldin mavjud versiyani olib tashlashni talab qiladi.
+O‘rnatish barcha ilova ma'lumotlarini o‘chiradi"</string>
+    <string name="patcher_storage_permission_description_api30">Bir nechta patch opsiyalari Oru o\'qiy olmaydigan yo\'llarga ishorat qiladi. Xotira ruxsatini bering va keyin patchlash avtomatik ravishda boshlanadi</string>
+    <string name="patcher_storage_permission_description_legacy">Bir nechta patch opsiyalari Oru o\'qiy olmaydigan yo\'llarga ishorat qiladi. Xotira ruxsatini bering va tugmani bosing, keyin patchlash avtomatik ravishda boshlanadi</string>
+    <string name="patcher_storage_permission_hint">Maslahat: Fayllarni /Android/data/app.oru.manager/files/ ga ko\'chiring - qo\'shimcha ruxsatlar kerak emas</string>
+    <string name="root_mount_module_unmount_warning">Agar KernelSU da Dismount modullari avtomatik ravishda yoqilgan bo\'lsa, KernelSU &gt; Superuser &gt; siz o\'rnatgan ilova &gt; Profile &gt; Maxsus sozlamalar oching va Dismount modullarini o\'chiring. Aks holda, o\'rnatilgan o\'zgartirilgan APK ishlamasligi mumkin, hatto Oru uni o\'rnatilgan deb ko\'rsatsa ham</string>
+    <string name="settings_advanced_expert_mode_description">Oru patchlash sozlamalarini va sozlash imkoniyatlarini ochish</string>
+    <string name="settings_advanced_github_pat_export_include_label">Ushbu PATni eksport qilingan Oru sozlamalariga kiritmang</string>
+    <string name="settings_advanced_github_pat_export_include_supporting">Ushbu PATni eksport qilingan Oru sozlamalariga qo\'shadi</string>
+    <string name="settings_advanced_patch_options_custom_branding_custom_icon_instruction">"Maxsus ikon sifatida ishlatiladigan tasvirlar papkasi.
+
+Papkada quyidagi papkalardan biri yoki bir nechtasi bo‘lishi kerak, bu moslamaning DPI ga bog‘liq:
+- mipmap-mdpi
+- mipmap-hdpi
+- mipmap-xhdpi
+- mipmap-xxhdpi
+- mipmap-xxxhdpi
+
+Har bir papkada quyidagi fayllar bo‘lishi kerak:
+morphe_adaptive_background_custom.png
+morphe_adaptive_foreground_custom.png
+
+Tasvir o‘lchamlari quyidagicha bo‘lishi kerak:
+- mipmap-mdpi: 108x108 px
+- mipmap-hdpi: 162x162 px
+- mipmap-xhdpi: 216x216 px
+- mipmap-xxhdpi: 324x324 px
+- mipmap-xxxhdpi: 432x432 px
+
+Ixtiyoriy ravishda, yo‘lda \"drawable\" papkasi quyidagi bir rangdagi ikon fayli bilan mavjud bo‘lishi mumkin:
+morphe_adaptive_monochrome_custom.xml
+
+Ixtiyoriy ravishda, yo‘lda quyidagi formatlardan biri bildirishnoma ikoni mavjud bo‘lishi mumkin:
+- \"drawable\" dagi XML vektor chizig‘i:
+  morphe_notification_icon_custom.xml
+- \"drawable-dpi\" papkalaridagi PNG raster tasvirlari:
+  drawable-mdpi/morphe_notification_icon_custom.png (24x24 px)
+  drawable-hdpi/morphe_notification_icon_custom.png (36x36 px)
+  drawable-xhdpi/morphe_notification_icon_custom.png (48x48 px)
+  drawable-xxhdpi/morphe_notification_icon_custom.png (72x72 px)
+  drawable-xxxhdpi/morphe_notification_icon_custom.png (96x96 px)"</string>
+    <string name="settings_advanced_patch_options_custom_header_instruction">"Rasm bilan bog'liq fayllar joylashtirilgan papka, maxsus header logotip sifatida ishlatiladi.
+
+Papka quyidagi papkalardan birini yoki bir nechta o'z ichiga olishi kerak, bu qurilmaning DPI-siga bog'liq:
+- drawable-hdpi
+- drawable-xhdpi
+- drawable-xxhdpi
+- drawable-xxxhdpi
+
+Har bir papkada quyidagi fayllar bo'lishi kerak:
+morphe_header_custom_light.png
+morphe_header_custom_dark.png
+
+Rasm o'lchamlari quyidagicha bo'lishi kerak:
+- drawable-hdpi: 194x72 px
+- drawable-xhdpi: 258x96 px
+- drawable-xxhdpi: 387x144 px
+- drawable-xxxhdpi: 512x192 px"</string>
+    <string name="settings_advanced_updates_allow_metered_description">Oru va patchlardan yangilashni mobil ma\'lumotlar orqali yuklab olishga ruxsat bering</string>
+    <string name="settings_advanced_updates_manager_prereleases_description">Oru yangi versiyalariga erta kirish</string>
+    <string name="settings_advanced_updates_prerelease_warning_message">"Oru'ning pre-release versiyalari hali ishlab chiqish bosqichida va beqaror bo'lishi mumkin.
+
+Patchlar ta'sirlanmaydi: patch manbalari ro'yxatidagi har bir manba uchun pre-release patchlarni yoqing"</string>
+    <string name="settings_appearance_app_icon_selector_description">Oru bosh ekranda va ilovalar ro‘yxatida qanday ko‘rinishi</string>
+    <string name="settings_auto_uninstall_warning_message">Agar Shizuku avtomatik o‘rnatish paytida Android imzo ziddiyati haqida xabar bersa, Oru o‘zgartirilgan APK-ni o‘rnatishdan oldin mavjud ilovani o‘chirib tashlaydi</string>
+    <string name="settings_system_apk_download_helper_warning">APK yordamchi ilovadan keladi, shuning uchun faqat o‘zingiz bilgan ilovalarga ishoning. Oru baribir yamashdan oldin har bir faylning paketi, versiyasi va imzosini tekshiradi</string>
+    <string name="settings_system_export_manager_settings_fail">Oru sozlamalarini eksport qilishda xatolik: %s</string>
+    <string name="settings_system_export_manager_settings_success">Oru sozlamalari eksport qilindi</string>
+    <string name="settings_system_import_manager_settings_description">Oru sozlamalaringizni saqlab qolish va tiklash</string>
+    <string name="settings_system_import_manager_settings_fail">Oru sozlamalarini import qilishda xatolik: %s</string>
+    <string name="settings_system_import_manager_settings_mode_title">Oru sozlamalarini import qilish</string>
+    <string name="settings_system_import_manager_settings_success">Oru sozlamalari import qilindi</string>
+    <string name="settings_system_morphe_settings">Oru sozlamalari</string>
+    <string name="settings_system_process_runtime_heap_limit_ignored">Bu qurilma oxirgi ishga tushirishda xotira chegarasini e’tiborsiz qoldirdi, shuning uchun yamash Oru ichida ishlashga qaytishi mumkin</string>
+    <string name="settings_system_signing_key_dialog_description">Oru yamaydigan har bir ilova shu kalit bilan imzolanadi. Nusxasini saqlang: usiz yamalgan ilovalarni faqat o‘chirib tashlagandan keyin yangilash mumkin</string>
+    <string name="settings_system_signing_key_missing">Oru birinchi yamoqda uni yaratadi</string>
+    <string name="settings_system_storage_open_app_info_description">Kelola atau bersihkan semua data Oru melalui pengaturan sistem</string>
+    <string name="sources_dialog_community_notice_message">"Jamiyat yamoq manbalari o'z mualliflari tomonidan yaratiladi va qo'llab-quvvatlanadi. Oru uchinchi tomon yamoqlarini ko'rib chiqmaydi yoki tasdiqlamaydi va ularning tarkibi yoki sizning qurilmangizda nima qilishlari uchun javobgar emas.
+
+Ushbu veb-saytdan qo'shadigan har qanday narsa o'z xavfingiz ostida qo'llaniladi."</string>
+    <string name="sources_management_held_back_hint">Bu manba yuklash paytida Oru’ni ishdan chiqardi, shuning uchun u o‘tkazib yuborilmoqda. Qayta urinish uchun uni yangilang yoki qayta import qiling</string>
+    <string name="sources_management_outdated_manager_badge">Oru ni yangilang</string>
+    <string name="sources_management_outdated_manager_hint">Ushbu manba %1$s yamoqchisi uchun yaratilgan, lekin Oru %2$s %3$s yamoqchisini o\'z ichiga oladi. Undan foydalanish uchun Oru ni yangilang</string>
+    <string name="tour_prompt_desc">Oru ning asosiy funksiyalarini qisqacha ko\'rib chiqmoqchisiz?</string>
+    <string name="uninstall_app_unverified">Joyida qoldirildi: Oru o\'rnatilgan ilova u yamagan build ekanligini tasdiqlay olmadi.</string>
+</resources>

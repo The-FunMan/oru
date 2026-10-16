@@ -19,17 +19,52 @@ import kotlin.time.Duration.Companion.seconds
 
 /**
  * Works out where a specific version of an app can be downloaded from.
+ *
+ * The morphe flavour asks Morphe's API, which picks the mirror. The oru flavour sends no request
+ * at all and opens the APKMirror page built on the device ([ApkMirrorLinks]).
  */
 class DownloadUrlResolver(private val morpheAPI: MorpheAPI) {
+
+    private val projectApi: Boolean get() = OruEndpoints.current.projectApiEnabled
 
     /**
      * Resolves the download page for [packageName] at [version], falling back to a plain web
      * search when the API cannot point anywhere useful.
-     *
-     * Every redirect along the way is followed: the API sometimes points at itself once more,
-     * and the download sites redirect for reasons of their own, so only the end of the chain
-     * says what the user will actually get.
      */
+    suspend fun resolve(packageName: String, version: String?): String =
+        if (projectApi) chain().resolve(packageName, version)
+        else ApkMirrorLinks.downloadPage(packageName, version)
+
+    /**
+     * The URL standing in for the destination until [resolve] has one: the unfollowed API search in
+     * the morphe flavour, the APKMirror page in oru.
+     */
+    fun apiSearchUrl(packageName: String, version: String?): String =
+        if (projectApi) chain().apiSearchUrl(packageName, version)
+        else ApkMirrorLinks.downloadPage(packageName, version)
+
+    /** Used when the API is unreachable, so the user still lands on something useful. */
+    fun webSearchUrl(packageName: String, version: String?): String =
+        chain().webSearchUrl(packageName, version)
+
+    private fun chain() = DownloadUrlChain(
+        redirect = morpheAPI::resolveRedirect,
+        abi = Build.SUPPORTED_ABIS.first()
+    )
+}
+
+/**
+ * The resolution steps behind [DownloadUrlResolver], with the network and the device ABI passed in
+ * so the fallback can be exercised without a device or a connection.
+ *
+ * Every redirect along the way is followed: the API sometimes points at itself once more,
+ * and the download sites redirect for reasons of their own, so only the end of the chain
+ * says what the user will actually get.
+ */
+internal class DownloadUrlChain(
+    private val redirect: suspend (String) -> String?,
+    private val abi: String,
+) {
     suspend fun resolve(packageName: String, version: String?): String =
         // The instructions wait on this, so a host that never answers has to end the wait itself
         withTimeoutOrNull(RESOLVE_TIMEOUT) { follow(packageName, version) } ?: run {
@@ -41,14 +76,14 @@ class DownloadUrlResolver(private val morpheAPI: MorpheAPI) {
         val searchUrl = apiSearchUrl(packageName, version)
         Log.d(tag, "Using search url: $searchUrl")
 
-        var resolved = morpheAPI.resolveRedirect(searchUrl) ?: run {
+        var resolved = redirect(searchUrl) ?: run {
             Log.w(tag, "No redirect location for: $searchUrl")
             return webSearchUrl(packageName, version)
         }
 
         repeat(MAX_REDIRECTS) {
             // A URL that redirects nowhere is the end of the chain
-            val next = morpheAPI.resolveRedirect(resolved) ?: return finalUrl(resolved, packageName, version)
+            val next = redirect(resolved) ?: return finalUrl(resolved, packageName, version)
             Log.i(tag, "Following redirect to: $next")
             resolved = next
         }
@@ -57,16 +92,14 @@ class DownloadUrlResolver(private val morpheAPI: MorpheAPI) {
         return webSearchUrl(packageName, version)
     }
 
-    /** The unfollowed API URL, standing in for the destination until [resolve] has one. */
     fun apiSearchUrl(packageName: String, version: String?): String {
-        val query = "$packageName~${version ?: "any"}~${Build.SUPPORTED_ABIS.first()}".encodeURLPath()
+        val query = "$packageName~${version ?: "any"}~$abi".encodeURLPath()
         return "$MORPHE_API_URL/v2/web-search/$query"
     }
 
-    /** Used when the API is unreachable, so the user still lands on something useful. */
     fun webSearchUrl(packageName: String, version: String?): String {
         val architecture = if (packageName == KnownApps.YOUTUBE_MUSIC) {
-            " (${Build.SUPPORTED_ABIS.first()})"
+            " ($abi)"
         } else {
             "nodpi"
         }

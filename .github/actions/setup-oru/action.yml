@@ -1,0 +1,81 @@
+name: Set up the Oru build
+description: JDK 21, Gradle cache and, when native is true, the Android SDK packages, NDK and Rust targets the native crates need.
+
+inputs:
+  native:
+    description: Install the NDK, CMake and the Rust Android targets.
+    required: false
+    default: 'true'
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+      with:
+        distribution: temurin
+        java-version: '21'
+
+    - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+      with:
+        cache-read-only: ${{ github.event_name == 'pull_request' }}
+
+    - id: ndk
+      if: inputs.native == 'true'
+      shell: bash
+      run: echo "path=$ANDROID_HOME/ndk/28.2.13676358" >> "$GITHUB_OUTPUT"
+
+    - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      if: inputs.native == 'true'
+      with:
+        path: ${{ steps.ndk.outputs.path }}
+        key: ndk-28.2.13676358-${{ runner.os }}
+
+    - name: Install SDK packages
+      if: inputs.native == 'true'
+      shell: bash
+      run: |
+        sdk_root="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}"
+        if [ -z "$sdk_root" ]; then
+          echo "::error::ANDROID_HOME and ANDROID_SDK_ROOT are both unset" >&2
+          exit 1
+        fi
+
+        # The command line tools are not on PATH in this job: take sdkmanager from PATH if it is
+        # there, otherwise the newest cmdline-tools/<version>/bin under the SDK root.
+        sdkmanager=""
+        if found=$(command -v sdkmanager); then
+          sdkmanager=$found
+        else
+          for root in "$sdk_root" "${ANDROID_SDK_ROOT:-}"; do
+            [ -n "$root" ] || continue
+            candidate=$(printf '%s\n' "$root"/cmdline-tools/*/bin/sdkmanager | sort -V | tail -n 1)
+            if [ -x "$candidate" ]; then
+              sdkmanager=$candidate
+              break
+            fi
+          done
+        fi
+        if [ -z "$sdkmanager" ]; then
+          echo "::error::sdkmanager not found on PATH or under $sdk_root/cmdline-tools" >&2
+          ls -la "$sdk_root/cmdline-tools" >&2 || echo "$sdk_root/cmdline-tools does not exist" >&2
+          exit 1
+        fi
+        echo "Using $sdkmanager"
+
+        # Accept the licences non-interactively. yes gets SIGPIPE once sdkmanager exits, which
+        # pipefail would report as a failure, so pipefail is off for this one pipeline only.
+        (
+          set +o pipefail
+          yes | "$sdkmanager" --sdk_root="$sdk_root" --licenses >/dev/null
+        )
+
+        if ! "$sdkmanager" --sdk_root="$sdk_root" "platforms;android-37.0" "build-tools;36.0.0" "ndk;28.2.13676358" "cmake;3.22.1"; then
+          echo "::error::sdkmanager could not install the SDK packages; matching packages on this runner:" >&2
+          "$sdkmanager" --sdk_root="$sdk_root" --list | grep -E "platforms;android-3[6-9]|build-tools;36|ndk;28|cmake;3.22" || true
+          exit 1
+        fi
+
+    - name: Add Rust Android targets
+      if: inputs.native == 'true'
+      shell: bash
+      run: rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android

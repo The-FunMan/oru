@@ -565,8 +565,6 @@ Nếu không, APK đã vá và được gắn có thể sẽ không hoạt độ
     <string name="patcher_field_value_stripped">đã loại bỏ</string>
     <!-- Value of "Libraries": every library was left in the patched APK -->
     <string name="patcher_field_value_kept">giữ lại</string>
-    <string name="patcher_tab_logs">Nhật ký trình vá</string>
-    <string name="patcher_tab_game">Trò chơi</string>
     <string name="patcher_logs_waiting">Đang chờ nhật ký đầu ra…</string>
     <string name="patcher_logs_lost">Nhật ký đầu ra sẽ không được giữ lại sau khi khởi động lại ứng dụng</string>
     <string name="patcher_long_step_warning">Bước này có thể hơi lâu một chút. Vui lòng chờ…</string>
@@ -596,7 +594,6 @@ Gỡ cài đặt sẽ xóa vĩnh viễn toàn bộ dữ liệu ứng dụng"</st
     <string name="patcher_install_error_subtitle">Hãy thử gỡ và cài đặt lại</string>
     <string name="patcher_ready_to_mount_subtitle">Bấm nút bên dưới để gắn kết</string>
     <string name="patcher_patches_excluded_for_installer">Không khả dụng với phương thức cài đặt này và đã bị loại trừ: %s</string>
-    <string name="patcher_back_to_game_hint">Chạm vào %1$s để quay lại trò chơi của bạn</string>
     <string name="patcher_storage_permission_dialog_title">Không thể truy cập đường dẫn bộ nhớ</string>
     <string name="patcher_incompatible_patcher_title">Cần phải cập nhật</string>
     <string name="patcher_incompatible_patcher_description">Nguồn &lt;b&gt;%1$s&lt;/b&gt; yêu cầu patcher &lt;b&gt;%2$s&lt;/b&gt; trở lên. Cập nhật Morphe để sử dụng nó</string>
@@ -693,29 +690,6 @@ Gỡ cài đặt sẽ xóa vĩnh viễn toàn bộ dữ liệu ứng dụng"</st
     <string name="package_name">Tên gói</string>
     <string name="failed_to_mount">Không thể gắn: %s</string>
     <string name="failed_to_unmount">Không thể gỡ gắn: %s</string>
-    <!-- Patcher Screen - Mini-games -->
-    <string name="mini_game_score">Điểm %s</string>
-    <string name="mini_game_best">Cao nhất %s</string>
-    <string name="mini_game_new_record">Kỷ lục mới!</string>
-    <string name="mini_game_game_over">Bạn đã thua</string>
-    <string name="mini_game_try_again">Thử lại</string>
-    <string name="mini_game_paused">Tạm dừng</string>
-    <string name="mini_game_resume">Tiếp tục</string>
-    <string name="mini_game_restart">Bắt đầu lại</string>
-    <string name="mini_game_change">Chọn một trò chơi khác</string>
-    <string name="mini_game_2048_picker_subtitle">Vuốt để ghép các ô lại với nhau</string>
-    <string name="mini_game_flappy_picker_subtitle">Chạm để bay lách qua các ống</string>
-    <string name="mini_game_flappy_tap_to_start">Chạm để bay</string>
-    <string name="mini_game_snake_picker_subtitle">Ăn thức ăn, đừng tự đâm vào mình</string>
-    <string name="mini_game_snake_swipe_to_start">Vuốt để bắt đầu</string>
-    <string name="mini_game_dino_picker_subtitle">Chạm để nhảy qua xương rồng</string>
-    <string name="mini_game_dino_tap_to_start">Chạm để chạy</string>
-    <string name="mini_game_blocks_picker_subtitle">Ghép hình, xóa dòng</string>
-    <string name="mini_game_blocks_tap_to_start">Chạm để xoay, vuốt để di chuyển, vuốt xuống để thả</string>
-    <string name="mini_game_bricks_picker_subtitle">Bật bóng, phá tường</string>
-    <string name="mini_game_bricks_tap_to_start">Kéo để ngắm, chạm để bắn</string>
-    <string name="mini_game_miner_picker_subtitle">Chạm để mở, giữ để gắn cờ</string>
-    <string name="mini_game_pairs_picker_subtitle">Lật bài, tìm cặp giống nhau</string>
     <!-- Settings -->
     <string name="appearance">Giao diện</string>
     <string name="advanced">Nâng cao</string>

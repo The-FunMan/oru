@@ -548,8 +548,6 @@ Teruskannya mungkin boleh menyebabkan aplikasi tidak dapat berfungsi</string>
     <string name="patcher_field_value_stripped">dibuang</string>
     <!-- Value of "Libraries": every library was left in the patched APK -->
     <string name="patcher_field_value_kept">disimpan</string>
-    <string name="patcher_tab_logs">Log patcher</string>
-    <string name="patcher_tab_game">Permainan</string>
     <string name="patcher_logs_waiting">Menunggu output log…</string>
     <string name="patcher_logs_lost">Output log tidak disimpan semasa aplikasi dimulakan semula</string>
     <string name="patcher_long_step_warning">Langkah ini mungkin mengambil sedikit masa. Sila tunggu…</string>
@@ -577,7 +575,6 @@ Nyahpasang akan memadam semua data aplikasi secara kekal"</string>
     <string name="patcher_install_error_subtitle">Cuba nyahpasang dan pasang semula</string>
     <string name="patcher_ready_to_mount_subtitle">Tekan butang dibawah untuk memasang</string>
     <string name="patcher_patches_excluded_for_installer">Tidak tersedia untuk kaedah pemasangan ini dan dikecualikan: %s</string>
-    <string name="patcher_back_to_game_hint">Ketuk %1$s untuk kembali ke permainan anda</string>
     <string name="patcher_storage_permission_dialog_title">Laluan storan tidak dapat diakses</string>
     <string name="patcher_incompatible_patcher_title">Kemas kini diperlukan</string>
     <string name="patcher_incompatible_patcher_description">Sumber &lt;b&gt;%1$s&lt;/b&gt; memerlukan patcher &lt;b&gt;%2$s&lt;/b&gt; atau lebih baharu. Kemas kini Morphe untuk menggunakannya</string>
@@ -673,29 +670,6 @@ Nyahpasang akan memadam semua data aplikasi secara kekal"</string>
     <string name="package_name">Nama pakej</string>
     <string name="failed_to_mount">Gagal untuk ditunggang: %s</string>
     <string name="failed_to_unmount">Gagal untuk nyah-tunggang %s</string>
-    <!-- Patcher Screen - Mini-games -->
-    <string name="mini_game_score">Markah %s</string>
-    <string name="mini_game_best">Terbaik %s</string>
-    <string name="mini_game_new_record">Rekod baharu!</string>
-    <string name="mini_game_game_over">Permainan Tamat</string>
-    <string name="mini_game_try_again">Cuba Lagi</string>
-    <string name="mini_game_paused">Dijedakan</string>
-    <string name="mini_game_resume">Teruskan</string>
-    <string name="mini_game_restart">Mula semula</string>
-    <string name="mini_game_change">Pilih permainan lain</string>
-    <string name="mini_game_2048_picker_subtitle">Leret jubin untuk menggabungkan</string>
-    <string name="mini_game_flappy_picker_subtitle">Ketuk untuk terbang melalui paip</string>
-    <string name="mini_game_flappy_tap_to_start">Ketuk untuk terbang</string>
-    <string name="mini_game_snake_picker_subtitle">Makan makanan, jangan langgar diri sendiri</string>
-    <string name="mini_game_snake_swipe_to_start">Leret untuk mula</string>
-    <string name="mini_game_dino_picker_subtitle">Ketuk untuk melompat melepasi kaktus</string>
-    <string name="mini_game_dino_tap_to_start">Ketuk untuk berlari</string>
-    <string name="mini_game_blocks_picker_subtitle">Padankan bentuk, kosongkan baris</string>
-    <string name="mini_game_blocks_tap_to_start">Ketik untuk putar, leret untuk gerakkan, leret ke bawah untuk jatuhkan</string>
-    <string name="mini_game_bricks_picker_subtitle">Lantunkan bola, hancurkan dinding</string>
-    <string name="mini_game_bricks_tap_to_start">Seret untuk menyasarkan, ketik untuk melancarkan</string>
-    <string name="mini_game_miner_picker_subtitle">Ketuk untuk membuka, tahan untuk menandakan</string>
-    <string name="mini_game_pairs_picker_subtitle">Terbalikkan kad, cari padanan</string>
     <!-- Settings -->
     <string name="appearance">Penampilan</string>
     <string name="advanced">Lebih mahir</string>

@@ -1,0 +1,72 @@
+name: Yank release
+
+# Takes a bad release back. It never deletes a tag or a branch: delete-release removes the release and its assets
+# and keeps the tag, and mark-prerelease only changes the release flag.
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag to yank: vX.Y.Z or vX.Y.Z-dev.N'
+        required: true
+        type: string
+      action:
+        description: 'mark-prerelease: off the stable feed only. delete-release: off every feed.'
+        required: true
+        type: choice
+        options:
+          - mark-prerelease
+          - delete-release
+        default: mark-prerelease
+      confirm:
+        description: 'Type the tag again. It must match the tag input exactly.'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: yank-release
+  cancel-in-progress: false
+
+jobs:
+  yank:
+    if: github.repository == 'The-FunMan/oru' && github.actor == github.repository_owner
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write   # changes or deletes one release; tags are not touched
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      TAG: ${{ inputs.tag }}
+      CONFIRM: ${{ inputs.confirm }}
+      ACTION: ${{ inputs.action }}
+    steps:
+      - name: Check the tag and the confirmation
+        run: |
+          if ! [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-dev\.[0-9]+)?$ ]]; then
+            echo "not a release tag: $TAG" >&2
+            exit 1
+          fi
+          if [ "$CONFIRM" != "$TAG" ]; then
+            echo "confirm must equal the tag ($TAG), found '$CONFIRM'" >&2
+            exit 1
+          fi
+          gh release view "$TAG" --json tagName >/dev/null
+
+      - name: Mark the release as a pre-release
+        if: inputs.action == 'mark-prerelease'
+        run: gh release edit "$TAG" --prerelease
+
+      - name: Delete the release (the tag stays)
+        if: inputs.action == 'delete-release'
+        run: gh release delete "$TAG" --yes
+
+      - name: Summary
+        run: |
+          {
+            echo "### Yank: $ACTION on $TAG"
+            echo
+            echo "No tag or branch was changed. Check the Releases page, and see docs/maintainers/from-the-phone.md."
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -563,8 +563,6 @@ Para un mejor resultado, esta aplicación te recomienda parchear un &lt;b&gt;APK
     <string name="patcher_field_value_stripped">eliminadas</string>
     <!-- Value of "Libraries": every library was left in the patched APK -->
     <string name="patcher_field_value_kept">conservadas</string>
-    <string name="patcher_tab_logs">Registro del parcheador</string>
-    <string name="patcher_tab_game">Juegos</string>
     <string name="patcher_logs_waiting">Esperando la salida del registro…</string>
     <string name="patcher_logs_lost">La salida del registro no se conserva al reiniciar la aplicación</string>
     <string name="patcher_long_step_warning">Este paso puede tardar un tiempo. Por favor, espera…</string>
@@ -594,7 +592,6 @@ Al desinstalarla se borrarán permanentemente todos los datos de la aplicación"
     <string name="patcher_install_error_subtitle">Intenta desinstalar y volver a instalar</string>
     <string name="patcher_ready_to_mount_subtitle">Pulsa el botón más abajo para montar</string>
     <string name="patcher_patches_excluded_for_installer">No disponible para este método de instalación y excluido: %s</string>
-    <string name="patcher_back_to_game_hint">Pulsa %1$s para volver a tu juego</string>
     <string name="patcher_storage_permission_dialog_title">No se puede acceder a la ruta de almacenamiento</string>
     <string name="patcher_incompatible_patcher_title">Actualización necesaria</string>
     <string name="patcher_incompatible_patcher_description">La fuente &lt;b&gt;%1$s&lt;/b&gt; requiere el parcheador &lt;b&gt;%2$s&lt;/b&gt; o una versión posterior. Actualiza Morphe para usarla</string>
@@ -691,29 +688,6 @@ Al desinstalarla se borrarán permanentemente todos los datos de la aplicación"
     <string name="package_name">Nombre del paquete</string>
     <string name="failed_to_mount">Error al montar: %s</string>
     <string name="failed_to_unmount">Error al desmontar: %s</string>
-    <!-- Patcher Screen - Mini-games -->
-    <string name="mini_game_score">Puntuación: %s</string>
-    <string name="mini_game_best">Mejor: %s</string>
-    <string name="mini_game_new_record">¡Nuevo récord!</string>
-    <string name="mini_game_game_over">Fin del juego</string>
-    <string name="mini_game_try_again">Volver a intentar</string>
-    <string name="mini_game_paused">En pausa</string>
-    <string name="mini_game_resume">Continuar</string>
-    <string name="mini_game_restart">Empezar de nuevo</string>
-    <string name="mini_game_change">Elegir otro juego</string>
-    <string name="mini_game_2048_picker_subtitle">Desliza las fichas para combinarlas</string>
-    <string name="mini_game_flappy_picker_subtitle">Pulsa para volar entre los tubos</string>
-    <string name="mini_game_flappy_tap_to_start">Pulsa para volar</string>
-    <string name="mini_game_snake_picker_subtitle">Engulle comida, no te golpees a ti mismo</string>
-    <string name="mini_game_snake_swipe_to_start">Desliza para empezar</string>
-    <string name="mini_game_dino_picker_subtitle">Pulsa para saltar sobre los cactus</string>
-    <string name="mini_game_dino_tap_to_start">Pulsa para correr</string>
-    <string name="mini_game_blocks_picker_subtitle">Encaja las formas, elimina líneas</string>
-    <string name="mini_game_blocks_tap_to_start">Pulsa para girar, desliza para mover, desliza hacia abajo para soltar</string>
-    <string name="mini_game_bricks_picker_subtitle">Rebota la pelota, derriba la pared</string>
-    <string name="mini_game_bricks_tap_to_start">Arrastra para apuntar, pulsa para lanzar</string>
-    <string name="mini_game_miner_picker_subtitle">Pulsa para abrir, mantén pulsado para marcar</string>
-    <string name="mini_game_pairs_picker_subtitle">Voltea cartas, encuentra la pareja</string>
     <!-- Settings -->
     <string name="appearance">Apariencia</string>
     <string name="advanced">Avanzado</string>

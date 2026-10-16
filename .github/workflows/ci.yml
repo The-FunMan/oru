@@ -1,0 +1,108 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: read   # the Morphe library comes from GitHub Packages, which wants a token even for public reads
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  android:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup-oru
+      - name: Unit tests and lint
+        run: ./gradlew :app:testOruDebugUnitTest :app:testMorpheDebugUnitTest :app:lint --stacktrace
+      - name: Oru release APK, debug-signed, no secrets
+        run: ./gradlew :app:assembleOruRelease -PsignAsDebug --stacktrace
+      - name: Check the APK
+        run: .github/scripts/verify-apk.sh app/build/outputs/apk/oru/release/*.apk
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: oru-pr-${{ github.sha }}
+          path: app/build/outputs/apk/oru/release/*.apk
+          retention-days: 5
+          if-no-files-found: error
+
+  patcher:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup-oru
+        with:
+          native: false
+      - run: ./gradlew :patcher:test :patcher:apiCheck :patcher:jar --stacktrace
+
+  patch-api-guard:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup-oru
+        with:
+          native: false
+      - run: ./gradlew :patcher:jar --stacktrace
+      - name: Fetch upstream bundles (read-only)
+        run: |
+          d="$RUNNER_TEMP/bundles"
+          mkdir -p "$d/stable" "$d/dev"
+          gh release download --repo MorpheApp/morphe-patches --pattern '*.mpp' --dir "$d/stable"
+          tag=$(gh release list --repo MorpheApp/morphe-patches --exclude-drafts --limit 30 \
+                --json tagName,isPrerelease --jq '[.[] | select(.isPrerelease)][0].tagName')
+          gh release download "$tag" --repo MorpheApp/morphe-patches --pattern '*.mpp' --dir "$d/dev"
+      - name: Guard, stable (blocking)
+        run: |
+          python3 -I tools/parity/patch_api_guard.py \
+            --patcher "$(ls patcher/build/libs/morphe-patcher-[0-9]*.jar | head -1)" \
+            --bundle "$RUNNER_TEMP"/bundles/stable/*.mpp
+      - name: Guard, dev (advisory)
+        continue-on-error: true
+        run: |
+          python3 -I tools/parity/patch_api_guard.py \
+            --patcher "$(ls patcher/build/libs/morphe-patcher-[0-9]*.jar | head -1)" \
+            --bundle "$RUNNER_TEMP"/bundles/dev/*.mpp
+
+  rust:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+        with:
+          workspaces: |
+            native-packager -> target
+            native -> target
+      - run: cd native-packager && cargo test --workspace --locked
+      - run: cd native && cargo test --locked
+      - run: python3 -I -m unittest discover -s tools/parity -p "test_*.py"
+
+  dependency-review:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0

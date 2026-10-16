@@ -563,8 +563,6 @@
     <string name="patcher_field_value_stripped">削除済み</string>
     <!-- Value of "Libraries": every library was left in the patched APK -->
     <string name="patcher_field_value_kept">保持済み</string>
-    <string name="patcher_tab_logs">パッチャーのログ</string>
-    <string name="patcher_tab_game">ゲーム</string>
     <string name="patcher_logs_waiting">ログの出力を待機中…</string>
     <string name="patcher_logs_lost">ログの出力はアプリを再起動すると消去されます</string>
     <string name="patcher_long_step_warning">この処理には時間がかかる場合があります。お待ちください…</string>
@@ -594,7 +592,6 @@
     <string name="patcher_install_error_subtitle">一度アンインストールしてから、再度インストールしてください</string>
     <string name="patcher_ready_to_mount_subtitle">マウントするには以下のボタンを押してください</string>
     <string name="patcher_patches_excluded_for_installer">このインストール方法では利用できません: %s</string>
-    <string name="patcher_back_to_game_hint">%1$s をタップしてゲームを再開</string>
     <string name="patcher_storage_permission_dialog_title">ストレージパスにアクセスできません</string>
     <string name="patcher_incompatible_patcher_title">アップデートが必要です</string>
     <string name="patcher_incompatible_patcher_description">ソース &lt;b&gt;%1$s&lt;/b&gt; にはパッチャー &lt;b&gt;%2$s&lt;/b&gt; 以降が必要です。これを使用するには Morphe を更新してください</string>
@@ -692,29 +689,6 @@
     <string name="package_name">パッケージ名</string>
     <string name="failed_to_mount">マウントに失敗しました: %s</string>
     <string name="failed_to_unmount">アンマウントに失敗しました: %s</string>
-    <!-- Patcher Screen - Mini-games -->
-    <string name="mini_game_score">スコア %s</string>
-    <string name="mini_game_best">最高記録 %s</string>
-    <string name="mini_game_new_record">新記録！</string>
-    <string name="mini_game_game_over">ゲームオーバー</string>
-    <string name="mini_game_try_again">リトライ</string>
-    <string name="mini_game_paused">ポーズ中</string>
-    <string name="mini_game_resume">続行</string>
-    <string name="mini_game_restart">やり直す</string>
-    <string name="mini_game_change">別のゲームを選ぶ</string>
-    <string name="mini_game_2048_picker_subtitle">タイルをスライドして合体させよう</string>
-    <string name="mini_game_flappy_picker_subtitle">タップしてパイプの間を飛び抜けよう</string>
-    <string name="mini_game_flappy_tap_to_start">タップして開始</string>
-    <string name="mini_game_snake_picker_subtitle">自分にぶつからずに食べ物を食べよう</string>
-    <string name="mini_game_snake_swipe_to_start">スワイプして開始</string>
-    <string name="mini_game_dino_picker_subtitle">タップしてサボテンを飛び越えよう</string>
-    <string name="mini_game_dino_tap_to_start">タップして開始</string>
-    <string name="mini_game_blocks_picker_subtitle">ブロックを組み合わせてラインを消そう</string>
-    <string name="mini_game_blocks_tap_to_start">タップして回転、スワイプして移動、下にスワイプしてドロップ</string>
-    <string name="mini_game_bricks_picker_subtitle">ボールを跳ね返して壁を壊そう</string>
-    <string name="mini_game_bricks_tap_to_start">ドラッグして狙いを定め、タップして発射</string>
-    <string name="mini_game_miner_picker_subtitle">タップして開き、長押しして旗を立てよう</string>
-    <string name="mini_game_pairs_picker_subtitle">カードをめくってペアを見つけよう</string>
     <!-- Settings -->
     <string name="appearance">外観</string>
     <string name="advanced">詳細設定</string>

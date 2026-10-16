@@ -1,0 +1,17 @@
+{
+  "uniqueId": "me.zhanghai.android.appiconloader:appiconloader-coil",
+  "name": "AppIconLoader",
+  "developers": [
+    {
+      "name": "Hai Zhang"
+    }
+  ],
+  "website": "https://github.com/zhanghai/AppIconLoader",
+  "scm": {
+    "connection": "scm:git:https://github.com/zhanghai/AppIconLoader.git",
+    "url": "https://github.com/zhanghai/AppIconLoader"
+  },
+  "licenses": [
+    "Apache-2.0"
+  ]
+}

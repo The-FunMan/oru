@@ -44,6 +44,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import app.morphe.manager.BuildConfig
 import app.morphe.manager.R
 import app.morphe.manager.domain.bundles.APIPatchBundle
 import app.morphe.manager.domain.bundles.PatchBundleSource
@@ -123,8 +124,9 @@ fun AddSourceDialog(
         footer = {
             Column(modifier = Modifier.fillMaxWidth()) {
                 // The website hands out remote URLs, so it has nothing to offer the local tab
+                // ORU: the community sources site is Morphe's, so the oru flavour offers no link to it
                 AnimatedVisibility(
-                    visible = selectedTab == 0,
+                    visible = selectedTab == 0 && !BuildConfig.ORU_UX,
                     enter = Animations.expandFadeEnter,
                     exit = Animations.shrinkFadeExit
                 ) {
@@ -661,7 +663,7 @@ fun BundlePatchesDialog(
 
     PatchListDialog(
         icon = { modifier -> BundleIcon(bundle = src, modifier = modifier) },
-        title = src.displayTitle,
+        title = src.shownTitle,
         subtitle = listOfNotNull(
             pluralStringResource(R.plurals.patch_count, patches.size, patches.size.toString()),
             pluralStringResource(R.plurals.home_category_app_count, appCount, appCount.toString())
@@ -831,8 +833,9 @@ fun BundleChangelogDialog(
                 val entries = ChangelogParser.entriesFor(shownEntries, subject, generalChangesHeading)
 
                 // APIPatchBundle has endpoint="api" - use SOURCE_REPO_URL directly
+                // ORU: that repository is Morphe's, so the oru flavour links no release page for it
                 val repoUrl = when (src) {
-                    is APIPatchBundle -> SOURCE_REPO_URL
+                    is APIPatchBundle -> SOURCE_REPO_URL.takeUnless { BuildConfig.ORU_UX }
                     else -> RemotePatchBundle.inferPageUrlFromEndpoint(src.endpoint)
                 }
                 val latestPageUrl = entries.firstOrNull()?.version?.let { version ->
@@ -965,7 +968,7 @@ fun BundleChangelogDialog(
         // entries arrive
         ListDialogHeader(
             icon = { modifier -> BundleIcon(bundle = src, modifier = modifier) },
-            title = src.displayTitle,
+            title = src.shownTitle,
             subtitle = subject?.appNames?.firstOrNull()?.let { stringResource(R.string.changelog_for_app, it) }
                 ?: src.installedVersionSignature?.withVersionPrefix()?.isolateLtr().orEmpty()
         )
@@ -1180,7 +1183,7 @@ fun SourceAppsDialog(
         // Headed by the source, as its patches are
         ListDialogHeader(
             icon = { modifier -> BundleIcon(bundle = src, modifier = modifier) },
-            title = src.displayTitle,
+            title = src.shownTitle,
             subtitle = pluralStringResource(R.plurals.home_category_app_count, apps.size, apps.size.toString()),
             search = search,
             searchLabel = stringResource(R.string.home_search_apps),

@@ -563,8 +563,6 @@
     <string name="patcher_field_value_stripped">已移除</string>
     <!-- Value of "Libraries": every library was left in the patched APK -->
     <string name="patcher_field_value_kept">已保留</string>
-    <string name="patcher_tab_logs">修補程式記錄</string>
-    <string name="patcher_tab_game">遊戲</string>
     <string name="patcher_logs_waiting">正在等待日誌輸出…</string>
     <string name="patcher_logs_lost">日誌輸出不會跨應用程式重新啟動保留</string>
     <string name="patcher_long_step_warning">此步驟可能需要一些時間。請稍候…</string>
@@ -594,7 +592,6 @@
     <string name="patcher_install_error_subtitle">嘗試解除安裝並重新安裝</string>
     <string name="patcher_ready_to_mount_subtitle">點擊下方的按鈕進行掛載</string>
     <string name="patcher_patches_excluded_for_installer">未針對此安裝方法提供且已排除：%s</string>
-    <string name="patcher_back_to_game_hint">點擊%1$s返回您的遊戲</string>
     <string name="patcher_storage_permission_dialog_title">無法存取儲存路徑</string>
     <string name="patcher_incompatible_patcher_title">需要更新</string>
     <string name="patcher_incompatible_patcher_description">來源 &lt;b&gt;%1$s&lt;/b&gt; 需要修補程式 &lt;b&gt;%2$s&lt;/b&gt; 或更新版本。更新 Morphe 以使用它</string>
@@ -691,29 +688,6 @@
     <string name="package_name">套件名稱</string>
     <string name="failed_to_mount">無法掛載：%s</string>
     <string name="failed_to_unmount">無法解除掛載：%s</string>
-    <!-- Patcher Screen - Mini-games -->
-    <string name="mini_game_score">分數 %s</string>
-    <string name="mini_game_best">最佳 %s</string>
-    <string name="mini_game_new_record">新紀錄！</string>
-    <string name="mini_game_game_over">遊戲結束</string>
-    <string name="mini_game_try_again">再試一次</string>
-    <string name="mini_game_paused">已暫停</string>
-    <string name="mini_game_resume">繼續</string>
-    <string name="mini_game_restart">重新開始</string>
-    <string name="mini_game_change">選擇其他遊戲</string>
-    <string name="mini_game_2048_picker_subtitle">滑動方塊合併</string>
-    <string name="mini_game_flappy_picker_subtitle">點擊穿過管道</string>
-    <string name="mini_game_flappy_tap_to_start">點擊飛行</string>
-    <string name="mini_game_snake_picker_subtitle">吃食物，不要碰到自己</string>
-    <string name="mini_game_snake_swipe_to_start">滑動開始</string>
-    <string name="mini_game_dino_picker_subtitle">點擊跳過仙人掌</string>
-    <string name="mini_game_dino_tap_to_start">點擊跑步</string>
-    <string name="mini_game_blocks_picker_subtitle">拼合形狀，消除線條</string>
-    <string name="mini_game_blocks_tap_to_start">點擊旋轉，滑動移動，向下滑動落下</string>
-    <string name="mini_game_bricks_picker_subtitle">彈跳球，消除牆壁</string>
-    <string name="mini_game_bricks_tap_to_start">拖動瞄準，點擊發射</string>
-    <string name="mini_game_miner_picker_subtitle">點擊開啟，長按標記旗幟</string>
-    <string name="mini_game_pairs_picker_subtitle">翻開卡片，找出配對</string>
     <!-- Settings -->
     <string name="appearance">外觀</string>
     <string name="advanced">進階</string>

@@ -564,8 +564,6 @@
     <string name="patcher_field_value_stripped">הוסרו</string>
     <!-- Value of "Libraries": every library was left in the patched APK -->
     <string name="patcher_field_value_kept">נשמרו</string>
-    <string name="patcher_tab_logs">יומני תיקונים</string>
-    <string name="patcher_tab_game">משחקים</string>
     <string name="patcher_logs_waiting">ממתין לפלט לוג…</string>
     <string name="patcher_logs_lost">פלט הלוג לא נשמר בין הפעלות מחדש של האפליקציה</string>
     <string name="patcher_long_step_warning">שלב זה עשוי לקחת זמן. אנא המתן…</string>
@@ -595,7 +593,6 @@
     <string name="patcher_install_error_subtitle">נסה להסיר ולהתקין שוב</string>
     <string name="patcher_ready_to_mount_subtitle">לחץ על הכפתור למטה כדי לאתחל</string>
     <string name="patcher_patches_excluded_for_installer">לא זמין עבור שיטת התקנה זו והוחרג: %s</string>
-    <string name="patcher_back_to_game_hint">הקש על %1$s כדי לחזור למשחק שלך</string>
     <string name="patcher_storage_permission_dialog_title">לא ניתן לגשת לדרך אחסון</string>
     <string name="patcher_incompatible_patcher_title">עדכון נדרש</string>
     <string name="patcher_incompatible_patcher_description">המקור &lt;b&gt;%1$s&lt;/b&gt; דורש את הפאצ׳ר &lt;b&gt;%2$s&lt;/b&gt; ומעלה. עדכן את Morphe כדי להשתמש בו</string>
@@ -692,29 +689,6 @@
     <string name="package_name">שם חבילה</string>
     <string name="failed_to_mount">טעינה נכשלה: %s</string>
     <string name="failed_to_unmount">כשל בפירוק: %s</string>
-    <!-- Patcher Screen - Mini-games -->
-    <string name="mini_game_score">ציון %s</string>
-    <string name="mini_game_best">הכי טוב %s</string>
-    <string name="mini_game_new_record">שיא חדש!</string>
-    <string name="mini_game_game_over">סיום משחק</string>
-    <string name="mini_game_try_again">נסה שוב</string>
-    <string name="mini_game_paused">מושהה</string>
-    <string name="mini_game_resume">המשך</string>
-    <string name="mini_game_restart">התחל מחדש</string>
-    <string name="mini_game_change">בחר משחק אחר</string>
-    <string name="mini_game_2048_picker_subtitle">החלק כדי למזג אריחים</string>
-    <string name="mini_game_flappy_picker_subtitle">הקש כדי לעוף דרך הצינורות</string>
-    <string name="mini_game_flappy_tap_to_start">הקש כדי לעוף</string>
-    <string name="mini_game_snake_picker_subtitle">אכול אוכל, אל תפגע בעצמך</string>
-    <string name="mini_game_snake_swipe_to_start">החלק כדי להתחיל</string>
-    <string name="mini_game_dino_picker_subtitle">הקש כדי לקפוץ מעל קקטוסים</string>
-    <string name="mini_game_dino_tap_to_start">הקש כדי לרוץ</string>
-    <string name="mini_game_blocks_picker_subtitle">התאימו את הצורות, נקו שורות</string>
-    <string name="mini_game_blocks_tap_to_start">הקש כדי לסובב, החלק כדי להזיז, החלק למטה כדי להוריד</string>
-    <string name="mini_game_bricks_picker_subtitle">הקפיצו את הכדור, נקו את הקיר</string>
-    <string name="mini_game_bricks_tap_to_start">גררו לכוון, הקישו לשגר</string>
-    <string name="mini_game_miner_picker_subtitle">הקש כדי לפתוח, החזק כדי לסמן</string>
-    <string name="mini_game_pairs_picker_subtitle">הפוך קלפים, מצא את הזוג</string>
     <!-- Settings -->
     <string name="appearance">מראה</string>
     <string name="advanced">מתקדם</string>

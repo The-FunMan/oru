@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="battery_optimization_dialog_description">Heke sepan biçikînin, hin cîhazan dikarin paşgirê rawestînin. Ji bo ku paşgirê bi pêvehiyê qediya, bihêle Oru bêyî astengiyên serfkirina batêriyê bixebite.</string>
+    <string name="deep_link_add_source_message">Ma tu wê çavkaniya vê pakê ji Oru zêde bike?</string>
+    <string name="external_batch_patch_description">%s dixwaze Oru sepanan patch bike û saz bike</string>
+    <string name="home_apk_helper_description">Oru ji serlêdanê arîkarê jêrîn wê bigire ku APK-ya orjînal dakêşîne û pelê paş de bide</string>
+    <string name="home_apk_helper_installed_unavailable">Oru nekarî appa sazkirî bikar bîne</string>
+    <string name="home_apk_helper_warning">Tenê pêşkeve, heke te ewî serlêdanê arîkar bawer bikî. Oru paketa, versiyon û îmzeya her tiştê ku werdigire berî girêdayînê kontrol dike</string>
+    <string name="home_apk_helper_warning_unverified">Tenê pêşkeve, heke te ewî serlêdanê arîkar bawer bikî. Oru nikare îmzaya vê APK-yê verast bike, ji ber vê yekê pelê guherandî nabe dîtin</string>
+    <string name="home_app_filter_not_patched_description">Sepanên ku we hê di Oru de pîne nekirine</string>
+    <string name="home_app_filter_patched_description">Sepanên ku we bi Oru pîne kirine an jî tomar kirine</string>
+    <string name="home_app_filter_uninstalled_description">Sepanên ku bi Oru ve hatine patchkirin û êdî li ser vê cîhazê nînin</string>
+    <string name="home_app_info_app_deleted_description">Epp li derve ji Oru hate laşkirin. Serpêş pêlavînê da serê ku serê bi sist ki.</string>
+    <string name="home_app_info_install_unverified">Oru nikare piştrast bike ku sepanê hatî sazkirin ew avahiya ku ew patch kiriye. Dîsa patch bike an jî ji APK ya tomarkirî careke din saz bike da ku çalakiyên wê vegerînin.</string>
+    <string name="home_app_info_not_patched_description">Versiyoneka ne-patchkirî ya vê aplikasyonê hatîn sazkirin. Oru hîna tomarê patchê yê berê yê xweye</string>
+    <string name="home_download_instructions_download_button_toast_6">Artık resmi bir Oru düğme test cihazısın 🏅</string>
+    <string name="home_download_instructions_step2_search_note">Oru nikare ji bo van malperan garantiyê bide. Yên ku li şûna dosyeyeke APK firoşgeha xwe ya sepanan pêşkêş dikin derbas bikin</string>
+    <string name="home_download_instructions_step4">Pi serîdana daxistinê bi dawî bû, vegerin ser Oru</string>
+    <string name="home_download_instructions_step4_mount">Pi naskindina APK\'ya bilavkirinê, vegerin Oru</string>
+    <string name="home_held_back_title">Çavkaniyek patchê Oru xiste xwarê</string>
+    <string name="home_outdated_manager_title">Oru kevn e</string>
+    <string name="home_update_available">Nûvekirina Oru heye</string>
+    <string name="installer_shizuku_error_permission">Destûra Shizuku winda bûye. Destûrê da Oru û dîsa bicûrbîne.</string>
+    <string name="installer_status_shizuku_permission">Destûrê da Oru ji bo sepina Shizuku</string>
+    <string name="installing_manager_update_hint">Oru dê were girtin da ku nûvekirinê biqedîne.</string>
+    <string name="launch_app_unverified">Oru nikaribû verast bike ku sepana sazkirî ew guhertoya ku ew patch kiriye ye.</string>
+    <string name="notification_bundle_update_text_unversioned">Kilîkê veke Oru û nûve bike</string>
+    <string name="notification_channel_manager_updates">Nûvekirinên Oru</string>
+    <string name="notification_channel_manager_updates_description">Agahdariyên derbarê guhertoyên nû yên Oru de</string>
+    <string name="notification_channel_patcher_description">Di dema ku Oru bernameyekê di rewşê de çêdike</string>
+    <string name="notification_permission_dialog_description">Oru ji bo domandina ragihînan destûrê divê ku we ji ber ku nûvekirinên li ser were agahdar kirin.</string>
+    <string name="onboarding_settings_desc">Oru xweş bike: xuya, vebijarkên pêşkeftî, û amûrên sîstemê</string>
+    <string name="patcher_incompatible_patcher_description">Çavkanî &lt;b&gt;%1$s&lt;/b&gt; hewceyî patchker &lt;b&gt;%2$s&lt;/b&gt; an jî nûtir e. Ji bo ku bikar bîne, Oru nûve bike.</string>
+    <string name="patcher_installed_conflict_body">"Oru serîlêdanên guhertî bi şehadeya xwe ya taybet îmza dike, ku ji ya orjînal cûda ye. Android hewce dike ku veguherîna heyî berî veguherîna serîlêdanê were neqişandin.
+
+Neqişandin dê hemî daneyên serîlêdanê bi awayê daîmî tune bike"</string>
+    <string name="patcher_storage_permission_description_api30">Yek an zêde ji vebijarkên pakê destûrên ku Oru nikare bixwîne, nîşan didin. Destûra separeyê daynin û ser bilêvê bikşînin û pêlê dûv re bibaşêre</string>
+    <string name="patcher_storage_permission_hint">Îşar: Pelan biçike /Android/data/app.oru.manager/files/ - îznayên separe zîde heta jinavê.</string>
+    <string name="root_mount_module_unmount_warning">Heke KernelSU bi modûlên Dis-mount\'ê bi piranî vekirî heye, KernelSU &gt; Superuser &gt; app\'a ku te li ser wê çêkirî &gt; Profile &gt; Custom veke û modûlên Dis-mount\'ê neçêkire. Wekî din, APK\'a paşguhkirî ya ku li ser wê çêkirî heye, dikare bandordike, heke Oru wê wekî çêkirî nîşan bide.</string>
+    <string name="settings_advanced_expert_mode_description">Destûr dide sazkirina vegirêtinên Oru’yê ên pêşkeftî u hilbijartinên xwerû</string>
+    <string name="settings_advanced_github_pat_export_include_supporting">Ev PAT bi danan Oru sazkirina xwe vekirî</string>
+    <string name="settings_advanced_patch_options_custom_branding_custom_icon_instruction">"Folder ku wêneyan hene ku wekî ikonê bikaribin serdest bikin.
+
+Folder divê yek an zêdetir ji folderên jêrîn bicive, li gorî DPI yê alavê:
+- mipmap-mdpi
+- mipmap-hdpi
+- mipmap-xhdpi
+- mipmap-xxhdpi
+- mipmap-xxxhdpi
+
+Her du folderan divê hemû pelên jêrîn bicive:
+morphe_adaptive_background_custom.png
+morphe_adaptive_foreground_custom.png
+
+Mezinahiyên wêneyan divê wiha be:
+- mipmap-mdpi: 108x108 px
+- mipmap-hdpi: 162x162 px
+- mipmap-xhdpi: 216x216 px
+- mipmap-xxhdpi: 324x324 px
+- mipmap-xxxhdpi: 432x432 px
+
+Bi taybetî, rêzê pêde dest wan folder kontrol e, folder ku pelê monochrome ikonê heye:
+morphe_adaptive_monochrome_custom.xml
+
+Bi taybetî, rêzê pêde dest wan folder kontrol e, ikonê ragihîner di yek ji formatên jêrîn de heye:
+- XML vector drawable di 'drawable':
+  morphe_notification_icon_custom.xml
+- PNG raster images di 'drawable-dpi' folders:
+  drawable-mdpi/morphe_notification_icon_custom.png (24x24 px)
+  drawable-hdpi/morphe_notification_icon_custom.png (36x36 px)
+  drawable-xhdpi/morphe_notification_icon_custom.png (48x48 px)
+  drawable-xxhdpi/morphe_notification_icon_custom.png (72x72 px)
+  drawable-xxxhdpi/morphe_notification_icon_custom.png (96x96 px)"</string>
+    <string name="settings_advanced_patch_options_custom_header_instruction">"Folderekî bi wêneyan re ku weke logo serê logo xwerûst bikaribin.
+
+Folderek divê yek an zêdetir ji folderekê pêwist be, li gor DPI yê cûre cihazê:
+- drawable-hdpi
+- drawable-xhdpi
+- drawable-xxhdpi
+- drawable-xxxhdpi
+
+Her folderek divê hemî pelgirtinên jêrîn pêwist be:
+morphe_header_custom_light.png
+morphe_header_custom_dark.png
+
+Qasîyên wêneyan divê wiha bin:
+- drawable-hdpi: 194x72 px
+- drawable-xhdpi: 258x96 px
+- drawable-xxhdpi: 387x144 px
+- drawable-xxxhdpi: 512x192 px"</string>
+    <string name="settings_advanced_updates_allow_metered_description">Destûrê dide Oru\'yê u nûvekirinên qeyikan da ku li ser danebîna mobîlê biçin</string>
+    <string name="settings_advanced_updates_manager_prereleases_description">Gihîştina zû ya guhertoyên nû yên Oru</string>
+    <string name="settings_advanced_updates_prerelease_warning_message">"Guhertoyên pêş-weşanê yên Oru hê jî di pêşxistinê de ne û dibe ku ne aram bin.
+
+Patch ne bandor in: ji bo her çavkaniyê di lîsteya çavkaniyên patch de patchên pêş-weşanê çalak bike."</string>
+    <string name="settings_appearance_app_icon_selector_description">Oru li ser ekrana te ya malê û di dolaba sepanan de çawa xuya dike.</string>
+    <string name="settings_auto_uninstall_warning_message">Eger Android di dema saz kirina otomatîkî ya Shizuku de rapor bide ku kêşek heye, Oru dê berî saz kirina APKya guhartî aplikasyona heyî rake.</string>
+    <string name="settings_system_apk_download_helper_warning">APK ji sepana alîkar tê, lewra tenê bi sepanên ku tu nas dikî bawer bike. Oru hê jî berî patchkirinê pakêt, guherto û îmzeya her pelê kontrol dike.</string>
+    <string name="settings_system_custom_file_picker_description">Li şûna hilbijêrkê pelan yê serî yê sîstemê, hilbijêrkê pelan yê têne çêkirin yê Oru bikar bîne</string>
+    <string name="settings_system_export_manager_settings_fail">Ne serketî sawekirina sazkirina Oru: %s</string>
+    <string name="settings_system_export_manager_settings_success">Sawekirina sazkirina Oru serketî</string>
+    <string name="settings_system_import_manager_settings_description">Mîhengên Oru’yê pişgîrî u dîsa vekirin</string>
+    <string name="settings_system_import_manager_settings_fail">Ne serketî sawekirina sazkirina Oru: %s</string>
+    <string name="settings_system_import_manager_settings_mode_title">Oru mîhengên îthalkirin</string>
+    <string name="settings_system_import_manager_settings_success">Sawekirina sazkirina Oru serketî</string>
+    <string name="settings_system_morphe_settings">Rêgezên Oru</string>
+    <string name="settings_system_process_runtime_heap_limit_ignored">Ev cîhaz di xebata dawî de sînorê bîrê paşguh kir, lewra patchkirin dibe ku vegerî ser xebitîna di nav Oru de.</string>
+    <string name="settings_system_signing_key_dialog_description">Her sepana ku Oru patch dike bi vê mifteyê tê îmzekirin. Kopiyekê bigire: bêyî wê, sepanên patchkirî tenê piştî rakirina wan dikarin bên nûvekirin.</string>
+    <string name="settings_system_signing_key_missing">Oru bi patchê te yê yekem re yekê çêdike.</string>
+    <string name="settings_system_storage_open_app_info_description">Rêvebirin an paqijkirina hemû daneyê Oru ji riya mîhengên sîstemê</string>
+    <string name="sources_dialog_community_notice_message">"Çavkaniyên patch ên civakê ji aliyê nivîskarên xwe ve têne çêkirin û têne parastin. Oru patchên partiya sêyem nirx nake û verast nake, û ji naveroka wan an ji tiştê ku ew li ser cîhaza we dikin berpirsiyar nabe.
+
+Her tiştê ku hûn ji vê malperê zêde dikin bi xetereya we tê bikaranîn."</string>
+    <string name="sources_management_held_back_hint">Ev çavkanî dema barkirinê Oru xiste xwarê, lewra tê derbaskirin. Ji bo ku dîsa biceribînî, wê nû bike an jî ji nû ve îthal bike.</string>
+    <string name="sources_management_outdated_manager_badge">Oru nûve bike</string>
+    <string name="sources_management_outdated_manager_hint">Ev çavkanî ji bo patcher %1$s hatî çêkirin, lê Oru %2$s patcher %3$s vedihewîne. Oru nûve bike da ku wê bikar bîne</string>
+    <string name="tour_prompt_desc">Dixwazî gerîşka taybetmendiyên sereke yên Oru bikî?</string>
+    <string name="uninstall_app_unverified">Li cîh hiştin: Oru nikaribû verast bike ku sepana sazkirî ew guhertoya ku ew patch kiriye ye.</string>
+</resources>

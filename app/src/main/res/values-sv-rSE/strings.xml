@@ -563,8 +563,6 @@ För bästa resultat rekommenderar den här appen att du modifierar en &lt;b&gt;
     <string name="patcher_field_value_stripped">borttagna</string>
     <!-- Value of "Libraries": every library was left in the patched APK -->
     <string name="patcher_field_value_kept">behållna</string>
-    <string name="patcher_tab_logs">Modifieringsloggar</string>
-    <string name="patcher_tab_game">Spel</string>
     <string name="patcher_logs_waiting">Väntar på loggutdata …</string>
     <string name="patcher_logs_lost">Loggutdata sparas inte när appen startas om</string>
     <string name="patcher_long_step_warning">Det här steget kan ta en stund. Vänta …</string>
@@ -594,7 +592,6 @@ Om du avinstallerar raderas alla appdata permanent"</string>
     <string name="patcher_install_error_subtitle">Försök att avinstallera och installera igen</string>
     <string name="patcher_ready_to_mount_subtitle">Tryck på knappen nedan för att montera</string>
     <string name="patcher_patches_excluded_for_installer">Inte tillgänglig för denna installationsmetod och utesluten: %s</string>
-    <string name="patcher_back_to_game_hint">Tryck på %1$s för att gå tillbaka till spelet</string>
     <string name="patcher_storage_permission_dialog_title">Det går inte att komma åt lagringssökväg</string>
     <string name="patcher_incompatible_patcher_title">Uppdatering krävs</string>
     <string name="patcher_incompatible_patcher_description">Källan &lt;b&gt;%1$s&lt;/b&gt; kräver modifieringsverktyg &lt;b&gt;%2$s&lt;/b&gt; eller nyare. Uppdatera Morphe för att använda den</string>
@@ -691,29 +688,6 @@ Om du avinstallerar raderas alla appdata permanent"</string>
     <string name="package_name">Paketnamn</string>
     <string name="failed_to_mount">Det gick inte att montera: %s</string>
     <string name="failed_to_unmount">Det gick inte att avmontera: %s</string>
-    <!-- Patcher Screen - Mini-games -->
-    <string name="mini_game_score">Poäng %s</string>
-    <string name="mini_game_best">Rekord %s</string>
-    <string name="mini_game_new_record">Nytt rekord!</string>
-    <string name="mini_game_game_over">Spelet är slut</string>
-    <string name="mini_game_try_again">Försök igen</string>
-    <string name="mini_game_paused">Pausat</string>
-    <string name="mini_game_resume">Fortsätt</string>
-    <string name="mini_game_restart">Starta om</string>
-    <string name="mini_game_change">Välj ett annat spel</string>
-    <string name="mini_game_2048_picker_subtitle">Flytta brickorna och slå ihop dem</string>
-    <string name="mini_game_flappy_picker_subtitle">Tryck för att flyga mellan rören</string>
-    <string name="mini_game_flappy_tap_to_start">Tryck för att flyga</string>
-    <string name="mini_game_snake_picker_subtitle">Ät mat och träffa inte dig själv</string>
-    <string name="mini_game_snake_swipe_to_start">Svep för att starta</string>
-    <string name="mini_game_dino_picker_subtitle">Tryck för att hoppa över kaktusarna</string>
-    <string name="mini_game_dino_tap_to_start">Tryck för att springa</string>
-    <string name="mini_game_blocks_picker_subtitle">Passa ihop formerna och ta bort raderna</string>
-    <string name="mini_game_blocks_tap_to_start">Tryck för att rotera, svep för att flytta, svep nedåt för att släppa</string>
-    <string name="mini_game_bricks_picker_subtitle">Studsa bollen och slå sönder muren</string>
-    <string name="mini_game_bricks_tap_to_start">Dra för att sikta, tryck för att skjuta iväg</string>
-    <string name="mini_game_miner_picker_subtitle">Tryck för att öppna och tryck länge för att flagga</string>
-    <string name="mini_game_pairs_picker_subtitle">Vänd korten och hitta paren</string>
     <!-- Settings -->
     <string name="appearance">Utseende</string>
     <string name="advanced">Avancerat</string>

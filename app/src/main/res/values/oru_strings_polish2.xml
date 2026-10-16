@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Short lines for the second UX polish pass. The counter sits under the percentage in the patching hero, so it
+  is one short line inside the circle. The ready title is the done screen's title. English only (decision D6).
+-->
+<resources>
+    <string name="oru_hero_counter">%1$d of %2$d</string>
+    <string name="oru_done_ready_title">%1$s is ready</string>
+</resources>

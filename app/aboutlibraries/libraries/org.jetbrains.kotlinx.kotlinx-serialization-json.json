@@ -1,0 +1,17 @@
+{
+  "uniqueId": "org.jetbrains.kotlinx:kotlinx-serialization-json",
+  "name": "kotlinx.serialization",
+  "developers": [
+    {
+      "name": "JetBrains"
+    }
+  ],
+  "website": "https://github.com/Kotlin/kotlinx.serialization",
+  "scm": {
+    "connection": "scm:git:https://github.com/Kotlin/kotlinx.serialization.git",
+    "url": "https://github.com/Kotlin/kotlinx.serialization"
+  },
+  "licenses": [
+    "Apache-2.0"
+  ]
+}

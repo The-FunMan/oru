@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Oru patch run copy that is not in oru_strings.xml yet. English only (decision D6). Keys that
+  already exist in oru_strings.xml or strings.xml are reused, not repeated here.
+-->
+<resources>
+    <!-- Run: hero titles and lines -->
+    <string name="oru_run_title_done">Patched</string>
+    <string name="oru_run_title_cancelled">Cancelled</string>
+    <plurals name="oru_run_patches_applied">
+        <item quantity="one">%1$d patch applied.</item>
+        <item quantity="other">%1$d patches applied.</item>
+    </plurals>
+
+    <!-- Run: the three friendly steps of Simple mode, grouped from the real stages -->
+    <string name="oru_run_step_prepare">Preparing</string>
+    <string name="oru_run_step_finish">Finishing</string>
+
+    <!-- Run: the total after a patch count that rolls, "66 of 96": only the total, the count rolls on its own -->
+    <string name="oru_run_counter_of">of %1$d</string>
+
+    <!-- Run: the plain line under the title for the stages without a label of their own, and the gap between stages -->
+    <string name="oru_run_line_reading_app">Reading the app</string>
+    <string name="oru_run_line_writing_app">Writing the patched app</string>
+    <string name="oru_run_line_signing_app">Signing the app</string>
+    <string name="oru_run_line_almost_there">Almost there</string>
+
+    <!-- Failed and cancelled outcomes -->
+    <string name="oru_action_copy_log">Copy log</string>
+    <string name="oru_failed_back">Back</string>
+    <string name="oru_failed_no_detail">Patching stopped without a message. Share the log to see what happened.</string>
+</resources>

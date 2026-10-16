@@ -562,8 +562,6 @@ Für optimale Ergebnisse empfiehlt diese App, eine &lt;b&gt;vollständige APK&lt
     <string name="patcher_field_value_stripped">entfernt</string>
     <!-- Value of "Libraries": every library was left in the patched APK -->
     <string name="patcher_field_value_kept">behalten</string>
-    <string name="patcher_tab_logs">Patcher-Protokolle</string>
-    <string name="patcher_tab_game">Spiele</string>
     <string name="patcher_logs_waiting">Warte auf die Log-Ausgabe…</string>
     <string name="patcher_logs_lost">Die Log-Ausgabe wird zwischen App-Neustarts nicht gespeichert</string>
     <string name="patcher_long_step_warning">Dieser Schritt kann eine Weile dauern. Bitte warten…</string>
@@ -594,7 +592,6 @@ Durch die Deinstallation werden alle App-Daten dauerhaft gelöscht"</string>
     <string name="patcher_install_error_subtitle">Versuche, die App zu entfernen und erneut zu installieren</string>
     <string name="patcher_ready_to_mount_subtitle">Drücke die Schaltfläche unten zum Mounten</string>
     <string name="patcher_patches_excluded_for_installer">Nicht verfügbar für diese Installationsmethode und ausgeschlossen: %s</string>
-    <string name="patcher_back_to_game_hint">Tippe auf %1$s, um zu deinem Spiel zurückzukehren</string>
     <string name="patcher_storage_permission_dialog_title">Auf den Speicherpfad kann nicht zugegriffen werden</string>
     <string name="patcher_incompatible_patcher_title">Update erforderlich</string>
     <string name="patcher_incompatible_patcher_description">Die Quelle &lt;b&gt;%1$s&lt;/b&gt; erfordert Patcher &lt;b&gt;%2$s&lt;/b&gt; oder neuer. Aktualisiere Morphe, um sie zu verwenden</string>
@@ -691,29 +688,6 @@ Durch die Deinstallation werden alle App-Daten dauerhaft gelöscht"</string>
     <string name="package_name">Paketname</string>
     <string name="failed_to_mount">Mounten fehlgeschlagen: %s</string>
     <string name="failed_to_unmount">Unmounten fehlgeschlagen: %s</string>
-    <!-- Patcher Screen - Mini-games -->
-    <string name="mini_game_score">Punktzahl %s</string>
-    <string name="mini_game_best">Beste(r) %s</string>
-    <string name="mini_game_new_record">Neuer Rekord!</string>
-    <string name="mini_game_game_over">Spiel vorbei</string>
-    <string name="mini_game_try_again">Erneut versuchen</string>
-    <string name="mini_game_paused">Pausiert</string>
-    <string name="mini_game_resume">Weiter</string>
-    <string name="mini_game_restart">Neu starten</string>
-    <string name="mini_game_change">Ein anderes Spiel wählen</string>
-    <string name="mini_game_2048_picker_subtitle">Schieben Sie die Kacheln, um sie zu verbinden</string>
-    <string name="mini_game_flappy_picker_subtitle">Tippen, um durch Rohre zu fliegen</string>
-    <string name="mini_game_flappy_tap_to_start">Tippen zum Fliegen</string>
-    <string name="mini_game_snake_picker_subtitle">Iss das Futter, aber beiß dich nicht selbst</string>
-    <string name="mini_game_snake_swipe_to_start">Wischen, um zu starten</string>
-    <string name="mini_game_dino_picker_subtitle">Tippen, um über Kakteen zu springen</string>
-    <string name="mini_game_dino_tap_to_start">Tippen zum Rennen</string>
-    <string name="mini_game_blocks_picker_subtitle">Passe die Formen an, beseitige Linien</string>
-    <string name="mini_game_blocks_tap_to_start">Zum Drehen tippen, zum Bewegen wischen, nach unten wischen zum Ablegen</string>
-    <string name="mini_game_bricks_picker_subtitle">Lass den Ball hüpfen, zerstöre die Wand</string>
-    <string name="mini_game_bricks_tap_to_start">Ziehe zum Zielen, tippe zum Starten</string>
-    <string name="mini_game_miner_picker_subtitle">Tippen zum Öffnen, gedrückt halten zum Flaggen</string>
-    <string name="mini_game_pairs_picker_subtitle">Karten umdrehen, das passende Paar finden</string>
     <!-- Settings -->
     <string name="appearance">Darstellung</string>
     <string name="advanced">Erweitert</string>

@@ -6,6 +6,7 @@
 package app.morphe.manager.ui.model
 
 import android.app.Application
+import app.morphe.manager.domain.manager.OruEndpoints
 import app.morphe.manager.domain.manager.PreferencesManager
 import app.morphe.manager.domain.repository.PatchBundleRepository.Companion.DEFAULT_SOURCE_UID
 import app.morphe.manager.util.syncFcmTopics
@@ -83,7 +84,10 @@ class PostPatchPrompts(
                     useManagerPrereleases = useManagerPrereleases,
                     usePatchesPrereleases = usePatchesPrereleases
                 )
-                if (!hasGms) UpdateCheckWorker.schedule(app, prefs.updateCheckInterval.get())
+                // ORU: same rule as ManagerApplication, oru keeps the worker on GMS devices
+                if (OruEndpoints.current.updateWorkerScheduled(notificationsEnabled = true, hasGms = hasGms)) {
+                    UpdateCheckWorker.schedule(app, prefs.updateCheckInterval.get())
+                }
             }
         }
         _notification.value = false

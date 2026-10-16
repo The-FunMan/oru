@@ -13,13 +13,17 @@ import app.morphe.manager.R
 import app.morphe.manager.patcher.logger.LogLevel
 import app.morphe.manager.patcher.logger.Logger
 import app.morphe.manager.patcher.logger.logField
+// ORU: heap-limit and done-line telemetry is parsed by parseRunTelemetry, see below.
+import app.morphe.manager.patcher.runtime.ResourceMonitor.LOG_MEMORY_FIELD_MAX
 import app.morphe.manager.patcher.runtime.ResourceMonitor.LOG_MEMORY_PREFIX_CURRENT
+import app.morphe.manager.patcher.runtime.ResourceMonitor.LOG_MEMORY_PREFIX_DONE
 import app.morphe.manager.patcher.runtime.ResourceMonitor.LOG_USAGE_FIELD_CPU
 import app.morphe.manager.patcher.runtime.ResourceMonitor.LOG_USAGE_FIELD_IO_READ
 import app.morphe.manager.patcher.runtime.ResourceMonitor.LOG_USAGE_FIELD_IO_WRITE
 import app.morphe.manager.patcher.runtime.ResourceMonitor.LOG_USAGE_PREFIX_CURRENT
 import app.morphe.manager.patcher.runtime.process.PatcherProcess.Companion.LOG_PROCESS_PREFIX_PROCESS_HEAP
 import app.morphe.manager.patcher.split.SplitApkPreparer
+import app.morphe.manager.patcher.worker.PatcherWorker.Companion.LOG_PROCESS_PREFIX_COROUTINE_HEAP
 import app.morphe.manager.ui.screen.patcher.LogItem
 import app.morphe.manager.ui.screen.patcher.LogItemAccumulator
 import kotlinx.coroutines.*
@@ -34,9 +38,25 @@ import kotlin.time.Duration.Companion.milliseconds
 
 private const val TAG = "Morphe Patcher"
 
+/** Lines kept per stage for the stage rail; older lines drop off. */
+// ORU: bounded per-stage log buffer, step timings and peak heap (S08).
+internal const val STAGE_LOG_LIMIT = 50
+
 /** One storage throughput sample of the patcher run, in kilobytes per second. */
 data class IoSample(val readKbPerSec: Int, val writeKbPerSec: Int) {
     val totalKbPerSec get() = readKbPerSec + writeKbPerSec
+}
+
+/** The log lines of one stage (the last [STAGE_LOG_LIMIT]) and how many WARN lines the stage printed. */
+// ORU: per-stage log and warning count (S08).
+data class StageLog(
+    val lines: List<Pair<LogLevel, String>> = emptyList(),
+    val warningCount: Int = 0
+)
+
+/** When a step started and ended, from [System.currentTimeMillis]. [endedAtMs] stays null while the step runs. */
+data class StepTiming(val startedAtMs: Long, val endedAtMs: Long? = null) {
+    val durationMs: Long? get() = endedAtMs?.let { it - startedAtMs }
 }
 
 /** Live state of one patcher run, as consumed by the patching screens. */
@@ -46,6 +66,9 @@ interface PatchProgressSource {
     val logItems: List<LogItem>
     val heapSamples: List<Int>
     val heapLimitMb: Int
+
+    /** Highest heap use (MB) seen during this attempt, from the samples or the run's closing line. */
+    val peakHeapMb: Int get() = 0
 
     /** Load of every CPU core in percent, empty while the device exposes no core counters. */
     val cpuCoreLoads: List<Int>
@@ -58,6 +81,13 @@ interface PatchProgressSource {
 
     /** Cumulative number of log entries recorded during this run. */
     val totalLogCount: Int get() = logs.size
+
+    // ORU: new per-stage and timing members default to empty so existing readers are unaffected.
+    /** Per-stage log lines and warning counts, keyed by the stage they were printed in. */
+    val stageLogs: Map<StepId, StageLog> get() = emptyMap()
+
+    /** Start and end of each step that has started, keyed by step. */
+    val stepTimings: Map<StepId, StepTiming> get() = emptyMap()
 }
 
 /**
@@ -95,6 +125,18 @@ class PatchRunProgress(
     private val logChannel = Channel<Pair<LogLevel, String>>(Channel.UNLIMITED)
     private var consumerJob: Job? = null
 
+    // ORU: per-stage bookkeeping, written where the consumer drains log lines.
+    private val stageLogTracker = StageLogTracker()
+    private val stepTimingTracker = StepTimingTracker()
+
+    /** Per-stage log lines and warning counts, replaced as a whole on every change. */
+    override var stageLogs by mutableStateOf<Map<StepId, StageLog>>(emptyMap())
+        private set
+
+    /** Step start and end times, replaced as a whole on every change. */
+    override var stepTimings by mutableStateOf<Map<StepId, StepTiming>>(emptyMap())
+        private set
+
     init {
         consumerJob = scope.launch(Dispatchers.Main.immediate) {
             val buffer = ArrayList<Pair<LogLevel, String>>()
@@ -108,6 +150,12 @@ class PatchRunProgress(
                     totalLogCount += buffer.size
                     logs.addAll(buffer)
                     accumulator.appendAll(buffer)
+
+                    // Lines belong to the stage that was running when they were consumed
+                    steps.getOrNull(currentStepIndex)?.id?.let { stage ->
+                        buffer.forEach { (level, message) -> stageLogTracker.append(stage, level, message) }
+                        stageLogs = stageLogTracker.snapshot()
+                    }
                     buffer.clear()
                 }
             } catch (_: CancellationException) {
@@ -122,11 +170,16 @@ class PatchRunProgress(
      */
     override val logsLost = restoredSteps != null
 
-    /** Heap usage samples (MB) collected every second while patching. */
+    // ORU: the usage sampling interval is 2 seconds, not 1 (ResourceMonitor.MONITOR_INTERVAL).
+    /** Heap usage samples (MB) collected every 2 seconds while patching. */
     override val heapSamples = mutableStateListOf<Int>()
 
     /** Heap limit (MB) of the patcher process, parsed from the runtime's log line. */
     override var heapLimitMb by mutableIntStateOf(0)
+        private set
+
+    // ORU: peak heap, from samples and the closing done line.
+    override var peakHeapMb by mutableIntStateOf(0)
         private set
 
     /**
@@ -146,8 +199,12 @@ class PatchRunProgress(
     var failedPatch by mutableStateOf(restoredFailedPatch)
         private set
 
-    /** Share of the progress bar left for executing patches after the fixed steps. */
-    private var patchesPercentage = max(0.0, 1.0 - steps.sumOf { it.progressPercentage })
+    /**
+     * The fraction [0, 1] of a stage that reports its own progress, for the stage that is running. A stage with no entry
+     * counts as nothing done until it completes. Cleared when the run restarts.
+     */
+    var stageFractions by mutableStateOf<Map<StepId, Float>>(emptyMap())
+        private set
 
     private var currentStepIndex = steps.indexOfFirst { it.state == State.RUNNING }.coerceAtLeast(0)
 
@@ -164,15 +221,7 @@ class PatchRunProgress(
 
     /** [0, 1] progress across every step of the run. */
     val progress by derivedStateOf {
-        val current = steps.sumOf {
-            if (it.state == State.COMPLETED && it.category != StepCategory.PATCHING) {
-                it.progressPercentage
-            } else {
-                0.0
-            }
-        } + (completedPatches / totalPatches.coerceAtLeast(1).toDouble()) * patchesPercentage
-
-        min(1.0, current).toFloat()
+        runProgressOf(steps, completedPatches, totalPatches, stageFractions)
     }
 
     /** Logger handed to the patcher worker. */
@@ -198,6 +247,9 @@ class PatchRunProgress(
                 currentStepIndex++
                 steps[currentStepIndex] = steps[currentStepIndex].copy(state = State.RUNNING)
             }
+
+            // ORU: step timings follow every step change.
+            publishStepTimings()
         }
     }
 
@@ -207,6 +259,18 @@ class PatchRunProgress(
 
     fun onPatchFailed(patchName: String) {
         scope.launch(Dispatchers.Main) { failedPatch = patchName }
+    }
+
+    /**
+     * Records how far a running stage has got, as a fraction of its own share of the bar. A report never lowers the
+     * fraction already held for that stage, and a NaN report is ignored.
+     */
+    fun onStageFraction(stage: StepId, fraction: Float) {
+        if (fraction.isNaN()) return
+        scope.launch(Dispatchers.Main) {
+            val held = stageFractions[stage] ?: 0f
+            stageFractions = stageFractions + (stage to max(held, fraction.coerceIn(0f, 1f)))
+        }
     }
 
     /**
@@ -223,9 +287,9 @@ class PatchRunProgress(
             currentStepIndex = 0
             steps.clear()
             steps.addAll(generatePatchSteps(appContext, requiresSplitPreparation))
-            patchesPercentage = max(0.0, 1.0 - steps.sumOf { it.progressPercentage })
             // A memory retry reports its own limit, and a fallback to the app's process has the app's heap
             heapLimitMb = 0
+            peakHeapMb = 0
             heapSamples.clear()
             ioSamples.clear()
             cpuCoreLoads = emptyList()
@@ -233,6 +297,13 @@ class PatchRunProgress(
             accumulator.reset()
             totalLogCount = logs.size
             accumulator.appendAll(logs)
+            // The stage counts and timings describe the attempt that was abandoned
+            stageLogTracker.clear()
+            stageLogs = emptyMap()
+            stageFractions = emptyMap()
+            stepTimingTracker.clear()
+            // ORU: restart clears per-stage counts and timings.
+            publishStepTimings()
         }
     }
 
@@ -258,6 +329,8 @@ class PatchRunProgress(
             !needsSplit && requiresSplitPreparation -> {
                 requiresSplitPreparation = false
                 removeSplitStep()
+                // ORU: split step removed, timing dropped.
+                publishStepTimings()
                 return
             }
         }
@@ -272,6 +345,9 @@ class PatchRunProgress(
                 }
             }
         }
+
+        // ORU: split step added or merged, timing recorded.
+        publishStepTimings()
     }
 
     /**
@@ -320,6 +396,13 @@ class PatchRunProgress(
         if (opening.state != State.WAITING && opening.state != State.RUNNING) return
 
         steps[0] = opening.copy(state = state)
+        // ORU: opening step hold and resume, timing recorded.
+        publishStepTimings()
+    }
+
+    /** Recomputes step start and end times from the steps as they are now. Main dispatcher only. */
+    private fun publishStepTimings() {
+        stepTimings = stepTimingTracker.sync(steps, System.currentTimeMillis())
     }
 
     fun stopStallWatch() {
@@ -328,47 +411,39 @@ class PatchRunProgress(
         _showLongStepWarning.value = false
     }
 
+    // ORU: telemetry parsed by a pure function; the log panel rules are unchanged.
     private fun record(level: LogLevel, message: String) {
         level.androidLog(message)
 
-        if (message.startsWith(LOG_PROCESS_PREFIX_PROCESS_HEAP)) {
-            val mb = message.removePrefix(LOG_PROCESS_PREFIX_PROCESS_HEAP)
-                .substringBefore("MB").trim().toIntOrNull()
-            if (mb != null) scope.launch(Dispatchers.Main) { heapLimitMb = mb }
-            // Still passed through to the log panel
-        }
+        val parsed = parseRunLine(level, message)
+        when (val telemetry = parsed.telemetry) {
+            is RunTelemetry.HeapLimit -> scope.launch(Dispatchers.Main) { heapLimitMb = telemetry.mb }
 
-        if (message.startsWith(LOG_MEMORY_PREFIX_CURRENT)) {
-            val mb = message.removePrefix(LOG_MEMORY_PREFIX_CURRENT)
-                .substringBefore("MB").toIntOrNull()
-            if (mb != null) {
-                scope.launch(Dispatchers.Main) {
-                    heapSamples.add(mb)
-                    if (heapSamples.size > SAMPLE_HISTORY_LIMIT) heapSamples.removeAt(0)
-                }
+            is RunTelemetry.HeapSample -> scope.launch(Dispatchers.Main) {
+                heapSamples.add(telemetry.mb)
+                if (heapSamples.size > SAMPLE_HISTORY_LIMIT) heapSamples.removeAt(0)
+                peakHeapMb = max(peakHeapMb, telemetry.mb)
             }
-            return // Raw heap polls would drown out the log panel
-        }
 
-        if (message.startsWith(LOG_USAGE_PREFIX_CURRENT)) {
-            val coreLoads = message.logField(LOG_USAGE_FIELD_CPU)
-                ?.split(',')
-                ?.mapNotNull(String::toIntOrNull)
-            val read = message.logField(LOG_USAGE_FIELD_IO_READ)?.toIntOrNull()
-            val write = message.logField(LOG_USAGE_FIELD_IO_WRITE)?.toIntOrNull()
+            is RunTelemetry.HeapDone -> scope.launch(Dispatchers.Main) {
+                peakHeapMb = max(peakHeapMb, telemetry.maxMb)
+            }
 
-            scope.launch(Dispatchers.Main) {
-                if (!coreLoads.isNullOrEmpty()) cpuCoreLoads = coreLoads
+            is RunTelemetry.Usage -> scope.launch(Dispatchers.Main) {
+                if (telemetry.coreLoads.isNotEmpty()) cpuCoreLoads = telemetry.coreLoads
 
+                val read = telemetry.ioRead
+                val write = telemetry.ioWrite
                 if (read != null && write != null) {
                     ioSamples.add(IoSample(read, write))
                     if (ioSamples.size > SAMPLE_HISTORY_LIMIT) ioSamples.removeAt(0)
                 }
             }
-            return // Raw usage polls would drown out the log panel
+
+            null -> Unit
         }
 
-        if (level == LogLevel.TRACE) return
+        if (!parsed.showInLog) return
 
         logChannel.trySend(level to message)
     }
@@ -432,6 +507,163 @@ class PatchRunProgress(
             LogLevel.ERROR -> Log.e(TAG, msg)
         }
     }
+}
+
+/** A line the run prints about its own resource use. These feed the usage readout. */
+// ORU: pure parsing used by PatchRunProgress and the parse tests.
+internal sealed interface RunTelemetry {
+    data class HeapLimit(val mb: Int) : RunTelemetry
+    data class HeapSample(val mb: Int) : RunTelemetry
+    data class HeapDone(val maxMb: Int) : RunTelemetry
+    data class Usage(val coreLoads: List<Int>, val ioRead: Int?, val ioWrite: Int?) : RunTelemetry
+}
+
+/**
+ * How one run log line is treated: [telemetry] is what it reports, [showInLog] says whether it
+ * reaches the log panel. Raw polls and TRACE lines do not.
+ */
+private const val PROFILE_LOG_PREFIX = "oru.profile"
+
+internal class ParsedRunLine(val telemetry: RunTelemetry?, val showInLog: Boolean)
+
+internal fun parseRunLine(level: LogLevel, message: String): ParsedRunLine {
+    val rawPoll = message.startsWith(LOG_MEMORY_PREFIX_CURRENT) || message.startsWith(LOG_USAGE_PREFIX_CURRENT)
+    // ORU: developer phase profile lines (marker file) go to logcat and the profile file only
+    val profileLine = message.startsWith(PROFILE_LOG_PREFIX)
+    return ParsedRunLine(
+        telemetry = parseRunTelemetry(message),
+        showInLog = level != LogLevel.TRACE && !rawPoll && !profileLine
+    )
+}
+
+/**
+ * Both heap-limit prefixes are accepted: the separate patcher process logs the first, the
+ * in-process runtime logs the second.
+ */
+internal fun parseRunTelemetry(message: String): RunTelemetry? = when {
+    message.startsWith(LOG_PROCESS_PREFIX_PROCESS_HEAP) ->
+        message.megabytesAfter(LOG_PROCESS_PREFIX_PROCESS_HEAP)?.let { RunTelemetry.HeapLimit(it) }
+
+    message.startsWith(LOG_PROCESS_PREFIX_COROUTINE_HEAP) ->
+        message.megabytesAfter(LOG_PROCESS_PREFIX_COROUTINE_HEAP)?.let { RunTelemetry.HeapLimit(it) }
+
+    message.startsWith(LOG_MEMORY_PREFIX_CURRENT) ->
+        message.megabytesAfter(LOG_MEMORY_PREFIX_CURRENT)?.let { RunTelemetry.HeapSample(it) }
+
+    message.startsWith(LOG_MEMORY_PREFIX_DONE) ->
+        message.logField(LOG_MEMORY_FIELD_MAX)?.substringBefore("MB")?.toIntOrNull()
+            ?.let { RunTelemetry.HeapDone(it) }
+
+    message.startsWith(LOG_USAGE_PREFIX_CURRENT) -> RunTelemetry.Usage(
+        coreLoads = message.logField(LOG_USAGE_FIELD_CPU)
+            ?.split(',')
+            ?.mapNotNull(String::toIntOrNull)
+            .orEmpty(),
+        ioRead = message.logField(LOG_USAGE_FIELD_IO_READ)?.toIntOrNull(),
+        ioWrite = message.logField(LOG_USAGE_FIELD_IO_WRITE)?.toIntOrNull()
+    )
+
+    else -> null
+}
+
+private fun String.megabytesAfter(prefix: String): Int? =
+    removePrefix(prefix).substringBefore("MB").trim().toIntOrNull()
+
+/**
+ * Keeps the last [STAGE_LOG_LIMIT] lines of each stage and counts its WARN lines. Kept apart from
+ * [PatchRunProgress] so the bookkeeping can be tested without Android. Not thread safe: main only.
+ */
+// ORU: pure per-stage bookkeeping (S08).
+internal class StageLogTracker {
+    private val lines = HashMap<StepId, ArrayDeque<Pair<LogLevel, String>>>()
+    private val warnings = HashMap<StepId, Int>()
+
+    fun append(stage: StepId, level: LogLevel, message: String) {
+        val stageLines = lines.getOrPut(stage) { ArrayDeque() }
+        stageLines.addLast(level to message)
+        if (stageLines.size > STAGE_LOG_LIMIT) stageLines.removeFirst()
+
+        if (level == LogLevel.WARN) warnings[stage] = (warnings[stage] ?: 0) + 1
+    }
+
+    fun snapshot(): Map<StepId, StageLog> = (lines.keys + warnings.keys).associateWith { stage ->
+        StageLog(
+            lines = lines[stage]?.toList().orEmpty(),
+            warningCount = warnings[stage] ?: 0
+        )
+    }
+
+    fun clear() {
+        lines.clear()
+        warnings.clear()
+    }
+}
+
+/**
+ * Derives each step's start and end from its state. A step gets a start when it first runs and an
+ * end when it completes or fails. A step that has left the list (the split step once it is dropped)
+ * loses its timing. Not thread safe: main only.
+ */
+// ORU: pure step timing bookkeeping (S08).
+internal class StepTimingTracker {
+    private var timings: Map<StepId, StepTiming> = emptyMap()
+
+    fun sync(steps: List<Step>, now: Long): Map<StepId, StepTiming> {
+        val next = LinkedHashMap<StepId, StepTiming>()
+        for (step in steps) {
+            val current = timings[step.id]
+            val timing = when (step.state) {
+                State.WAITING -> current
+                State.RUNNING -> current ?: StepTiming(startedAtMs = now)
+                State.COMPLETED, State.FAILED -> when {
+                    current == null -> StepTiming(startedAtMs = now, endedAtMs = now)
+                    current.endedAtMs == null -> current.copy(endedAtMs = now)
+                    else -> current
+                }
+            }
+            if (timing != null) next[step.id] = timing
+        }
+
+        timings = next
+        return next
+    }
+
+    fun clear() {
+        timings = emptyMap()
+    }
+}
+
+/**
+ * The share [0, 1] of the whole run that is done, see [PatchRunProgress.progress].
+ *
+ * A completed stage counts its full share. A running stage counts its share times its fraction in [stageFractions],
+ * and nothing while it reports none, so the bar only moves for a stage that reports real progress. Executing patches
+ * counts the patches done out of the share the fixed steps leave it, so a split step takes its share from the patches.
+ * Pure, so the weighting can be tested without Android.
+ */
+internal fun runProgressOf(
+    steps: List<Step>,
+    completedPatches: Int,
+    totalPatches: Int,
+    stageFractions: Map<StepId, Float> = emptyMap(),
+): Float {
+    val patchesShare = max(0.0, 1.0 - steps.sumOf { it.progressPercentage })
+    val stagesDone = steps.sumOf { step ->
+        when {
+            step.category == StepCategory.PATCHING -> 0.0
+            step.state == State.COMPLETED -> step.progressPercentage
+            step.state == State.RUNNING -> {
+                // A NaN report is no report: the stage counts as nothing done
+                val fraction = stageFractions[step.id]?.takeUnless { it.isNaN() } ?: 0f
+                step.progressPercentage * fraction.coerceIn(0f, 1f)
+            }
+
+            else -> 0.0
+        }
+    }
+    val patchesDone = completedPatches / totalPatches.coerceAtLeast(1).toDouble()
+
+    return min(1.0, stagesDone + patchesDone * patchesShare).toFloat()
 }
 
 /**

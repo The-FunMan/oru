@@ -563,8 +563,6 @@ A legjobb eredmény érdekében az alkalmazás javasolja a &lt;b&gt;teljes APK&l
     <string name="patcher_field_value_stripped">eltávolítva</string>
     <!-- Value of "Libraries": every library was left in the patched APK -->
     <string name="patcher_field_value_kept">megtartva</string>
-    <string name="patcher_tab_logs">Javító naplók</string>
-    <string name="patcher_tab_game">Játékok</string>
     <string name="patcher_logs_waiting">Várja a napló kimenetét…</string>
     <string name="patcher_logs_lost">A napló kimenet nem kerül megőrzésre az alkalmazás újraindításakor</string>
     <string name="patcher_long_step_warning">Ez a lépés eltarthat egy ideig. Kérjük várj…</string>
@@ -594,7 +592,6 @@ Az eltávolítás véglegesen törli az alkalmazás összes adatát."</string>
     <string name="patcher_install_error_subtitle">Próbáld meg eltávolítani és újratelepíteni</string>
     <string name="patcher_ready_to_mount_subtitle">Nyomd meg az alábbi gombot a csatoláshoz</string>
     <string name="patcher_patches_excluded_for_installer">Nem érhető el a telepítési módszerhez és kizárt: %s</string>
-    <string name="patcher_back_to_game_hint">Koppints a(z) %1$s elemre a játékhoz való visszatéréshez</string>
     <string name="patcher_storage_permission_dialog_title">Az elérési útvonal nem hozzáférhető</string>
     <string name="patcher_incompatible_patcher_title">Frissítés szükséges</string>
     <string name="patcher_incompatible_patcher_description">A &lt;b&gt;%1$s&lt;/b&gt; forrás a &lt;b&gt;%2$s&lt;/b&gt; vagy újabb patchert igényel. A használatához frissítse a Morphe-ot</string>
@@ -691,29 +688,6 @@ Az eltávolítás véglegesen törli az alkalmazás összes adatát."</string>
     <string name="package_name">Csomagnév</string>
     <string name="failed_to_mount">Nem sikerült csatlakoztatni: %s</string>
     <string name="failed_to_unmount">Nem sikerült leválasztani: %s</string>
-    <!-- Patcher Screen - Mini-games -->
-    <string name="mini_game_score">Értékelés: %s</string>
-    <string name="mini_game_best">Legjobb %s</string>
-    <string name="mini_game_new_record">Új rekord!</string>
-    <string name="mini_game_game_over">Játék vége</string>
-    <string name="mini_game_try_again">Próbálja újra</string>
-    <string name="mini_game_paused">Szüneteltetve</string>
-    <string name="mini_game_resume">Folytatás</string>
-    <string name="mini_game_restart">Újrakezdés</string>
-    <string name="mini_game_change">Válassz másik játékot</string>
-    <string name="mini_game_2048_picker_subtitle">Húzd a lapkákat összevonáshoz</string>
-    <string name="mini_game_flappy_picker_subtitle">Érintsd meg, hogy átrepülj a csővázakon</string>
-    <string name="mini_game_flappy_tap_to_start">Érintsd meg a repüléshez</string>
-    <string name="mini_game_snake_picker_subtitle">Egyél, és ne ütközz magadba</string>
-    <string name="mini_game_snake_swipe_to_start">Húzd az ujjad a kezdéshez</string>
-    <string name="mini_game_dino_picker_subtitle">Érintsd meg a kaktuszok átugrásához</string>
-    <string name="mini_game_dino_tap_to_start">Érintsd meg a futáshoz</string>
-    <string name="mini_game_blocks_picker_subtitle">Illeszd a formákat, tiszta vonalak</string>
-    <string name="mini_game_blocks_tap_to_start">Koppints a forgatáshoz, húzd el a mozgatáshoz, húzd le az ejtéshez</string>
-    <string name="mini_game_bricks_picker_subtitle">Pattintsd a labdát, törd le a falat</string>
-    <string name="mini_game_bricks_tap_to_start">Húzd a célzáshoz, koppints az indításhoz</string>
-    <string name="mini_game_miner_picker_subtitle">Koppints a megnyitáshoz, tartsd lenyomva a megjelöléshez</string>
-    <string name="mini_game_pairs_picker_subtitle">Fordíts kártyákat, találd meg a párokat</string>
     <!-- Settings -->
     <string name="appearance">Megjelenés</string>
     <string name="advanced">Haladó</string>

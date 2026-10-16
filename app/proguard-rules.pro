@@ -21,3 +21,5 @@
 -dontwarn java.awt.**
 -dontwarn javax.**
 -dontwarn org.slf4j.**
+# PhaseProfiler reads GC and thread counts from the desktop management beans only when it runs on a JVM; Android has none of these classes
+-dontwarn java.lang.management.**

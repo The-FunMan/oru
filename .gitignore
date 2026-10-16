@@ -131,5 +131,30 @@ local.properties
 
 .cxx
 AGENT.md
-.gitignore
 to-do.txt
+native/target/
+native-packager/target/
+
+# Signing material and local credentials. Keystores must never reach the repository.
+*.jks
+*.keystore
+*.p12
+*.pfx
+*.pem
+keystore.jks
+keystore.properties
+app/google-services.json
+
+# Other packaged app formats: the repository never stores app files
+*.apks
+*.xapk
+*.aab
+
+# Local scratch and generated reports
+/scratch/
+/reports/
+__pycache__/
+*.pyc
+
+# Maintainer-only privacy patterns for scripts/privacy-scan.sh. Never commit this file.
+scripts/privacy-patterns.local.txt

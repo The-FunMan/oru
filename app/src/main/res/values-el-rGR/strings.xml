@@ -563,8 +563,6 @@
     <string name="patcher_field_value_stripped">αφαιρέθηκαν</string>
     <!-- Value of "Libraries": every library was left in the patched APK -->
     <string name="patcher_field_value_kept">διατηρήθηκαν</string>
-    <string name="patcher_tab_logs">Καταγραφές Patcher</string>
-    <string name="patcher_tab_game">Παιχνίδια</string>
     <string name="patcher_logs_waiting">Αναμονή για έξοδο καταγραφής…</string>
     <string name="patcher_logs_lost">Η έξοδος καταγραφής δεν διατηρείται κατά την επανεκκίνηση της εφαρμογής</string>
     <string name="patcher_long_step_warning">Αυτό το βήμα μπορεί να διαρκέσει λίγο. Παρακαλώ περιμένετε…</string>
@@ -594,7 +592,6 @@
     <string name="patcher_install_error_subtitle">Δοκιμάστε να απεγκαταστήσετε και να εγκαταστήσετε ξανά</string>
     <string name="patcher_ready_to_mount_subtitle">Πατήστε το παρακάτω κουμπί για προσάρτηση</string>
     <string name="patcher_patches_excluded_for_installer">Δεν είναι διαθέσιμο για αυτήν τη μέθοδο εγκατάστασης και εξαιρέθηκε: %s</string>
-    <string name="patcher_back_to_game_hint">Πάτα %1$s για να επιστρέψεις στο παιχνίδι σου</string>
     <string name="patcher_storage_permission_dialog_title">Δεν είναι δυνατή η πρόσβαση στη διαδρομή αποθηκευτικού χώρου</string>
     <string name="patcher_incompatible_patcher_title">Απαιτείται ενημέρωση</string>
     <string name="patcher_incompatible_patcher_description">Η πηγή &lt;b&gt;%1$s&lt;/b&gt; απαιτεί τον patcher &lt;b&gt;%2$s&lt;/b&gt; ή νεότερο. Ενημερώστε το Morphe για να τον χρησιμοποιήσει</string>
@@ -691,29 +688,6 @@
     <string name="package_name">Όνομα πακέτου</string>
     <string name="failed_to_mount">Αδυναμία προσάρτησης: %s</string>
     <string name="failed_to_unmount">Αποτυχία αποπροσάρτησης: %s</string>
-    <!-- Patcher Screen - Mini-games -->
-    <string name="mini_game_score">Βαθμολογία %s</string>
-    <string name="mini_game_best">Καλύτερη %s</string>
-    <string name="mini_game_new_record">Νέο ρεκόρ!</string>
-    <string name="mini_game_game_over">Τέλος παιχνιδιού</string>
-    <string name="mini_game_try_again">Δοκιμάστε ξανά</string>
-    <string name="mini_game_paused">Σε παύση</string>
-    <string name="mini_game_resume">Συνέχεια</string>
-    <string name="mini_game_restart">Ξεκινήστε από την αρχή</string>
-    <string name="mini_game_change">Επιλέξτε άλλο παιχνίδι</string>
-    <string name="mini_game_2048_picker_subtitle">Σύρετε τα πλακίδια για να τα συγχωνεύσετε</string>
-    <string name="mini_game_flappy_picker_subtitle">Πατήστε για να πετάξετε ανάμεσα από τους σωλήνες</string>
-    <string name="mini_game_flappy_tap_to_start">Πατήστε για να πετάξετε</string>
-    <string name="mini_game_snake_picker_subtitle">Φάτε φαγητό, μην χτυπήσετε τον εαυτό σας</string>
-    <string name="mini_game_snake_swipe_to_start">Σύρετε για να ξεκινήσετε</string>
-    <string name="mini_game_dino_picker_subtitle">Πατήστε για να πηδήξετε πάνω από τους κάκτους</string>
-    <string name="mini_game_dino_tap_to_start">Πατήστε για να τρέξετε</string>
-    <string name="mini_game_blocks_picker_subtitle">Ταίριαξε τα σχήματα, καθάρισε τις γραμμές</string>
-    <string name="mini_game_blocks_tap_to_start">Πατήστε για περιστροφή, σύρετε για μετακίνηση, σύρετε προς τα κάτω για να αφήσετε</string>
-    <string name="mini_game_bricks_picker_subtitle">Χτύπα την μπάλα, καθάρισε τον τοίχο</string>
-    <string name="mini_game_bricks_tap_to_start">Σύρε για να στοχεύσεις, πάτησε για να εκτοξεύσεις</string>
-    <string name="mini_game_miner_picker_subtitle">Πατήστε για άνοιγμα, κρατήστε για σήμανση</string>
-    <string name="mini_game_pairs_picker_subtitle">Αναποδογυρίστε τις κάρτες, βρείτε το ζευγάρι</string>
     <!-- Settings -->
     <string name="appearance">Εμφάνιση</string>
     <string name="advanced">Για προχωρημένους</string>

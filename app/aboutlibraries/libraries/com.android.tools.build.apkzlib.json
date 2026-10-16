@@ -1,0 +1,12 @@
+{
+  "uniqueId": "com.android.tools.build:apkzlib",
+  "name": "apkzlib",
+  "developers": [
+    {
+      "name": "The Android Open Source Project"
+    }
+  ],
+  "licenses": [
+    "Apache-2.0"
+  ]
+}

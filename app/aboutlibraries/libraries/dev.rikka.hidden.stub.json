@@ -1,0 +1,12 @@
+{
+  "uniqueId": "dev.rikka.hidden:stub",
+  "name": "HiddenApi stub",
+  "developers": [
+    {
+      "name": "RikkaW"
+    }
+  ],
+  "licenses": [
+    "MIT"
+  ]
+}

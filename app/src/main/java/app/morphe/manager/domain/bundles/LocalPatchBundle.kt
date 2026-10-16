@@ -11,6 +11,7 @@
 package app.morphe.manager.domain.bundles
 
 import kotlinx.coroutines.Dispatchers
+import app.morphe.manager.util.moveReplacing
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.InputStream
@@ -54,14 +55,15 @@ class LocalPatchBundle(
     ): Boolean = withContext(Dispatchers.IO) {
         val target = patchesJarFile
         target.parentFile?.mkdirs()
+        // Checked before the swap: a bad file must never replace the installed bundle
+        requireValidBundleFile(tempFile, "Importing patch bundle")
         // Made read-only before the swap rather than after: the rename replaces the installed
         // bundle in one step, so a concurrent reader never sees a writable dex container
         tempFile.setReadOnly()
-        if (!tempFile.renameTo(target)) {
+        if (!moveReplacing(tempFile, target)) {
             runCatching { tempFile.setWritable(true, true) }
             return@withContext false
         }
-        requireNonEmptyBundleFile(target, "Importing patch bundle")
         onProgress?.invoke(0L, totalBytes)
         return@withContext true
     }

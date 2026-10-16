@@ -28,6 +28,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import app.morphe.manager.BuildConfig
 import app.morphe.manager.R
 import app.morphe.manager.domain.manager.HomeAppButtonPreferences
 import app.morphe.manager.ui.screen.settings.appearance.*
@@ -120,7 +121,14 @@ fun AppearanceTabContent(
         LanguageAndDisplaySection(
             appLanguage = appLanguage,
             uiScale = uiScale,
-            onLanguageClick = { showTranslationInfoDialog.value = true },
+            // ORU: the translation page is Morphe's, so oru goes straight to the language list
+            onLanguageClick = {
+                if (BuildConfig.ORU_UX) {
+                    showLanguageDialog.value = true
+                } else {
+                    showTranslationInfoDialog.value = true
+                }
+            },
             onUiScaleClick = { showUiScaleDialog.value = true }
         )
 

@@ -37,6 +37,7 @@ import app.morphe.manager.patcher.patch.PatchInfo
 import app.morphe.manager.patcher.patch.appColorFor
 import app.morphe.manager.ui.model.HomeAppItem
 import app.morphe.manager.ui.screen.shared.*
+import app.morphe.manager.util.shownTitle
 import app.morphe.manager.util.toast
 import app.morphe.manager.util.withToast
 import kotlinx.coroutines.launch
@@ -395,7 +396,7 @@ fun AppPatchSourcesDialog(
             .map { uid ->
                 val reaches = packages.filter { uid in coveredBy[it].orEmpty() }
                 val held = reaches.count { uid in keptFrom[it].orEmpty() }
-                Triple(uid, sourcesByUid[uid]?.displayTitle ?: uid.toString(), held to reaches.size)
+                Triple(uid, sourcesByUid[uid]?.shownTitle ?: uid.toString(), held to reaches.size)
             }
             .sortedBy { (_, title, _) -> title.lowercase(Locale.ROOT) }
     }

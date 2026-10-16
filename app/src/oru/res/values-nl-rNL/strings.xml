@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="adaptive_icon_guide_png_body">Een logo op een transparante achtergrond werkt het beste, met de hieronder gekozen achtergrondkleur. Een afbeelding zonder transparantie vult in plaats daarvan het hele pictogram, en de thema- en meldingspictogrammen behouden dan het Oru-logo.</string>
+    <string name="adaptive_icon_no_transparency_warning">Deze afbeelding heeft geen transparante pixels, dus de thema- en meldingspictogrammen behouden het Oru-logo</string>
+    <string name="battery_optimization_dialog_description">Sommige apparaten kunnen de patcher stoppen wanneer de app geminimaliseerd is. Sta Oru toe om zonder batterijbeperkingen te draaien om ervoor te zorgen dat het patchen betrouwbaar voltooid wordt.</string>
+    <string name="deep_link_add_source_message">Wilt u deze patchbron toevoegen aan Oru?</string>
+    <string name="external_batch_patch_description">%s wil dat Oru apps patched en installeert</string>
+    <string name="home_apk_helper_description">Oru vraagt de onderstaande hulpprogramma om de originele APK te downloaden en het bestand terug te geven</string>
+    <string name="home_apk_helper_installed_unavailable">Oru kon de geïnstalleerde app niet gebruiken</string>
+    <string name="home_apk_helper_warning">Ga alleen verder als u deze hulpprogramma-app vertrouwt. Oru controleert het pakket, de versie en de handtekening van alles wat het ontvangt voordat het gaat patchen.</string>
+    <string name="home_apk_helper_warning_unverified">Ga alleen verder als u deze hulpprogramma-app vertrouwt. Oru kan de handtekening van deze APK niet verifiëren, dus een gewijzigd bestand zou niet worden gedetecteerd.</string>
+    <string name="home_app_filter_not_patched_description">Apps die je nog niet in Oru hebt gepatcht</string>
+    <string name="home_app_filter_patched_description">Apps die je met Oru hebt gepatcht of opgeslagen</string>
+    <string name="home_app_filter_uninstalled_description">Apps die met Oru zijn gepatcht en niet meer op dit apparaat staan</string>
+    <string name="home_app_info_app_deleted_description">Deze app is buiten Oru verwijderd. Installeer de patch om de functionaliteit te herstellen</string>
+    <string name="home_app_info_install_unverified">Oru kan niet bevestigen dat de geïnstalleerde app de build is die is gepatcht. Patch deze opnieuw of installeer deze opnieuw vanuit de opgeslagen APK om de acties te herstellen</string>
+    <string name="home_app_info_not_patched_description">Er is een niet-gepatchte versie van deze app geïnstalleerd. Oru heeft nog steeds zijn eerdere patchrecord.</string>
+    <string name="home_download_instructions_download_button_toast_6">Je bent nu een officiële Oru knop tester 🏅</string>
+    <string name="home_download_instructions_step2_search_note">Oru kan niet voor deze websites instaan. Sla de websites over die een eigen appwinkel aanbieden in plaats van een APK-bestand</string>
+    <string name="home_download_instructions_step4">Na het downloaden, ga terug naar Oru</string>
+    <string name="home_download_instructions_step4_mount">Na het installeren van het oorspronkelijke APK, ga terug naar Oru</string>
+    <string name="home_held_back_title">Een patchbron heeft Oru laten crashen.}</string>
+    <string name="home_outdated_manager_title">Oru is verouderd</string>
+    <string name="home_update_available">Oru-update beschikbaar</string>
+    <string name="installer_shizuku_error_permission">De Shizuku-toestemming ontbreekt. Verleen toestemming aan Oru en probeer het opnieuw.</string>
+    <string name="installer_status_shizuku_permission">Geef Oru toestemming vanuit de Shizuku-app</string>
+    <string name="installing_manager_update_hint">Oru zal sluiten om de update af te ronden</string>
+    <string name="launch_app_unverified">Oru kon niet verifiëren dat de geïnstalleerde app de build is die het heeft gepatcht.</string>
+    <string name="notification_bundle_update_text_unversioned">Tik om Oru te openen en bij te werken</string>
+    <string name="notification_channel_manager_updates">Oru-updates</string>
+    <string name="notification_channel_manager_updates_description">Meldingen over nieuwe Oru-releases.</string>
+    <string name="notification_channel_patcher_description">Wordt weergegeven terwijl Oru een app op de achtergrond patched</string>
+    <string name="notification_mount_replaced_text">v%1$s heeft de gepatchte v%2$s vervangen. Open Oru om deze te herstellen</string>
+    <string name="notification_permission_dialog_description">Oru heeft toestemming nodig voor meldingen om u te waarschuwen wanneer er updates op de achtergrond beschikbaar zijn</string>
+    <string name="onboarding_settings_desc">Pas Oru aan: uiterlijk, geavanceerde opties en systeemtools</string>
+    <string name="patcher_incompatible_patcher_description">De bron &lt;b&gt;%1$s&lt;/b&gt; vereist patcher &lt;b&gt;%2$s&lt;/b&gt; of nieuwer. Werk Oru bij om deze te gebruiken</string>
+    <string name="patcher_installed_conflict_body">"Oru ondertekent gepatchte apps met zijn eigen certificaat, dat verschilt van het origineel. Android vereist dat de bestaande versie wordt verwijderd voordat de gepatchte app kan worden geïnstalleerd.
+
+Deïnstalleren wist alle app-gegevens permanent."</string>
+    <string name="patcher_storage_permission_description_api30">Een of meer patchopties verwijzen naar paden die Oru niet kan lezen. Geef toegang tot de opslag en tik op de knop; het patchproces start dan automatisch</string>
+    <string name="patcher_storage_permission_hint">Tip: Verplaats bestanden naar /Android/data/app.oru.manager/files/ - geen extra toestemmingen nodig</string>
+    <string name="root_mount_module_unmount_warning">Als KernelSU standaard het loskoppelen van modules heeft ingeschakeld, open dan KernelSU &gt; Superuser &gt; de app die je hebt gemonteerd &gt; Profiel &gt; Aangepast en schakel het loskoppelen van modules uit. Anders kan de gemonteerde gepatchte APK mogelijk niet effectief worden, zelfs als Oru aangeeft dat deze is gemonteerd.</string>
+    <string name="settings_advanced_expert_mode_description">Activeert complexe Oru patch-instellingen en aanpassingsmogelijkheden</string>
+    <string name="settings_advanced_github_pat_export_include_supporting">Voegt deze PAT toe aan de geëxporteerde Oru-instellingen</string>
+    <string name="settings_advanced_patch_options_custom_branding_custom_icon_instruction">"Map met afbeeldingen om te gebruiken als een aangepast pictogram.
+
+De map moet één of meer van de volgende mappen bevatten, afhankelijk van de DPI van het apparaat:
+- mipmap-mdpi
+- mipmap-hdpi
+- mipmap-xhdpi
+- mipmap-xxhdpi
+- mipmap-xxxhdpi
+
+Elke van de mappen moet alle volgende bestanden bevatten:
+morphe_adaptive_background_custom.png
+morphe_adaptive_foreground_custom.png
+
+De afbeeldingsafmetingen moeten als volgt zijn:
+- mipmap-mdpi: 108x108 px
+- mipmap-hdpi: 162x162 px
+- mipmap-xhdpi: 216x216 px
+- mipmap-xxhdpi: 324x324 px
+- mipmap-xxxhdpi: 432x432 px
+
+Optioneel, het pad bevat een 'drawable' map met een monochrome pictogrambestand:
+morphe_adaptive_monochrome_custom.xml
+
+Optioneel, het pad bevat een meldingpictogram in een van de volgende formaten:
+- XML vector drawable in 'drawable':
+  morphe_notification_icon_custom.xml
+- PNG rasterafbeeldingen in 'drawable-dpi' mappen:
+  drawable-mdpi/morphe_notification_icon_custom.png (24x24 px)
+  drawable-hdpi/morphe_notification_icon_custom.png (36x36 px)
+  drawable-xhdpi/morphe_notification_icon_custom.png (48x48 px)
+  drawable-xxhdpi/morphe_notification_icon_custom.png (72x72 px)
+  drawable-xxxhdpi/morphe_notification_icon_custom.png (96x96 px)"</string>
+    <string name="settings_advanced_patch_options_custom_header_instruction">"Map met afbeeldbestanden om te gebruiken als een aangepaste koptekst.
+
+De map moet een of meer van de volgende mappen bevatten, afhankelijk van het DPI van het apparaat:
+- drawable-hdpi
+- drawable-xhdpi
+- drawable-xxhdpi
+- drawable-xxxhdpi
+
+Elke van de mappen moet alle volgende bestanden bevatten:
+morphe_header_custom_light.png
+morphe_header_custom_dark.png
+
+De afbeelddimensionen moeten als volgt zijn:
+- drawable-hdpi: 194x72 px
+- drawable-xhdpi: 258x96 px
+- drawable-xxhdpi: 387x144 px
+- drawable-xxxhdpi: 512x192 px"</string>
+    <string name="settings_advanced_updates_allow_metered_description">Hiermee kan Oru en patch-updates downloaden via mobiele data</string>
+    <string name="settings_advanced_updates_manager_prereleases_description">Vroege toegang tot nieuwe Oru-versies</string>
+    <string name="settings_advanced_updates_prerelease_warning_message">"Pre-release-versies van Oru zijn nog in ontwikkeling en kunnen instabiel zijn.
+
+Patches worden niet beïnvloed: schakel pre-release-patches in voor elke bron in de patchbronnenlijst"</string>
+    <string name="settings_appearance_app_icon_selector_description">Hoe Oru eruitziet op je startscherm en in de app-lade</string>
+    <string name="settings_auto_uninstall_warning_message">Als Android een signature conflict meldt tijdens de automatische installatie via Shizuku, verwijdert Oru de bestaande app voordat de gepatchte APK wordt geïnstalleerd.</string>
+    <string name="settings_system_apk_download_helper_warning">De APK komt van de helper-app, dus vertrouw alleen apps die je kent. Oru controleert nog steeds het pakket, de versie en de handtekening van elk bestand voordat er gepatcht wordt.</string>
+    <string name="settings_system_custom_file_picker_description">Gebruik de ingebouwde bestandsselector van Oru in plaats van de standaardinstelling van het systeem</string>
+    <string name="settings_system_export_manager_settings_fail">Exporteren van Oru-instellingen mislukt: %s</string>
+    <string name="settings_system_export_manager_settings_success">Oru-instellingen geëxporteerd</string>
+    <string name="settings_system_import_manager_settings_description">Maakt een back-up van en herstelt uw Oru-instellingen</string>
+    <string name="settings_system_import_manager_settings_fail">Importeren van Oru-instellingen mislukt: %s</string>
+    <string name="settings_system_import_manager_settings_mode_title">Oru-instellingen importeren</string>
+    <string name="settings_system_import_manager_settings_success">Oru-instellingen geïmporteerd</string>
+    <string name="settings_system_morphe_settings">Oru instellingen</string>
+    <string name="settings_system_process_runtime_heap_limit_ignored">Dit apparaat heeft de geheugenlimiet bij de laatste uitvoering genegeerd, dus patchen kan terugvallen op het uitvoeren binnen Oru.</string>
+    <string name="settings_system_signing_key_dialog_description">Elke app die Oru patcht, wordt met deze sleutel ondertekend. Bewaar een kopie: zonder deze sleutel kunnen gepatchte apps alleen worden bijgewerkt nadat je ze hebt verwijderd.</string>
+    <string name="settings_system_signing_key_missing">Oru maakt er een bij je eerste patch.</string>
+    <string name="settings_system_storage_open_app_info_description">Beheer of wis alle Oru-gegevens via de systeeminstellingen</string>
+    <string name="sources_dialog_community_notice_message">"Community-patchbronnen worden gemaakt en onderhouden door hun eigen auteurs. Oru beoordeelt of verifieert patches van derden niet en is niet verantwoordelijk voor hun inhoud of voor wat ze op uw apparaat doen.
+
+Alles wat u van deze website toevoegt, gebruikt u op eigen risico"</string>
+    <string name="sources_management_held_back_hint">Deze bron heeft Oru laten crashen tijdens het laden en wordt daarom overgeslagen. Werk deze bij of importeer deze opnieuw om het opnieuw te proberen.</string>
+    <string name="sources_management_outdated_manager_badge">Update Oru</string>
+    <string name="sources_management_outdated_manager_hint">Deze bron is gebouwd voor patcher %1$s, maar Oru %2$s bevat patcher %3$s. Update Oru om deze te gebruiken</string>
+    <string name="tour_prompt_desc">Wilt u een snelle rondleiding door de belangrijkste functies van Oru?</string>
+    <string name="uninstall_app_unverified">Op zijn plaats gelaten: Oru kon niet verifiëren dat de geïnstalleerde app de build is die het heeft gepatcht.</string>
+</resources>

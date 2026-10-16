@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="adaptive_icon_guide_png_body">투명한 배경의 로고를 사용하는 것이 가장 좋으며, 아래에서 배경 색상을 선택할 수 있습니다. 투명도가 없는 이미지는 아이콘 전체를 채우게 되며, 이 경우 테마 아이콘과 알림 아이콘에도 Oru 로고가 그대로 표시됩니다</string>
+    <string name="adaptive_icon_no_transparency_warning">이 이미지에는 투명한 픽셀이 없기 때문에 테마 아이콘과 알림 아이콘에 Oru 로고가 그대로 표시됩니다</string>
+    <string name="battery_optimization_dialog_description">일부 기기에서는 앱이 최소화되면 패처가 중지될 수 있습니다. 패치가 안정적으로 완료되도록 Oru가 배터리 제한 없이 실행되도록 허용하세요</string>
+    <string name="deep_link_add_source_message">이 패치 소스를 Oru에 추가하시겠습니까?</string>
+    <string name="external_batch_patch_description">\'%s\'가 Oru를 사용하여 앱을 패치하고 설치하려고 합니다</string>
+    <string name="home_apk_helper_description">Oru는 아래의 Helper 앱에 원본 APK를 다운로드하고 파일을 다시 전달하도록 요청합니다</string>
+    <string name="home_apk_helper_installed_unavailable">Oru가 설치된 앱을 사용할 수 없습니다</string>
+    <string name="home_apk_helper_warning">이 Helper 앱을 신뢰하는 경우에만 계속 진행하세요. Oru는 패치하기 전에 수신하는 모든 파일의 패키지, 버전 및 서명을 확인합니다</string>
+    <string name="home_apk_helper_warning_unverified">이 Helper 앱을 신뢰하는 경우에만 계속 진행하세요. Oru는 이 APK의 서명을 검증할 수 없으므로, 파일이 변조되었더라도 이를 감지하지 못할 수 있습니다</string>
+    <string name="home_app_filter_not_patched_description">아직 Oru에서 패치하지 않은 앱</string>
+    <string name="home_app_filter_patched_description">Oru로 패치하거나 저장한 앱</string>
+    <string name="home_app_filter_uninstalled_description">Oru로 패치되었지만 더 이상 이 기기에 없는 앱</string>
+    <string name="home_app_info_app_deleted_description">이 앱은 Oru 외부에서 제거되었습니다. 기능을 복원하려면 다시 패치하세요</string>
+    <string name="home_app_info_install_unverified">Oru는 설치된 앱이 패치한 빌드인지 확인할 수 없습니다. 다시 패치하거나 저장된 APK에서 다시 설치하여 작업을 복원하세요</string>
+    <string name="home_app_info_not_patched_description">이 앱의 패치되지 않은 버전이 설치되어 있습니다. Oru는 여전히 이전 패치 기록을 보유하고 있습니다</string>
+    <string name="home_download_instructions_download_button_toast_6">이제 당신은 공식 Oru 버튼 테스터입니다 🏅</string>
+    <string name="home_download_instructions_step2_search_note">Oru는 APK 파일 대신 자체 앱 스토어를 제공하는 웹사이트를 보증할 수 없습니다. 이러한 웹사이트는 건너뛰세요</string>
+    <string name="home_download_instructions_step4">다운로드가 완료되면 Oru로 돌아오세요</string>
+    <string name="home_download_instructions_step4_mount">원본 APK를 설치한 후에 Oru로 돌아오세요</string>
+    <string name="home_held_back_title">패치 소스로 인해 Oru가 충돌함</string>
+    <string name="home_outdated_manager_title">Oru가 구버전입니다</string>
+    <string name="home_update_available">Oru 업데이트 사용 가능</string>
+    <string name="installer_shizuku_error_permission">Shizuku 권한이 누락되었습니다. Oru에 권한을 부여하고 다시 시도하세요</string>
+    <string name="installer_status_shizuku_permission">Shizuku 앱에서 Oru에 권한을 부여하세요</string>
+    <string name="installing_manager_update_hint">Oru가 업데이트를 완료하기 위해 종료됩니다</string>
+    <string name="launch_app_unverified">Oru는 설치된 앱이 패치한 빌드인지 검증할 수 없습니다</string>
+    <string name="notification_bundle_update_text_unversioned">Oru를 열고 업데이트하려면 탭하세요</string>
+    <string name="notification_channel_manager_updates">Oru 업데이트</string>
+    <string name="notification_channel_manager_updates_description">새 Oru 릴리스에 대한 알림</string>
+    <string name="notification_channel_patcher_description">Oru가 백그라운드에서 앱을 패치하는 동안에 표시되는 알림</string>
+    <string name="notification_mount_replaced_text">v%1$s가 패치된 v%2$s를 교체했습니다. Oru를 열어서 복원하세요</string>
+    <string name="notification_permission_dialog_description">Oru는 백그라운드에서 업데이트가 있을 경우에 알림을 보내기 위해 알림 권한이 필요합니다</string>
+    <string name="onboarding_settings_desc">레이아웃, 고급 옵션 및 시스템 도구와 같은 Oru 설정을 관리할 수 있습니다</string>
+    <string name="patcher_incompatible_patcher_description">소스 &lt;b&gt;%1$s&lt;/b&gt;를 사용하려면 &lt;b&gt;%2$s&lt;/b&gt;이상의 패처가 필요합니다. 해당 패처를 사용하려면 Oru를 업데이트하세요</string>
+    <string name="patcher_installed_conflict_body">"Oru는 자체 인증서로 패치된 앱에 서명하므로 원본 앱과 인증서가 다릅니다. Android에서는 기존 버전을 제거해야 패치된 앱을 설치할 수 있습니다
+
+앱을 제거하면 모든 앱 데이터가 영구적으로 삭제됩니다"</string>
+    <string name="patcher_storage_permission_description_api30">하나 이상의 패치 옵션이 Oru가 읽을 수 없는 경로를 가리키고 있습니다. 저장소 접근 권한을 부여하고 버튼을 탭하면 패치가 자동으로 시작됩니다</string>
+    <string name="patcher_storage_permission_hint">힌트: 파일을 \'/Android/data/app.oru.manager/files/\' 로 옮기세요. 추가 권한이 필요 없습니다</string>
+    <string name="root_mount_module_unmount_warning">KernelSU에서 \'모듈 마운트 해제를 기본값으로\'가 활성화되어 있다면, \'KernelSU &gt; 슈퍼유저 &gt; 마운트한 앱 &gt; 프로필 &gt; 사용자 지정\'으로 이동하여 \'모듈 마운트 해제\'를 비활성화하세요. 그렇지 않으면 Oru에서 패치된 APK가 마운트된 것으로 표시되더라도, 실제로는 마운트가 적용되지 않아 패치된 APK가 제대로 작동하지 않을 수 있습니다</string>
+    <string name="settings_advanced_expert_mode_description">고급 Oru 패치 설정과 커스텀 옵션을 활성화합니다</string>
+    <string name="settings_advanced_github_pat_export_include_supporting">내보낼 Oru 설정에 이 개인 액세스 토큰을 추가합니다</string>
+    <string name="settings_advanced_patch_options_custom_branding_custom_icon_instruction">"커스텀 아이콘으로 사용될 이미지가 있는 폴더.
+
+폴더에는 이 기기의 DPI에 따라 다음 폴더 중 하나 이상이 포함되어야 합니다:
+- mipmap-mdpi
+- mipmap-hdpi
+- mipmap-xhdpi
+- mipmap-xxhdpi
+- mipmap-xxxhdpi
+
+각 폴더에는 다음 파일이 모두 포함되어야 합니다:
+morphe_adaptive_background_custom.png
+morphe_adaptive_foreground_custom.png
+
+이미지 크기는 다음과 같아야 합니다:
+- mipmap-mdpi: 108x108 px
+- mipmap-hdpi: 162x162 px
+- mipmap-xhdpi: 216x216 px
+- mipmap-xxhdpi: 324x324 px
+- mipmap-xxxhdpi: 432x432 px
+
+선택적으로, 경로에는 모노크롬 아이콘 파일이 있는 'drawable' 폴더가 포함될 수 있습니다:
+morphe_adaptive_monochrome_custom.xml
+
+선택적으로, 경로에는 다음 형식 중 하나의 알림 아이콘이 포함될 수 있습니다:
+- 'drawable' 폴더의 XML 벡터 드로어블:
+  morphe_notification_icon_custom.xml
+- 'drawable-dpi' 폴더의 PNG 래스터 이미지:
+  drawable-mdpi/morphe_notification_icon_custom.png (24x24 px)
+  drawable-hdpi/morphe_notification_icon_custom.png (36x36 px)
+  drawable-xhdpi/morphe_notification_icon_custom.png (48x48 px)
+  drawable-xxhdpi/morphe_notification_icon_custom.png (72x72 px)
+  drawable-xxxhdpi/morphe_notification_icon_custom.png (96x96 px)"</string>
+    <string name="settings_advanced_patch_options_custom_header_instruction">"커스텀 헤더 로고로 사용될 이미지가 있는 폴더.
+
+폴더에는 이 기기의 DPI에 따라 다음 폴더 중 하나 이상이 포함되어야 합니다:
+- drawable-hdpi
+- drawable-xhdpi
+- drawable-xxhdpi
+- drawable-xxxhdpi
+
+각 폴더에는 다음 파일이 모두 포함되어야 합니다:
+morphe_header_custom_light.png
+morphe_header_custom_dark.png
+
+이미지 크기는 다음과 같아야 합니다:
+- drawable-hdpi: 194x72 px
+- drawable-xhdpi: 258x96 px
+- drawable-xxhdpi: 387x144 px
+- drawable-xxxhdpi: 512x192 px"</string>
+    <string name="settings_advanced_updates_allow_metered_description">모바일 데이터를 사용하여 Oru 및 패치 업데이트를 다운로드할 수 있도록 허용합니다</string>
+    <string name="settings_advanced_updates_manager_prereleases_description">새 Oru 앱 버전을 미리 받아봅니다</string>
+    <string name="settings_advanced_updates_prerelease_warning_message">"Oru의 Pre-release 버전은 아직 개발 중이며 불안정할 수 있습니다
+
+패치에는 영향을 주지 않습니다: 패치 소스 목록에서 각 소스에 대한 Pre-release 패치를 활성화하세요"</string>
+    <string name="settings_appearance_app_icon_selector_description">홈 화면과 앱 서랍에서 Oru의 모양</string>
+    <string name="settings_auto_uninstall_warning_message">Shizuku를 사용하여 자동 설치하는 중에 Android에서 서명 충돌이 발생했다고 보고되면, Oru는 패치된 APK를 설치하기 전에 기존 앱을 제거합니다</string>
+    <string name="settings_system_apk_download_helper_warning">APK는 Helper 앱에서 제공되므로, 신뢰할 수 있는 앱만 사용하세요. Oru는 패치하기 전에 모든 파일의 패키지, 버전 및 서명을 확인합니다</string>
+    <string name="settings_system_custom_file_picker_description">시스템 기본 파일 선택기 대신 Oru에 내장된 파일 선택기를 사용하여 저장소를 탐색합니다</string>
+    <string name="settings_system_export_manager_settings_fail">Oru 설정을 내보낼 수 없습니다: %s</string>
+    <string name="settings_system_export_manager_settings_success">Oru 설정을 내보냈습니다</string>
+    <string name="settings_system_import_manager_settings_description">Oru 설정을 백업하고 복원합니다</string>
+    <string name="settings_system_import_manager_settings_fail">Oru 설정을 가져올 수 없습니다: %s</string>
+    <string name="settings_system_import_manager_settings_mode_title">Oru 설정 가져오기</string>
+    <string name="settings_system_import_manager_settings_success">Oru 설정을 가져왔습니다</string>
+    <string name="settings_system_morphe_settings">Oru 설정</string>
+    <string name="settings_system_process_runtime_heap_limit_ignored">이 기기는 지난 실행에서 메모리 제한을 무시했으므로 패치 작업이 Oru 내부에서 실행되는 방식으로 대체될 수 있습니다</string>
+    <string name="settings_system_signing_key_dialog_description">Oru가 패치하는 모든 앱은 이 키로 서명됩니다. 이 키를 반드시 보관하세요: 이 키가 없으면 패치된 앱은 기존 앱을 삭제한 후에만 업데이트할 수 있습니다</string>
+    <string name="settings_system_signing_key_missing">Oru는 첫 번째 패치와 함께 하나를 생성합니다</string>
+    <string name="settings_system_storage_open_app_info_description">시스템 설정을 통해 모든 Oru 데이터를 관리하거나 지울 수 있습니다</string>
+    <string name="sources_dialog_community_notice_message">"커뮤니티 패치는 각 패치의 개발자가 직접 만들고 유지 관리합니다. Oru는 서드파티 패치를 검토하거나 검증하지 않으며, 해당 패치의 내용이나 패치가 사용자의 기기에서 수행하는 작업에 대해 책임을 지지 않습니다
+
+이 웹사이트에서 추가하는 모든 항목은 사용자 본인의 책임하에 사용해야 합니다"</string>
+    <string name="sources_management_held_back_hint">이 소스를 불러오는 동안 Oru가 충돌하여 현재 건너뛰고 있습니다. 다시 시도하려면 소스를 업데이트하거나 다시 가져오세요</string>
+    <string name="sources_management_outdated_manager_badge">Oru 업데이트</string>
+    <string name="sources_management_outdated_manager_hint">이 소스는 패처 %1$s용으로 빌드되었지만, Oru %2$s에는 패처 %3$s가 포함되어 있습니다. 이를 사용하려면 Oru를 업데이트하세요</string>
+    <string name="tour_prompt_desc">Oru의 주요 기능을 빠르게 둘러보시겠습니까?</string>
+    <string name="uninstall_app_unverified">그대로 유지됨: Oru는 설치된 앱이 패치한 빌드인지 검증할 수 없습니다.</string>
+</resources>

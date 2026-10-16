@@ -1,0 +1,126 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="adaptive_icon_guide_png_body">Logo trên nền trong suốt hoạt động tốt nhất, với màu nền được chọn bên dưới. Ngược lại, hình ảnh không có độ trong suốt sẽ lấp đầy toàn bộ biểu tượng, và khi đó biểu tượng theo chủ đề và biểu tượng thông báo sẽ giữ nguyên logo Oru.</string>
+    <string name="adaptive_icon_no_transparency_warning">Hình ảnh này không có pixel trong suốt, vì vậy biểu tượng theo chủ đề và biểu tượng thông báo sẽ giữ nguyên logo Oru</string>
+    <string name="battery_optimization_dialog_description">Một số thiết bị có thể tắt trình vá khi ứng dụng bị thu nhỏ. Cho phép Oru chạy không giới hạn pin để quá trình vá hoàn thành ổn định</string>
+    <string name="deep_link_add_source_message">Bạn có muốn thêm nguồn vá này vào Oru không?</string>
+    <string name="external_batch_patch_description">%s muốn Oru vá và cài đặt ứng dụng</string>
+    <string name="home_apk_helper_description">Oru sẽ yêu cầu ứng dụng hỗ trợ bên dưới tải APK gốc rồi gửi lại tệp cho Oru</string>
+    <string name="home_apk_helper_installed_unavailable">Oru không thể sử dụng ứng dụng đã cài đặt</string>
+    <string name="home_apk_helper_warning">Chỉ tiếp tục khi bạn tin tưởng ứng dụng hỗ trợ này. Trước khi vá, Oru sẽ kiểm tra tên gói, phiên bản và chữ ký của mọi tệp nhận được</string>
+    <string name="home_apk_helper_warning_unverified">Chỉ tiếp tục khi bạn tin tưởng ứng dụng hỗ trợ này. Vì Oru không thể xác minh chữ ký của APK này, nên sẽ không thể phát hiện nếu tệp đã bị sửa đổi</string>
+    <string name="home_app_filter_not_patched_description">Các ứng dụng mà bạn chưa vá trong Oru</string>
+    <string name="home_app_filter_patched_description">Các ứng dụng đã được bạn vá hoặc lưu bằng Oru</string>
+    <string name="home_app_filter_uninstalled_description">Các ứng dụng từng được vá bằng Oru nhưng không còn trên thiết bị nữa</string>
+    <string name="home_app_info_app_deleted_description">Ứng dụng này đã bị gỡ bên ngoài Oru. Hãy vá lại để khôi phục chức năng</string>
+    <string name="home_app_info_install_unverified">Oru không thể xác nhận rằng ứng dụng đã cài là bản được vá bởi Oru. Hãy vá lại hoặc cài đặt lại từ APK đã lưu để khôi phục những gì đã vá</string>
+    <string name="home_app_info_not_patched_description">Bạn đang cài đặt phiên bản chưa vá của ứng dụng. Đừng lo, Oru vẫn còn lưu bản đã vá trước đó</string>
+    <string name="home_download_instructions_download_button_toast_6">Giờ bạn đã là chuyên gia thử nút của Oru rồi đấy 🏅</string>
+    <string name="home_download_instructions_step2_search_note">Oru không thể đảm bảo độ tin cậy của các trang web này. Hãy bỏ qua những trang yêu cầu cài đặt kho ứng dụng của họ thay vì cho tải tệp APK ngay</string>
+    <string name="home_download_instructions_step4">Quay lại Oru</string>
+    <string name="home_download_instructions_step4_mount">Sau khi cài xong, hãy quay lại Oru</string>
+    <string name="home_held_back_title">Một nguồn bản vá đã làm Oru bị sập</string>
+    <string name="home_outdated_manager_subtitle">Một số nguồn vá yêu cầu phiên bản Oru mới hơn</string>
+    <string name="home_outdated_manager_title">Oru đã quá cũ</string>
+    <string name="home_update_available">Đã có bản cập nhật Oru mới</string>
+    <string name="installer_shizuku_error_permission">Chưa cấp quyền Shizuku. Hãy cấp quyền cho Oru rồi thử lại</string>
+    <string name="installer_status_shizuku_permission">Cấp quyền Shizuku cho Oru trong ứng dụng Shizuku</string>
+    <string name="installing_manager_update_hint">Oru sẽ đóng lại để hoàn tất cập nhật</string>
+    <string name="launch_app_unverified">Oru không thể xác minh rằng ứng dụng đã cài là bản được vá bởi Oru</string>
+    <string name="notification_bundle_update_text_unversioned">Bấm để mở Oru và cập nhật</string>
+    <string name="notification_channel_manager_updates">Cập nhật Oru</string>
+    <string name="notification_channel_manager_updates_description">Thông báo về các bản phát hành Oru mới</string>
+    <string name="notification_channel_patcher_description">Hiển thị khi Oru đang vá ứng dụng trong nền</string>
+    <string name="notification_mount_replaced_text">v%1$s đã thay thế v%2$s đã được vá. Mở Oru để khôi phục lại</string>
+    <string name="notification_permission_dialog_description">Để thông báo cho bạn về các bản cập nhật mới khi ứng dụng chạy nền, Oru cần được cấp quyền thông báo</string>
+    <string name="onboarding_settings_desc">Tùy chỉnh Oru: giao diện, tùy chọn nâng cao và công cụ hệ thống</string>
+    <string name="patcher_incompatible_patcher_description">Nguồn &lt;b&gt;%1$s&lt;/b&gt; yêu cầu patcher &lt;b&gt;%2$s&lt;/b&gt; trở lên. Cập nhật Oru để sử dụng nó</string>
+    <string name="patcher_installed_conflict_body">"Oru ký các ứng dụng đã vá bằng chứng chỉ của riêng mình, khác với bản gốc. Android yêu cầu xóa phiên bản hiện tại trước khi có thể cài đặt ứng dụng đã vá.
+
+Gỡ cài đặt sẽ xóa vĩnh viễn toàn bộ dữ liệu ứng dụng"</string>
+    <string name="patcher_storage_permission_description_api30">Một hoặc nhiều tuỳ chỉnh bản vá đang trỏ đến thư mục mà Oru không thể truy cập. Hãy cấp quyền truy cập bộ nhớ, sau đó bấm nút và quá trình vá sẽ tự động bắt đầu</string>
+    <string name="patcher_storage_permission_hint">Gợi ý: Di chuyển tệp sang /Android/data/app.oru.manager/files/ - sẽ không cần cấp thêm quyền truy cập</string>
+    <string name="root_mount_module_unmount_warning">Nếu KernelSU đang bật tùy chọn “Unmount mô-đun theo mặc định”, hãy mở KernelSU &gt; Superuser &gt; ứng dụng đã mount &gt; Hồ sơ &gt; Tùy chỉnh, rồi tắt tùy chọn “Unmount mô-đun”.
+
+Nếu không, APK đã vá và được gắn có thể sẽ không hoạt động, ngay cả khi Oru hiển thị là đã gắn kết thành công</string>
+    <string name="settings_advanced_expert_mode_description">Mở khoá các tuỳ chỉnh vá nâng cao của Oru</string>
+    <string name="settings_advanced_github_pat_export_include_supporting">Thêm PAT vào khi xuất cài đặt Oru</string>
+    <string name="settings_advanced_patch_options_custom_branding_custom_icon_instruction">"Thư mục chứa ảnh dùng làm biểu tượng tuỳ chỉnh.
+
+Thư mục này cần có ít nhất một trong các thư mục sau (tuỳ theo DPI của thiết bị):
+- mipmap-mdpi
+- mipmap-hdpi
+- mipmap-xhdpi
+- mipmap-xxhdpi
+- mipmap-xxxhdpi
+
+Mỗi thư mục trên phải chứa đầy đủ các tệp sau:
+morphe_adaptive_background_custom.png
+morphe_adaptive_foreground_custom.png
+
+Kích thước hình ảnh tương ứng:
+- mipmap-mdpi: 108x108 px
+- mipmap-hdpi: 162x162 px
+- mipmap-xhdpi: 216x216 px
+- mipmap-xxhdpi: 324x324 px
+- mipmap-xxxhdpi: 432x432 px
+
+Ngoài ra,
+Có thể thêm thư mục drawable chứa icon đơn sắc:
+morphe_adaptive_monochrome_custom.xml
+
+Có thể thêm icon thông báo theo một trong các cách sau:
+- Vector (XML) trong drawable:
+  morphe_notification_icon_custom.xml
+- Ảnh PNG trong các thư mục drawable-dpi:
+  drawable-mdpi/morphe_notification_icon_custom.png (24x24 px)
+  drawable-hdpi/morphe_notification_icon_custom.png (36x36 px)
+  drawable-xhdpi/morphe_notification_icon_custom.png (48x48 px)
+  drawable-xxhdpi/morphe_notification_icon_custom.png (72x72 px)
+  drawable-xxxhdpi/morphe_notification_icon_custom.png (96x96 px)"</string>
+    <string name="settings_advanced_patch_options_custom_header_instruction">"Thư mục chứa hình ảnh sử dụng làm logo đầu trang tùy chỉnh.
+
+Thư mục này phải chứa một hoặc nhiều thư mục sau, tùy theo DPI của thiết bị:
+- drawable-hdpi
+- drawable-xhdpi
+- drawable-xxhdpi
+- drawable-xxxhdpi
+
+Mỗi thư mục trên bắt buộc phải chứa đầy đủ các tệp sau:
+morphe_header_custom_light.png
+morphe_header_custom_dark.png
+
+Kích thước hình ảnh yêu cầu:
+- drawable-hdpi: 194x72 px
+- drawable-xhdpi: 258x96 px
+- drawable-xxhdpi: 387x144 px
+- drawable-xxxhdpi: 512x192 px"</string>
+    <string name="settings_advanced_updates_allow_metered_description">Cho phép tải Oru và cập nhật bản vá qua dữ liệu di động</string>
+    <string name="settings_advanced_updates_manager_prereleases_description">Truy cập sớm các phiên bản Oru mới</string>
+    <string name="settings_advanced_updates_prerelease_warning_message">"Các phiên bản trước khi phát hành của Oru vẫn đang trong quá trình phát triển và có thể không ổn định.
+
+Các bản vá không bị ảnh hưởng: bật các bản vá trước khi phát hành cho từng nguồn trong danh sách nguồn vá"</string>
+    <string name="settings_appearance_app_icon_selector_description">Cách Oru hiển thị trên màn hình chính và trong ngăn kéo ứng dụng</string>
+    <string name="settings_auto_uninstall_warning_message">Nếu Android phát hiện xung đột chữ ký trong quá trình tự động cài đặt bằng Shizuku, Oru sẽ gỡ ứng dụng đang có trước khi cài đặt APK đã vá</string>
+    <string name="settings_system_apk_download_helper_warning">APK đến từ ứng dụng trợ giúp, vì vậy chỉ tin cậy những ứng dụng bạn biết. Oru vẫn kiểm tra gói, phiên bản và chữ ký của mọi tệp trước khi vá.</string>
+    <string name="settings_system_custom_file_picker_description">Duyệt bộ nhớ bằng trình chọn tệp tích hợp của Oru thay vì trình chọn mặc định của hệ thống</string>
+    <string name="settings_system_export_manager_settings_fail">Không thể xuất cài đặt Oru: %s</string>
+    <string name="settings_system_export_manager_settings_success">Đã xuất cài đặt Oru</string>
+    <string name="settings_system_import_manager_settings_description">Sao lưu và khôi phục lại cài đặt Oru của bạn</string>
+    <string name="settings_system_import_manager_settings_fail">Không thể nhập cài đặt Oru: %s</string>
+    <string name="settings_system_import_manager_settings_mode_title">Nhập cài đặt Oru</string>
+    <string name="settings_system_import_manager_settings_success">Đã nhập cài đặt Oru</string>
+    <string name="settings_system_morphe_settings">Cài đặt Oru</string>
+    <string name="settings_system_process_runtime_heap_limit_ignored">Thiết bị này đã bỏ qua giới hạn bộ nhớ trong lần chạy trước, vì vậy việc vá có thể sẽ chuyển sang chạy bên trong Oru</string>
+    <string name="settings_system_signing_key_dialog_description">Mọi ứng dụng mà Oru vá đều được ký bằng khóa này. Hãy giữ một bản sao: nếu không có nó, các ứng dụng đã vá chỉ có thể được cập nhật sau khi gỡ cài đặt chúng</string>
+    <string name="settings_system_signing_key_missing">Oru tạo một khóa trong lần vá đầu tiên của bạn</string>
+    <string name="settings_system_storage_open_app_info_description">Mở Cài đặt hệ thống để quản lý hoặc xóa toàn bộ dữ liệu Oru</string>
+    <string name="sources_dialog_community_notice_message">"Các nguồn vá cộng đồng được tạo và duy trì bởi chính các tác giả của họ. Oru không xem xét hoặc xác minh các bản vá của bên thứ ba, và không chịu trách nhiệm về nội dung của chúng hoặc về những gì chúng thực hiện trên thiết bị của bạn.
+
+Bất cứ thứ gì bạn thêm từ trang web này đều được sử dụng với rủi ro của riêng bạn"</string>
+    <string name="sources_management_held_back_hint">Nguồn này đã làm Oru sập khi đang tải nên đang bị bỏ qua. Cập nhật hoặc nhập lại nguồn này để thử lại</string>
+    <string name="sources_management_outdated_manager_badge">Cập nhật Oru</string>
+    <string name="sources_management_outdated_manager_hint">Nguồn vá này được xây dựng cho trình vá %1$s, nhưng Oru %2$s chỉ có trình vá %3$s. Hãy cập nhật Oru để sử dụng nguồn vá này</string>
+    <string name="tour_prompt_desc">Bạn muốn xem qua các tính năng nổi bật của Oru không? Nhanh thôi</string>
+    <string name="uninstall_app_unverified">Giữ nguyên: Oru không thể xác minh rằng ứng dụng đã cài là bản được vá bởi Oru</string>
+</resources>

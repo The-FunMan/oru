@@ -869,7 +869,6 @@ fun InstallerUnavailableDialog(
                         )
                     )
 
-                    // Cancel
                     add(
                         DialogAction(
                             text = stringResource(android.R.string.cancel),

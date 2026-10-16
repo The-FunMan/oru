@@ -1,6 +1,20 @@
 import com.mikepenz.aboutlibraries.plugin.DuplicateMode
 import com.mikepenz.aboutlibraries.plugin.DuplicateRule
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.gradle.api.DefaultTask
+import org.gradle.api.GradleException
+import org.gradle.api.file.ConfigurableFileCollection
+import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.provider.Property
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputFiles
+import org.gradle.api.tasks.InputFile
+import org.gradle.api.tasks.Internal
+import org.gradle.api.tasks.Optional
+import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.TaskAction
+import java.io.IOException
 import kotlin.random.Random
 
 plugins {
@@ -11,8 +25,14 @@ plugins {
     alias(libs.plugins.devtools)
     alias(libs.plugins.about.libraries)
     alias(libs.plugins.about.libraries.android)
-    alias(libs.plugins.google.services)
     signing
+}
+
+// Firebase reads app/google-services.json, which only Morphe's build has. Without the file the
+// plugin is not applied, so the project still configures. Oru never processes the file either
+// (see the processOru*GoogleServices tasks at the end of this script).
+if (file("google-services.json").exists()) {
+    apply(plugin = "com.google.gms.google-services")
 }
 
 dependencies {
@@ -146,6 +166,7 @@ val translationTags = translations.joinToString(prefix = "{", postfix = "}") { (
 android {
     namespace = "app.morphe.manager"
     compileSdk = 37
+    ndkVersion = "28.2.13676358"   // the version .github/actions/setup-oru installs
 
     defaultConfig {
         applicationId = "app.morphe.manager"
@@ -153,15 +174,32 @@ android {
 
         versionName = version.toString()
 
-        // VersionCode derived from current time (1-minute intervals) + offset.
-        val nowMillis = System.currentTimeMillis()
-        val timestampVersionCode = (nowMillis / (60 * 1000)).toInt()
-        // Offset of the prior v1.1.1 version code to ensure the code is always newer for old installations.
-        // If a new app is used this offset should be changed to zero.
-        // 1 minute rounding and this offset still gives ~4,000 years of valid version codes
-        // and still fall into Play store max version code range.
-        val versionCodeOffset = 10010100
-        versionCode = timestampVersionCode + versionCodeOffset
+        // Deterministic versionCode: major*100000000 + minor*1000000 + patch*1000 + s
+        // where s is the dev number for X.Y.Z-dev.N (1..998) and 999 for stable.
+        // The ranges below keep the encoding unique and inside Int (the largest code is 2099999999).
+        val versionRegex = Regex("""^v?(\d+)\.(\d+)\.(\d+)(?:-dev\.(\d+))?$""")
+        val versionMatch = versionRegex.matchEntire(versionName.orEmpty())
+            ?: error("Invalid version format in app/gradle.properties: $versionName")
+        val vMajor = versionMatch.groupValues[1].toInt()
+        val vMinor = versionMatch.groupValues[2].toInt()
+        val vPatch = versionMatch.groupValues[3].toInt()
+        val vDev = if (versionMatch.groupValues[4].isNotEmpty()) versionMatch.groupValues[4].toInt() else null
+
+        require(vMajor in 0..20) {
+            "vMajor must be in 0..20: a larger major lets the Int versionCode overflow (found $vMajor)"
+        }
+        require(vMinor in 0..99) {
+            "vMinor must be in 0..99: a larger minor runs into the major digit (found $vMinor)"
+        }
+        require(vPatch in 0..999) { "vPatch must be in 0..999 (found $vPatch)" }
+        if (vDev != null) {
+            require(vDev in 1..998) { "vDev must be in 1..998 (found $vDev)" }
+        }
+
+        val vS = vDev ?: 999
+        val vCode = vMajor * 100_000_000L + vMinor * 1_000_000L + vPatch * 1_000L + vS
+        require(vCode <= Int.MAX_VALUE) { "versionCode $vCode for $versionName does not fit an Int" }
+        versionCode = vCode.toInt()
 
         // Expose the resolved morphe-patcher version so PatcherViewModel can compare it
         // against the Patcher-Version declared in .mpp bundle manifests at runtime.
@@ -199,6 +237,24 @@ android {
             }
 
             buildConfigField("long", "BUILD_ID", "0L")
+        }
+    }
+
+    // The morphe flavor is upstream's build. The oru flavor takes its own package and resources from
+    // src/oru, and turns off the services that belong to Morphe's Firebase project and update feed.
+    flavorDimensions += "brand"
+    productFlavors {
+        create("morphe") {
+            dimension = "brand"
+            isDefault = true
+            buildConfigField("boolean", "UPSTREAM_SERVICES", "true")
+            buildConfigField("boolean", "ORU_UX", "false")
+        }
+        create("oru") {
+            dimension = "brand"
+            applicationId = "app.oru.manager"
+            buildConfigField("boolean", "UPSTREAM_SERVICES", "false")
+            buildConfigField("boolean", "ORU_UX", "true")
         }
     }
 
@@ -305,6 +361,155 @@ kotlin {
     }
 }
 
+/**
+ * A Rust crate in the repository, built with cargo for each ABI the app ships and packaged as lib[libraryName].so.
+ * The patcher loads it when it is there and falls back to the JVM otherwise, so a missing cargo only warns.
+ * Pages are aligned to 16 KB, which Android 15 and later require.
+ */
+abstract class BuildNativeCrate : DefaultTask() {
+    @get:InputFiles
+    abstract val sources: ConfigurableFileCollection
+
+    @get:InputFile
+    abstract val manifest: RegularFileProperty
+
+    @get:InputFile
+    abstract val lockfile: RegularFileProperty
+
+    @get:Input
+    abstract val ndkDirectory: Property<String>
+
+    @get:Input
+    abstract val minSdk: Property<Int>
+
+    @get:Input
+    abstract val libraryName: Property<String>
+
+    /** The workspace member to build with `-p`, or null for the package in [crateDirectory]. */
+    @get:Optional
+    @get:Input
+    abstract val cargoPackage: Property<String>
+
+    @get:Internal
+    abstract val crateDirectory: DirectoryProperty
+
+    @get:Internal
+    abstract val cargoTargetDirectory: DirectoryProperty
+
+    @get:Internal
+    abstract val repositoryRoot: DirectoryProperty
+
+    @get:OutputDirectory
+    abstract val jniLibs: DirectoryProperty
+
+    @TaskAction
+    fun build() {
+        val output = jniLibs.get().asFile.apply { deleteRecursively() }
+        val cargoFound = try {
+            ProcessBuilder("cargo", "--version").redirectErrorStream(true).start().waitFor() == 0
+        } catch (_: IOException) {
+            false
+        }
+        if (!cargoFound) {
+            logger.warn("cargo is not installed: lib${libraryName.get()}.so is not packaged")
+            return
+        }
+
+        val windows = System.getProperty("os.name").startsWith("Windows")
+        val host = when {
+            windows -> "windows-x86_64"
+            System.getProperty("os.name").startsWith("Mac") -> "darwin-x86_64"
+            else -> "linux-x86_64"
+        }
+        val bin = File(ndkDirectory.get(), "toolchains/llvm/prebuilt/$host/bin")
+        val crate = crateDirectory.get().asFile
+        val targetDir = cargoTargetDirectory.get().asFile
+
+        // Cargo ranks CARGO_TARGET_*_RUSTFLAGS below RUSTFLAGS and splits it on spaces: pass every flag encoded.
+        // The remapped prefixes keep the builder's home, cargo and rustup paths out of the binaries.
+        val sysroot = ProcessBuilder("rustc", "--print", "sysroot").directory(crate).start()
+            .inputStream.bufferedReader().use { it.readText().trim() }
+        val inherited = System.getenv("CARGO_ENCODED_RUSTFLAGS")?.takeIf { it.isNotEmpty() }?.split('\u001f')
+            ?: System.getenv("RUSTFLAGS")?.split(' ')?.filter { it.isNotEmpty() }.orEmpty()
+        val remap = listOf(
+            repositoryRoot.get().asFile.absolutePath to "/oru",
+            (System.getenv("CARGO_HOME") ?: File(System.getProperty("user.home"), ".cargo").absolutePath) to "/cargo",
+            sysroot to "/rustc",
+        ).map { (from, to) -> "--remap-path-prefix=$from=$to" }
+        val rustflags = (inherited + listOf("-C", "link-arg=-Wl,-z,max-page-size=16384") + remap).joinToString("\u001f")
+
+        // ABI, Rust target and the clang target prefix of the NDK wrappers
+        listOf(
+            Triple("arm64-v8a", "aarch64-linux-android", "aarch64-linux-android"),
+            Triple("armeabi-v7a", "armv7-linux-androideabi", "armv7a-linux-androideabi"),
+            Triple("x86", "i686-linux-android", "i686-linux-android"),
+            Triple("x86_64", "x86_64-linux-android", "x86_64-linux-android"),
+        ).forEach { (abi, rustTarget, clangTarget) ->
+            val linker = bin.resolve("$clangTarget${minSdk.get()}-clang${if (windows) ".cmd" else ""}")
+            val ar = bin.resolve("llvm-ar${if (windows) ".exe" else ""}")
+            val command = mutableListOf(
+                "cargo", "build", "--release", "--lib",
+                "--target", rustTarget,
+                "--target-dir", targetDir.absolutePath,
+            )
+            cargoPackage.orNull?.let { command += listOf("-p", it) }
+            val build = ProcessBuilder(command).directory(crate).inheritIO()
+            val env = rustTarget.uppercase().replace('-', '_')
+            build.environment().apply {
+                put("CARGO_TARGET_${env}_LINKER", linker.absolutePath)
+                put("CARGO_TARGET_${env}_AR", ar.absolutePath)
+                put("CARGO_ENCODED_RUSTFLAGS", rustflags)
+            }
+            if (build.start().waitFor() != 0) throw GradleException("cargo failed for $rustTarget")
+
+            output.resolve(abi).mkdirs()
+            val library = "lib${libraryName.get()}.so"
+            targetDir.resolve("$rustTarget/release/$library").copyTo(output.resolve("$abi/$library"), overwrite = true)
+        }
+    }
+}
+
+val buildNativeDexIndex = tasks.register<BuildNativeCrate>("buildNativeDexIndex") {
+    group = "build"
+    description = "Builds the native dex index in native/ for the ABIs the app ships"
+
+    val crate = rootProject.layout.projectDirectory.dir("native")
+    sources.from(crate.dir("src"))
+    manifest.set(crate.file("Cargo.toml"))
+    lockfile.set(crate.file("Cargo.lock"))
+    crateDirectory.set(crate)
+    repositoryRoot.set(rootProject.layout.projectDirectory)
+    libraryName.set("oru_patcher")
+    cargoTargetDirectory.set(layout.buildDirectory.dir("nativeDexIndex/cargo"))
+    jniLibs.set(layout.buildDirectory.dir("generated/nativeDexIndex/jniLibs"))
+    ndkDirectory.set(androidComponents.sdkComponents.ndkDirectory.map { it.asFile.absolutePath })
+    minSdk.set(android.defaultConfig.minSdk ?: 29)
+}
+
+val buildNativePackager = tasks.register<BuildNativeCrate>("buildNativePackager") {
+    group = "build"
+    description = "Builds the native APK packager and its JNI wrapper in native-packager/ for the ABIs the app ships"
+
+    // The workspace root holds the lockfile for both the packager and its JNI crate.
+    val workspace = rootProject.layout.projectDirectory.dir("native-packager")
+    sources.from(workspace.dir("src"), workspace.dir("jni/src"))
+    manifest.set(workspace.file("jni/Cargo.toml"))
+    lockfile.set(workspace.file("Cargo.lock"))
+    crateDirectory.set(workspace)
+    repositoryRoot.set(rootProject.layout.projectDirectory)
+    cargoPackage.set("oru-packager-jni")
+    libraryName.set("oru_packager")
+    cargoTargetDirectory.set(layout.buildDirectory.dir("nativePackager/cargo"))
+    jniLibs.set(layout.buildDirectory.dir("generated/nativePackager/jniLibs"))
+    ndkDirectory.set(androidComponents.sdkComponents.ndkDirectory.map { it.asFile.absolutePath })
+    minSdk.set(android.defaultConfig.minSdk ?: 29)
+}
+
+androidComponents.onVariants { variant ->
+    variant.sources.jniLibs?.addGeneratedSourceDirectory(buildNativeDexIndex) { it.jniLibs }
+    variant.sources.jniLibs?.addGeneratedSourceDirectory(buildNativePackager) { it.jniLibs }
+}
+
 aboutLibraries {
     collect {
         configPath = file("aboutlibraries")
@@ -320,6 +525,21 @@ tasks {
         if (name.startsWith("lintVital")) {
             enabled = false
         }
+    }
+}
+
+// google-services.json only lists Morphe's package names, so the oru variant has no Firebase config to process
+tasks.matching { it.name.startsWith("process") && it.name.contains("Oru") && it.name.endsWith("GoogleServices") }
+    .configureEach { enabled = false }
+
+// Release signing falls back to the public debug key when keystore.jks is absent. Refuse that for release tasks in
+// the graph; -PsignAsDebug is the explicit opt-in. Checked on the graph so configuration (IDE sync) still works.
+val releaseTaskName = Regex("^(assemble|bundle|package|install)\\w*Release\\w*$")
+val appProject = project
+gradle.taskGraph.whenReady {
+    val releaseRequested = allTasks.any { it.project == appProject && releaseTaskName.matches(it.name) }
+    if (releaseRequested && !appProject.hasProperty("signAsDebug") && !appProject.file("keystore.jks").exists()) {
+        throw GradleException("Release build needs app/keystore.jks. Add it, or pass -PsignAsDebug to sign with the debug key.")
     }
 }
 

@@ -6,6 +6,7 @@
 package app.morphe.manager.patcher.patch
 
 import app.morphe.manager.patcher.logger.Logger
+import app.morphe.patcher.patch.OptionException
 import app.morphe.patcher.patch.Patch
 import kotlin.reflect.KType
 
@@ -73,7 +74,13 @@ fun Map<String, Patch<*>>.applyPatchOptions(
             "Option \"$key\" of the \"$patchName\" patch does not accept \"$value\" as ${option.type}"
         )
 
-        patch.options[key] = coerced
+        try {
+            patch.options[key] = coerced
+        } catch (e: OptionException.InvalidValueTypeException) {
+            logger.warn(
+                "Option \"$key\" of the \"$patchName\" patch does not accept \"$value\" as ${option.type}"
+            )
+        }
     }
 }
 

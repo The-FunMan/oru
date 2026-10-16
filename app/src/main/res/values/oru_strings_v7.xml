@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Oru quick toggles on Home: the theme and glass style chips under the Simple and Expert switch.
+  English only. Each segment has a content description for screen readers.
+-->
+<resources>
+    <string name="oru_quick_theme_group">Theme</string>
+    <string name="oru_quick_theme_system">Follow the phone</string>
+    <string name="oru_quick_theme_light">Light theme</string>
+    <string name="oru_quick_theme_dark">Dark theme</string>
+
+    <string name="oru_quick_glass_group">Glass style</string>
+    <string name="oru_quick_glass_frosted">Frosted</string>
+    <string name="oru_quick_glass_clear">Clear</string>
+    <string name="oru_quick_glass_frosted_description">Frosted glass</string>
+    <string name="oru_quick_glass_clear_description">Clear glass</string>
+</resources>

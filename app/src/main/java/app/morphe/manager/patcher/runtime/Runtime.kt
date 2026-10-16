@@ -16,6 +16,7 @@ import app.morphe.manager.domain.manager.PreferencesManager
 import app.morphe.manager.domain.repository.PatchBundleRepository
 import app.morphe.manager.patcher.logger.Logger
 import app.morphe.manager.patcher.worker.ProgressEventHandler
+import app.morphe.manager.patcher.worker.StageFractionHandler
 import app.morphe.manager.util.Options
 import app.morphe.manager.util.PatchSelection
 import app.morphe.manager.util.bytesToMebibytes
@@ -59,6 +60,8 @@ sealed class Runtime(context: Context) : KoinComponent {
      *                         The runtime has no further use for the file, so it may be moved.
      * @param onRestart        Called when the current attempt is abandoned and patching starts over,
      *                         so progress reported so far can be dropped instead of accumulating.
+     * @param onStageFraction  Called with the fraction [0, 1] of a stage that reports its own progress,
+     *                         such as the write stage while the patcher writes the APK.
      * @return The heap limit in MB the run only finished under after lowering it, null when the
      *         limit it started with held.
      */
@@ -75,5 +78,6 @@ sealed class Runtime(context: Context) : KoinComponent {
         stripUnusedNativeLibs: Boolean,
         onMergedApkReady: (suspend (File) -> Unit)? = null,
         onRestart: suspend () -> Unit = {},
+        onStageFraction: StageFractionHandler = { _, _ -> },
     ): Int?
 }

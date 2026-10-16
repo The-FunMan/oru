@@ -161,7 +161,12 @@ fun BundleManagementSheet(
         if (merged != localOrder) localOrder = merged
     }
     val sortModePreference by prefs.sourceBundleSortMode.getAsState()
-    val sourceSortMode = SourceBundleSortMode.fromPreference(sortModePreference)
+    // ORU: the order is fixed to manual, so a sort chosen before the flavour changed is not applied
+    val sourceSortMode = if (BuildConfig.ORU_UX) {
+        SourceBundleSortMode.MANUAL
+    } else {
+        SourceBundleSortMode.fromPreference(sortModePreference)
+    }
     val isManualSort = sourceSortMode == SourceBundleSortMode.MANUAL
     val orderedSources = remember(localOrder, sources, sourceSortMode) {
         sources.sortedForSourceSort(sourceSortMode, localOrder)
@@ -201,7 +206,7 @@ fun BundleManagementSheet(
         if (!alphabetScrollMode) {
             emptyList()
         } else {
-            buildIndexedScrollTargets(visibleSources) { source -> source.displayTitle }
+            buildIndexedScrollTargets(visibleSources) { source -> source.shownTitle }
         }
     }
     val haptic = LocalHapticFeedback.current
@@ -295,17 +300,20 @@ fun BundleManagementSheet(
                                 active = search.visible
                             )
 
-                            val activeSortLabel = stringResource(sourceSortMode.labelRes)
-                            TitleAction(
-                                icon = Icons.AutoMirrored.Outlined.Sort,
-                                contentDescription = stringResource(R.string.sort),
-                                onClick = { showSortDialog = true },
-                                modifier = Modifier.semantics {
-                                    role = Role.Button
-                                    stateDescription = activeSortLabel
-                                },
-                                style = TitleActionStyle.Neutral
-                            )
+                            // ORU: no sort menu, the manual order is the only one
+                            if (!BuildConfig.ORU_UX) {
+                                val activeSortLabel = stringResource(sourceSortMode.labelRes)
+                                TitleAction(
+                                    icon = Icons.AutoMirrored.Outlined.Sort,
+                                    contentDescription = stringResource(R.string.sort),
+                                    onClick = { showSortDialog = true },
+                                    modifier = Modifier.semantics {
+                                        role = Role.Button
+                                        stateDescription = activeSortLabel
+                                    },
+                                    style = TitleActionStyle.Neutral
+                                )
+                            }
                         }
                     }
                     TitleAction(
@@ -507,7 +515,8 @@ fun BundleManagementSheet(
         }
     }
 
-    if (showSortDialog) {
+    // ORU: never opened, as the sort button is not shown
+    if (showSortDialog && !BuildConfig.ORU_UX) {
         SortModeSelectionDialog(
             title = stringResource(R.string.sources_sort_title),
             current = sourceSortMode,
@@ -527,7 +536,7 @@ fun BundleManagementSheet(
             message = stringResource(R.string.sources_dialog_delete_confirm_body),
             primaryText = stringResource(R.string.delete),
             subject = {
-                ConfirmSubject(name = bundle.displayTitle) { modifier ->
+                ConfirmSubject(name = bundle.shownTitle) { modifier ->
                     BundleIcon(bundle = bundle, modifier = modifier)
                 }
             },
@@ -574,7 +583,7 @@ fun BundleManagementSheet(
     // Outdated manager dialog, shared with the pre-flight check done when patching starts
     bundleRequiringManagerUpdate?.let { bundle ->
         IncompatiblePatcherVersionDialog(
-            bundleName = bundle.displayTitle,
+            bundleName = bundle.shownTitle,
             requiredVersion = bundle.requiredPatcherVersion.orEmpty(),
             onDismiss = { bundleRequiringManagerUpdate = null }
         )
@@ -623,11 +632,11 @@ private fun List<PatchBundleSource>.sortedForSourceSort(
 }
 
 private fun PatchBundleSource.sourceSortTitle(): String =
-    displayTitle.lowercase(Locale.ROOT)
+    shownTitle.lowercase(Locale.ROOT)
 
 /** Whether the source's own name answers to a search query, before its patches are consulted. */
 private fun PatchBundleSource.matchesQuery(query: String): Boolean =
-    displayTitle.contains(query, ignoreCase = true) || name.contains(query, ignoreCase = true)
+    shownTitle.contains(query, ignoreCase = true) || name.contains(query, ignoreCase = true)
 
 /** What a source card reports about its source, beyond the source itself. */
 private data class SourceCardInfo(
@@ -736,9 +745,9 @@ private fun BundleManagementCard(
             // Build content description
             val updateLabel = stringResource(R.string.update)
             val availableLabel = stringResource(R.string.available)
-            val contentDesc = remember(bundle.displayTitle, isEnabled, expanded, forceExpanded, info.updateInfo) {
+            val contentDesc = remember(bundle.shownTitle, isEnabled, expanded, forceExpanded, info.updateInfo) {
                 buildString {
-                    append(bundle.displayTitle)
+                    append(bundle.shownTitle)
                     append(", ")
                     if (isEnabled) {
                         append(enabledState)
@@ -896,8 +905,9 @@ private fun BundleManagementCard(
                             }
                         }
 
-                        // Repository actions, as wide as the four pill action bar below
-                        if (bundle is RemotePatchBundle) {
+                        // Repository actions, as wide as the four pill action bar below.
+                        // ORU: the default source's pages are Morphe's GitHub repository, so it has none
+                        if (bundle is RemotePatchBundle && !(BuildConfig.ORU_UX && bundle.isDefault)) {
                             ActionPillRow(
                                 modifier = Modifier.padding(vertical = 4.dp),
                                 stretchLabelsTo = 4
@@ -905,7 +915,7 @@ private fun BundleManagementCard(
                                 ActionPillButton(
                                     onClick = actions.onOpenInBrowser,
                                     icon = Icons.AutoMirrored.Outlined.OpenInNew,
-                                    contentDescription = openInBrowser + " " + bundle.displayTitle,
+                                    contentDescription = openInBrowser + " " + bundle.shownTitle,
                                     label = openInBrowser,
                                     tooltip = openInBrowser
                                 )
@@ -914,7 +924,7 @@ private fun BundleManagementCard(
                                     ActionPillButton(
                                         onClick = actions.onShare,
                                         icon = Icons.Outlined.Share,
-                                        contentDescription = share + " " + bundle.displayTitle,
+                                        contentDescription = share + " " + bundle.shownTitle,
                                         tooltip = share
                                     )
                                 }
@@ -922,7 +932,7 @@ private fun BundleManagementCard(
                                 ActionPillButton(
                                     onClick = actions.onReportIssue,
                                     icon = Icons.Outlined.BugReport,
-                                    contentDescription = reportIssue + " " + bundle.displayTitle,
+                                    contentDescription = reportIssue + " " + bundle.shownTitle,
                                     tooltip = reportIssue
                                 )
                             }
@@ -974,7 +984,7 @@ private fun BundleManagementCard(
                                 val disableEnableVerb = stringResource(
                                     if (bundle.enabled) R.string.disable else R.string.enable
                                 )
-                                val disableEnableDesc = disableEnableVerb + " " + bundle.displayTitle
+                                val disableEnableDesc = disableEnableVerb + " " + bundle.shownTitle
                                 val disableDone = stringResource(
                                     if (bundle.enabled) R.string.sources_management_source_disabled
                                     else R.string.sources_management_source_enabled
@@ -994,7 +1004,7 @@ private fun BundleManagementCard(
                             val isLocal = bundle is LocalPatchBundle
                             if (bundle is RemotePatchBundle || isLocal) {
                                 val updateVerb = stringResource(R.string.update)
-                                val updateDesc = updateVerb + " " + bundle.displayTitle
+                                val updateDesc = updateVerb + " " + bundle.shownTitle
                                 val updateStarted = stringResource(R.string.sources_management_source_updating)
                                 // Update button. A local source has nothing to fetch from, so it asks
                                 // for a replacement file instead and reports progress once one is picked
@@ -1011,8 +1021,8 @@ private fun BundleManagementCard(
                             if (!bundle.isDefault) {
                                 val renameVerb = stringResource(R.string.rename)
                                 val deleteVerb = stringResource(R.string.delete)
-                                val renameDesc = renameVerb + " " + bundle.displayTitle
-                                val deleteDesc = deleteVerb + " " + bundle.displayTitle
+                                val renameDesc = renameVerb + " " + bundle.shownTitle
+                                val deleteDesc = deleteVerb + " " + bundle.shownTitle
                                 // Rename button
                                 ActionPillButton(
                                     onClick = actions.onRename,
@@ -1081,7 +1091,7 @@ private fun BundleCardHeader(
         // Title + badges
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = bundle.displayTitle,
+                text = bundle.shownTitle,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
                 color = titleColor,

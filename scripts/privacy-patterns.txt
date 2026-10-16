@@ -1,0 +1,6 @@
+# Generic patterns for scripts/privacy-scan.sh. One extended regular expression per line.
+# Only generic values belong here. The maintainer's own names and device identifiers go in
+# scripts/privacy-patterns.local.txt, which is untracked.
+C:\\Users\\
+(^|[ "'=:(])/home/[a-z]
+RFCY

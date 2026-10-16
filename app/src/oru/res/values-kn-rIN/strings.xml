@@ -1,0 +1,5 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="deep_link_add_source_message">Oruಗೆ ಈ ಪ್ಯಾಚ್ ಮೂಲವನ್ನು ಸೇರಿಸಬೇಕೆಂದು ನೀವು ಬಯಸುತ್ತೀರಾ?</string>
+    <string name="home_update_available">Oru ನವೀಕರಣ ಲಭ್ಯವಿದೆ</string>
+</resources>

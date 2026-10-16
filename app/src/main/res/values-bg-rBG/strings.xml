@@ -563,8 +563,6 @@
     <string name="patcher_field_value_stripped">премахнати</string>
     <!-- Value of "Libraries": every library was left in the patched APK -->
     <string name="patcher_field_value_kept">запазени</string>
-    <string name="patcher_tab_logs">Дневници на пакетора</string>
-    <string name="patcher_tab_game">Игри</string>
     <string name="patcher_logs_waiting">Изчаквам изход от логовете…</string>
     <string name="patcher_logs_lost">Изходите от логовете не се запазват при рестартиране на приложението</string>
     <string name="patcher_long_step_warning">Този стъпка може да отнеме време. Моля, изчакайте…</string>
@@ -594,7 +592,6 @@
     <string name="patcher_install_error_subtitle">Опитайте да деинсталирате и инсталирате отново</string>
     <string name="patcher_ready_to_mount_subtitle">Натиснете бутона по-долу за монтиране</string>
     <string name="patcher_patches_excluded_for_installer">Не е налично за този метод на инсталиране и е изключено: %s</string>
-    <string name="patcher_back_to_game_hint">Докоснете %1$s, за да се върнете към играта си</string>
     <string name="patcher_storage_permission_dialog_title">Не е възможно да се достъпи до пата за съхранение</string>
     <string name="patcher_incompatible_patcher_title">Необходима е актуализация</string>
     <string name="patcher_incompatible_patcher_description">Източникът &lt;b&gt;%1$s&lt;/b&gt; изисква патчер &lt;b&gt;%2$s&lt;/b&gt; или по-нова версия. Обновете Morphe, за да го използвате</string>
@@ -691,29 +688,6 @@
     <string name="package_name">Име на пакета</string>
     <string name="failed_to_mount">Неуспешно монтиране: %s</string>
     <string name="failed_to_unmount">Неуспешно откачване: %s</string>
-    <!-- Patcher Screen - Mini-games -->
-    <string name="mini_game_score">Резултат %s</string>
-    <string name="mini_game_best">Най-добър %s</string>
-    <string name="mini_game_new_record">Нов рекорд!</string>
-    <string name="mini_game_game_over">Край на играта</string>
-    <string name="mini_game_try_again">Опитай отново</string>
-    <string name="mini_game_paused">Пауза</string>
-    <string name="mini_game_resume">Продължи</string>
-    <string name="mini_game_restart">Започни отначало</string>
-    <string name="mini_game_change">Избери друга игра</string>
-    <string name="mini_game_2048_picker_subtitle">Плъзнете плочките, за да ги обедините</string>
-    <string name="mini_game_flappy_picker_subtitle">Докоснете, за да прелетите през тръбите</string>
-    <string name="mini_game_flappy_tap_to_start">Докоснете, за да летите</string>
-    <string name="mini_game_snake_picker_subtitle">Яжте храна, не се удряйте</string>
-    <string name="mini_game_snake_swipe_to_start">Плъзнете, за да започнете</string>
-    <string name="mini_game_dino_picker_subtitle">Докоснете, за да прескочите кактусите</string>
-    <string name="mini_game_dino_tap_to_start">Докоснете, за да бягате</string>
-    <string name="mini_game_blocks_picker_subtitle">Съчетайте формите, изчистете редовете</string>
-    <string name="mini_game_blocks_tap_to_start">Докоснете, за да завъртите, плъзнете, за да преместите, плъзнете надолу, за да пуснете</string>
-    <string name="mini_game_bricks_picker_subtitle">Отскачайте топката, изчистете стената</string>
-    <string name="mini_game_bricks_tap_to_start">Плъзнете, за да прицелите, докоснете, за да изстреляте</string>
-    <string name="mini_game_miner_picker_subtitle">Докоснете, за да отворите, задръжте, за да поставите флаг</string>
-    <string name="mini_game_pairs_picker_subtitle">Обърнете картите, намерете съвпадението</string>
     <!-- Settings -->
     <string name="appearance">Външен вид</string>
     <string name="advanced">Разширено</string>

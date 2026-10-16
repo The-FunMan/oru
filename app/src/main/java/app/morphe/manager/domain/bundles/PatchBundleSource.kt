@@ -12,12 +12,15 @@ package app.morphe.manager.domain.bundles
 
 import androidx.compose.runtime.Stable
 import app.morphe.manager.domain.bundles.PatchBundleSource.Extensions.gitlabAvatarUrl
+import app.morphe.manager.domain.manager.OruEndpoints
 import app.morphe.manager.domain.repository.PatchBundleHeldBackException
 import app.morphe.manager.patcher.patch.PatchBundle
 import app.morphe.manager.util.hasZipHeader
 import app.morphe.manager.util.isPatcherOutdated
+import app.morphe.manager.util.moveReplacing
 import java.io.File
 import java.io.IOException
+import java.util.zip.ZipFile
 
 /**
  * A [PatchBundle] source.
@@ -99,11 +102,11 @@ sealed class PatchBundleSource(
             runCatching { staging.setWritable(true, true) }
             runCatching { staging.delete() }
             write(staging)
-            requireNonEmptyBundleFile(staging, context)
+            requireValidBundleFile(staging, context)
             staging.setReadOnly()
             // Replaces the installed bundle in a single step, so readers see either the old
             // file or the new one
-            if (!staging.renameTo(patchesFile)) {
+            if (!moveReplacing(staging, patchesFile)) {
                 throw IOException("$context could not replace the installed patch bundle")
             }
         } catch (t: Throwable) {
@@ -113,7 +116,11 @@ sealed class PatchBundleSource(
         }
     }
 
-    protected fun requireNonEmptyBundleFile(file: File, context: String) {
+    /**
+     * Rejects a file that must not replace the installed bundle. Runs on the staged copy, so a
+     * rejected file is deleted and the installed bundle stays as it is.
+     */
+    protected fun requireValidBundleFile(file: File, context: String) {
         val length = runCatching { file.length() }.getOrDefault(0L)
         if (length < MIN_PATCH_BUNDLE_BYTES) {
             runCatching { file.delete() }
@@ -125,6 +132,19 @@ sealed class PatchBundleSource(
         if (!file.hasZipHeader()) {
             runCatching { file.delete() }
             throw IOException("$context produced a file that is not a patch bundle archive")
+        }
+
+        // A cut transfer keeps the header but loses the central directory at the end of the archive
+        val entryNames = try {
+            ZipFile(file).use { zip -> zip.entries().asSequence().map { it.name }.toList() }
+        } catch (e: IOException) {
+            runCatching { file.delete() }
+            throw IOException("$context produced a truncated or corrupt patch bundle", e)
+        }
+
+        if (entryNames.none { it.endsWith(".dex", ignoreCase = true) }) {
+            runCatching { file.delete() }
+            throw IOException("$context produced a patch bundle without dex code")
         }
     }
 
@@ -220,6 +240,8 @@ sealed class PatchBundleSource(
          */
         val PatchBundleSource.gitlabAvatarUrl: String? get() {
             val remote = this as? RemotePatchBundle ?: return null
+            // ORU: oru sends no request to unavatar.io and shows the placeholder icon instead
+            if (!OruEndpoints.current.unavatarEnabled) return null
             return extractGitLabOwner(remote.endpoint)?.let { owner ->
                 "https://unavatar.io/gitlab/$owner"
             }

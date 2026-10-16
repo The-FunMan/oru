@@ -1,0 +1,131 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="adaptive_icon_guide_png_body">לוגו על רקע שקוף עובד הכי טוב, כשצבע הרקע נבחר למטה. תמונה ללא שקיפות ממלאת את כל הסמל במקום זאת, וסמלי הנושא וסמלי ההתראות שומרים אז על לוגו Oru.</string>
+    <string name="adaptive_icon_no_transparency_warning">לתמונה זו אין פיקסלים שקופים, לכן סמלי הנושא וסמלי ההתראות שומרים על לוגו Oru</string>
+    <string name="battery_optimization_dialog_description">ייתכן שמכשירים מסוימים יפסיקו את המתקן כאשר האפליקציה מצומצמת. אפשר ל-Oru לפעול ללא הגבלות סוללה כדי להבטיח שהתיקון יושלם באופן מהימן</string>
+    <string name="deep_link_add_source_message">האם ברצונך להוסיף מקור תיקונים זה ל-Oru?</string>
+    <string name="external_batch_patch_description">%s רוצה ש-Oru יתקן ויתקין אפליקציות</string>
+    <string name="home_apk_helper_description">Oru תבקש מהאפליקציה המסייעת להלן להוריד את קובץ ה-APK המקורי ולהחזיר את הקובץ</string>
+    <string name="home_apk_helper_installed_unavailable">Oru לא הצליח להשתמש באפליקציה המותקנת</string>
+    <string name="home_apk_helper_warning">המשך רק אם אתה סומך על האפליקציה המסייעת הזו. Oru בודקת את החבילה, הגרסה והחתימה של כל מה שהיא מקבלת לפני תיקון</string>
+    <string name="home_apk_helper_warning_unverified">המשך רק אם אתה סומך על האפליקציה המסייעת הזו. Oru אינה יכולה לאמת את החתימה של קובץ ה-APK הזה, ולכן קובץ ששוּנה לא יזוהה</string>
+    <string name="home_app_filter_not_patched_description">אפליקציות שעדיין לא תיקנת ב-Oru</string>
+    <string name="home_app_filter_patched_description">אפליקציות שתיקנת או שמרת עם Oru</string>
+    <string name="home_app_filter_uninstalled_description">אפליקציות שתוקנו באמצעות Oru ושאינן מותקנות עוד במכשיר זה</string>
+    <string name="home_app_info_app_deleted_description">האפליקציה הוסרה מחוץ ל-Oru. התאם כדי לשחזר את הפונקציונליות</string>
+    <string name="home_app_info_install_unverified">Oru אינו יכול לאשר שהאפליקציה המותקנת היא הגרסה שתיקנה. בצע תיקון מחדש או התקן אותה שוב מ-APK השמור כדי להחזיר את פעולותיה</string>
+    <string name="home_app_info_not_patched_description">מותקנת גרסה לא מתוקנת של אפליקציה זו. ל-Oru עדיין יש רשומת תיקון קודמת.</string>
+    <string name="home_download_instructions_download_button_toast_6">אתה עכשיו בודק רשמי של כפתור Oru 🏅</string>
+    <string name="home_download_instructions_step2_search_note">Oru אינה יכולה לערוב לאתרים אלה. דלגו על אלה שמציעים חנות אפליקציות משלהם במקום קובץ APK</string>
+    <string name="home_download_instructions_step4">לאחר סיום ההורדה, חזרו ל-Oru</string>
+    <string name="home_download_instructions_step4_mount">לאחר התקנת APK המקורית, חזרו ל-Oru</string>
+    <string name="home_held_back_title">מקור תיקונים הפיל את Oru</string>
+    <string name="home_outdated_manager_title">Oru מיושן</string>
+    <string name="home_update_available">עדכון Oru זמין</string>
+    <string name="installer_shizuku_error_permission">חסרה הרשאת Shizuku. תן הרשאה ל-Oru ונסה שוב</string>
+    <string name="installing_manager_update_hint">Oru ייסגר כדי לסיים את העדכון</string>
+    <string name="launch_app_unverified">Oru לא יכלה לאמת שהאפליקציה המותקנת היא הגרסה שתיקנה.</string>
+    <string name="notification_bundle_update_text_unversioned">לחץ כדי לפתוח את Oru ולעדכן</string>
+    <string name="notification_channel_manager_updates">עדכוני Oru</string>
+    <string name="notification_channel_manager_updates_description">התראות על מהדורות Oru חדשות</string>
+    <string name="notification_channel_patcher_description">מוצג בזמן ש-Oru מתקן אפליקציה ברקע</string>
+    <string name="notification_mount_replaced_text">v%1$s החליפה את v%2$s המתוקנת. פתח את Oru כדי לשחזר אותה</string>
+    <string name="notification_permission_dialog_description">Oru זקוקה לבקשת הרשאה להודעות כדי להודיע לך כאשר ישנם עדכונים זמינים ברקע</string>
+    <string name="onboarding_settings_desc">התאם אישית את Oru: מראה, אפשרויות מתקדמות וכלי מערכת</string>
+    <string name="patcher_incompatible_patcher_description">המקור &lt;b&gt;%1$s&lt;/b&gt; דורש את הפאצ׳ר &lt;b&gt;%2$s&lt;/b&gt; ומעלה. עדכן את Oru כדי להשתמש בו</string>
+    <string name="patcher_installed_conflict_body">"Oru חותם על אפליקציות שעברו שינוי באמצעות תעודה משלו, השונה מהמקורית. Android דורש הסרת הגרסה הקיימת לפני שאפשר להתקין את האפליקציה שעברה שינוי.
+
+הסרת ההתקנה תמחק לצמיתות את כל נתוני האפליקציה."</string>
+    <string name="patcher_storage_permission_description_api30">אפשרות אחת או יותר של תיקונים מצביעה על נתיבים ש-Oru לא יכול לקרוא. הענק גישה לאחסון ולחץ על הכפתור ואז התיקון יתחיל באופן אוטומטי</string>
+    <string name="patcher_storage_permission_hint">עצה: העבר קבצים ל- /Android/data/app.oru.manager/files/ - אין צורך ברשאות נוספות</string>
+    <string name="root_mount_module_unmount_warning">אם ל-KernelSU מופעלים כברירת מחדל מודולי ניתוק, פתח KernelSU &gt; משתמש על-ידי &gt; האפליקציה שהרכבת &gt; פרופיל &gt; מותאם אישית ובטל את מודולי ניתוק. אחרת, ייתכן שה-APK המותקן לא ייכנס לתוקף, גם אם Oru מראה שהוא מותקן</string>
+    <string name="settings_advanced_expert_mode_description">מאפשר הגדרות והתאמות אישיות תחכוריות של תיקון Oru</string>
+    <string name="settings_advanced_github_pat_export_include_supporting">מוסיף את PAT זה להגדרות Oru המיוצאות</string>
+    <string name="settings_advanced_patch_options_custom_branding_custom_icon_instruction">"תיקייה עם תמונות לשימוש כסמל מותאם אישית.
+
+התיקייה חייבת להכיל תיקייה אחת או יותר מהמפורטות להלן, בהתאם ל-DPI של המכשיר:
+- mipmap-mdpi
+- mipmap-hdpi
+- mipmap-xhdpi
+- mipmap-xxhdpi
+- mipmap-xxxhdpi
+
+כל אחת מהתיקיות חייבת להכיל את כל הקבצים הבאים:
+morphe_adaptive_background_custom.png
+morphe_adaptive_foreground_custom.png
+
+מידות התמונה צריכות להיות כדלקמן:
+- mipmap-mdpi: 108x108 px
+- mipmap-hdpi: 162x162 px
+- mipmap-xhdpi: 216x216 px
+- mipmap-xxhdpi: 324x324 px
+- mipmap-xxxhdpi: 432x432 px
+
+אופציונלית, הנתיב מכיל תיקיית 'drawable' עם קובץ סמל מונוכרומטי:
+morphe_adaptive_monochrome_custom.xml
+
+אופציונלית, הנתיב מכיל סמל התראה באחד מהפורמטים הבאים:
+- ציור וקטורי XML בתיקיית 'drawable':
+  morphe_notification_icon_custom.xml
+- תמונות רסטר PNG בתיקיות 'drawable-dpi':
+  drawable-mdpi/morphe_notification_icon_custom.png (24x24 px)
+  drawable-hdpi/morphe_notification_icon_custom.png (36x36 px)
+  drawable-xhdpi/morphe_notification_icon_custom.png (48x48 px)
+  drawable-xxhdpi/morphe_notification_icon_custom.png (72x72 px)
+  drawable-xxxhdpi/morphe_notification_icon_custom.png (96x96 px)"</string>
+    <string name="settings_advanced_patch_options_custom_header_instruction">"תיקייה עם תמונות לשימוש כבלוג כותרת מותאם אישית.
+
+התיקייה חייבת להכיל אחת או יותר מהתיקיות הבאות, בהתאם ל-DPI של המכשיר:
+
+- drawable-hdpi
+
+- drawable-xhdpi
+
+- drawable-xxhdpi
+
+- drawable-xxxhdpi
+
+כל אחת מהתיקיות חייבת להכיל את כל הקבצים הבאים:
+
+morphe_header_custom_light.png
+
+morphe_header_custom_dark.png
+
+מידות התמונה חייבות להיות כדלקמן:
+
+- drawable-hdpi: 194x72 פיקסלים
+
+- drawable-xhdpi: 258x96 פיקסלים
+
+drawable-xxhdpi: 387x144 פיקסלים
+
+- drawable-xxxhdpi: 512x192 פיקסלים"</string>
+    <string name="settings_advanced_updates_allow_metered_description">מאפשר לאפליקציית Oru ולעדכוני תיקונים להוריד דרך נתונים ניידים</string>
+    <string name="settings_advanced_updates_manager_prereleases_description">גישה מוקדמת לגרסאות חדשות של Oru</string>
+    <string name="settings_advanced_updates_prerelease_warning_message">"גרסאות טרום-שחרור של Oru עדיין בפיתוח ועשויות להיות לא יציבות
+
+תיקונים אינם מושפעים: הפעל תיקוני טרום-שחרור עבור כל מקור ברשימת מקורות התיקונים"</string>
+    <string name="settings_appearance_app_icon_selector_description">איך Oru נראה על מסך הבית ובמגירת האפליקציות</string>
+    <string name="settings_auto_uninstall_warning_message">אם Android מדווח על התנגשות חתימות במהלך ההתקנה האוטומטית של Shizuku, Oru תסיר את האפליקציה הקיימת לפני התקנת קובץ ה-APK שעבר תיקון</string>
+    <string name="settings_system_apk_download_helper_warning">קובץ ה-APK מגיע מאפליקציית העזר, לכן סמוך רק על אפליקציות שאתה מכיר. Oru עדיין בודק את החבילה, הגרסה והחתימה של כל קובץ לפני תיקון.</string>
+    <string name="settings_system_custom_file_picker_description">דפדף אחסון באמצעות בוחר הקבצים המובנה של Oru במקום ברירת המערכת</string>
+    <string name="settings_system_export_manager_settings_fail">נכשל לייצא הגדרות Oru: %s</string>
+    <string name="settings_system_export_manager_settings_success">הגדרות Oru ייצאו</string>
+    <string name="settings_system_import_manager_settings_description">גיבוי ושחזור של הגדרות Oru שלך</string>
+    <string name="settings_system_import_manager_settings_fail">נכשל ייבוא הגדרות Oru: %s</string>
+    <string name="settings_system_import_manager_settings_mode_title">ייבוא הגדרות Oru</string>
+    <string name="settings_system_import_manager_settings_success">הגדרות Oru יובאו</string>
+    <string name="settings_system_morphe_settings">הגדרות Oru</string>
+    <string name="settings_system_process_runtime_heap_limit_ignored">המכשיר התעלם ממגבלת הזיכרון בריצה האחרונה, כך שהתיקון עשוי לחזור לרוץ בתוך Oru</string>
+    <string name="settings_system_signing_key_dialog_description">כל אפליקציה שעברה טלאי ב-Oru נחתמת באמצעות המפתח הזה. שמור עותק: בלעדיו, אפליקציות שעברו טלאי ניתנות לעדכון רק לאחר הסרת ההתקנה שלהן</string>
+    <string name="settings_system_signing_key_missing">Oru יוצר מפתח עם הטלאי הראשון שלך</string>
+    <string name="settings_system_storage_open_app_info_description">נהל או נקה את כל נתוני Oru דרך הגדרות המערכת</string>
+    <string name="sources_dialog_community_notice_message">"מקורות תיקוני קהילה נעשים ומתוחזקים על ידי מחבריהם. Oru אינו בודק או מאמת תיקוני צד שלישי, ואינו אחראי לתוכנם או למה שהם עושים במכשירך.
+
+כל דבר שתוסיף מאתר זה בשימוש על אחריותך בלבד."</string>
+    <string name="sources_management_held_back_hint">המקור הזה גרם ל-Oru לקרוס בזמן הטעינה, ולכן מדלגים עליו. עדכן או ייבא אותו מחדש כדי לנסות שוב</string>
+    <string name="sources_management_outdated_manager_badge">עדכן Oru</string>
+    <string name="sources_management_outdated_manager_hint">מקור זה נבנה עבור patcher %1$s, אך Oru %2$s כוללת את patcher %3$s. עדכן את Oru כדי להשתמש בו</string>
+    <string name="tour_prompt_desc">רוצה סיור מהיר בתכונות המרכזיות של Oru?</string>
+    <string name="uninstall_app_unverified">הושאר במקום: Oru לא יכלה לאמת שהאפליקציה המותקנת היא הגרסה שתיקנה.</string>
+</resources>

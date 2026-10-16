@@ -546,8 +546,6 @@
     <string name="patcher_field_value_stripped">वगळल्या</string>
     <!-- Value of "Libraries": every library was left in the patched APK -->
     <string name="patcher_field_value_kept">ठेवल्या</string>
-    <string name="patcher_tab_logs">पॅचर लॉग</string>
-    <string name="patcher_tab_game">गेम</string>
     <string name="patcher_logs_waiting">लॉग आउटपुटची प्रतीक्षा करत आहे…</string>
     <string name="patcher_logs_lost">ॲप रीस्टार्ट झाल्यावर लॉग आउटपुट ठेवला जात नाही</string>
     <string name="patcher_long_step_warning">या स्टेपला थोडा वेळ लागू शकतो. कृपया प्रतीक्षा करा…</string>
@@ -575,7 +573,6 @@
     <string name="patcher_install_error_subtitle">अनइंस्टॉल करून पुन्हा इंस्टॉल करण्याचा प्रयत्न करा</string>
     <string name="patcher_ready_to_mount_subtitle">माउंट करण्यासाठी खालील बटण दाबा</string>
     <string name="patcher_patches_excluded_for_installer">या इन्स्टॉल पद्धतीसाठी उपलब्ध नाही आणि वगळण्यात आले आहे: %s</string>
-    <string name="patcher_back_to_game_hint">तुमच्या गेमवर परत जाण्यासाठी %1$s वर टॅप करा</string>
     <string name="patcher_storage_permission_dialog_title">स्टोरेज पाथ ॲक्सेस करू शकत नाही</string>
     <string name="patcher_incompatible_patcher_title">अद्यतन आवश्यक आहे</string>
     <string name="patcher_incompatible_patcher_description">स्रोत &lt;b&gt;%1$s&lt;/b&gt; ला पॅचर &lt;b&gt;%2$s&lt;/b&gt; किंवा त्याहून नवीन आवश्यक आहे. ते वापरण्यासाठी Morphe अपडेट करा</string>
@@ -671,29 +668,6 @@
     <string name="package_name">पॅकेजचे नाव</string>
     <string name="failed_to_mount">माउंट करण्यात अयशस्वी: %s</string>
     <string name="failed_to_unmount">अनमाउंट करण्यात अयशस्वी: %s</string>
-    <!-- Patcher Screen - Mini-games -->
-    <string name="mini_game_score">स्कोअर %s</string>
-    <string name="mini_game_best">सर्वोत्तम %s</string>
-    <string name="mini_game_new_record">नवीन रेकॉर्ड!</string>
-    <string name="mini_game_game_over">गेम ओव्हर</string>
-    <string name="mini_game_try_again">पुन्हा प्रयत्न करा</string>
-    <string name="mini_game_paused">थांबवले</string>
-    <string name="mini_game_resume">सुरू ठेवा</string>
-    <string name="mini_game_restart">पुन्हा सुरू करा</string>
-    <string name="mini_game_change">दुसरा गेम निवडा</string>
-    <string name="mini_game_2048_picker_subtitle">जुळवण्यासाठी टाइल्स सरकवा</string>
-    <string name="mini_game_flappy_picker_subtitle">पाईपमधून उडण्यासाठी टॅप करा</string>
-    <string name="mini_game_flappy_tap_to_start">उडण्यासाठी टॅप करा</string>
-    <string name="mini_game_snake_picker_subtitle">अन्न खा, स्वतःला मारू नका</string>
-    <string name="mini_game_snake_swipe_to_start">सुरू करण्यासाठी स्वाइप करा</string>
-    <string name="mini_game_dino_picker_subtitle">कॅक्टसवरून उडी मारण्यासाठी टॅप करा</string>
-    <string name="mini_game_dino_tap_to_start">धावण्यासाठी टॅप करा</string>
-    <string name="mini_game_blocks_picker_subtitle">आकार जुळवा, रेषा साफ करा</string>
-    <string name="mini_game_blocks_tap_to_start">फिरवण्यासाठी टॅप करा, हलवण्यासाठी स्वाइप करा, खाली सोडण्यासाठी स्वाइप करा</string>
-    <string name="mini_game_bricks_picker_subtitle">चेंडू उडवा, भिंत साफ करा</string>
-    <string name="mini_game_bricks_tap_to_start">लक्ष्य ठेवण्यासाठी ड्रॅग करा, सोडण्यासाठी टॅप करा</string>
-    <string name="mini_game_miner_picker_subtitle">उघडण्यासाठी टॅप करा, फ्लॅग करण्यासाठी दाबून ठेवा</string>
-    <string name="mini_game_pairs_picker_subtitle">कार्डे उलटवा, जुळणी शोधा</string>
     <!-- Settings -->
     <string name="appearance">स्वरूप</string>
     <string name="advanced">प्रगत</string>

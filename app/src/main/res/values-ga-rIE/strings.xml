@@ -563,8 +563,6 @@ Chun na torthaí is fearr a fháil, molann an aip seo paiste a chur ar &lt;b&gt;
     <string name="patcher_field_value_stripped">stróicthe</string>
     <!-- Value of "Libraries": every library was left in the patched APK -->
     <string name="patcher_field_value_kept">coimeádta</string>
-    <string name="patcher_tab_logs">Logaí paisteora</string>
-    <string name="patcher_tab_game">Cluichí</string>
     <string name="patcher_logs_waiting">Ag fanacht le haschur loga…</string>
     <string name="patcher_logs_lost">Ní choimeádtar aschur loga tar éis atosú aipeanna</string>
     <string name="patcher_long_step_warning">D’fhéadfadh sé go dtógfadh an chéim seo tamall. Fan le do thoil…</string>
@@ -594,7 +592,6 @@ Scriosfaidh díshuiteáil gach sonraí aip go buan."</string>
     <string name="patcher_install_error_subtitle">Déan iarracht é a dhíshuiteáil agus a shuiteáil arís</string>
     <string name="patcher_ready_to_mount_subtitle">Brúigh an cnaipe thíos chun é a ghléasadh</string>
     <string name="patcher_patches_excluded_for_installer">Ní féidir é a shuiteáil agus níl sé ar fáil: %s</string>
-    <string name="patcher_back_to_game_hint">Tapáil %1$s chun filleadh ar do chluiche</string>
     <string name="patcher_storage_permission_dialog_title">Ní féidir rochtain a fháil ar an gcosán stórála</string>
     <string name="patcher_incompatible_patcher_title">Nuashonrú ag teastáil</string>
     <string name="patcher_incompatible_patcher_description">Éilíonn an fhoinse &lt;b&gt;%1$s&lt;/b&gt; paitseálaí &lt;b&gt;%2$s&lt;/b&gt; nó níos nuaí. Nuashonraigh Morphe chun é a úsáid</string>
@@ -691,29 +688,6 @@ Scriosfaidh díshuiteáil gach sonraí aip go buan."</string>
     <string name="package_name">Ainm an phacáiste</string>
     <string name="failed_to_mount">Theip ar fheistiú: %s</string>
     <string name="failed_to_unmount">Theip ar dhíshuiteáil: %s</string>
-    <!-- Patcher Screen - Mini-games -->
-    <string name="mini_game_score">Scór %s</string>
-    <string name="mini_game_best">Is Fearr %s</string>
-    <string name="mini_game_new_record">Taifead nua!</string>
-    <string name="mini_game_game_over">Cluiche Thart</string>
-    <string name="mini_game_try_again">Bain Triail Arís</string>
-    <string name="mini_game_paused">Sosaithe</string>
-    <string name="mini_game_resume">Lean ar aghaidh</string>
-    <string name="mini_game_restart">Tosaigh arís</string>
-    <string name="mini_game_change">Roghnaigh cluiche eile</string>
-    <string name="mini_game_2048_picker_subtitle">Sleamhnaigh tíleanna le cumasc</string>
-    <string name="mini_game_flappy_picker_subtitle">Beartaigh chun eitilt trí phíopaí</string>
-    <string name="mini_game_flappy_tap_to_start">Beartaigh le heitilt</string>
-    <string name="mini_game_snake_picker_subtitle">Ith bia, ná buail tú féin</string>
-    <string name="mini_game_snake_swipe_to_start">Svaidhpeáil le tosú</string>
-    <string name="mini_game_dino_picker_subtitle">Tapáil chun léim thar cacti</string>
-    <string name="mini_game_dino_tap_to_start">Tapáil le rith</string>
-    <string name="mini_game_blocks_picker_subtitle">Fit na cruthanna, línte soiléire</string>
-    <string name="mini_game_blocks_tap_to_start">Tapáil chun rothlú, sleamhnú chun bogadh, sleamhnú síos le titim</string>
-    <string name="mini_game_bricks_picker_subtitle">Preab an liathróid, glan an balla</string>
-    <string name="mini_game_bricks_tap_to_start">Tarraing chun aidhm, tapáil chun seoladh</string>
-    <string name="mini_game_miner_picker_subtitle">Tapáil chun oscailt, coinnigh go bratach</string>
-    <string name="mini_game_pairs_picker_subtitle">Smeach cártaí, aimsigh an cluiche</string>
     <!-- Settings -->
     <string name="appearance">Dealramh</string>
     <string name="advanced">Ardleibhéil</string>

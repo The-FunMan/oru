@@ -518,7 +518,7 @@ class PatchBundleRepository(
         val metadata = map.mapNotNull { (bundle, src) ->
             try {
                 src.uid to PatchBundleInfo.Global(
-                    name = src.displayTitle,
+                    name = src.shownTitle,
                     version = bundle.manifestAttributes?.version,
                     uid = src.uid,
                     enabled = src.enabled,
@@ -966,7 +966,7 @@ class PatchBundleRepository(
                 val ready = state as? BundleState.Ready ?: return@dispatchAction state
                 val src = ready.sources[uid] ?: return@dispatchAction state
                 val updated = src.copy(displayName = normalized)
-                val updatedInfo = ready.info[uid]?.copy(name = updated.displayTitle)
+                val updatedInfo = ready.info[uid]?.copy(name = updated.shownTitle)
                 ready.copy(
                     sources = ready.sources.putting(uid, updated),
                     info = if (updatedInfo != null) ready.info.putting(uid, updatedInfo) else ready.info
@@ -1389,9 +1389,9 @@ class PatchBundleRepository(
         if (code != null && code in 400..499
             && bundle is JsonPatchBundle && bundle.supportsPrerelease
         ) {
-            toast(R.string.sources_download_endpoint_not_found, bundle.displayTitle)
+            toast(R.string.sources_download_endpoint_not_found, bundle.shownTitle)
         } else {
-            toast(R.string.sources_download_fail_named, bundle.displayTitle)
+            toast(R.string.sources_download_fail_named, bundle.shownTitle)
         }
     }
 
@@ -1439,8 +1439,7 @@ class PatchBundleRepository(
     } catch (_: Exception) { null }
 
     fun normalizeRemoteBundleUrl(input: String): String {
-        // A link is usually pasted without its scheme, and every host here serves https
-        val trimmed = input.trim().let { if ("://" in it) it else "https://$it" }
+        val trimmed = withHttpsScheme(input)
         val parsed = try {
             Url(trimmed)
         } catch (e: Exception) {
@@ -1458,10 +1457,9 @@ class PatchBundleRepository(
 
             // Check if it's a pull request URL
             if (pathSegments.size >= 3 && pathSegments[2] == "pull") {
-                val scheme = if (parsed.protocol.name.equals("https", ignoreCase = true)) "https" else "http"
                 val basePath = "/" + pathSegments.joinToString("/")
                 val query = parsed.encodedQuery.takeIf { it.isNotEmpty() }?.let { "?$it" }.orEmpty()
-                return "$scheme://$host$basePath$query"
+                return "https://$host$basePath$query"
             }
 
             // Transform GitHub repository URL to raw.githubusercontent.com
@@ -2240,13 +2238,20 @@ class PatchBundleRepository(
      * In [ImportMode.Replace] mode this first removes existing custom remote bundles that are
      * absent from [snapshots] (the default source and local bundles are always kept), then adds
      * the missing ones. Triggers a full reload and starts a download job for newly added bundles.
+     *
+     * Added sources start disabled and without auto update, so nothing is fetched until the user
+     * enables them. Returns one reason per snapshot that was skipped because its source is not a
+     * valid https bundle URL.
      */
     suspend fun importCustomBundles(
         snapshots: List<BundleSnapshot>,
         mode: ImportMode = ImportMode.Merge,
-    ) {
+    ): List<String> {
+        val rejected = rejectedSourceReasons(snapshots, ::normalizeRemoteBundleUrl)
+        rejected.forEach { Log.w(tag, "Skipped bundle on import: $it") }
+
         // Empty snapshot in Merge mode is a no-op; in Replace mode it still needs to clear existing customs
-        if (snapshots.isEmpty() && mode == ImportMode.Merge) return
+        if (snapshots.isEmpty() && mode == ImportMode.Merge) return rejected
 
         dispatchAction("Import custom bundles ($mode)") { state ->
             val ready = state as? BundleState.Ready ?: return@dispatchAction state
@@ -2364,9 +2369,8 @@ class PatchBundleRepository(
                 UpdateRequest(
                     allowUnsafeNetwork = prefs.allowMeteredUpdates.get(),
                     target = UpdateTarget(custom = { bundle ->
+                        // Disabled bundles are not fetched; enabling one triggers its first download
                         bundle.uid != DEFAULT_SOURCE_UID &&
-                                // Disabled bundles are not refreshed, but ones that were never
-                                // downloaded still need their initial fetch
                                 (bundle.enabled || bundle.state is PatchBundleSource.State.Missing) &&
                                 snapshots.any { s ->
                                     bundle.endpoint.equals(
@@ -2380,11 +2384,36 @@ class PatchBundleRepository(
 
             newState
         }
+        return rejected
     }
 
     internal companion object {
         const val DEFAULT_SOURCE_UID = 0
         const val LOCAL_IMPORT_STEPS = 2
+
+        /**
+         * A link is usually pasted without its scheme, and every host here serves https. An explicit
+         * scheme must be https: cleartext bundles are never fetched, since their DEX code would be
+         * unauthenticated on the wire.
+         */
+        fun withHttpsScheme(input: String): String {
+            val trimmed = input.trim()
+            if ("://" !in trimmed) return "https://$trimmed"
+            require(trimmed.startsWith("https://", ignoreCase = true)) {
+                "Bundle URL must use https: $trimmed"
+            }
+            return trimmed
+        }
+
+        /** Describes each snapshot whose source [normalize] rejects, so an import can report what it dropped. */
+        fun rejectedSourceReasons(
+            snapshots: List<BundleSnapshot>,
+            normalize: (String) -> String,
+        ): List<String> = snapshots.mapNotNull { snapshot ->
+            runCatching { normalize(snapshot.source) }.exceptionOrNull()?.let { error ->
+                "${snapshot.name}: ${error.message ?: error.javaClass.simpleName}"
+            }
+        }
 
         // Create default entity with sortOrder 0
         fun createDefaultEntity() = PatchBundleEntity(

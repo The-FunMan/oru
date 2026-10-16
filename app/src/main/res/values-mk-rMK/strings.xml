@@ -285,7 +285,6 @@
     <!-- Fastest read or write rate reached while patching, in data per second -->
     <!-- Value of "Libraries": the libraries this device cannot use were dropped from the patched APK -->
     <!-- Value of "Libraries": every library was left in the patched APK -->
-    <string name="patcher_tab_game">Игри</string>
     <string name="patcher_long_step_warning">Овој чекор може да потрае некое време. Ве молам, почекајте…</string>
     <string name="patcher_installing_subtitle">Почти сте спремни за акција! 🎸</string>
     <string name="patcher_success_subtitle">Вашата апликација е поправена и инсталирана!</string>
@@ -373,19 +372,6 @@
     <string name="package_name">Име на пакет</string>
     <string name="failed_to_mount">Не успеа да се монтира: %s</string>
     <string name="failed_to_unmount">Не успеа да се размонтира: %s</string>
-    <!-- Patcher Screen - Mini-games -->
-    <string name="mini_game_new_record">Нов рекорд!</string>
-    <string name="mini_game_game_over">Игра завршена</string>
-    <string name="mini_game_try_again">Обидете се повторно</string>
-    <string name="mini_game_paused">Пауза</string>
-    <string name="mini_game_resume">Континуирај</string>
-    <string name="mini_game_2048_picker_subtitle">Поставете плочки за да ги споите</string>
-    <string name="mini_game_flappy_picker_subtitle">Допрете за да летате низ цевки</string>
-    <string name="mini_game_flappy_tap_to_start">Кликнете за да летате</string>
-    <string name="mini_game_snake_picker_subtitle">Јадете храна, не се удрете сами</string>
-    <string name="mini_game_snake_swipe_to_start">Повлечете за да започнете</string>
-    <string name="mini_game_dino_picker_subtitle">Допрете за да прескокнете над кактуси</string>
-    <string name="mini_game_dino_tap_to_start">Кликнете за да трчате</string>
     <!-- Settings -->
     <string name="appearance">Изглед</string>
     <string name="advanced">Напредно</string>

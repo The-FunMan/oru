@@ -34,6 +34,7 @@ import app.morphe.manager.domain.bundles.PatchBundleSource.Extensions.sourceType
 import app.morphe.manager.domain.bundles.PatchBundleSource.Extensions.usesPrerelease
 import app.morphe.manager.domain.bundles.RemotePatchBundle
 import app.morphe.manager.domain.bundles.recommended
+import app.morphe.manager.domain.manager.OruEndpoints
 import app.morphe.manager.domain.repository.PatchBundleRepository
 import app.morphe.manager.patcher.patch.PatchInfo
 import app.morphe.manager.ui.model.HomeAppItem
@@ -383,7 +384,7 @@ fun HomeDialogs(
                 val source = homeViewModel.getPatchSource(bundle.uid)
                 SimpleBundleCandidate(
                     uid = bundle.uid,
-                    displayTitle = source?.displayTitle
+                    displayTitle = source?.shownTitle
                         ?: homeViewModel.getBundleDisplayName(bundle.uid)
                         ?: bundle.name,
                     patchCount = patches.size,
@@ -782,7 +783,8 @@ fun DeepLinkAddSourceDialog(
                     val owner = uri.path.trim('/').split('/').firstOrNull()
                     val isGitLab = uri.host?.contains("gitlab.com", ignoreCase = true) == true
                     if (owner != null) {
-                        if (isGitLab) "https://unavatar.io/gitlab/$owner"
+                        // ORU: no unavatar.io request in oru, the placeholder icon shows instead
+                        if (isGitLab) "https://unavatar.io/gitlab/$owner".takeIf { OruEndpoints.current.unavatarEnabled }
                         else "https://github.com/$owner.png"
                     } else null
                 }.getOrNull()

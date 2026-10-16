@@ -1,0 +1,12 @@
+{
+  "uniqueId": "dev.rikka.tools.refine:annotation",
+  "name": "Refine annotation",
+  "developers": [
+    {
+      "name": "RikkaW"
+    }
+  ],
+  "licenses": [
+    "MIT"
+  ]
+}

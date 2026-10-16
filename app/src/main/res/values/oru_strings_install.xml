@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Oru install screen copy (S10). English only. These keys were missing from oru_strings.xml and
+  OruDecisionCopy referenced them as null. Rules: plain active voice, no dashes used as punctuation.
+-->
+<resources>
+
+    <!-- Installer lines on the Done state -->
+    <string name="oru_install_with_system">Installs with the system installer. Android asks you to confirm.</string>
+    <string name="oru_install_fallback">%1$s is not available, so this installs with the system installer.</string>
+
+    <!-- Install unknown apps permission -->
+    <string name="oru_action_allow_installs">Allow installs from Oru</string>
+
+    <!-- Signing key conflict, inline notice that opens the decision dialog -->
+    <string name="oru_install_review">Review</string>
+
+    <!-- Installer unavailable: actions and reasons -->
+    <string name="oru_action_open_shizuku">Open Shizuku</string>
+    <string name="oru_action_grant_shizuku">Grant permission</string>
+    <string name="oru_unavailable_shizuku_not_installed">Install Shizuku or Sui to use this installer.</string>
+    <string name="oru_unavailable_shizuku_unsupported">This Shizuku version is not supported. Update Shizuku.</string>
+    <string name="oru_unavailable_shizuku_not_running">Shizuku is not running. Start it and try again.</string>
+    <string name="oru_unavailable_root">Oru does not have root access. Grant it, then try again.</string>
+
+    <!-- The install ended without installing: declined, cancelled or aborted in the system dialog -->
+    <string name="oru_install_declined">The install was cancelled. Tap Install to try again.</string>
+
+    <!-- Installer picker -->
+    <string name="oru_install_pick_body">Choose the installer for this install.</string>
+    <string name="oru_install_plan_checking">Checking the install</string>
+
+    <!-- Root patch mode -->
+    <string name="oru_root_action_mount">Root mount</string>
+    <string name="oru_root_action_standard">Standard install</string>
+
+    <!-- Downgrade decision -->
+    <string name="oru_install_downgrade_title">Older version</string>
+
+    <!-- Usage readout units (S08). The readout uses these with the numbers it already has. -->
+    <string name="oru_vital_unit_mb">MB</string>
+    <string name="oru_vital_unit_percent">%</string>
+    <string name="oru_vital_unit_mb_s">MB/s</string>
+
+</resources>

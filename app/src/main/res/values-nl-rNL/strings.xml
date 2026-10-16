@@ -563,8 +563,6 @@ Voor de beste resultaten beveelt deze app aan om een &lt;b&gt;volledig APK&lt;/b
     <string name="patcher_field_value_stripped">verwijderd</string>
     <!-- Value of "Libraries": every library was left in the patched APK -->
     <string name="patcher_field_value_kept">behouden</string>
-    <string name="patcher_tab_logs">Patchlogboeken</string>
-    <string name="patcher_tab_game">Spellen</string>
     <string name="patcher_logs_waiting">Wacht op logboekuitvoer…</string>
     <string name="patcher_logs_lost">Logboekuitvoer wordt niet bewaard bij het opnieuw opstarten van de app</string>
     <string name="patcher_long_step_warning">Deze stap kan even duren. Een ogenblik geduld...</string>
@@ -594,7 +592,6 @@ Deïnstalleren wist alle app-gegevens permanent."</string>
     <string name="patcher_install_error_subtitle">Probeer opnieuw te verwijderen en te installeren</string>
     <string name="patcher_ready_to_mount_subtitle">Druk op de onderstaande knop om te koppelen</string>
     <string name="patcher_patches_excluded_for_installer">Niet beschikbaar voor deze installatiemethode en uitgesloten: %s</string>
-    <string name="patcher_back_to_game_hint">Tik op %1$s om terug te keren naar je spel</string>
     <string name="patcher_storage_permission_dialog_title">Kan opslagpad niet openen</string>
     <string name="patcher_incompatible_patcher_title">Update vereist</string>
     <string name="patcher_incompatible_patcher_description">De bron &lt;b&gt;%1$s&lt;/b&gt; vereist patcher &lt;b&gt;%2$s&lt;/b&gt; of nieuwer. Werk Morphe bij om deze te gebruiken</string>
@@ -691,29 +688,6 @@ Deïnstalleren wist alle app-gegevens permanent."</string>
     <string name="package_name">Pakketnaam</string>
     <string name="failed_to_mount">Kon %s niet koppelen</string>
     <string name="failed_to_unmount">Mislukt om te demonteer: %s</string>
-    <!-- Patcher Screen - Mini-games -->
-    <string name="mini_game_score">Score %s</string>
-    <string name="mini_game_best">Beste %s</string>
-    <string name="mini_game_new_record">Nieuw record!</string>
-    <string name="mini_game_game_over">Game Over</string>
-    <string name="mini_game_try_again">Probeer opnieuw</string>
-    <string name="mini_game_paused">Pauze</string>
-    <string name="mini_game_resume">Doorgaan</string>
-    <string name="mini_game_restart">Opnieuw beginnen</string>
-    <string name="mini_game_change">Kies een ander spel</string>
-    <string name="mini_game_2048_picker_subtitle">Schuif tegels om ze te combineren</string>
-    <string name="mini_game_flappy_picker_subtitle">Tik om door de pijpen te vliegen</string>
-    <string name="mini_game_flappy_tap_to_start">Tik om te vliegen</string>
-    <string name="mini_game_snake_picker_subtitle">Eet voedsel, raak jezelf niet</string>
-    <string name="mini_game_snake_swipe_to_start">Swipe om te starten</string>
-    <string name="mini_game_dino_picker_subtitle">Tik om over cactussen te springen</string>
-    <string name="mini_game_dino_tap_to_start">Tik om te rennen</string>
-    <string name="mini_game_blocks_picker_subtitle">Plaats de vormen, maak lijnen vrij</string>
-    <string name="mini_game_blocks_tap_to_start">Tik om te draaien, veeg om te bewegen, veeg omlaag om te laten vallen</string>
-    <string name="mini_game_bricks_picker_subtitle">Laat de bal stuiteren, breek de muur</string>
-    <string name="mini_game_bricks_tap_to_start">Sleep om te richten, tik om te lanceren</string>
-    <string name="mini_game_miner_picker_subtitle">Tik om te openen, houd vast om te vlaggen</string>
-    <string name="mini_game_pairs_picker_subtitle">Draai kaarten om, vind het paar</string>
     <!-- Settings -->
     <string name="appearance">Uiterlijk</string>
     <string name="advanced">Geavanceerd</string>

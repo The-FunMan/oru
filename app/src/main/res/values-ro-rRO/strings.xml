@@ -563,8 +563,6 @@ Pentru cele mai bune rezultate, această aplicație recomandă patch-uirea unui 
     <string name="patcher_field_value_stripped">eliminate</string>
     <!-- Value of "Libraries": every library was left in the patched APK -->
     <string name="patcher_field_value_kept">păstrate</string>
-    <string name="patcher_tab_logs">Jurnale de patch-uri</string>
-    <string name="patcher_tab_game">Jocuri</string>
     <string name="patcher_logs_waiting">Se éteptarea ieşirii jurnalului…</string>
     <string name="patcher_logs_lost">Ieşirile jurnalului nu sunt pãstrate la repornirea aplicaţiei</string>
     <string name="patcher_long_step_warning">Acest pas poate dura ceva timp. Vă rugăm să așteptați…</string>
@@ -594,7 +592,6 @@ Dezinstalarea va șterge definitiv toate datele aplicației."</string>
     <string name="patcher_install_error_subtitle">Încearcă să dezinstalezi și să instalezi din nou</string>
     <string name="patcher_ready_to_mount_subtitle">Apăsați butonul de mai jos pentru a monta</string>
     <string name="patcher_patches_excluded_for_installer">Nu este disponibil pentru această metodă de instalare și exclus: %s</string>
-    <string name="patcher_back_to_game_hint">Atinge %1$s pentru a reveni la jocul tău</string>
     <string name="patcher_storage_permission_dialog_title">Nu se poate accesa calea de stocare</string>
     <string name="patcher_incompatible_patcher_title">Actualizare necesară</string>
     <string name="patcher_incompatible_patcher_description">Sursa &lt;b&gt;%1$s&lt;/b&gt; necesită patcher-ul &lt;b&gt;%2$s&lt;/b&gt; sau o versiune mai nouă. Actualizează Morphe pentru a o folosi</string>
@@ -691,29 +688,6 @@ Dezinstalarea va șterge definitiv toate datele aplicației."</string>
     <string name="package_name">Nume pachet</string>
     <string name="failed_to_mount">Montare eșuată: %s</string>
     <string name="failed_to_unmount">Demontare eșuată: %s</string>
-    <!-- Patcher Screen - Mini-games -->
-    <string name="mini_game_score">Scor %s</string>
-    <string name="mini_game_best">Cel mai bun %s</string>
-    <string name="mini_game_new_record">Record nou!</string>
-    <string name="mini_game_game_over">Game Over</string>
-    <string name="mini_game_try_again">Încearcă din nou</string>
-    <string name="mini_game_paused">Pauză</string>
-    <string name="mini_game_resume">Continuă</string>
-    <string name="mini_game_restart">Reîncepe</string>
-    <string name="mini_game_change">Alege alt joc</string>
-    <string name="mini_game_2048_picker_subtitle">Glisează plăcile pentru a le îmbina</string>
-    <string name="mini_game_flappy_picker_subtitle">Atinge pentru a zbura printre țevi</string>
-    <string name="mini_game_flappy_tap_to_start">Atinge pentru a zbura</string>
-    <string name="mini_game_snake_picker_subtitle">Mănâncă mâncare, nu te lovi de tine</string>
-    <string name="mini_game_snake_swipe_to_start">Glisează pentru a începe</string>
-    <string name="mini_game_dino_picker_subtitle">Atinge pentru a sări peste cactuși</string>
-    <string name="mini_game_dino_tap_to_start">Atinge pentru a alerga</string>
-    <string name="mini_game_blocks_picker_subtitle">Potrivește formele, elimină liniile</string>
-    <string name="mini_game_blocks_tap_to_start">Atingeți pentru a roti, glisați pentru a muta, glisați în jos pentru a arunca</string>
-    <string name="mini_game_bricks_picker_subtitle">Fă mingea să sară, dărâmă peretele</string>
-    <string name="mini_game_bricks_tap_to_start">Glisează pentru a ținti, atinge pentru a lansa</string>
-    <string name="mini_game_miner_picker_subtitle">Atingeți pentru a deschide, țineți apăsat pentru a marca</string>
-    <string name="mini_game_pairs_picker_subtitle">Întoarceți cărțile, găsiți perechea</string>
     <!-- Settings -->
     <string name="appearance">Aspect</string>
     <string name="advanced">Avansat</string>

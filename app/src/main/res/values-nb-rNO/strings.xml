@@ -563,8 +563,6 @@ For de beste resultatene anbefaler denne appen å patche en &lt;b&gt;full APK-fi
     <string name="patcher_field_value_stripped">fjernet</string>
     <!-- Value of "Libraries": every library was left in the patched APK -->
     <string name="patcher_field_value_kept">beholdt</string>
-    <string name="patcher_tab_logs">Patcher-logg</string>
-    <string name="patcher_tab_game">Spill</string>
     <string name="patcher_logs_waiting">Venter på loggutskrift…</string>
     <string name="patcher_logs_lost">Loggutskrift lagres ikke mellom appomstarter</string>
     <string name="patcher_long_step_warning">Dette trinnet kan ta en stund. Vennligst vent…</string>
@@ -594,7 +592,6 @@ Avinstallering vil permanent slette alle appdata"</string>
     <string name="patcher_install_error_subtitle">Prøv å avinstallere og installere på nytt</string>
     <string name="patcher_ready_to_mount_subtitle">Trykk på knappen nedenfor for å montere</string>
     <string name="patcher_patches_excluded_for_installer">Ikke tilgjengelig for denne installasjonsmetoden og ekskludert: %s</string>
-    <string name="patcher_back_to_game_hint">Trykk %1$s for å gå tilbake til spillet ditt.</string>
     <string name="patcher_storage_permission_dialog_title">Kan ikke få tilgang til lagringsbane</string>
     <string name="patcher_incompatible_patcher_title">Oppdatering kreves</string>
     <string name="patcher_incompatible_patcher_description">Kilden &lt;b&gt;%1$s&lt;/b&gt; krever patcher &lt;b&gt;%2$s&lt;/b&gt; eller nyere. Oppdater Morphe for å bruke den</string>
@@ -691,29 +688,6 @@ Avinstallering vil permanent slette alle appdata"</string>
     <string name="package_name">Pakkens navn</string>
     <string name="failed_to_mount">Kunne ikke montere: %s</string>
     <string name="failed_to_unmount">Kunne ikke demontere: %s</string>
-    <!-- Patcher Screen - Mini-games -->
-    <string name="mini_game_score">Poengsum %s</string>
-    <string name="mini_game_best">Beste %s</string>
-    <string name="mini_game_new_record">Ny rekord!</string>
-    <string name="mini_game_game_over">Spillet er over</string>
-    <string name="mini_game_try_again">Prøv igjen</string>
-    <string name="mini_game_paused">Pauset</string>
-    <string name="mini_game_resume">Fortsett</string>
-    <string name="mini_game_restart">Start på nytt</string>
-    <string name="mini_game_change">Velg et annet spill</string>
-    <string name="mini_game_2048_picker_subtitle">Skyv brikkene for å slå dem sammen</string>
-    <string name="mini_game_flappy_picker_subtitle">Trykk for å fly gjennom rørene</string>
-    <string name="mini_game_flappy_tap_to_start">Trykk for å fly</string>
-    <string name="mini_game_snake_picker_subtitle">Spis mat, ikke treff deg selv</string>
-    <string name="mini_game_snake_swipe_to_start">Sveip for å starte</string>
-    <string name="mini_game_dino_picker_subtitle">Trykk for å hoppe over kaktusene</string>
-    <string name="mini_game_dino_tap_to_start">Trykk for å løpe</string>
-    <string name="mini_game_blocks_picker_subtitle">Passe formene, fjern linjer</string>
-    <string name="mini_game_blocks_tap_to_start">Trykk for å rotere, sveip for å flytte, sveip ned for å slippe</string>
-    <string name="mini_game_bricks_picker_subtitle">Sprett ballen, fjern veggen</string>
-    <string name="mini_game_bricks_tap_to_start">Dra for å sikte, trykk for å skyte</string>
-    <string name="mini_game_miner_picker_subtitle">Trykk for å åpne, hold inne for å flagge</string>
-    <string name="mini_game_pairs_picker_subtitle">Vend kortene, finn paret</string>
     <!-- Settings -->
     <string name="appearance">Utseende</string>
     <string name="advanced">Avansert</string>

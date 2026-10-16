@@ -563,8 +563,6 @@ Para sa pinakamahusay na resulta, nirerekomenda ng app na ito na i-patch ang isa
     <string name="patcher_field_value_stripped">tinanggal</string>
     <!-- Value of "Libraries": every library was left in the patched APK -->
     <string name="patcher_field_value_kept">pinanatili</string>
-    <string name="patcher_tab_logs">Mga log ng Patcher</string>
-    <string name="patcher_tab_game">Mga Laro</string>
     <string name="patcher_logs_waiting">Naghihintay ng log output…</string>
     <string name="patcher_logs_lost">Ang log output ay hindi napananatili pagkatapos mag-restart ang app</string>
     <string name="patcher_long_step_warning">Maaaring magtagal ang hakbang ito. Mangyaring maghintay…</string>
@@ -594,7 +592,6 @@ Ang pag-uninstall ay permanenteng bubura sa lahat ng data ng app."</string>
     <string name="patcher_install_error_subtitle">Subukan mong burahin at i-install muli</string>
     <string name="patcher_ready_to_mount_subtitle">Pindutin ang button sa ibaba upang i-mount</string>
     <string name="patcher_patches_excluded_for_installer">Hindi magagamit para sa paraang ito ng pag-install at hindi kasama: %s</string>
-    <string name="patcher_back_to_game_hint">I-tap ang %1$s upang bumalik sa iyong laro</string>
     <string name="patcher_storage_permission_dialog_title">Hindi ma-access ang landas ng imbakan</string>
     <string name="patcher_incompatible_patcher_title">Kinakailangan ang pag-update</string>
     <string name="patcher_incompatible_patcher_description">Ang source &lt;b&gt;%1$s&lt;/b&gt; ay nangangailangan ng patcher &lt;b&gt;%2$s&lt;/b&gt; o mas bago. I-update ang Morphe upang magamit ito</string>
@@ -691,29 +688,6 @@ Ang pag-uninstall ay permanenteng bubura sa lahat ng data ng app."</string>
     <string name="package_name">Pangalan ng pakete</string>
     <string name="failed_to_mount">Nabigong i-mount: %s</string>
     <string name="failed_to_unmount">Nabigong i-unmount: %s</string>
-    <!-- Patcher Screen - Mini-games -->
-    <string name="mini_game_score">Score %s</string>
-    <string name="mini_game_best">Pinakamahusay %s</string>
-    <string name="mini_game_new_record">Bagong rekord!</string>
-    <string name="mini_game_game_over">Tapos na ang laro</string>
-    <string name="mini_game_try_again">Subukan Muli</string>
-    <string name="mini_game_paused">Naka-pause</string>
-    <string name="mini_game_resume">Magpatuloy</string>
-    <string name="mini_game_restart">Magsimula muli</string>
-    <string name="mini_game_change">Pumili ng ibang laro</string>
-    <string name="mini_game_2048_picker_subtitle">I-slide ang mga tile para pagsamahin</string>
-    <string name="mini_game_flappy_picker_subtitle">I-tap para lumipad sa mga tubo</string>
-    <string name="mini_game_flappy_tap_to_start">I-tap para lumipad</string>
-    <string name="mini_game_snake_picker_subtitle">Kumain ng pagkain, huwag saktan ang sarili</string>
-    <string name="mini_game_snake_swipe_to_start">I-swipe para magsimula</string>
-    <string name="mini_game_dino_picker_subtitle">I-tap para tumalon sa mga cactus</string>
-    <string name="mini_game_dino_tap_to_start">I-tap para tumakbo</string>
-    <string name="mini_game_blocks_picker_subtitle">Pagkasyahin ang mga hugis, alisin ang mga linya</string>
-    <string name="mini_game_blocks_tap_to_start">I-tap upang paikutin, i-swipe upang ilipat, i-swipe pababa upang ihulog</string>
-    <string name="mini_game_bricks_picker_subtitle">Patalbogin ang bola, alisin ang pader</string>
-    <string name="mini_game_bricks_tap_to_start">I-drag para mag-aim, pindutin para ilunsad</string>
-    <string name="mini_game_miner_picker_subtitle">I-tap upang buksan, pindutin nang matagal upang i-flag</string>
-    <string name="mini_game_pairs_picker_subtitle">I-flip ang mga kard, hanapin ang magkapares</string>
     <!-- Settings -->
     <string name="appearance">Hitsura</string>
     <string name="advanced">Pagsulong</string>

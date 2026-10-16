@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Oru Advanced copy: the group headings of the Advanced page in the Settings sheet, the GitHub token row and the memory limit row.
+  English only (decision D6). The page title, the Install with row and the other rows reuse oru_strings.xml keys.
+-->
+<resources>
+    <string name="oru_advanced_group_installing">Installing</string>
+    <string name="oru_advanced_group_sources">Sources</string>
+    <string name="oru_advanced_group_automation">Automation</string>
+    <string name="oru_advanced_group_patching">Patching</string>
+    <string name="oru_advanced_group_backup">Backup</string>
+    <string name="oru_advanced_group_help">Help</string>
+    <string name="oru_settings_github_token">GitHub token</string>
+    <string name="oru_settings_github_token_helper">Needed for pull request sources.</string>
+    <string name="oru_settings_github_token_saved">Saved</string>
+    <string name="oru_settings_memory_limit">Memory limit</string>
+    <string name="oru_settings_memory_limit_description">Memory limit, %1$s</string>
+    <string name="oru_settings_memory_limit_helper">Higher limits help large apps patch. Lower it if patching gets killed.</string>
+    <string name="oru_settings_memory_limit_recommended">Use recommended (%1$s)</string>
+    <string name="oru_settings_memory_limit_ignored">This phone did not apply the limit, so a change may have no effect.</string>
+</resources>

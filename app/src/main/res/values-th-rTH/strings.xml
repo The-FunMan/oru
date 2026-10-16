@@ -563,8 +563,6 @@
     <string name="patcher_field_value_stripped">ถูกตัดออก</string>
     <!-- Value of "Libraries": every library was left in the patched APK -->
     <string name="patcher_field_value_kept">คงไว้</string>
-    <string name="patcher_tab_logs">บันทึกตัวแพตช์</string>
-    <string name="patcher_tab_game">เกม</string>
     <string name="patcher_logs_waiting">กำลังรอผลลัพธ์บันทึก…</string>
     <string name="patcher_logs_lost">ผลลัพธ์บันทึกจะไม่ถูกเก็บไว้เมื่อรีสตาร์ทแอป</string>
     <string name="patcher_long_step_warning">ขั้นตอนนี้อาจใช้เวลานาน โปรดรอสักครู่…</string>
@@ -594,7 +592,6 @@
     <string name="patcher_install_error_subtitle">ลองถอนการติดตั้งแล้วติดตั้งใหม่อีกครั้ง</string>
     <string name="patcher_ready_to_mount_subtitle">กดปุ่มด้านล่างเพื่อ Mount</string>
     <string name="patcher_patches_excluded_for_installer">ไม่สามารถใช้ได้กับวิธีการติดตั้งนี้ และไม่รวม: %s</string>
-    <string name="patcher_back_to_game_hint">แตะ %1$s เพื่อกลับไปยังเกมของคุณ</string>
     <string name="patcher_storage_permission_dialog_title">ไม่สามารถเข้าถึงเส้นทางเก็บข้อมูล</string>
     <string name="patcher_incompatible_patcher_title">จำเป็นต้องอัปเดต</string>
     <string name="patcher_incompatible_patcher_description">แหล่งที่มา &lt;b&gt;%1$s&lt;/b&gt; ต้องใช้แพตเชอร์ &lt;b&gt;%2$s&lt;/b&gt; หรือใหม่กว่า อัปเดต Morphe เพื่อใช้งาน</string>
@@ -691,29 +688,6 @@
     <string name="package_name">ชื่อแพ็กเกจ</string>
     <string name="failed_to_mount">ไม่สามารถติดตั้งใช้งานได้: %s</string>
     <string name="failed_to_unmount">ไม่สามารถยกเลิกการติดตั้งใช้งานได้: %s</string>
-    <!-- Patcher Screen - Mini-games -->
-    <string name="mini_game_score">คะแนน %s</string>
-    <string name="mini_game_best">ดีที่สุด %s</string>
-    <string name="mini_game_new_record">บันทึกใหม่!</string>
-    <string name="mini_game_game_over">เกมจบ</string>
-    <string name="mini_game_try_again">ลองอีกครั้ง</string>
-    <string name="mini_game_paused">หยุดชั่วคราว</string>
-    <string name="mini_game_resume">ดำเนินการต่อ</string>
-    <string name="mini_game_restart">เริ่มใหม่</string>
-    <string name="mini_game_change">เลือกเกมอื่น</string>
-    <string name="mini_game_2048_picker_subtitle">เลื่อนไทล์เพื่อรวมกัน</string>
-    <string name="mini_game_flappy_picker_subtitle">แตะเพื่อบินผ่านท่อ</string>
-    <string name="mini_game_flappy_tap_to_start">แตะเพื่อบิน</string>
-    <string name="mini_game_snake_picker_subtitle">กินอาหาร อย่าให้ชนตัวเอง</string>
-    <string name="mini_game_snake_swipe_to_start">ปัดเพื่อเริ่มเกม</string>
-    <string name="mini_game_dino_picker_subtitle">แตะเพื่อกระโดดข้ามกระบองเพชร</string>
-    <string name="mini_game_dino_tap_to_start">แตะเพื่อวิ่ง</string>
-    <string name="mini_game_blocks_picker_subtitle">วางชิ้นส่วนให้พอดี ลบเส้น</string>
-    <string name="mini_game_blocks_tap_to_start">แตะเพื่อหมุน ปัดเพื่อเลื่อน ปัดลงเพื่อวาง</string>
-    <string name="mini_game_bricks_picker_subtitle">ตีลูกบอลให้เด้ง ทำลายกำแพง</string>
-    <string name="mini_game_bricks_tap_to_start">ลากเพื่อเล็ง แตะเพื่อยิง</string>
-    <string name="mini_game_miner_picker_subtitle">แตะเพื่อเปิด กดค้างเพื่อวางธง</string>
-    <string name="mini_game_pairs_picker_subtitle">พลิกไพ่ หาคู่ที่ตรงกัน</string>
     <!-- Settings -->
     <string name="appearance">หน้าตา</string>
     <string name="advanced">ขั้นสูง</string>

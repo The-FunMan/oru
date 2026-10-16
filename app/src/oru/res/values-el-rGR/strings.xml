@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="adaptive_icon_guide_png_body">Ένα λογότυπο σε διαφανές φόντο λειτουργεί καλύτερα, με το χρώμα φόντου να επιλέγεται παρακάτω. Μια εικόνα χωρίς διαφάνεια γεμίζει αντί αυτού ολόκληρο το εικονίδιο και τότε τα θεματικά εικονίδια και τα εικονίδια ειδοποιήσεων διατηρούν το λογότυπο Oru.</string>
+    <string name="adaptive_icon_no_transparency_warning">Αυτή η εικόνα δεν έχει διαφανή pixel, οπότε τα θεματικά εικονίδια και τα εικονίδια ειδοποιήσεων διατηρούν το λογότυπο Oru</string>
+    <string name="battery_optimization_dialog_description">Ορισμένες συσκευές ενδέχεται να σταματήσουν το πρόγραμμα επισκευής όταν η εφαρμογή ελαχιστοποιηθεί. Επιτρέψτε στο Oru να εκτελείται χωρίς περιορισμούς μπαταρίας για να διασφαλίσετε ότι η επισκευή ολοκληρώνεται αξιόπιστα</string>
+    <string name="deep_link_add_source_message">Θέλετε να προσθέσετε αυτή την πηγή τροποποιήσεων στο Oru;</string>
+    <string name="external_batch_patch_description">Το %s θέλει να κάνει το Oru να διορθώσει και να εγκαταστήσει εφαρμογές</string>
+    <string name="home_apk_helper_description">Το Oru θα ζητήσει από την βοηθητική εφαρμογή παρακάτω να κατεβάσει το αρχικό APK και να παραδώσει το αρχείο</string>
+    <string name="home_apk_helper_installed_unavailable">Ο Oru δεν μπόρεσε να χρησιμοποιήσει την εγκατεστημένη εφαρμογή</string>
+    <string name="home_apk_helper_warning">Συνεχίστε μόνο εάν εμπιστεύεστε αυτή τη βοηθητική εφαρμογή. Η Oru ελέγχει το πακέτο, την έκδοση και την υπογραφή όποιου κι αν λάβει περιεχόμενο πριν από την εφαρμογή διορθώσεων</string>
+    <string name="home_apk_helper_warning_unverified">Συνεχίστε μόνο εάν εμπιστεύεστε αυτή τη βοηθητική εφαρμογή. Η Oru δεν μπορεί να επαληθεύσει την υπογραφή αυτού του APK, επομένως ένα τροποποιημένο αρχείο δεν θα ανιχνευθεί</string>
+    <string name="home_app_filter_not_patched_description">Εφαρμογές που δεν έχετε επιδιορθώσει ακόμα στο Oru</string>
+    <string name="home_app_filter_patched_description">Εφαρμογές που έχετε επιδιορθώσει ή αποθηκεύσει με το Oru</string>
+    <string name="home_app_filter_uninstalled_description">Εφαρμογές που έχουν επιδιορθωθεί με το Oru και δεν βρίσκονται πλέον σε αυτήν τη συσκευή</string>
+    <string name="home_app_info_app_deleted_description">Η εφαρμογή αυτή απεγκαταστάθηκε εκτός του Oru. Τροποποιήστε την ξανά για την επαναφορά λειτουργικότητά της</string>
+    <string name="home_app_info_install_unverified">Η Oru δεν μπορεί να επιβεβαιώσει ότι η εγκατεστημένη εφαρμογή είναι η έκδοση που τροποποίησε. Επαναλάβετε την τροποποίηση ή επανεγκαταστήστε την από το αποθηκευμένο APK για να επαναφέρετε τις ενέργειές της</string>
+    <string name="home_app_info_not_patched_description">Μια μη ενημερωμένη έκδοση αυτής της εφαρμογής είναι εγκατεστημένη. Το Oru εξακολουθεί να έχει το προηγούμενο αρχείο επιδιορθώσεων.</string>
+    <string name="home_download_instructions_download_button_toast_6">Είσαι πλέον επίσημος δοκιμαστής κουμπιού Oru 🏅</string>
+    <string name="home_download_instructions_step2_search_note">Το Oru δεν μπορεί να εγγυηθεί για αυτούς τους ιστότοπους. Παραλείψτε όσους προσφέρουν το δικό τους κατάστημα εφαρμογών αντί για αρχείο APK</string>
+    <string name="home_download_instructions_step4">Μετά την ολοκλήρωση της λήψης, επιστρέψτε στο Oru</string>
+    <string name="home_download_instructions_step4_mount">Μετά την εγκατάσταση του πρωτότυπου APK, επιστρέψτε στο Oru</string>
+    <string name="home_held_back_title">Μια πηγή ενημερώσεων προκάλεσε σφάλμα στο Oru</string>
+    <string name="home_outdated_manager_title">Η εφαρμογή Oru είναι παλιά</string>
+    <string name="home_update_available">Διαθέσιμη ενημέρωση του Oru</string>
+    <string name="installer_shizuku_error_permission">Λείπει άδεια Shizuku. Χορηγήστε άδεια στο Oru και δοκιμάστε ξανά.</string>
+    <string name="installer_status_shizuku_permission">Δώστε άδεια στο Oru από την εφαρμογή Shizuku</string>
+    <string name="installing_manager_update_hint">Το Oru θα κλείσει για να ολοκληρωθεί η ενημέρωση</string>
+    <string name="launch_app_unverified">Η Oru δεν μπόρεσε να επαληθεύσει ότι η εγκατεστημένη εφαρμογή είναι η έκδοση που επιδιόρθωσε</string>
+    <string name="notification_bundle_update_text_unversioned">Πατήστε για να ανοίξετε το Oru και να ενημερώσετε</string>
+    <string name="notification_channel_manager_updates">Ενημερώσεις Oru</string>
+    <string name="notification_channel_manager_updates_description">Ειδοποιήσεις για νέες εκδόσεις του Oru</string>
+    <string name="notification_channel_patcher_description">Εμφανίζεται όταν το Oru ενημερώνει μια εφαρμογή στο παρασκήνιο</string>
+    <string name="notification_mount_replaced_text">v%1$s αντικατέστησε την πατσαρισμένη v%2$s. Ανοίξτε το Oru για να την επαναφέρετε</string>
+    <string name="notification_permission_dialog_description">Το Oru χρειάζεται άδεια ειδοποιήσεων για να σας ειδοποιεί όταν είναι διαθέσιμες ενημερώσεις στο παρασκήνιο</string>
+    <string name="onboarding_settings_desc">Προσαρμόστε το Oru: εμφάνιση, προχωρημένες επιλογές και εργαλεία συστήματος</string>
+    <string name="patcher_incompatible_patcher_description">Η πηγή &lt;b&gt;%1$s&lt;/b&gt; απαιτεί τον patcher &lt;b&gt;%2$s&lt;/b&gt; ή νεότερο. Ενημερώστε το Oru για να τον χρησιμοποιήσει</string>
+    <string name="patcher_installed_conflict_body">"Η Oru υπογράφει τις τροποποιημένες εφαρμογές με το δικό της πιστοποιητικό, το οποίο διαφέρει από το αρχικό. Το Android απαιτεί την κατάργηση της υπάρχουσας έκδοσης πριν από την εγκατάσταση της τροποποιημένης εφαρμογής.
+
+Η απεγκατάσταση θα διαγράψει οριστικά όλα τα δεδομένα της εφαρμογής."</string>
+    <string name="patcher_storage_permission_description_api30">Μία ή περισσότερες επιλογές τροποποιήσεων πηγαίνουν σε διαδρομές που το Oru δεν μπορεί να διαβάσει. Δώστε άδεια αποθήκευσης και πατήστε το κουμπί, στη συνέχεια η διαδικασία τροποποίησης θα ξεκινήσει αυτόματα</string>
+    <string name="patcher_storage_permission_hint">Συμβουλή: Μετακινήστε τα αρχεία στο /Android/data/app.oru.manager/files/ - Δε χρειάζονται επιπλέον άδειες</string>
+    <string name="root_mount_module_unmount_warning">Εάν το KernelSU έχει ενεργοποιημένα από προεπιλογή modules Αποσυναρμολόγησης, ανοίξτε το KernelSU &gt; Superuser &gt; την εφαρμογή που τοποθετήσατε &gt; Profile &gt; Custom και απενεργοποιήστε τα modules Αποσυναρμολόγησης. Διαφορετικά, το τοποθετημένο τροποποιημένο APK ενδέχεται να μην έχει αποτέλεσμα, ακόμη και αν το Oru το εμφανίζει ως τοποθετημένο</string>
+    <string name="settings_advanced_expert_mode_description">Ενεργοποιήστε περίπλοκες ρυθμίσεις τροποποιήσεων του Oru και προσαρμοσμένες επιλογές</string>
+    <string name="settings_advanced_github_pat_export_include_supporting">Προσθέτει αυτό το PAT στις εξαγόμενες ρυθμίσεις του Oru</string>
+    <string name="settings_advanced_patch_options_custom_branding_custom_icon_instruction">"Φάκελος με εικόνες για χρήση ως προσαρμοσμένο εικονίδιο.
+
+Ο φάκελος πρέπει να περιέχει έναν ή περισσότερους από τους ακόλουθους φακέλους, ανάλογα με το DPI της συσκευής:
+- mipmap-mdpi
+- mipmap-hdpi
+- mipmap-xhdpi
+- mipmap-xxhdpi
+- mipmap-xxxhdpi
+
+Καθένας από τους φακέλους πρέπει να περιέχει όλα τα ακόλουθα αρχεία:
+morphe_adaptive_background_custom.png
+morphe_adaptive_foreground_custom.png
+
+Οι διαστάσεις της εικόνας πρέπει να είναι οι εξής:
+- mipmap-mdpi: 108x108 px
+- mipmap-hdpi: 162x162 px
+- mipmap-xhdpi: 216x216 px
+- mipmap-xxhdpi: 324x324 px
+- mipmap-xxxhdpi: 432x432 px
+
+Προαιρετικά, η διαδρομή περιέχει έναν φάκελο 'drawable' με ένα μονοχρωματικό αρχείο εικονιδίου:
+morphe_adaptive_monochrome_custom.xml
+
+Προαιρετικά, η διαδρομή περιέχει ένα εικονίδιο ειδοποίησης σε μία από τις ακόλουθες μορφές:
+- XML vector drawable στο 'drawable':
+  morphe_notification_icon_custom.xml
+- PNG raster images στους φακέλους 'drawable-dpi':
+  drawable-mdpi/morphe_notification_icon_custom.png (24x24 px)
+  drawable-hdpi/morphe_notification_icon_custom.png (36x36 px)
+  drawable-xhdpi/morphe_notification_icon_custom.png (48x48 px)
+  drawable-xxhdpi/morphe_notification_icon_custom.png (72x72 px)
+  drawable-xxxhdpi/morphe_notification_icon_custom.png (96x96 px)"</string>
+    <string name="settings_advanced_patch_options_custom_header_instruction">"Φάκελος με εικόνες για χρήση ως προσαρμοσμένο λογότυπο επικεφαλίδας.
+
+Ο φάκελος πρέπει να περιέχει έναν ή περισσότερους από τους ακόλουθους φακέλους, ανάλογα με το DPI της συσκευής:
+- drawable-hdpi
+- drawable-xhdpi
+- drawable-xxhdpi
+- drawable-xxxhdpi
+
+Κάθε ένας από τους φακέλους πρέπει να περιέχει όλα τα ακόλουθα αρχεία:
+morphe_header_custom_light.png
+morphe_header_custom_dark.png
+
+Οι διαστάσεις της εικόνας πρέπει να είναι οι εξής:
+- drawable-hdpi: 194x72 px
+- drawable-xhdpi: 258x96 px
+- drawable-xxhdpi: 387x144 px
+- drawable-xxxhdpi: 512x192 px"</string>
+    <string name="settings_advanced_updates_allow_metered_description">Να επιτρέπεται η λήψη των ενημερώσεων του Oru και των τροποποιήσεων μέσω δεδομένων κινητής τηλεφωνίας</string>
+    <string name="settings_advanced_updates_manager_prereleases_description">Πρόωρη πρόσβαση σε νέες εκδόσεις του Oru</string>
+    <string name="settings_advanced_updates_prerelease_warning_message">"Οι εκδόσεις προ-έκδοσης του Oru είναι ακόμη υπό ανάπτυξη και μπορεί να είναι ασταθείς.
+
+Οι επιδιορθώσεις δεν επηρεάζονται: ενεργοποιήστε τις επιδιορθώσεις προ-έκδοσης για κάθε πηγή στη λίστα πηγών επιδιορθώσεων"</string>
+    <string name="settings_appearance_app_icon_selector_description">Πώς φαίνεται το Oru στην αρχική οθόνη και στο συρτάρι εφαρμογών</string>
+    <string name="settings_auto_uninstall_warning_message">Εάν το Android αναφέρει μια σύγκρουση υπογραφών κατά την αυτόματη εγκατάσταση του Shizuku, το Oru θα απεγκαταστήσει την υπάρχουσα εφαρμογή πριν εγκαταστήσει το διορθωμένο APK.</string>
+    <string name="settings_system_apk_download_helper_warning">Το APK προέρχεται από τη βοηθητική εφαρμογή, γι\' αυτό εμπιστευτείτε μόνο εφαρμογές που γνωρίζετε. Το Oru εξακολουθεί να ελέγχει το πακέτο, την έκδοση και την υπογραφή κάθε αρχείου πριν από την τροποποίηση.</string>
+    <string name="settings_system_custom_file_picker_description">Χρησιμοποιήστε την ενσωματωμένη επιλογή αρχείων του Oru αντί για την προεπιλεγμένη του συστήματος</string>
+    <string name="settings_system_export_manager_settings_fail">Αποτυχία εξαγωγής των ρυθμίσεων του Oru: %s</string>
+    <string name="settings_system_export_manager_settings_success">Επιτυχής εξαγωγή ρυθμίσεων του Oru</string>
+    <string name="settings_system_import_manager_settings_description">Δημιουργεί αντίγραφα ασφαλείας και επαναφέρει τις ρυθμίσεις του Oru</string>
+    <string name="settings_system_import_manager_settings_fail">Αποτυχία εισαγωγής των ρυθμίσεων του Oru: %s</string>
+    <string name="settings_system_import_manager_settings_mode_title">Εισαγωγή ρυθμίσεων του Oru</string>
+    <string name="settings_system_import_manager_settings_success">Επιτυχής εισαγωγή ρυθμίσεων του Oru</string>
+    <string name="settings_system_morphe_settings">Ρυθμίσεις Oru</string>
+    <string name="settings_system_process_runtime_heap_limit_ignored">Αυτή η συσκευή αγνόησε το όριο μνήμης κατά την τελευταία εκτέλεση, οπότε η εφαρμογή διορθώσεων ενδέχεται να χρησιμοποιήσει ως εναλλακτική την εκτέλεση εντός του Oru.</string>
+    <string name="settings_system_signing_key_dialog_description">Κάθε εφαρμογή που επιδιορθώνει το Oru υπογράφεται με αυτό το κλειδί. Φυλάξτε ένα αντίγραφο: χωρίς αυτό, οι επιδιορθωμένες εφαρμογές μπορούν να ενημερωθούν μόνο μετά την απεγκατάστασή τους.</string>
+    <string name="settings_system_signing_key_missing">Το Oru δημιουργεί ένα με την πρώτη σας επιδιόρθωση.</string>
+    <string name="settings_system_storage_open_app_info_description">Διαχείριση ή εκκαθάριση όλων των δεδομένων του Oru μέσω των ρυθμίσεων του συστήματος</string>
+    <string name="sources_dialog_community_notice_message">"Οι πηγές patches κοινότητας δημιουργούνται και συντηρούνται από τους ίδιους τους συγγραφείς. Η Oru δεν εξετάζει ούτε επαληθεύει patches τρίτων και δεν είναι υπεύθυνη για το περιεχόμενό τους ή για ό,τι κάνουν στη συσκευή σας.
+
+Οτιδήποτε προσθέτετε από αυτόν τον ιστότοπο χρησιμοποιείται με δική σας ευθύνη."</string>
+    <string name="sources_management_held_back_hint">Αυτή η πηγή προκάλεσε σφάλμα στο Oru κατά τη φόρτωση, οπότε παραλείπεται. Ενημερώστε την ή εισάγετέ την ξανά για να δοκιμάσετε ξανά.</string>
+    <string name="sources_management_outdated_manager_badge">Ενημέρωση Oru</string>
+    <string name="sources_management_outdated_manager_hint">Αυτή η πηγή είναι κατασκευασμένη για το patcher %1$s, αλλά η Oru %2$s περιλαμβάνει το patcher %3$s. Ενημερώστε την Oru για να το χρησιμοποιήσετε</string>
+    <string name="tour_prompt_desc">Θέλετε μια γρήγορη περιήγηση στις βασικές λειτουργίες του Oru;</string>
+    <string name="uninstall_app_unverified">Παρέμεινε στη θέση του: Η Oru δεν μπόρεσε να επαληθεύσει ότι η εγκατεστημένη εφαρμογή είναι η έκδοση που επιδιόρθωσε</string>
+</resources>

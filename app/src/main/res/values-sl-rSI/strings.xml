@@ -563,8 +563,6 @@ Za najboljše rezultate ta aplikacija priporoča popravljanje &lt;b&gt;polnega A
     <string name="patcher_field_value_stripped">odstranjene</string>
     <!-- Value of "Libraries": every library was left in the patched APK -->
     <string name="patcher_field_value_kept">ohranjene</string>
-    <string name="patcher_tab_logs">Dnevniki popravkov</string>
-    <string name="patcher_tab_game">Igre</string>
     <string name="patcher_logs_waiting">Čakam na izpis dnevnika…</string>
     <string name="patcher_logs_lost">Izpis dnevnika ni shranjen ob ponovnem zagonu aplikacije.</string>
     <string name="patcher_long_step_warning">Ta korak lahko traja nekaj časa. Prosim, počakajte…</string>
@@ -594,7 +592,6 @@ Odstranitev bo trajno izbrisala vse podatke aplikacije."</string>
     <string name="patcher_install_error_subtitle">Poskusite aplikacijo ponovno odstraniti in namestiti</string>
     <string name="patcher_ready_to_mount_subtitle">Pritisnite gumb spodaj za montažo</string>
     <string name="patcher_patches_excluded_for_installer">Ni na voljo za to metodo namestitve in je izključeno: %s</string>
-    <string name="patcher_back_to_game_hint">Dotakni se %1$s, da se vrneš v svojo igro.</string>
     <string name="patcher_storage_permission_dialog_title">Dostopa do poti shrambe ni možen</string>
     <string name="patcher_incompatible_patcher_title">Posodobitev je zahtevana</string>
     <string name="patcher_incompatible_patcher_description">Vir &lt;b&gt;%1$s&lt;/b&gt; zahteva orodje za popravljanje &lt;b&gt;%2$s&lt;/b&gt; ali novejše. Posodobite Morphe, da ga boste lahko uporabili</string>
@@ -691,29 +688,6 @@ Odstranitev bo trajno izbrisala vse podatke aplikacije."</string>
     <string name="package_name">Ime paketa</string>
     <string name="failed_to_mount">Montiranje ni uspelo: %s</string>
     <string name="failed_to_unmount">Demontiranje ni uspelo: %s</string>
-    <!-- Patcher Screen - Mini-games -->
-    <string name="mini_game_score">Rezultat %s</string>
-    <string name="mini_game_best">Najboljši %s</string>
-    <string name="mini_game_new_record">Nov rekord!</string>
-    <string name="mini_game_game_over">Konec igre</string>
-    <string name="mini_game_try_again">Poskusite znova</string>
-    <string name="mini_game_paused">Pavza</string>
-    <string name="mini_game_resume">Nadaljuj</string>
-    <string name="mini_game_restart">Začni znova</string>
-    <string name="mini_game_change">Izberi drugo igro</string>
-    <string name="mini_game_2048_picker_subtitle">Združite ploščice, da pridete do čim višje številke</string>
-    <string name="mini_game_flappy_picker_subtitle">Tapkajte in poletite skozi cevi</string>
-    <string name="mini_game_flappy_tap_to_start">Tapnite za polet</string>
-    <string name="mini_game_snake_picker_subtitle">Zbirajte hrano, a ne zadanite zida</string>
-    <string name="mini_game_snake_swipe_to_start">Podrsajte za začetek</string>
-    <string name="mini_game_dino_picker_subtitle">Tapnite, da preskočite kaktuse</string>
-    <string name="mini_game_dino_tap_to_start">Tapnite za začetek teka</string>
-    <string name="mini_game_blocks_picker_subtitle">Sestavi oblike, počisti vrstice</string>
-    <string name="mini_game_blocks_tap_to_start">Dotakni se za vrtenje, povleci za premikanje, povleci navzdol za spust</string>
-    <string name="mini_game_bricks_picker_subtitle">Odbij žogo, podri steno</string>
-    <string name="mini_game_bricks_tap_to_start">Povleci za namerjanje, tapni za izstrelitev</string>
-    <string name="mini_game_miner_picker_subtitle">Dotaknite se za odpiranje, držite za označitev</string>
-    <string name="mini_game_pairs_picker_subtitle">Obrni kartice in poišči pare</string>
     <!-- Settings -->
     <string name="appearance">Izgled</string>
     <string name="advanced">Napredno</string>

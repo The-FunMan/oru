@@ -1,0 +1,21 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    target-branch: dev
+    schedule:
+      interval: weekly
+  - package-ecosystem: gradle
+    directories:
+      - /
+      - /patcher
+    target-branch: dev
+    schedule:
+      interval: weekly   # verification-metadata must be regenerated in the same PR when dependencies change
+  - package-ecosystem: cargo
+    directories:
+      - /native
+      - /native-packager
+    target-branch: dev
+    schedule:
+      interval: weekly
