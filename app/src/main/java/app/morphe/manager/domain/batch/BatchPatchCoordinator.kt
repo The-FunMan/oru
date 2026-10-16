@@ -838,6 +838,7 @@ internal class InputPrefetcher<K, V : Any>(
         drop(current)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private suspend fun drop(current: Pending<K, V>) = withContext(NonCancellable) {
         current.input.cancelAndJoin()
         if (!current.input.isCancelled) current.input.getCompleted()?.let(discard)

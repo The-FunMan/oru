@@ -496,7 +496,8 @@ private fun OruMemoryLimitRow(
                 color = scheme.onSurfaceVariant,
             )
         }
-        Slider(
+        // The SliderState overload has no onValueChange, so the snapping and tick logic below would need reworking.
+        @Suppress("DEPRECATION") Slider(
             value = shownLimit.toFloat(),
             onValueChange = { position ->
                 val next = snapMemoryLimit(position, maxLimit)

@@ -140,7 +140,7 @@ object OruFocusReducer {
                         actions = emptyList(),
                         blocking = true,
                         freeBytes = free,
-                        neededBytes = apk!! * READY_STORAGE_FACTOR - free!!,
+                        neededBytes = apk * READY_STORAGE_FACTOR - free,
                     ),
                 )
             }

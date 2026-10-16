@@ -41,6 +41,7 @@ import app.morphe.manager.ui.viewmodel.HomeViewModel
 import app.morphe.manager.ui.viewmodel.InstallViewModel
 import app.morphe.manager.ui.viewmodel.PatcherViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
@@ -174,7 +175,7 @@ class OruFocusViewModel(private val deps: OruFocusDeps) : ViewModel() {
         // and the owner's last value stays when it releases the run.
         deps.singleRunOwner?.let { owner ->
             viewModelScope.launch { owner.install.filterNotNull().collect { installer = it } }
-            viewModelScope.launch {
+            @OptIn(ExperimentalCoroutinesApi::class) viewModelScope.launch {
                 owner.install.filterNotNull().flatMapLatest { it.state }.collect { installState = it }
             }
             viewModelScope.launch {

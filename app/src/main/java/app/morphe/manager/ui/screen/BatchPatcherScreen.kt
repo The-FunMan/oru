@@ -427,7 +427,7 @@ fun BatchPatcherScreen(
                     )
                     // Each app ramps the background up from rest
                     PatchingBackgroundSpeedEffect(
-                        active = current.activeRun != null,
+                        active = true,
                         progress = { displayProgress.target },
                         onSpeedChange = onBackgroundSpeedChange,
                         run = shownRun

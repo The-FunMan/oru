@@ -109,7 +109,7 @@ fun resolveAppliedBundleAttribution(
         ?: bundleName?.takeUnless { it.isBlank() }
         // ORU: a name recorded for the default source is shown with the oru label
         ?: recorded?.bundleName?.takeUnless { it.isBlank() }?.let { name ->
-            OruSourceNames.displayName(name, isDefault = recorded?.bundleUid == DEFAULT_SOURCE_UID)
+            OruSourceNames.displayName(name, isDefault = recorded.bundleUid == DEFAULT_SOURCE_UID)
         }
         ?: fallbackTitle,
     version = storedVersion?.takeUnless { it.isBlank() }
