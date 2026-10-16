@@ -29,7 +29,6 @@ data class OruTileSource(
 data class OruChipUi(
     val text: String,
     val tone: OruTone = OruTone.Neutral,
-    val mono: Boolean = false,
 )
 
 @Immutable

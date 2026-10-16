@@ -95,7 +95,7 @@ data class OruHomeCard(
     val primary: OruHomeAction,
     val secondary: OruHomeAction?,
     val chipTone: OruTone,
-    /** The version a mono chip shows, or null when there is none to show. Simple reads it for the APK sentence only. */
+    /** The version the card names, or null when there is none to show. Simple reads it for the APK sentence only. */
     val version: String?,
     /** The version the sources recommend, shown as the Latest chip of an app that can be updated. */
     val latestVersion: String? = null,

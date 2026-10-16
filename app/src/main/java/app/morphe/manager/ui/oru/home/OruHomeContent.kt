@@ -655,10 +655,10 @@ private fun OruHomeCard.expertChips(): List<OruChipUi> = buildList {
     if (customized) add(customizedChip())
     // An app that can be updated shows the patched copy beside the newest version the sources support
     if (status == OruHomeCardStatus.UpdateAvailable) {
-        version?.let { add(OruChipUi(text = stringResource(R.string.oru_chip_patched_version, it), tone = OruTone.Neutral, mono = true)) }
-        latestVersion?.let { add(OruChipUi(text = stringResource(R.string.oru_chip_latest_version, it), tone = OruTone.Neutral, mono = true)) }
+        version?.let { add(OruChipUi(text = stringResource(R.string.oru_chip_patched_version, it), tone = OruTone.Neutral)) }
+        latestVersion?.let { add(OruChipUi(text = stringResource(R.string.oru_chip_latest_version, it), tone = OruTone.Neutral)) }
     } else {
-        version?.let { add(OruChipUi(text = it, tone = OruTone.Neutral, mono = true)) }
+        version?.let { add(OruChipUi(text = it, tone = OruTone.Neutral)) }
     }
 }
 
