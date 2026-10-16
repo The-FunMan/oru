@@ -289,6 +289,8 @@ android {
                 // Specific META-INF junk
                 "/META-INF/DEPENDENCIES",
                 "/META-INF/INDEX.LIST",
+                // Bouncy Castle 1.86 ships the same licence file in three jars, and the licences are listed in About
+                "/META-INF/LICENSE.md",
 
                 // Crypto optional metadata
                 "/org/bouncycastle/pqc/**.properties",

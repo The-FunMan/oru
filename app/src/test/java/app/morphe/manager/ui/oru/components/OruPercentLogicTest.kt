@@ -92,7 +92,7 @@ class OruPercentLogicTest {
         assertEquals(25, oruAnnouncedPercent(25))
         assertEquals(25, oruAnnouncedPercent(49))
         assertEquals(50, oruAnnouncedPercent(50))
-        assertEquals(75, oruAnnouncedPercent(74))
+        assertEquals(50, oruAnnouncedPercent(74))
         assertEquals(75, oruAnnouncedPercent(99))
         assertEquals(100, oruAnnouncedPercent(100))
     }

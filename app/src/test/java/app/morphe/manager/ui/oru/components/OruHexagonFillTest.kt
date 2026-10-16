@@ -32,7 +32,7 @@ class OruHexagonFillTest {
     @Test
     fun `the fill starts at the bottom of the hexagon and rises`() {
         // Screen y grows downwards, so the bottom has the largest centroid y
-        for ((lower, higher) in order.zipWithNext()) {
+        for ((lower, higher) in order.toList().zipWithNext()) {
             assertTrue(
                 centroidY(lower) >= centroidY(higher) - ROW_EPSILON,
                 "piece $higher is lit after $lower but sits lower",
