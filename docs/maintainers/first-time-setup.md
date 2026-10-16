@@ -52,7 +52,7 @@ The repo does not define the variable for the Gradle token (see step 7).
 
 The release key signs the APKs that users install and update. Losing it, or leaking it, is covered in `chores.md` ("Rotating the signing key").
 
-- [ ] Create the key on a machine you control. Key creation is not set up in the repo: there is no script for it. The keystore must be at `app/keystore.jks` for a local release build, the alias must be the value you store in `KEYSTORE_ENTRY_ALIAS`, and the passwords must match the two password secrets. Example with the JDK tool (check the options with `keytool -help` first):
+- [ ] Create the key on a machine you control. Key creation is not set up in the repo: there is no script for it. The keystore must be at `app/keystore.jks` for a local release build, the alias must be the value you store in `KEYSTORE_ENTRY_ALIAS`, and the passwords must match the two password secrets. A PKCS12 keystore protects the key with the store password and ignores a different key password, so set `KEYSTORE_ENTRY_PASSWORD` to the same value as `KEYSTORE_PASSWORD`. Example with the JDK tool (check the options with `keytool -help` first):
 
   ```sh
   keytool -genkeypair -keystore app/keystore.jks -storetype PKCS12 -alias oru-release -keyalg RSA -keysize 4096 -validity 10000

@@ -162,7 +162,10 @@ Oru is a modified version of Morphe Manager (https://github.com/MorpheApp/morphe
 - Product and company names belong to their owners. They are used only to identify the app that a patch targets.
 - Patching an app can change how it behaves and may break it. Patching may also go against the terms of service of that app. You are responsible for the apps you patch, for the APK files you use, and for how you use the result. Use only files you are entitled to use.
 - Oru does not, by itself, bypass any protection of an app, and it never downloads a stock APK. Any change to an app comes from the patch bundle you choose to run.
-- Oru is provided as is, without warranty of any kind, as described in sections 15 and 16 of the GPLv3.
+- Oru is provided as is, without warranty of any kind, as described in sections 15 and 16 of the GPLv3. To the extent the law allows, the maintainers and contributors are not liable for any damage, data loss, loss of access to an account or service, or other harm that results from using Oru, from the apps you patch with it, or from patch bundles written by others. You use Oru at your own risk.
+- Oru runs patch bundles that other people wrote. Oru does not review, audit or control them, and a bundle can do anything its code allows. Run only bundles from authors you trust, and keep your own backups.
+- The patched apps that Oru builds are signed with a key that is created on your phone and stays there. Keep the backup of that key private. Anyone who has it can sign an update that your phone will accept as yours.
+- The releases of Oru itself are signed with the project's release key. Check the checksum and the signing certificate fingerprint listed in the release notes before you install, and do not install a build of Oru from anywhere else.
 
 ## Privacy
 
