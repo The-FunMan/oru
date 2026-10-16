@@ -54,12 +54,7 @@ val httpModule = module {
             requestTimeoutMillis = 10 * 60_000L
         }
         install(UserAgent) {
-            // The oru flavour identifies as Oru; the morphe flavour keeps upstream's agent string
-            agent = if (BuildConfig.UPSTREAM_SERVICES) {
-                "Morphe-Manager/${BuildConfig.VERSION_CODE}"
-            } else {
-                "Oru/${BuildConfig.VERSION_NAME}"
-            }
+            agent = "Oru/${BuildConfig.VERSION_NAME}"
         }
     }
 

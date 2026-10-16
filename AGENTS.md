@@ -12,7 +12,7 @@ Product principles: simple, opinionated, honest, quick. Defaults over settings. 
 
 | Path | What it holds |
 | --- | --- |
-| `app/` | The Android app. Flavors `oru` (the product) and `morphe` (kept for parity). Oru screens are in `app/src/main/java/app/morphe/manager/ui/oru/`. |
+| `app/` | The Android app, with one flavor, `oru`. Oru screens are in `app/src/main/java/app/morphe/manager/ui/oru/`. |
 | `patcher/` | The patcher library, a separate Gradle build included by the root build. Its public API is a compatibility surface. |
 | `native/`, `native-packager/` | Rust crates (JNI index, packaging and signing). |
 | `tools/parity/` | Python tools: the patch API guard and the parity checks. |
@@ -31,7 +31,7 @@ Set up a Linux box once with `scripts/dev/setup-linux.sh`, then `source` the `en
 | --- | --- |
 | Quick local checks | `scripts/dev/check.sh quick` |
 | Everything CI runs | `scripts/dev/check.sh full` |
-| App unit tests | `./gradlew :app:testOruDebugUnitTest :app:testMorpheDebugUnitTest` |
+| App unit tests | `./gradlew :app:testOruDebugUnitTest` |
 | Lint | `./gradlew :app:lint` |
 | Patcher tests and API check | `./gradlew :patcher:test :patcher:apiCheck` |
 | Debug-signed Oru APK | `./gradlew :app:assembleOruRelease -PsignAsDebug` |

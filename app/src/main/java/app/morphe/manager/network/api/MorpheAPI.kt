@@ -122,7 +122,6 @@ class MorpheAPI(
     internal var rejectedPat: String? = null
 
     // Lazy so URL parsing doesn't happen on construction — only when first needed
-    private val managerConfig: RepoConfig by lazy { parseRepoUrl(MANAGER_REPO_URL) }
     private val patchesConfig: RepoConfig by lazy { parseRepoUrl(SOURCE_REPO_URL) }
 
     /**
@@ -313,21 +312,6 @@ class MorpheAPI(
         )
     }
 
-    private fun mapManagerJsonToAsset(
-        config: RepoConfig,
-        releaseInfo: ManagerReleaseInfo
-    ): MorpheAsset {
-        val version = normalizeVersion(releaseInfo.version)
-        return MorpheAsset(
-            downloadUrl = releaseInfo.downloadUrl,
-            createdAt = parseTimestamp(releaseInfo.createdAt),
-            signatureDownloadUrl = releaseInfo.signatureDownloadUrl,
-            pageUrl = releasePageUrl(config.htmlUrl, version),
-            description = releaseInfo.description,
-            version = version
-        )
-    }
-
     private fun mapPatchesJsonToAsset(
         config: RepoConfig,
         releaseInfo: PatchesReleaseInfo
@@ -386,120 +370,15 @@ class MorpheAPI(
     private fun normalizeVersion(version: String): String =
         if (version.startsWith("v")) version else "v$version"
 
-    /** Returns true if [asset] looks like an Android APK by name or content-type. */
-    private fun isManagerAsset(asset: GitHubAsset): Boolean =
-        asset.name.endsWith(".apk", ignoreCase = true) ||
-                asset.contentType?.contains("android.package-archive", ignoreCase = true) == true
-
     /** True when the currently installed manager is a dev/pre-release build. */
     val isDevBuild: Boolean
         get() = BuildConfig.VERSION_NAME.contains('-')
 
-    /** Fetches the latest manager release metadata from GitHub Releases. */
-    private suspend fun getManagerFromGitHub(): APIResponse<MorpheAsset> {
-        val includePrerelease = prefs.useManagerPrereleases.get()
-        return fetchReleaseAsset(managerConfig, includePrerelease, ::isManagerAsset)
-    }
-
     /**
-     * Fetches manager metadata from the static JSON endpoint (bypasses GitHub API rate limits).
-     *
-     * [branch] determines which JSON URL is used (`dev` → prerelease, anything else → stable).
-     * The request is cache busted because the raw CDN serves stale copies of freshly pushed files.
+     * Always null: the app does not read Morphe's manager feed. Oru updates come from
+     * [OruUpdateSource], which [ManagerUpdateRepository] uses.
      */
-    private suspend fun getManagerFromJson(branch: String): APIResponse<MorpheAsset> {
-        val url = cacheBusted(if (branch == "dev") MANAGER_PRERELEASE_JSON_URL else MANAGER_RELEASE_JSON_URL)
-        return when (val response = client.request<ManagerReleaseInfo> {
-            url(url)
-            header("Cache-Control", "no-cache")
-        }) {
-            is APIResponse.Success -> runCatching {
-                mapManagerJsonToAsset(managerConfig, response.data).also {
-                    Log.d(tag, "Manager JSON ($branch): ${it.version} → ${it.downloadUrl}")
-                }
-            }.fold(
-                onSuccess = { APIResponse.Success(it) },
-                onFailure = {
-                    Log.w(tag, "Failed to map manager JSON ($branch)", it)
-                    APIResponse.Failure(APIFailure(it, null))
-                }
-            )
-
-            is APIResponse.Error -> APIResponse.Error(response.error)
-            is APIResponse.Failure -> APIResponse.Failure(response.error)
-        }
-    }
-
-    /**
-     * Returns a newer [MorpheAsset] if one is available, or null if the app is up to date.
-     *
-     * Channel selection logic (mirrors FCM subscription matrix in [app.morphe.manager.util.syncFcmTopics]):
-     *  - `usePrereleases == true` OR current build is dev → use `dev` branch / prerelease channel
-     *  - Otherwise → use `main` branch / stable channel
-     *
-     * Update sources:
-     *  - Primary: static JSON file ([USE_MANAGER_DIRECT_JSON] == true)
-     *  - Fallback: GitHub Releases API
-     *
-     * A newer version is reported only once its APK is downloadable, so a release that is
-     * already announced but still uploading is treated as if it did not exist yet.
-     */
-    suspend fun getAppUpdate(): MorpheAsset? {
-        // Morphe's manager APK would replace a build of another brand. Oru updates from its own feed
-        // (OruUpdateSource, routed by ManagerUpdateRepository), so this never answers for it
-        if (!BuildConfig.UPSTREAM_SERVICES) return null
-        val usePrereleases = prefs.useManagerPrereleases.get()
-        val currentWeight = versionWeight(BuildConfig.VERSION_NAME.removePrefix("v"))
-        val branch = if (usePrereleases) "dev" else "main"
-
-        val candidate = if (USE_MANAGER_DIRECT_JSON) {
-            getManagerFromJson(branch).fallbackTo {
-                Log.w(tag, "Manager JSON unavailable, falling back to GitHub API")
-                getManagerFromGitHub()
-            }
-        } else {
-            getManagerFromGitHub()
-        }.getOrNull()
-
-        // Return only if the remote version is strictly newer than what's installed. The stable
-        // channel offers stable builds alone: merging dev into main carries the dev release file
-        // along, and it stays there until the stable release replaces it
-        val update = candidate?.takeIf {
-            (usePrereleases || !it.version.contains('-')) &&
-                    versionWeight(it.version.removePrefix("v")) > currentWeight
-        } ?: return null
-
-        // Only a definitive "not there" hides the update: a check that could not run at all
-        // must not keep a real release from being offered
-        if (client.isReachable(update.downloadUrl) == false) {
-            Log.d(tag, "Manager update ${update.version} is announced but its APK is not downloadable yet")
-            return null
-        }
-
-        return update
-    }
-
-    /**
-     * Converts a semver-like version string to a comparable [Long] weight.
-     *
-     * Format: `MAJOR.MINOR.PATCH[-prerelease.N]`
-     *
-     * Stable releases rank strictly above pre-releases with the same core version:
-     * e.g. `1.2.3` > `1.2.3-beta.5`.
-     */
-    private fun versionWeight(version: String): Long {
-        val dashIdx = version.indexOf('-')
-        val core = if (dashIdx >= 0) version.substring(0, dashIdx) else version
-        val pre = if (dashIdx >= 0) version.substring(dashIdx + 1) else null
-        val parts = core.split('.').map { it.toIntOrNull() ?: 0 }
-        val major = parts.getOrElse(0) { 0 }.toLong()
-        val minor = parts.getOrElse(1) { 0 }.toLong()
-        val patch = parts.getOrElse(2) { 0 }.toLong()
-        // Stable gets a 100_000 bonus so it always beats any pre-release of the same version
-        val preWeight = if (pre == null) 100_000L
-        else pre.split('.').lastOrNull()?.toLongOrNull() ?: 0L
-        return major * 1_000_000_000L + minor * 1_000_000L + patch * 100_000L + preWeight
-    }
+    suspend fun getAppUpdate(): MorpheAsset? = null
 
     /**
      * Fetches patches update from the Morphe backend API.
@@ -555,44 +434,11 @@ class MorpheAPI(
         }
     }
 
-    /**
-     * Fetches the most recent GitHub release that passes [matcher] for its assets.
-     *
-     * Pre-releases are included only when [includePrerelease] is true.
-     * Draft releases are always skipped.
-     */
-    private suspend fun fetchReleaseAsset(
-        config: RepoConfig,
-        includePrerelease: Boolean,
-        matcher: (GitHubAsset) -> Boolean
-    ): APIResponse<MorpheAsset> {
-        return when (val r = githubRequest<List<GitHubRelease>>(config, "releases")) {
-            is APIResponse.Success -> runCatching {
-                val release = r.data.firstOrNull { release ->
-                    !release.draft
-                            && (includePrerelease || !release.prerelease)
-                            && release.assets.any(matcher)
-                } ?: throw IllegalStateException("No matching release found in ${config.name}")
-
-                mapReleaseToAsset(config, release, release.assets.first(matcher))
-            }.fold(
-                onSuccess = { APIResponse.Success(it) },
-                onFailure = { APIResponse.Failure(APIFailure(it, null)) }
-            )
-
-            is APIResponse.Error -> APIResponse.Error(r.error)
-            is APIResponse.Failure -> APIResponse.Failure(r.error)
-        }
-    }
-
     /** Fetches and parses the manager's CHANGELOG.md from the appropriate branch. */
-    suspend fun fetchManagerChangelog(forDevBranch: Boolean = isDevBuild): List<ChangelogEntry> {
-        // ORU: the changelog of the manager is Morphe's file, which a Oru build does not read. Its
-        // update dialog shows the notes of the release it offers instead
-        if (!BuildConfig.UPSTREAM_SERVICES) return emptyList()
-        val branch = if (forDevBranch) "dev" else "main"
-        return fetchChangelogFromRepo(managerConfig, branch, "CHANGELOG.md")
-    }
+    suspend fun fetchManagerChangelog(forDevBranch: Boolean = isDevBuild): List<ChangelogEntry> =
+        // The manager changelog is Morphe's file, which the app does not read. Its update dialog
+        // shows the notes of the release it offers instead
+        emptyList()
 
     /** Fetches and parses CHANGELOG.md from the first-party patches repository. */
     suspend fun fetchPatchesChangelog(branch: String = "main", stopAfterFirstStable: Boolean = false): List<ChangelogEntry> =

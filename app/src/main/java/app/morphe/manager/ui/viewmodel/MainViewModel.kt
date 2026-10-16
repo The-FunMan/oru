@@ -65,8 +65,8 @@ class MainViewModel(
      */
     var pendingExternalApkUri: Uri? by mutableStateOf(null)
 
-    /** ORU: production rules for the external trigger; the flavour decides trust. */
-    private val externalBatchGate: ExternalBatchGate = FlavorExternalBatchGate(BuildConfig.ORU_UX)
+    /** Production rules for the external trigger. */
+    private val externalBatchGate: ExternalBatchGate = FlavorExternalBatchGate(oruUx = true)
 
     /** Batch patch request received from another app, waiting to be gated. */
     var pendingBatchPatch: BatchPatchRequest? by mutableStateOf(null)
@@ -204,8 +204,7 @@ interface ExternalBatchGate {
 }
 
 /**
- * ORU: the gate used in the app. [oruUx] is `BuildConfig.ORU_UX`; tests pass it explicitly.
- * With it false (Morphe) the rules are the original ones.
+ * The gate used in the app is built with [oruUx] = true. Tests build it both ways.
  */
 class FlavorExternalBatchGate(private val oruUx: Boolean) : ExternalBatchGate {
     override fun verdict(

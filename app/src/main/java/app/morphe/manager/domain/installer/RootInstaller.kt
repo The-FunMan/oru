@@ -10,7 +10,6 @@ import android.content.pm.PackageInfo
 import android.os.Process
 import android.os.SystemClock
 import android.util.Log
-import app.morphe.manager.BuildConfig
 import app.morphe.manager.util.PLAY_STORE_INSTALLER_PACKAGE
 import app.morphe.manager.util.PM
 import app.morphe.manager.util.sha256OrNull
@@ -40,7 +39,7 @@ class RootInstaller(
     private var cachedIsMagisk: Boolean? = null
 
     // The root manager shows the module's description, so it names the product this build is
-    private val productName = if (BuildConfig.ORU_UX) "Oru" else "Morphe"
+    private val productName = "Oru"
 
     private val _mountChanges = MutableSharedFlow<String>(extraBufferCapacity = 8)
 

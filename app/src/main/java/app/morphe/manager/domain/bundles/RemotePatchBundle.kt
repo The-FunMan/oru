@@ -10,7 +10,6 @@
 
 package app.morphe.manager.domain.bundles
 
-import app.morphe.manager.BuildConfig
 import app.morphe.manager.domain.manager.PreferencesManager
 import app.morphe.manager.network.api.MorpheAPI
 import app.morphe.manager.network.dto.MorpheAsset
@@ -171,11 +170,11 @@ sealed class RemotePatchBundle(
             ?: browsePageUrl
 
     /**
-     * Add-source link for this source, see [addSourceLinkForEndpoint]. ORU: null in the oru
-     * flavour, so no share link to Morphe's website is built.
+     * Add-source link for this source. Always null: the oru build builds no share link to
+     * Morphe's website.
      */
     open val addSourceLink: String?
-        get() = if (BuildConfig.ORU_UX) null else addSourceLinkForEndpoint(endpoint, name)
+        get() = null
 
     /**
      * Shared cache logic for [fetchChangelogEntries] and its overrides.

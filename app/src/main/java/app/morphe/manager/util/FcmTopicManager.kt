@@ -5,10 +5,6 @@
 
 package app.morphe.manager.util
 
-import android.util.Log
-import app.morphe.manager.BuildConfig
-import com.google.firebase.messaging.FirebaseMessaging
-
 /**
  * FCM topic strings used for update push notifications.
  *
@@ -35,17 +31,10 @@ object FcmTopics {
 }
 
 /**
- * Synchronizes all four FCM topic subscriptions with the user's current preferences.
+ * Keeps the FCM topic subscriptions in line with the user's preferences.
  *
- * | Parameter             | stable topic | dev topic    |
- * |-----------------------|--------------|--------------|
- * | useManagerPrereleases | ✓ always     | if true only |
- * | usePatchesPrereleases | ✓ always     | if true only |
- *
- * When [notificationsEnabled] is false, unsubscribes from all four topics.
- *
- * Custom third-party bundles do not have FCM topics — only the built-in Morphe bundle does.
- * Safe to call multiple times — FCM deduplicates subscribe/unsubscribe internally.
+ * Oru does not subscribe to Morphe's FCM topics, so this does nothing. Callers still pass their
+ * preferences, and the parameters are kept so they do not change.
  *
  * Called from:
  * - [app.morphe.manager.ManagerApplication] on every cold start
@@ -56,38 +45,4 @@ fun syncFcmTopics(
     useManagerPrereleases: Boolean,
     usePatchesPrereleases: Boolean = false,
 ) {
-    // Firebase is only configured for Morphe's own builds
-    if (!BuildConfig.UPSTREAM_SERVICES) return
-    val messaging = FirebaseMessaging.getInstance()
-
-    if (!notificationsEnabled) {
-        FcmTopics.all.forEach { topic ->
-            messaging.unsubscribeFromTopic(topic)
-                .addOnCompleteListener { Log.d("FcmTopicSync", "Unsubscribed from $topic") }
-        }
-        return
-    }
-
-    // Stable topics: always subscribed when notifications are enabled
-    // Dev topics: only when user has explicitly enabled prereleases
-    messaging.syncTopic(FcmTopics.MANAGER_STABLE, subscribe = true)
-    messaging.syncTopic(FcmTopics.MANAGER_DEV,    subscribe = useManagerPrereleases)
-    messaging.syncTopic(FcmTopics.PATCHES_STABLE, subscribe = true)
-    messaging.syncTopic(FcmTopics.PATCHES_DEV,    subscribe = usePatchesPrereleases)
-}
-
-/**
- * Subscribes to or unsubscribes from a single FCM topic and logs the result.
- */
-private fun FirebaseMessaging.syncTopic(topic: String, subscribe: Boolean) {
-    val tag = "Morphe FcmTopicSync"
-    if (subscribe) {
-        subscribeToTopic(topic).addOnCompleteListener { task ->
-            Log.d(tag, if (task.isSuccessful) "Subscribed to $topic" else "Failed to subscribe to $topic")
-        }
-    } else {
-        unsubscribeFromTopic(topic).addOnCompleteListener {
-            Log.d(tag, "Unsubscribed from $topic")
-        }
-    }
 }

@@ -28,8 +28,8 @@ plugins {
     signing
 }
 
-// Firebase reads app/google-services.json, which only Morphe's build has. Without the file the
-// plugin is not applied, so the project still configures. Oru never processes the file either
+// Firebase reads app/google-services.json, which lists the upstream Morphe package names. Without the
+// file the plugin is not applied, so the project still configures. Oru never processes the file either
 // (see the processOru*GoogleServices tasks at the end of this script).
 if (file("google-services.json").exists()) {
     apply(plugin = "com.google.gms.google-services")
@@ -240,18 +240,13 @@ android {
         }
     }
 
-    // The morphe flavor is upstream's build. The oru flavor takes its own package and resources from
-    // src/oru, and turns off the services that belong to Morphe's Firebase project and update feed.
+    // Oru is the only flavor. It takes its own package and resources from src/oru, and turns off the
+    // services that belong to Morphe's Firebase project and update feed.
     flavorDimensions += "brand"
     productFlavors {
-        create("morphe") {
-            dimension = "brand"
-            isDefault = true
-            buildConfigField("boolean", "UPSTREAM_SERVICES", "true")
-            buildConfigField("boolean", "ORU_UX", "false")
-        }
         create("oru") {
             dimension = "brand"
+            isDefault = true
             applicationId = "app.oru.manager"
             buildConfigField("boolean", "UPSTREAM_SERVICES", "false")
             buildConfigField("boolean", "ORU_UX", "true")

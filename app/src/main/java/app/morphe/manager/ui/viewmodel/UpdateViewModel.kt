@@ -127,8 +127,8 @@ class UpdateViewModel : ViewModel(), KoinComponent {
     private fun resolveUpdate() = viewModelScope.launch {
         isCheckingForUpdate = true
         try {
-            // ORU: the log line names the flavour's manager (the toast is a resource)
-            uiSafe(app, R.string.failed_to_download_update, "Failed to download ${if (BuildConfig.ORU_UX) "Oru" else "Morphe"} Manager") {
+            // The log line names the manager (the toast is a resource)
+            uiSafe(app, R.string.failed_to_download_update, "Failed to download Oru Manager") {
                 releaseInfo = managerUpdateRepository.getOrRefresh()
             }
         } finally {
@@ -186,7 +186,7 @@ class UpdateViewModel : ViewModel(), KoinComponent {
                 }
                 requireApkArchive(location)
                 // A Oru download is installed only once it checks out, see verifyOruDownload
-                val problem = if (BuildConfig.UPSTREAM_SERVICES) null else verifyOruDownload(release, location)
+                val problem = verifyOruDownload(release, location)
                 if (problem != null) {
                     location.delete()
                     failInstall(problem)

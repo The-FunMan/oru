@@ -24,7 +24,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import app.morphe.manager.BuildConfig
 import app.morphe.manager.R
 import app.morphe.manager.data.platform.Filesystem
 import app.morphe.manager.domain.manager.PreferencesManager
@@ -132,7 +131,7 @@ fun Uri.readMppManifest(contentResolver: ContentResolver): MppManifest? =
 
 /**
  * Folder picker for a folder used by path, as the patcher reads it through the File API. Storage
- * access comes first, then Morphe's own [FilePicker] where it is chosen or on TV, else the system one.
+ * access comes first, then Morphe's own [FilePicker] on TV, else the system one.
  */
 @Composable
 fun rememberFolderPickerWithPermission(
@@ -141,10 +140,7 @@ fun rememberFolderPickerWithPermission(
     val context = LocalContext.current
     val isTV = remember { context.isAndroidTv() }
     val fs: Filesystem = koinInject()
-    val prefs: PreferencesManager = koinInject()
-    // Oru always uses the system picker, so a stored choice cannot bring the in-app one back (SETTINGS_IA row 47)
-    val customPickerPref by prefs.useCustomFilePicker.getAsState()
-    val useCustomPicker = customPickerPref && !BuildConfig.ORU_UX
+    // Only TV gets the in-app picker, whatever is stored (SETTINGS_IA row 47)
     val showPickerState = remember { mutableStateOf(false) }
 
     if (showPickerState.value) {
@@ -172,15 +168,15 @@ fun rememberFolderPickerWithPermission(
         contract = permissionContract
     ) { granted ->
         if (granted) {
-            if (useCustomPicker || isTV) showPickerState.value = true
+            if (isTV) showPickerState.value = true
             else folderPickerLauncher.launch(null)
         }
     }
 
-    return remember(isTV, useCustomPicker) {
+    return remember(isTV) {
         {
             when {
-                useCustomPicker || isTV -> {
+                isTV -> {
                     if (fs.hasStoragePermission()) showPickerState.value = true
                     else permissionLauncher.launch(permissionName)
                 }
@@ -342,8 +338,7 @@ internal enum class PickerKind { InApp, System }
 
 /**
  * Which picker a request opens. TV always gets the own picker, as does a request that asks for it.
- * Oru otherwise keeps the system picker whatever is stored (SETTINGS_IA row 47), and Morphe follows
- * the stored choice.
+ * Otherwise the system picker is kept whatever is stored (SETTINGS_IA row 47).
  */
 internal fun pickerKind(
     preferInAppPicker: Boolean,
@@ -382,7 +377,7 @@ private fun rememberAdaptivePicker(
     val prefs: PreferencesManager = koinInject()
     val fs: Filesystem = koinInject()
     val customPickerPref by prefs.useCustomFilePicker.getAsState()
-    val kind = pickerKind(preferInAppPicker, customPickerPref, isTV, BuildConfig.ORU_UX)
+    val kind = pickerKind(preferInAppPicker, customPickerPref, isTV, true)
 
     // SAF launchers for phones/tablets - always registered so the composable graph stays stable
     val singleLauncher = rememberLauncherForActivityResult(

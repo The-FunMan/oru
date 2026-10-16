@@ -25,7 +25,7 @@ Requirements: JDK 21, the Android SDK, a Rust toolchain with the Android targets
 
 | What | Command |
 | --- | --- |
-| App unit tests (Oru and Morphe flavors) | `./gradlew :app:testOruDebugUnitTest :app:testMorpheDebugUnitTest` |
+| App unit tests | `./gradlew :app:testOruDebugUnitTest` |
 | Lint | `./gradlew :app:lint` |
 | Patcher tests and API check | `./gradlew :patcher:test :patcher:apiCheck` |
 | Native packager tests | `cd native-packager && cargo test --workspace --locked` |

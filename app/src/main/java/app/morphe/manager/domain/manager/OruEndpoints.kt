@@ -5,15 +5,12 @@
 
 package app.morphe.manager.domain.manager
 
-import app.morphe.manager.BuildConfig
-
 /**
- * Behaviour that differs between the morphe and oru flavours.
+ * Which Morphe-run services the app may use.
  *
- * [upstreamServices] is true in the morphe flavour, which talks to Morphe's own services, and false
- * in oru. Oru talks to no Morphe-run host at all: the APKMirror link is built on the device
- * ([ApkMirrorLinks]) and the blocked-sources list is not fetched.
- * The manager self-update is not switched here: each flavour checks its own feed, see ManagerUpdateRepository.
+ * [upstreamServices] is false in the app. Oru talks to no Morphe-run host at all: the APKMirror link
+ * is built on the device ([ApkMirrorLinks]) and the blocked-sources list is not fetched.
+ * The manager self-update is not switched here: it checks its own feed, see ManagerUpdateRepository.
  */
 class OruEndpoints(private val upstreamServices: Boolean) {
 
@@ -39,15 +36,15 @@ class OruEndpoints(private val upstreamServices: Boolean) {
         notificationsEnabled && (!hasGms || !upstreamServices)
 
     /**
-     * Alias and key password for a signing keystore created from now on. Null in morphe, which keeps
-     * its stored values. Keystores that already exist keep the alias stored with them.
+     * Alias and key password for a signing keystore created from now on. Null when upstream services
+     * are on, which keeps the stored values. Keystores that already exist keep the alias stored with them.
      */
     val newKeystoreAlias: String? = if (upstreamServices) null else ORU_KEYSTORE_ALIAS
 
     companion object {
         private const val ORU_KEYSTORE_ALIAS = "oru"
 
-        /** The endpoints of the flavour this build was made from. */
-        val current = OruEndpoints(upstreamServices = BuildConfig.UPSTREAM_SERVICES)
+        /** The endpoints the app uses. */
+        val current = OruEndpoints(upstreamServices = false)
     }
 }

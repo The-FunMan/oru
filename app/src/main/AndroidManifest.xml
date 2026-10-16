@@ -128,16 +128,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
-            <!-- Add-source deep link. Website acts as the gateway for repo validation -->
-            <intent-filter android:autoVerify="false">
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:scheme="https"
-                    android:host="morphe.software"
-                    android:pathPrefix="/add-source" />
-            </intent-filter>
         </activity>
 
         <service

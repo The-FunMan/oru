@@ -28,7 +28,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import app.morphe.manager.BuildConfig
 import app.morphe.manager.R
 import app.morphe.manager.domain.manager.HomeAppButtonPreferences
 import app.morphe.manager.ui.screen.settings.appearance.*
@@ -43,12 +42,9 @@ import app.morphe.manager.ui.viewmodel.ThemeSettingsViewModel
 import app.morphe.manager.util.AppCardColorDefaults
 import app.morphe.manager.util.AppCardColorMode
 import app.morphe.manager.util.AppLocale
-import app.morphe.manager.util.MORPHE_WEBSITE_URL
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import kotlin.math.roundToInt
-import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Appearance tab content.
@@ -92,7 +88,6 @@ fun AppearanceTabContent(
 
     val showLanguageDialog = remember { mutableStateOf(false) }
     val showUiScaleDialog = remember { mutableStateOf(false) }
-    val showTranslationInfoDialog = remember { mutableStateOf(false) }
     val showAppCardColorDialog = remember { mutableStateOf(false) }
     val showBackgroundDialog = remember { mutableStateOf(false) }
     val appCardColorValues = remember(customAppCardColors) {
@@ -121,14 +116,8 @@ fun AppearanceTabContent(
         LanguageAndDisplaySection(
             appLanguage = appLanguage,
             uiScale = uiScale,
-            // ORU: the translation page is Morphe's, so oru goes straight to the language list
-            onLanguageClick = {
-                if (BuildConfig.ORU_UX) {
-                    showLanguageDialog.value = true
-                } else {
-                    showTranslationInfoDialog.value = true
-                }
-            },
+            // No translation page is linked here, so the language list opens directly
+            onLanguageClick = { showLanguageDialog.value = true },
             onUiScaleClick = { showUiScaleDialog.value = true }
         )
 
@@ -225,29 +214,6 @@ fun AppearanceTabContent(
                 }
             },
             onDismiss = { showUiScaleDialog.value = false }
-        )
-    }
-
-    // Translation info dialog
-    AnimatedVisibility(
-        visible = showTranslationInfoDialog.value,
-        enter = Animations.fadeIn,
-        exit = Animations.fadeOut(if (showLanguageDialog.value) 0 else Defaults.ANIMATION_DURATION)
-    ) {
-        AppDialogWithLinks(
-            title = stringResource(R.string.settings_appearance_translations_info_title),
-            message = stringResource(
-                R.string.settings_appearance_translations_info_text,
-                stringResource(R.string.settings_appearance_translations_info_url)
-            ),
-            urlLink = "$MORPHE_WEBSITE_URL/translate",
-            onDismiss = {
-                showTranslationInfoDialog.value = false
-                scope.launch {
-                    delay(50.milliseconds)
-                    showLanguageDialog.value = true
-                }
-            }
         )
     }
 

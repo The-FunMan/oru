@@ -5,7 +5,6 @@
 
 package app.morphe.manager.domain.manager
 
-import app.morphe.manager.BuildConfig
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -63,8 +62,9 @@ class OruEndpointsTest {
     }
 
     @Test
-    fun currentFollowsTheBuildFlavour() {
-        assertEquals(BuildConfig.UPSTREAM_SERVICES, OruEndpoints.current.unavatarEnabled)
-        assertEquals(BuildConfig.UPSTREAM_SERVICES, OruEndpoints.current.projectApiEnabled)
+    fun currentIsOru() {
+        assertFalse(OruEndpoints.current.unavatarEnabled)
+        assertFalse(OruEndpoints.current.projectApiEnabled)
+        assertEquals("oru", OruEndpoints.current.newKeystoreAlias)
     }
 }

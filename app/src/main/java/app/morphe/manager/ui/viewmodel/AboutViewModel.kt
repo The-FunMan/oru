@@ -10,8 +10,6 @@ import androidx.compose.material.icons.automirrored.outlined.Article
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Public
 import androidx.lifecycle.ViewModel
-import app.morphe.manager.BuildConfig
-import app.morphe.manager.util.MORPHE_WEBSITE_URL
 import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Brands
 import compose.icons.fontawesomeicons.brands.Github
@@ -25,41 +23,8 @@ data class SocialLink(
 
 class AboutViewModel : ViewModel() {
     companion object {
-        // ORU: the website, GitHub and Reddit entries are Morphe's own accounts and are
-        // left out of the oru flavour. The changelog link also points at Morphe's website and is left out.
-        val socials: List<SocialLink> = buildList {
-            if (!BuildConfig.ORU_UX) {
-                add(
-                    SocialLink(
-                        name = "Website",
-                        url = MORPHE_WEBSITE_URL,
-                        preferred = true
-                    )
-                )
-            }
-            if (!BuildConfig.ORU_UX) {
-                add(
-                    SocialLink(
-                        name = "Changelog",
-                        url = "$MORPHE_WEBSITE_URL/changelog"
-                    )
-                )
-            }
-            if (!BuildConfig.ORU_UX) {
-                add(
-                    SocialLink(
-                        name = "GitHub",
-                        url = "https://github.com/MorpheApp"
-                    )
-                )
-                add(
-                    SocialLink(
-                        name = "Reddit",
-                        url = "https://reddit.com/r/MorpheApp"
-                    )
-                )
-            }
-        }
+        // Oru does not list any social links.
+        val socials: List<SocialLink> = emptyList()
 
         private val socialIcons = mapOf(
             "Website" to Icons.Outlined.Public,

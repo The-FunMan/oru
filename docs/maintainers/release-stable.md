@@ -20,7 +20,7 @@ A stable release is a GitHub release marked as the latest, with tag `vX.Y.Z`. It
 ## Pre-release checklist
 
 - [ ] CI is green on the `dev` head (the CI workflow runs on every push to `dev`).
-- [ ] App unit tests, both flavours: `./gradlew :app:testOruDebugUnitTest :app:testMorpheDebugUnitTest`
+- [ ] App unit tests: `./gradlew :app:testOruDebugUnitTest`
 - [ ] Patcher checks: `./gradlew :patcher:test :patcher:apiCheck :patcher:jar --stacktrace`
 - [ ] Native crates: `cd native-packager && cargo test --workspace --locked` and `cd native && cargo test --locked`
 - [ ] Python tools: `python -m unittest discover -s tools/parity -p "test_*.py"`

@@ -19,7 +19,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import app.morphe.manager.BuildConfig
 import app.morphe.manager.R
 import app.morphe.manager.ui.screen.shared.*
 import kotlinx.coroutines.launch
@@ -92,8 +91,8 @@ internal fun GitHubPatDialog(
     val showInfoDialog = rememberSaveable { mutableStateOf(false) }
 
     val scope = rememberCoroutineScope()
-    // ORU: the token description GitHub shows is the flavour's manager name
-    val tokenDescription = if (BuildConfig.ORU_UX) "oru-manager-github-integration" else "morphe-manager-github-integration"
+    // The token description GitHub shows is the manager name
+    val tokenDescription = "oru-manager-github-integration"
     val generatePatLink = "https://github.com/settings/tokens/new?scopes=public_repo&description=$tokenDescription"
 
     AppDialog(

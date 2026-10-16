@@ -23,7 +23,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.OpenInNew
-import androidx.compose.material.icons.automirrored.outlined.Sort
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
@@ -134,7 +133,6 @@ fun BundleManagementSheet(
     // Set when the user flips pre-releases on: the toggle waits for confirmation first,
     // so the meaning of unstable testing builds is explained before anything changes
     val bundleToConfirmPrerelease = remember { mutableStateOf<PatchBundleSource?>(null) }
-    var showSortDialog by remember { mutableStateOf(false) }
     // Search is offered from two sources up
     val isSearchable = sources.size >= 2
     val search = rememberSearchFieldState(searchable = isSearchable)
@@ -166,13 +164,8 @@ fun BundleManagementSheet(
         val merged = existing + added
         if (merged != localOrder) localOrder = merged
     }
-    val sortModePreference by prefs.sourceBundleSortMode.getAsState()
-    // ORU: the order is fixed to manual, so a sort chosen before the flavour changed is not applied
-    val sourceSortMode = if (BuildConfig.ORU_UX) {
-        SourceBundleSortMode.MANUAL
-    } else {
-        SourceBundleSortMode.fromPreference(sortModePreference)
-    }
+    // The order is fixed to manual, so a sort chosen earlier is not applied
+    val sourceSortMode = SourceBundleSortMode.MANUAL
     val isManualSort = sourceSortMode == SourceBundleSortMode.MANUAL
     val orderedSources = remember(localOrder, sources, sourceSortMode) {
         sources.sortedForSourceSort(sourceSortMode, localOrder)
@@ -305,21 +298,6 @@ fun BundleManagementSheet(
                                 style = TitleActionStyle.Toggle,
                                 active = search.visible
                             )
-
-                            // ORU: no sort menu, the manual order is the only one
-                            if (!BuildConfig.ORU_UX) {
-                                val activeSortLabel = stringResource(sourceSortMode.labelRes)
-                                TitleAction(
-                                    icon = Icons.AutoMirrored.Outlined.Sort,
-                                    contentDescription = stringResource(R.string.sort),
-                                    onClick = { showSortDialog = true },
-                                    modifier = Modifier.semantics {
-                                        role = Role.Button
-                                        stateDescription = activeSortLabel
-                                    },
-                                    style = TitleActionStyle.Neutral
-                                )
-                            }
                         }
                     }
                     TitleAction(
@@ -519,20 +497,6 @@ fun BundleManagementSheet(
                 }
             }
         }
-    }
-
-    // ORU: never opened, as the sort button is not shown
-    if (showSortDialog && !BuildConfig.ORU_UX) {
-        SortModeSelectionDialog(
-            title = stringResource(R.string.sources_sort_title),
-            current = sourceSortMode,
-            options = sortModeOptions<SourceBundleSortMode>(),
-            onSelect = { mode ->
-                scope.launch { prefs.sourceBundleSortMode.update(mode.name) }
-                showSortDialog = false
-            },
-            onDismiss = { showSortDialog = false }
-        )
     }
 
     // Delete confirmation dialog
@@ -931,8 +895,8 @@ private fun BundleManagementCard(
                         }
 
                         // Repository actions, as wide as the four pill action bar below.
-                        // ORU: the default source's pages are Morphe's GitHub repository, so it has none
-                        if (bundle is RemotePatchBundle && !(BuildConfig.ORU_UX && bundle.isDefault)) {
+                        // The default source's pages are Morphe's GitHub repository, so it has none
+                        if (bundle is RemotePatchBundle && !bundle.isDefault) {
                             ActionPillRow(
                                 modifier = Modifier.padding(vertical = 4.dp),
                                 stretchLabelsTo = 4
