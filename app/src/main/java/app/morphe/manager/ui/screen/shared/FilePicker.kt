@@ -169,7 +169,7 @@ private fun decodeThumbnail(file: File): ImageBitmap? = runCatching {
         ?.asImageBitmap()
 }.getOrNull()
 
-private enum class SortMode {
+internal enum class SortMode {
     NAME_ASC, NAME_DESC, SIZE_DESC, SIZE_ASC, DATE_DESC, DATE_ASC;
 
     fun labelRes() = when (this) {
@@ -182,12 +182,16 @@ private enum class SortMode {
     }
 }
 
+/** The sort a picker opens with: the stored choice when it reads back, else newest first. */
+internal fun initialSortMode(stored: String?): SortMode =
+    enumByNameOrNull<SortMode>(stored) ?: SortMode.DATE_DESC
+
 // Returns null when the directory cannot be read (permission denied or I/O error)
 private fun listDir(dir: File, allowedExtensions: Set<String>?): List<File>? =
     dir.listFiles()
         ?.filter { it.isDirectory || allowedExtensions == null || it.extension.lowercase() in allowedExtensions }
 
-private fun applySort(files: List<File>, mode: SortMode): List<File> {
+internal fun applySort(files: List<File>, mode: SortMode): List<File> {
     val (dirs, nonDirs) = files.partition { it.isDirectory }
     val sortedFiles = when (mode) {
         SortMode.NAME_ASC  -> nonDirs.sortedBy { it.name.lowercase() }
@@ -244,8 +248,8 @@ fun FilePicker(
     // Oru fixes the sort and hides hidden files (SETTINGS_IA rows 48-49), so it neither reads nor writes them
     var sortMode by remember {
         mutableStateOf(
-            if (BuildConfig.ORU_UX) SortMode.NAME_ASC
-            else enumByNameOrNull<SortMode>(prefs.filePickerSortMode.getBlocking()) ?: SortMode.NAME_ASC
+            if (BuildConfig.ORU_UX) SortMode.DATE_DESC
+            else initialSortMode(prefs.filePickerSortMode.getBlocking())
         )
     }
     var showHiddenFiles by remember {

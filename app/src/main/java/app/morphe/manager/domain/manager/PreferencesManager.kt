@@ -197,7 +197,7 @@ class PreferencesManager(
     val trustedApkDownloadHelpers = stringSetPreference("trusted_apk_download_helpers", emptySet())
 
     val lastFilePickerPath = stringPreference("last_file_picker_path", "")
-    val filePickerSortMode = stringPreference("file_picker_sort_mode", "NAME_ASC")
+    val filePickerSortMode = stringPreference("file_picker_sort_mode", "DATE_DESC")
     val filePickerShowHiddenFiles = booleanPreference("file_picker_show_hidden_files", false)
 
     /** Persist the pre-patch APK so it can be reused for repatching without asking the user to reselect it. */
