@@ -23,10 +23,9 @@ Oru is an Android app. It is not a ROM hack or a game.
 
 <div align="center">
 
-<img src="site/assets/shots/run-start.webp" width="200" alt="Oru run screen at the start of a patch run, with the progress hexagon nearly empty.">
-<img src="site/assets/shots/run-writing.webp" width="200" alt="Oru run screen while the patched app is written, with the hexagon about half full.">
-<img src="site/assets/shots/run-installed.webp" width="200" alt="Oru run screen after the install, with a complete green hexagon and a check mark.">
-<img src="site/assets/shots/settings.webp" width="200" alt="Oru Settings sheet with style, animation, update, storage and signing key rows.">
+<img src="site/assets/shots/split-start-done.webp" width="880" alt="One Oru phone screen cut in two. The top half shows a run at the start, with an almost empty hexagon, under the words Tap once. The bottom half shows the finished run, a complete green hexagon with a check mark, under the words Signed here, installed here.">
+
+<img src="site/assets/shots/split-progress-key.webp" width="880" alt="One Oru phone screen cut in two. The top half shows a run at 53 percent with the real stages listed, under the words One progress. The bottom half shows the Settings sheet with theme, glass style, animations and wallpaper colors, under the words Make it yours.">
 
 </div>
 
