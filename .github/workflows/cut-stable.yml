@@ -28,6 +28,17 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  wrong-branch:
+    # The default branch is main, so the Run workflow dialog starts on it. Every other job is skipped off dev;
+    # this one says why instead of leaving a run that looks as if nothing happened.
+    if: github.repository == 'The-FunMan/oru' && github.ref != 'refs/heads/dev'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    steps:
+      - run: |
+          echo "::error::Cut stable release runs on the dev branch. Choose dev under 'Use workflow from' and run it again."
+          exit 1
+
   plan:
     if: github.repository == 'The-FunMan/oru' && github.actor == github.repository_owner && github.ref == 'refs/heads/dev'
     runs-on: ubuntu-24.04
