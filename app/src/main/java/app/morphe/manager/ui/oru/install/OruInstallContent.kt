@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -463,10 +465,12 @@ private fun InstallScaffold(
     extra: (@Composable ColumnScope.() -> Unit)? = null,
     dock: (@Composable RowScope.() -> Unit)? = null,
 ) {
+    // Scrolls as a whole when the rows are taller than the screen, so the dock stays reachable
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = OruSpacing.ScreenGutter),
+            .padding(horizontal = OruSpacing.ScreenGutter)
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(OruSpacing.Medium),
     ) {
