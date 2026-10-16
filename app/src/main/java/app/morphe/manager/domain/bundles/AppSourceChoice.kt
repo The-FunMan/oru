@@ -54,6 +54,16 @@ object AppSourceChoice {
     fun offersChoice(facts: List<AppSourceFact>): Boolean = facts.size > 1
 
     /**
+     * Whether [fact] covers the app with fewer patches than the pre-installed source does, out of [facts]. A partial
+     * bundle reads as complete from its name alone, so the choice says so. False when there is no pre-installed source
+     * among [facts] or when [fact] is that source.
+     */
+    fun coversFewerThanDefault(fact: AppSourceFact, facts: List<AppSourceFact>): Boolean {
+        val default = facts.firstOrNull { it.isDefault } ?: return false
+        return !fact.isDefault && fact.patchCount < default.patchCount
+    }
+
+    /**
      * The apps a new source must be turned down from so it does not take them over: the apps it shares with a
      * source that already patches them. An app only the new source covers is left alone, it has no other source.
      */
