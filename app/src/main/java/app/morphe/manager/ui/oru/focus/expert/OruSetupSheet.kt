@@ -245,6 +245,8 @@ internal fun ColumnScope.OruSetupContent(
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            // The rows stand clear of the subtitle above them
+            .padding(top = 12.dp)
             .padding(horizontal = SheetGutter)
             .oruSlab(
                 shape = OruGroupShape,

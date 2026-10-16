@@ -623,8 +623,8 @@ private fun OruHomeCard.toCardUi(expert: Boolean): OruCardUi {
         chips = if (expert) expertChips() else simpleChips(),
         source = source,
         hint = hintText(),
-        primary = OruCardButton(label = stringResource(primary.labelRes()), style = primary.style()),
-        secondary = secondary?.let { OruCardButton(label = stringResource(it.labelRes()), style = it.style()) },
+        primary = OruCardButton(label = stringResource(primary.labelRes(expert)), style = primary.style()),
+        secondary = secondary?.let { OruCardButton(label = stringResource(it.labelRes(expert)), style = it.style()) },
     )
 }
 
@@ -695,14 +695,16 @@ private fun OruHomeCard.statusTextRes(): Int = when (status) {
     OruHomeCardStatus.PatchedElsewhere -> R.string.oru_chip_installed
 }
 
-private fun OruHomeAction.labelRes(): Int = when (this) {
+/** The label of an action. Expert's shorter label for the saved copy fits one line; Simple keeps the full one. */
+private fun OruHomeAction.labelRes(expert: Boolean): Int = when (this) {
     OruHomeAction.AppInfo -> R.string.oru_action_app_info
     OruHomeAction.CheckAndPatch -> R.string.oru_action_check_and_patch
     OruHomeAction.FindOnApkMirror -> R.string.oru_action_find_apkmirror
     OruHomeAction.UseFile -> R.string.oru_action_use_file
     OruHomeAction.ChooseFile -> R.string.oru_action_choose_file
     OruHomeAction.OpenApkMirrorAgain -> R.string.oru_action_open_apkmirror_again
-    OruHomeAction.PatchFromSaved -> R.string.oru_action_patch_from_saved
+    OruHomeAction.PatchFromSaved ->
+        if (expert) R.string.oru_action_patch_saved_expert else R.string.oru_action_patch_from_saved
     OruHomeAction.UseAnotherFile -> R.string.oru_action_use_another_file
     OruHomeAction.GetIt -> R.string.oru_action_get_it
     OruHomeAction.Patch -> R.string.oru_action_patch

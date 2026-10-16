@@ -13,6 +13,7 @@
     <string name="oru_home_banner_batch_running">Patching %1$d of %2$d apps.</string>
     <string name="oru_home_banner_batch_finished">A batch is finished. Review the results.</string>
     <string name="oru_action_get_it">Find APK</string>
+    <string name="oru_action_patch_saved_expert">Patch saved copy</string>
     <string name="oru_chip_patched_version">Patched %1$s</string>
     <string name="oru_chip_latest_version">Latest %1$s</string>
     <string name="oru_simple_status_up_to_date">Up to date</string>
