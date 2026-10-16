@@ -324,6 +324,7 @@ fun BoxScope.ContentOverlay(
 /**
  * Main dialog content area.
  */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun DialogContent(
     title: String?,

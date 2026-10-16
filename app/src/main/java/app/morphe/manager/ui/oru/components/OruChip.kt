@@ -16,20 +16,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import app.morphe.manager.ui.oru.theme.OruMonoStyle
 
 /**
- * A status chip. The text carries the meaning, the tone only adds the colour. [mono] sets the text in
- * the monospace figure style, for versions and counts. A neutral chip takes the app's tint when its screen provides one
+ * A status chip. The text carries the meaning, the tone only adds the colour. Its text is the body font, so a version
+ * reads like the rest of the copy. A neutral chip takes the app's tint when its screen provides one
  * (LocalOruAppTint), such as an app's card or its Focus.
  */
 @Composable
 fun OruChip(
     text: String,
     tone: OruTone,
-    mono: Boolean = false,
     modifier: Modifier = Modifier,
 ) {
     val colors = oruContainerColors(oruContainerRole(tone))
@@ -45,11 +42,7 @@ fun OruChip(
     ) {
         Text(
             text = text,
-            style = if (mono) {
-                OruMonoStyle.copy(fontWeight = FontWeight.Medium)
-            } else {
-                MaterialTheme.typography.labelLarge
-            },
+            style = MaterialTheme.typography.labelLarge,
             color = content,
         )
     }
@@ -73,7 +66,6 @@ internal fun OruChipRow(
             OruChip(
                 text = chip.text,
                 tone = chip.tone,
-                mono = chip.mono,
                 modifier = Modifier.weight(1f, fill = false),
             )
         }

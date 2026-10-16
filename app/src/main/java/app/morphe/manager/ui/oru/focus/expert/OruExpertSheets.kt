@@ -102,6 +102,9 @@ internal fun OruExpertSheets(
     item: HomeAppItem,
     /** The APK choice is showing, so the version can be changed. */
     choosing: Boolean,
+    /** Whether Expert changed the app. The Setup sheet offers the reset for it. */
+    customized: Boolean,
+    onReset: () -> Unit,
 ) {
     // A selection answered with its defaults never shows the sheet (see OruFocusViewModel.autoSelecting)
     val selecting = home.showExpertModeDialog && !vm.autoSelecting
@@ -133,7 +136,15 @@ internal fun OruExpertSheets(
                 patchName = current.patchName,
             )
             OruExpertSheet.Customize -> OruCustomizeContent(host = host, home = home)
-            OruExpertSheet.Setup -> OruSetupContent(host = host, vm = vm, home = home, item = item, choosing = choosing)
+            OruExpertSheet.Setup -> OruSetupContent(
+                host = host,
+                vm = vm,
+                home = home,
+                item = item,
+                choosing = choosing,
+                customized = customized,
+                onReset = onReset,
+            )
             OruExpertSheet.Version -> OruVersionContent(host = host, vm = vm, home = home)
             OruExpertSheet.Installer -> OruInstallerContent(host = host, vm = vm)
             OruExpertSheet.Sources -> OruSourcesContent(host = host, vm = vm, home = home, item = item)

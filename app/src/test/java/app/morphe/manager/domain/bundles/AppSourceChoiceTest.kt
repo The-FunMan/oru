@@ -107,6 +107,24 @@ class AppSourceChoiceTest {
     }
 
     @Test
+    fun `a source with fewer patches than the default one is flagged`() {
+        val partial = fact(uid = 5, name = "Partial", path = "owner/partial", patches = 5)
+        assertTrue(AppSourceChoice.coversFewerThanDefault(partial, listOf(default, partial)))
+    }
+
+    @Test
+    fun `a source with as many patches as the default one is not flagged`() {
+        val same = fact(uid = 5, name = "Same", path = "owner/same", patches = 25)
+        assertFalse(AppSourceChoice.coversFewerThanDefault(same, listOf(default, same)))
+    }
+
+    @Test
+    fun `the default source is never flagged, nor a source when there is no default`() {
+        assertFalse(AppSourceChoice.coversFewerThanDefault(default, listOf(default, remote)))
+        assertFalse(AppSourceChoice.coversFewerThanDefault(remote, listOf(remote)))
+    }
+
+    @Test
     fun `a remote source is named by its owner and repository, from its address`() {
         assertEquals(
             "Morphe/patches",

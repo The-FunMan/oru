@@ -29,7 +29,6 @@ data class OruTileSource(
 data class OruChipUi(
     val text: String,
     val tone: OruTone = OruTone.Neutral,
-    val mono: Boolean = false,
 )
 
 @Immutable
@@ -71,10 +70,14 @@ data class OruNoticeAction(
     val onClick: () -> Unit,
 )
 
+/** How a dialog's second action is drawn: a tonal button, or a text button in the dialog's tone. */
+enum class OruDialogActionStyle { Tonal, Text }
+
 @Immutable
 data class OruDialogAction(
     val label: String,
     val onClick: () -> Unit,
+    val style: OruDialogActionStyle = OruDialogActionStyle.Tonal,
 )
 
 /** The four looks of the Focus hero. */

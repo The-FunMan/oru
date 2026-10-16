@@ -106,6 +106,13 @@ class OruHomeActionRouterTest {
     }
 
     @Test
+    fun `install makes no call, because the focus it opens holds the finished run`() {
+        val commands = FakeCommands()
+        OruHomeActionRouter.route(card(), OruHomeAction.Install, commands)
+        assertEquals(emptyList<String>(), commands.calls)
+    }
+
+    @Test
     fun `get it and patch from saved copy open focus on their step, and the other actions keep the apk choice`() {
         assertEquals(OruFocusOpening.DownloadStep, OruFocusOpening.forAction(OruHomeAction.GetIt))
         assertEquals(OruFocusOpening.SavedCopy, OruFocusOpening.forAction(OruHomeAction.PatchFromSaved))

@@ -15,6 +15,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -36,6 +38,8 @@ private val LabelSpacing = 8.dp
  *        apart is the whole point.
  * @param textStyle Smaller for a value whose lines must not wrap, such as a fingerprint.
  * @param textAlign Centered for a block of even lines, which reads as one shape that way.
+ * @param spokenValue What the screen reader says for [value], when its line breaks read badly, such as a fingerprint.
+ *        Null reads [value] as it is.
  */
 @Composable
 fun MonospaceValuePanel(
@@ -44,7 +48,8 @@ fun MonospaceValuePanel(
     label: String? = null,
     tone: SemanticTone = SemanticTone.Neutral,
     textStyle: TextStyle = MaterialTheme.typography.bodyLarge,
-    textAlign: TextAlign = TextAlign.Start
+    textAlign: TextAlign = TextAlign.Start,
+    spokenValue: String? = null,
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -76,6 +81,7 @@ fun MonospaceValuePanel(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(PanelPadding)
+                    .semantics { spokenValue?.let { contentDescription = it } }
             )
         }
     }

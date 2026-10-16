@@ -25,6 +25,7 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import app.morphe.manager.R
+import app.morphe.manager.domain.bundles.AppSourceChoice
 import app.morphe.manager.ui.oru.components.OruOutlinedButton
 import app.morphe.manager.ui.oru.focus.expert.oruChosenMark
 import app.morphe.manager.ui.oru.theme.OruGroupInnerShape
@@ -102,13 +103,19 @@ internal fun ColumnScope.OruSourceChoiceContent(
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
-                        fact.recommendedVersion?.let { version ->
+                        if (AppSourceChoice.coversFewerThanDefault(fact, sources.facts)) {
                             Text(
-                                text = stringResource(R.string.oru_source_needs, appName, version),
-                                style = MaterialTheme.typography.bodyMedium,
+                                text = stringResource(R.string.oru_source_fewer_patches),
+                                style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                         }
+                        Text(
+                            text = fact.recommendedVersion?.let { stringResource(R.string.oru_source_needs, appName, it) }
+                                ?: stringResource(R.string.oru_source_no_requirement),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
                     }
                     if (isChosen) {
                         Spacer(Modifier.width(12.dp))

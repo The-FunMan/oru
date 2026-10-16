@@ -11,7 +11,7 @@ Patch Android apps on your own device.
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 [![Latest release](https://img.shields.io/github/v/release/The-FunMan/oru)](https://github.com/The-FunMan/oru/releases/latest)
-[![CI](https://github.com/The-FunMan/oru/actions/workflows/ci.yml/badge.svg?branch=dev)](https://github.com/The-FunMan/oru/actions/workflows/ci.yml)
+[![CI](https://github.com/The-FunMan/oru/actions/workflows/ci.yml/badge.svg?branch=dev&event=push)](https://github.com/The-FunMan/oru/actions/workflows/ci.yml)
 
 Project page: <https://the-funman.github.io/oru/>
 
@@ -23,10 +23,15 @@ Oru is an Android app. It is not a ROM hack or a game.
 
 <div align="center">
 
-<img src="site/assets/shots/run-start.webp" width="200" alt="Oru run screen at the start of a patch run, with the progress hexagon nearly empty.">
-<img src="site/assets/shots/run-writing.webp" width="200" alt="Oru run screen while the patched app is written, with the hexagon about half full.">
-<img src="site/assets/shots/run-installed.webp" width="200" alt="Oru run screen after the install, with a complete green hexagon and a check mark.">
-<img src="site/assets/shots/settings.webp" width="200" alt="Oru Settings sheet with style, animation, update, storage and signing key rows.">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="site/assets/shots/split-start-done-dark.webp">
+  <img src="site/assets/shots/split-start-done-light.webp" width="880" alt="One Oru phone screen that melts from one state into another. The top half shows a run at the start, with an almost empty hexagon, under the words Tap once. The bottom half shows the finished run, a complete green hexagon with a check mark, under the words Signed here, installed here.">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="site/assets/shots/split-progress-key-dark.webp">
+  <img src="site/assets/shots/split-progress-key-light.webp" width="880" alt="One Oru phone screen that melts from one state into another. The top half shows a run in progress with the real stages listed, under the words One progress. The bottom half shows the Settings sheet with theme, glass style, animations and wallpaper colors, under the words Make it yours.">
+</picture>
 
 </div>
 
@@ -35,7 +40,8 @@ Oru is an Android app. It is not a ROM hack or a game.
 Oru runs the same patch bundles as other patch managers. What differs is the app around them: it is built to be simple, beautiful and quick to understand.
 
 - **Beautiful.** Fluid motion, soft glass and one hexagon that fills as your app is patched.
-- **Fast.** In one emulator test with the same input and the same 96 patches, Oru patched in about 90 seconds and Morphe Manager in about 156. That is one small test, so read the [method and limits](docs/benchmarks.md).
+- **Current.** Dependencies are checked every day and kept on the newest stable release. What is held back on purpose is listed in [docs/dependencies.md](docs/dependencies.md).
+- **Fast.** In one emulator test with the same input and the same 96 patches, Oru patched in about 90 seconds and another well-known patch manager in about 156. That is one small test, so read the [method and limits](docs/benchmarks.md).
 - **Simple and Expert.** In Simple, each app shows one sentence and one button. The Simple and Expert switch is on the bottom bar of the Home screen. Expert lets you choose the version, patches, options, installer and patch channel for each app.
 - **One patch source per app.** You choose it in Expert mode. Adding a source never changes the apps you already set up.
 - **One progress for the whole run.** A run shows the real stages and real counts, not invented progress.

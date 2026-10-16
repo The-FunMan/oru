@@ -57,6 +57,8 @@ object OruHomeActionRouter {
             OruHomeAction.PatchAgain -> commands.patch(packageName, card.repatchedPackageName)
             // The screen opens the Focus for this action, see oruActionOpensFocus, so the router has nothing to call
             OruHomeAction.GetIt -> Unit
+            // The same: the Focus of the finished run holds its install
+            OruHomeAction.Install -> Unit
             // The APKMirror step and the file step only make sense for the app the flow is waiting on
             OruHomeAction.ChooseFile ->
                 if (commands.isPendingFor(packageName)) commands.showFilePickerPrompt()

@@ -69,6 +69,9 @@ import app.morphe.manager.ui.oru.nav.oruTitleSharedKey
 import app.morphe.manager.ui.oru.nav.rememberOruPresence
 import app.morphe.manager.ui.oru.components.OruSwapText
 import app.morphe.manager.ui.oru.sources.OruAppSources
+import app.morphe.manager.ui.oru.sources.OruVersionSide
+import app.morphe.manager.ui.oru.sources.oruVersionGate
+import app.morphe.manager.ui.oru.sources.oruVersionSide
 import app.morphe.manager.ui.oru.sources.rememberOruAppSources
 import app.morphe.manager.ui.oru.theme.OruBlobShape
 import app.morphe.manager.ui.oru.theme.OruMotion
@@ -100,7 +103,7 @@ internal fun OruFocusShell(
     /** Whether Expert changed the app. Simple shows the badge and the reset for it. */
     customized: Boolean,
     onReset: () -> Unit,
-    /** Opens the app's info. Simple has no App info button on the card, so the Focus offers it here. Null in Expert. */
+    /** Opens the app's info. The Focus offers it in both modes, since the card has no visible way to it. Null without an install. */
     onAppInfo: (() -> Unit)?,
     modifier: Modifier = Modifier,
 ) {
@@ -127,7 +130,9 @@ internal fun OruFocusShell(
     val plan = oruDockPlan(
         state = state,
         pending = home.pendingPackageName == item.packageName,
-        hasSaved = home.pendingSavedApkInfo != null,
+        hasSaved = home.pendingSavedApkInfo?.let { saved ->
+            oruVersionGate(saved.version, saved.versionCode, sources.effectiveVersions).patchable
+        } == true,
         hasInstalled = home.pendingInstalledApkInfo != null,
     )
     val dockItem = focusDockItems(state, vm, item, openFilePicker, openUrl)
@@ -183,6 +188,10 @@ internal fun OruFocusShell(
                                 color = scheme.onSurface,
                                 modifier = Modifier.oruSharedText(oruTitleSharedKey(item.id)),
                             )
+                            // Expert names its mode under the app name, so the mode is never in doubt. App info keeps its place
+                            if (expert) {
+                                OruChip(text = stringResource(R.string.oru_mode_expert), tone = OruTone.Neutral)
+                            }
                             OruSwapText(
                                 text = line,
                                 style = MaterialTheme.typography.bodyMedium,
@@ -199,7 +208,6 @@ internal fun OruFocusShell(
                                 OruFocusNoticeCard(
                                     notice = notice,
                                     appName = appName,
-                                    expert = expert,
                                     onAct = { action ->
                                         if (action == OruFocusAction.UseAnother) {
                                             // "Use another file" opens the picker, as "Use a file" does, instead of starting the APK choice again
@@ -241,17 +249,7 @@ internal fun OruFocusShell(
                     )
                 }
             }
-            // Expert screens name their mode in the top bar, so the mode is never in doubt
-            if (expert) {
-                OruChip(
-                    text = stringResource(R.string.oru_mode_expert),
-                    tone = OruTone.Neutral,
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(end = 4.dp, top = 12.dp),
-                )
-            }
-            // Simple's App info: the card's long press opens the same dialog, this is the way from the Focus
+            // App info: the card's long press opens the same dialog, this is the way from the Focus
             onAppInfo?.let { open ->
                 OruGlassSurface(
                     shape = oruGlassShape(OruGlassForm.Pill),
@@ -298,11 +296,15 @@ private fun focusLine(
             // An installed app, whichever way it was installed, is the app on the phone, so its version is the line to read.
             // The status is the Home card's, so the Focus does not say "Needs" for an app Home shows as installed.
             // The source is named by the Setup line, not here: the headline says what the APK has to be
-            val installedStatus = OruHomePresenter.statusOf(item, handedOff = false, supportedVersions = null)
-            if (oruFocusShowsInstalled(installedStatus)) {
-                stringResource(R.string.oru_focus_installed_line, item.version)
-            } else {
-                needsLine(oruAppName(item.packageName, item.displayName), home, sources)
+            val installedStatus = OruHomePresenter.statusOf(item, handedOff = false, targets = null)
+            // A saved copy the sources patch is offered in the dock, so the line names its version, as the Home card does
+            val saved = home.pendingSavedApkInfo?.takeIf {
+                oruVersionGate(it.version, it.versionCode, sources.effectiveVersions).patchable
+            }
+            when {
+                oruFocusShowsInstalled(installedStatus) -> stringResource(R.string.oru_focus_installed_line, item.version)
+                saved != null -> stringResource(R.string.oru_focus_ready_patch, saved.version)
+                else -> needsLine(oruAppName(item.packageName, item.displayName), home, sources)
             }
         } else {
             val version = (home.pendingSelectedDownloadVersion ?: home.pendingRecommendedVersion)?.version
@@ -384,11 +386,10 @@ private fun focusDockItems(
 private fun OruFocusNoticeCard(
     notice: OruFocusNotice,
     appName: String,
-    expert: Boolean,
     onAct: (OruFocusAction) -> Unit,
 ) {
     OruNotice(
-        text = noticeText(notice, appName, expert),
+        text = noticeText(notice, appName),
         tone = notice.tone,
         actions = notice.actions.map { action ->
             OruNoticeAction(label = actionLabel(action, appName), onClick = { onAct(action) })
@@ -397,24 +398,21 @@ private fun OruFocusNoticeCard(
 }
 
 @Composable
-private fun noticeText(notice: OruFocusNotice, appName: String, expert: Boolean): String {
+private fun noticeText(notice: OruFocusNotice, appName: String): String {
     val context = LocalContext.current
     val version = notice.version.orEmpty()
     return when (notice.kind) {
         OruNoticeKind.WrongPackage -> stringResource(R.string.oru_error_wrong_app)
         OruNoticeKind.Split -> stringResource(R.string.oru_error_split)
         OruNoticeKind.InvalidSignature -> stringResource(R.string.oru_error_changed)
-        // Simple names the app and the version its source can patch at. Expert points to that version in its own words
-        OruNoticeKind.Unsupported -> when {
-            !expert -> notice.supportedVersion?.let {
-                stringResource(R.string.oru_notice_unsupported_simple, appName, version, it)
-            } ?: stringResource(R.string.oru_notice_unsupported_simple_none, appName, version)
-            notice.supportedVersion != null ->
-                stringResource(R.string.oru_notice_unsupported, version, notice.supportedVersion)
-            else -> stringResource(R.string.oru_notice_unsupported_none, version)
+        // One wording per state in both modes: newer or older than the patches, or no version to point to
+        OruNoticeKind.Unsupported -> when (oruVersionSide(version, notice.supportedVersion)) {
+            OruVersionSide.Newer -> stringResource(R.string.oru_notice_unsupported, version, notice.supportedVersion.orEmpty())
+            OruVersionSide.Older -> stringResource(R.string.oru_notice_unsupported_older, version, notice.supportedVersion.orEmpty())
+            OruVersionSide.Unknown -> stringResource(R.string.oru_notice_unsupported_none, version)
         }
         OruNoticeKind.ExperimentalOff -> stringResource(R.string.oru_notice_experimental_off, version, appName)
-        OruNoticeKind.ExperimentalOn -> stringResource(R.string.oru_notice_experimental_on, version, appName)
+        OruNoticeKind.ExperimentalOn -> stringResource(R.string.oru_notice_experimental_on, version)
         OruNoticeKind.NoCompatible -> stringResource(R.string.oru_error_generic)
         OruNoticeKind.LowStorage -> stringResource(
             R.string.oru_error_low_storage,

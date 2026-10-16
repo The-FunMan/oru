@@ -8,6 +8,7 @@ package app.morphe.manager.ui.oru.focus
 import android.app.Application
 import android.net.Uri
 import app.morphe.manager.R
+import app.morphe.manager.domain.bundles.BundledAppTarget
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -275,7 +276,7 @@ class OruFocusViewModel(private val deps: OruFocusDeps) : ViewModel() {
         viewModelScope.launch {
             val sources = oruAppSourcesNow(home, item.packageName)
             home.showPatchDialog(item.packageName, item.installedApp?.trackingKey, sources.effective?.uid)
-            cardExpert?.let { openOnCardStep(item, sources.supportedVersions, it) }
+            cardExpert?.let { openOnCardStep(item, sources.effectiveVersions, it) }
         }
     }
 
@@ -284,8 +285,8 @@ class OruFocusViewModel(private val deps: OruFocusDeps) : ViewModel() {
      * set: the APKMirror link is not opened, and a saved copy is picked but not run. Skipped when the flow went another
      * way (a notice came up, or the saved copy was used on its own) or when the user has moved on.
      */
-    private suspend fun openOnCardStep(item: HomeAppItem, supportedVersions: Set<String>, expert: Boolean) {
-        val opening = OruFocusOpening.forAction(OruHomePresenter.primaryActionOf(item, supportedVersions, expert))
+    private suspend fun openOnCardStep(item: HomeAppItem, targets: List<BundledAppTarget>, expert: Boolean) {
+        val opening = OruFocusOpening.forAction(OruHomePresenter.primaryActionOf(item, targets, expert))
         if (opening == OruFocusOpening.Choice) return
         withTimeoutOrNull(OPEN_STEP_WAIT_MS) {
             snapshotFlow { home.showApkAvailabilityDialog }.first { it }
@@ -611,7 +612,12 @@ class OruFocusViewModel(private val deps: OruFocusDeps) : ViewModel() {
         if (installState?.ui is OruInstallUi.Installing) return
         val runWorking = singleRunOwner?.isActive == true
         if (runWorking) return
-        if (leaving) singleRunOwner?.releaseLeftRun()
+        if (leaving) {
+            singleRunOwner?.releaseLeftRun()
+            // A version notice belongs to this Focus. Left open, Home would raise it again as its own dialog.
+            home.dismissUnsupportedVersionDialog()
+            home.dismissExperimentalVersionDialog()
+        }
 
         home.showApkAvailabilityDialog = false
         home.showDownloadInstructionsDialog = false

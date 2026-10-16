@@ -176,6 +176,7 @@
     <string name="sources_management_experimental_versions_toggle">Experimental app versions</string>
     <string name="sources_management_experimental_versions_toggle_description">Shows and patches experimental app targets</string>
     <string name="sources_management_already_exists">This source has already been added</string>
+    <string name="sources_management_no_bundle">Could not find a patch bundle at this address.</string>
     <string name="sources_management_invalid_url">Invalid source URL. Please check the address and try again</string>
     <string name="sources_management_blocked">This patch source is blocked and cannot be added</string>
     <string name="sources_management_source_blocked_badge">Blocked</string>
@@ -196,7 +197,15 @@
     <string name="sources_dialog_duplicate_name_error">A patch source with this name already exists</string>
     <string name="sources_dialog_missing_error">Could not update this patch source</string>
     <string name="sources_dialog_add_source">Add patch source</string>
+    <string name="sources_dialog_checking">Checking…</string>
     <string name="sources_dialog_delete_confirm_body">This cannot be undone</string>
+    <string name="sources_delete_impact_one">%1$s uses this source and will switch to %2$s.</string>
+    <string name="sources_delete_impact_many">%1$s use this source and will switch to %2$s.</string>
+    <string name="sources_delete_target_other">another source</string>
+    <string name="sources_removed_moved_one">%1$s now uses %2$s.</string>
+    <string name="sources_removed_moved_many">%1$s now use %2$s.</string>
+    <string name="sources_apps_pair">%1$s and %2$s</string>
+    <string name="sources_apps_and_more">%1$s and %2$d more</string>
     <string name="sources_dialog_remote">Remote</string>
     <string name="sources_dialog_remote_url">Source URL</string>
     <string name="sources_dialog_remote_url_hint">A repository or a link to a patch bundle .json. Paste several at once to add them all</string>

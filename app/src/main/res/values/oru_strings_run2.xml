@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Oru patch run copy, second batch. English only. Keys that already exist in oru_strings.xml or strings.xml are
+  reused, not repeated here.
+-->
+<resources>
+    <!-- What TalkBack reads for a working run at each step of its percentage (0, 25, 50, 75) -->
+    <string name="oru_run_progress_announce">Patching, %1$d percent</string>
+</resources>

@@ -51,9 +51,12 @@ import app.morphe.manager.patcher.runtime.ProcessRuntime
 import app.morphe.manager.patcher.runtime.coerceMemoryLimit
 import app.morphe.manager.patcher.runtime.heapLimitMebibytes
 import app.morphe.manager.patcher.split.SplitApkPreparer
+import app.morphe.manager.ui.model.LiveBarStage
+import app.morphe.manager.ui.model.RunLiveBar
 import app.morphe.manager.ui.model.SelectedApp
 import app.morphe.manager.ui.model.State
 import app.morphe.manager.ui.model.StepId
+import app.morphe.manager.ui.model.liveBarStage
 import app.morphe.manager.util.*
 import app.morphe.manager.util.PatchSelectionUtils.restrictTo
 import com.topjohnwu.superuser.Shell
@@ -121,6 +124,14 @@ class PatcherWorker(
     /** Queue position shown in the ongoing notification, set once the args are claimed. */
     private var queueLabel: String? = null
 
+    /** The status bar of this run, see [RunLiveBar]. With no stage yet the bar is indeterminate. */
+    private val liveBar = RunLiveBar()
+
+    /** What the ongoing notification last showed, so a moved bar can be posted again without losing its title. */
+    private var shownStep: String? = null
+    private var shownPatches: Pair<Int, Int>? = null
+    private var shownContent: String? = null
+
     override suspend fun getForegroundInfo() =
         ForegroundInfo(
             NOTIFICATION_ID,
@@ -170,6 +181,8 @@ class PatcherWorker(
                     val (completed, total) = patchProgress
                     setSubText("$completed / $total")
                     setProgress(total, completed, false)
+                } else if (liveBar.stage != null) {
+                    setProgress(RunLiveBar.TOTAL_POINTS, liveBar.progress, false)
                 }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) {
                     applyLiveUpdate(patchProgress)
@@ -182,18 +195,22 @@ class PatcherWorker(
             .build()
     }
 
-    /** Request promotion to a Live Update, shown as a status bar chip while the manager is in the background. */
+    /**
+     * Request promotion to a Live Update, shown as a status bar chip while the manager is in the background. The bar
+     * has a segment per stage of the run, sized like the in-app bar, and is indeterminate until the first stage starts.
+     */
     @RequiresApi(Build.VERSION_CODES.BAKLAVA)
     private fun Notification.Builder.applyLiveUpdate(patchProgress: Pair<Int, Int>?) {
         val style = Notification.ProgressStyle()
-        if (patchProgress != null) {
-            val (completed, total) = patchProgress
-            // The bar length is the sum of its segments, a single one spans every patch
-            style.progressSegments = listOf(Notification.ProgressStyle.Segment(total.coerceAtLeast(1)))
-            style.progress = completed
-            setShortCriticalText("$completed/$total")
+        if (liveBar.stage != null) {
+            style.progressSegments = liveBar.segments.map { Notification.ProgressStyle.Segment(it) }
+            style.progress = liveBar.progress
         } else {
             style.isProgressIndeterminate = true
+        }
+        if (patchProgress != null) {
+            val (completed, total) = patchProgress
+            setShortCriticalText("$completed/$total")
         }
         setStyle(style)
         // The builder setter only exists from 36.1, the extra is what the framework reads on 36.0
@@ -205,6 +222,9 @@ class PatcherWorker(
         patchProgress: Pair<Int, Int>? = null,
         contentText: String? = null,
     ) {
+        shownStep = stepName
+        shownPatches = patchProgress
+        shownContent = contentText
         val notificationManager =
             applicationContext.getSystemService(NotificationManager::class.java)
         // Android won't visually switch from indeterminate → determinate on the same notification
@@ -215,6 +235,9 @@ class PatcherWorker(
         } catch (_: SecurityException) {
         }
     }
+
+    /** Posts the ongoing notification again as it was last shown, so the bar can move on under the same title. */
+    private fun refreshBar() = updatePatcherNotification(shownStep, shownPatches, shownContent)
 
     private fun showCompletionNotification(
         succeeded: Boolean,
@@ -345,12 +368,14 @@ class PatcherWorker(
         val isExpertMode = prefs.useExpertMode.get()
         // Flipped once when the patching phase completes to trigger the writing-step notification
         var patchingPhaseCompleted = false
+        liveBar.report(LiveBarStage.READ_LOAD, 0f)
 
         fun updateProgress(name: String? = null, state: State? = null, message: String? = null) {
             if (state == State.RUNNING) {
                 if (name != null) {
                     updatePatcherNotification(stepName = name, patchProgress = null)
                 } else if (totalPatches > 0) {
+                    liveBar.report(LiveBarStage.PATCH, completedPatches.toFloat() / totalPatches)
                     updatePatcherNotification(
                         stepName = applyingPatchesLabel,
                         patchProgress = completedPatches to totalPatches
@@ -360,6 +385,7 @@ class PatcherWorker(
                 && completedPatches == totalPatches && totalPatches > 0
             ) {
                 patchingPhaseCompleted = true
+                liveBar.report(LiveBarStage.WRITE, 0f)
                 updatePatcherNotification(stepName = writingApkLabel, patchProgress = null)
             }
             args.onProgress(name, state, message)
@@ -367,6 +393,7 @@ class PatcherWorker(
 
         val onPatchCompleted: suspend (String) -> Unit = { patchName ->
             completedPatches++
+            liveBar.report(LiveBarStage.PATCH, completedPatches.toFloat() / totalPatches.coerceAtLeast(1))
             // Update both title and progress bar together on every completed patch;
             // in expert mode also show which patch just finished
             updatePatcherNotification(
@@ -379,13 +406,22 @@ class PatcherWorker(
 
         // The notification carries a patch count of its own, which would otherwise keep
         // climbing past the total once a restarted attempt reports the same patches again.
-        // It goes back to the indeterminate form because the next attempt starts at loading
+        // The bar goes back to its first stage because the next attempt starts at loading
         // patches, not at applying them
         val onRestart: suspend () -> Unit = {
             completedPatches = 0
             patchingPhaseCompleted = false
+            liveBar.reset()
+            liveBar.report(LiveBarStage.READ_LOAD, 0f)
             updatePatcherNotification(stepName = null, patchProgress = null)
             args.onPatchingRestarted()
+        }
+
+        // A stage that reports its fraction moves the bar as well as the run. The notification is posted only when the bar moves
+        val reportStageFraction: StageFractionHandler = { stage, fraction ->
+            args.onStageFraction(stage, fraction)
+            val barStage = stage.liveBarStage()
+            if (barStage != null && liveBar.report(barStage, fraction)) refreshBar()
         }
 
         val patchedApk = fs.tempDir.resolve("patched.apk")
@@ -426,6 +462,7 @@ class PatcherWorker(
             val useProcessRuntime = prefs.useProcessRuntime.get() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
             val stripNativeLibs = prefs.stripUnusedNativeLibs.get()
             val inputIsSplitArchive = SplitApkPreparer.isSplitArchive(inputFile)
+            liveBar.splitInput = inputIsSplitArchive
             // The architecture the patches were selected against, worth a line of its own now
             // that a patch can declare itself unavailable for the one the input carries. Read
             // from the app rather than from [inputFile], which for an installed one is the base
@@ -529,7 +566,7 @@ class PatcherWorker(
                     stripNativeLibs,
                     onMergedApkReady,
                     onRestart,
-                    args.onStageFraction,
+                    reportStageFraction,
                 )
             } catch (e: Exception) {
                 val fallbackReason = when {
@@ -559,14 +596,15 @@ class PatcherWorker(
                     stripNativeLibs,
                     onMergedApkReady,
                     onRestart,
-                    args.onStageFraction,
+                    reportStageFraction,
                 )
             }
 
+            liveBar.report(LiveBarStage.SIGN, 0f)
             updatePatcherNotification(stepName = signingApkLabel, patchProgress = null)
             val signTime = measureTime {
                 keystoreManager.sign(patchedApk) { fraction ->
-                    args.onStageFraction(StepId.SIGN_PATCHED_APK, fraction)
+                    reportStageFraction(StepId.SIGN_PATCHED_APK, fraction)
                 }
                 withContext(Dispatchers.IO) {
                     Files.move(patchedApk.toPath(), File(args.output).toPath(), StandardCopyOption.REPLACE_EXISTING)

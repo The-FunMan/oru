@@ -51,7 +51,9 @@ import app.morphe.manager.ui.oru.home.OruHomeRun
 import app.morphe.manager.ui.oru.home.OruManagerUpdate
 import app.morphe.manager.ui.oru.home.oruAppName
 import app.morphe.manager.ui.oru.home.oruHomeRunOf
+import app.morphe.manager.ui.oru.home.oruReadyToInstallOf
 import app.morphe.manager.ui.oru.home.oruSingleHomeRunOf
+import app.morphe.manager.ui.oru.home.oruTourPatchedOn
 import app.morphe.manager.ui.oru.settings.OruSettingsOpen
 import app.morphe.manager.ui.oru.settings.OruSettingsSection
 import app.morphe.manager.ui.oru.settings.OruSettingsSheet
@@ -140,6 +142,10 @@ fun OruHomeScreen(
     val hasHeldBackSources by homeViewModel.patchBundleRepository.hasHeldBackSources.collectAsStateWithLifecycle()
     val isRefreshing by homeViewModel.isRefreshing.collectAsStateWithLifecycle()
     val useExpertMode by homeViewModel.prefs.useExpertMode.getAsState()
+    val tourFlag by homeViewModel.prefs.oruTourDone.getAsState()
+    // A first patch that ended on its Done screen has already taught what the tour would
+    val keyNoticeShown by homeViewModel.prefs.oruKeyNoticeShown.getAsState()
+    val tourDone = tourFlag || keyNoticeShown
 
     val visibleItems = homeAppState?.visible.orEmpty()
 
@@ -157,7 +163,7 @@ fun OruHomeScreen(
         }
     }
     val patchCounts = remember(appSources) { appSources.mapValues { it.value.effective?.patchCount ?: 0 } }
-    val supportedVersions = remember(appSources) { appSources.mapValues { it.value.supportedVersions } }
+    val effectiveVersions = remember(appSources) { appSources.mapValues { it.value.effectiveVersions } }
     val recommended = remember(appSources) {
         appSources.mapNotNull { (packageName, sources) -> sources.effective?.recommendedVersion?.let { packageName to it } }
             .toMap()
@@ -247,10 +253,12 @@ fun OruHomeScreen(
         handedOff = handedOff,
         offline = offline,
         recommendedVersions = recommended,
-        supportedVersions = supportedVersions,
+        effectiveVersions = effectiveVersions,
         patchCounts = patchCounts,
         sourceNames = sourceNames,
         customized = customizedApps,
+        // A finished single-app run waiting for its install marks its card, see oruReadyToInstallOf
+        readyToInstall = oruReadyToInstallOf(activeRun),
         banner = OruBannerInput(
             managerUpdate = oruManagerUpdateOf(
                 vm = updateViewModel,
@@ -277,6 +285,13 @@ fun OruHomeScreen(
         ),
     )
     val uiState = remember(input) { OruHomePresenter.state(input) }
+
+    // The first patch ends the first-run tour for good, however it was made: a patched app on Home is the proof
+    LaunchedEffect(tourFlag, uiState) {
+        if (!tourFlag && oruTourPatchedOn(uiState.cards.map { it.status })) {
+            homeViewModel.prefs.oruTourDone.update(true)
+        }
+    }
 
     // Dialog and sheet state. The patch dialogs themselves live in HomeDialogs, as on the old Home
     var showSettings by rememberSaveable { mutableStateOf(false) }
@@ -419,6 +434,8 @@ fun OruHomeScreen(
         },
         onCheckUpdates = { homeViewModel.refresh() },
         onAddSource = { homeViewModel.showBundleManagementSheet = true },
+        tourDone = tourDone,
+        onTourDone = { scope.launch { homeViewModel.prefs.oruTourDone.update(true) } },
         // The settings sheet is drawn in the Home backdrop host, so its glass blurs the Home content
         overlay = {
             OruFrostedSheet(

@@ -85,6 +85,36 @@ fun OruOutlinedButton(
 }
 
 /**
+ * A text action in [color], for a step that leaves the surface, such as Cancel. It has no fill and no outline, so it
+ * never reads as the main path, and it keeps the 48 dp touch target.
+ */
+@Composable
+fun OruTextButton(
+    text: String,
+    onClick: () -> Unit,
+    color: Color,
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier = modifier
+            .defaultMinSize(minHeight = OruSpacing.TouchTarget)
+            .clip(OruPillShape)
+            .clickable(role = Role.Button, onClick = onClick),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text = text,
+            modifier = Modifier.padding(horizontal = ButtonPaddingHorizontal, vertical = ButtonPaddingVertical),
+            style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold),
+            color = color,
+            textAlign = TextAlign.Center,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+    }
+}
+
+/**
  * [allowTwoLines] is for a button inside a card, where the label may take a second line at a large font
  * scale rather than be cut. The button grows in height to fit it. Dock buttons keep one line.
  */

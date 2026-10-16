@@ -5,6 +5,13 @@
 
 package app.morphe.manager.ui.oru.home
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -35,10 +42,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -64,7 +73,6 @@ import app.morphe.manager.ui.oru.components.OruBackdropHost
 import app.morphe.manager.ui.oru.components.OruBanner
 import app.morphe.manager.ui.oru.components.OruCardButton
 import app.morphe.manager.ui.oru.components.OruCardUi
-import app.morphe.manager.ui.oru.components.OruChip
 import app.morphe.manager.ui.oru.components.OruChipUi
 import app.morphe.manager.ui.oru.components.OruGlassForm
 import app.morphe.manager.ui.oru.components.OruGlassSurface
@@ -93,7 +101,9 @@ import app.morphe.manager.ui.oru.nav.oruLeaveDrop
 import app.morphe.manager.ui.oru.nav.oruLeaveParting
 import app.morphe.manager.ui.oru.nav.oruTileSharedKey
 import app.morphe.manager.ui.oru.theme.OruBlobShape
+import app.morphe.manager.ui.oru.theme.OruMotion
 import app.morphe.manager.ui.oru.theme.OruSpacing
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**
@@ -125,6 +135,9 @@ fun OruHomeContent(
     onSecondary: (OruHomeCard) -> Unit,
     onCheckUpdates: () -> Unit,
     onAddSource: () -> Unit,
+    // The first-run tour: whether it is done for good, and the call that marks it done (see OruTourCard)
+    tourDone: Boolean,
+    onTourDone: () -> Unit,
     // The settings sheet, drawn in the backdrop host so its glass blurs the Home content
     overlay: @Composable BoxScope.() -> Unit = {},
     modifier: Modifier = Modifier,
@@ -183,6 +196,24 @@ fun OruHomeContent(
     var tappedId by remember { mutableStateOf<String?>(null) }
     val tappedIndex = state.cards.indexOfFirst { it.id == tappedId }.takeIf { it >= 0 }
 
+    // The first-run tour. Its step moves forward with the progress of Home and never back on its own. It goes once it is
+    // done, dismissed, or Home shows a patched app (see oruTourVisible)
+    var tour by rememberSaveable(stateSaver = OruTourStateSaver) { mutableStateOf(OruTourState()) }
+    val tourInput = oruTourInputOf(state, runActive = run != null)
+    val tourVisible = oruTourVisible(done = tourDone, state = tour, input = tourInput)
+    val tourStep = oruTourDerivedStep(tourInput)
+    LaunchedEffect(tourStep) { tour = tour.advanceTo(tourStep) }
+    // The tour's item stays in the list while the card leaves, then goes, so the list keeps no gap where it was
+    var tourMounted by remember { mutableStateOf(tourVisible) }
+    LaunchedEffect(tourVisible) {
+        if (tourVisible) {
+            tourMounted = true
+        } else {
+            delay(if (reduced) 0L else OruMotion.MaxDurationMillis.toLong())
+            tourMounted = false
+        }
+    }
+
     OruBackdropHost(
         // The glow is drawn before the status bar padding so it also covers the status bar area
         modifier = modifier.fillMaxSize().oruAmbient(MaterialTheme.colorScheme.primary).statusBarsPadding(),
@@ -230,13 +261,40 @@ fun OruHomeContent(
                                     anchor = titleAnchor,
                                     titleAlpha = titleAlpha,
                                     subtitleAlpha = subtitleAlpha,
-                                    expert = state.expert,
                                 )
                             }
 
                             state.banner?.let { banner ->
                                 item(key = "banner") {
                                     HomeBanner(banner = banner, onAction = { onBannerAction(banner) })
+                                }
+                            }
+
+                            if (tourMounted) {
+                                item(key = "tour") {
+                                    AnimatedVisibility(
+                                        visible = tourVisible,
+                                        enter = if (reduced) {
+                                            EnterTransition.None
+                                        } else {
+                                            fadeIn(OruMotion.fade(reduced)) + expandVertically(OruMotion.expand(reduced))
+                                        },
+                                        exit = if (reduced) {
+                                            ExitTransition.None
+                                        } else {
+                                            fadeOut(OruMotion.fade(reduced)) + shrinkVertically(OruMotion.expand(reduced))
+                                        },
+                                    ) {
+                                        OruTourCard(
+                                            state = tour,
+                                            onPick = { picked -> tour = tour.goTo(picked) },
+                                            onNext = { tour = tour.next() },
+                                            onDismiss = {
+                                                tour = tour.dismiss()
+                                                onTourDone()
+                                            },
+                                        )
+                                    }
                                 }
                             }
 
@@ -405,7 +463,6 @@ private fun HomeHeader(
     anchor: OruTitleAnchor,
     titleAlpha: () -> Float,
     subtitleAlpha: () -> Float,
-    expert: Boolean,
 ) {
     Column(modifier = Modifier.padding(top = HeaderTopSpace, bottom = HeaderBottomSpace)) {
         Box(
@@ -436,15 +493,6 @@ private fun HomeHeader(
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
-        // The mode the cards are in, under what the list says: Expert only, as Simple is the default reading
-        if (expert) {
-            Spacer(modifier = Modifier.height(TitleLedeSpace))
-            OruChip(
-                text = stringResource(R.string.oru_mode_expert),
-                tone = OruTone.Neutral,
-                modifier = Modifier.graphicsLayer { alpha = subtitleAlpha() },
-            )
-        }
     }
 }
 
@@ -623,8 +671,8 @@ private fun OruHomeCard.toCardUi(expert: Boolean): OruCardUi {
         chips = if (expert) expertChips() else simpleChips(),
         source = source,
         hint = hintText(),
-        primary = OruCardButton(label = stringResource(primary.labelRes()), style = primary.style()),
-        secondary = secondary?.let { OruCardButton(label = stringResource(it.labelRes()), style = it.style()) },
+        primary = OruCardButton(label = stringResource(primary.labelRes(expert)), style = primary.style()),
+        secondary = secondary?.let { OruCardButton(label = stringResource(it.labelRes(expert)), style = it.style()) },
     )
 }
 
@@ -643,7 +691,10 @@ private fun OruHomeCard.sentenceText(): String = when (status.simpleSentence()) 
     OruHomeSentence.NeedsApk -> version?.let { stringResource(R.string.oru_simple_status_needs, item.displayName, it) }
         ?: stringResource(R.string.oru_simple_status_needs_plain, item.displayName)
     OruHomeSentence.WaitingApk -> stringResource(R.string.oru_chip_waiting_apk)
+    OruHomeSentence.SavedCopyGated -> version?.let { stringResource(R.string.oru_simple_status_gated, item.displayName, it) }
+        ?: stringResource(R.string.oru_simple_status_gated_plain)
     OruHomeSentence.Ready -> stringResource(R.string.oru_simple_status_ready)
+    OruHomeSentence.ReadyToInstall -> stringResource(R.string.oru_notification_ready_to_install)
     OruHomeSentence.UpdateReady -> stringResource(R.string.oru_simple_status_update_ready)
     OruHomeSentence.UpToDate -> stringResource(R.string.oru_simple_status_up_to_date)
     OruHomeSentence.Patched -> stringResource(R.string.oru_simple_status_patched)
@@ -651,18 +702,23 @@ private fun OruHomeCard.sentenceText(): String = when (status.simpleSentence()) 
 
 @Composable
 private fun OruHomeCard.simpleChips(): List<OruChipUi> = buildList {
-    if (customized) add(OruChipUi(text = stringResource(R.string.oru_simple_customized), tone = OruTone.Neutral))
+    if (customized) add(customizedChip())
 }
+
+/** The badge of an app Expert set up differently from the recommended setup. Both modes show it. */
+@Composable
+private fun customizedChip(): OruChipUi = OruChipUi(text = stringResource(R.string.oru_simple_customized), tone = OruTone.Neutral)
 
 @Composable
 private fun OruHomeCard.expertChips(): List<OruChipUi> = buildList {
     add(OruChipUi(text = stringResource(statusTextRes()), tone = chipTone))
+    if (customized) add(customizedChip())
     // An app that can be updated shows the patched copy beside the newest version the sources support
     if (status == OruHomeCardStatus.UpdateAvailable) {
-        version?.let { add(OruChipUi(text = stringResource(R.string.oru_chip_patched_version, it), tone = OruTone.Neutral, mono = true)) }
-        latestVersion?.let { add(OruChipUi(text = stringResource(R.string.oru_chip_latest_version, it), tone = OruTone.Neutral, mono = true)) }
+        version?.let { add(OruChipUi(text = stringResource(R.string.oru_chip_patched_version, it), tone = OruTone.Neutral)) }
+        latestVersion?.let { add(OruChipUi(text = stringResource(R.string.oru_chip_latest_version, it), tone = OruTone.Neutral)) }
     } else {
-        version?.let { add(OruChipUi(text = it, tone = OruTone.Neutral, mono = true)) }
+        version?.let { add(OruChipUi(text = it, tone = OruTone.Neutral)) }
     }
 }
 
@@ -674,12 +730,16 @@ private fun OruHomeCard.hintText(): String? = when (hint) {
             ?: stringResource(R.string.oru_hint_return_download)
     OruHomeHint.ReturnDownload -> stringResource(R.string.oru_hint_return_download)
     OruHomeHint.SavedCopy -> stringResource(R.string.oru_state_saved_copy)
+    OruHomeHint.SavedCopyGated ->
+        hintVersion?.let { stringResource(R.string.oru_hint_saved_gated, it) }
+            ?: stringResource(R.string.oru_hint_saved_gated_plain)
 }
 
 private fun OruHomeCard.statusTextRes(): Int = when (status) {
     OruHomeCardStatus.Checking -> R.string.oru_chip_checking
     OruHomeCardStatus.Unverified -> R.string.oru_chip_unverified
-    OruHomeCardStatus.NeedsApk -> R.string.oru_chip_apk_needed
+    OruHomeCardStatus.NeedsApk,
+    OruHomeCardStatus.SavedCopyGated -> R.string.oru_chip_apk_needed
     OruHomeCardStatus.Waiting -> R.string.oru_chip_waiting_apk
     OruHomeCardStatus.SavedCopy,
     OruHomeCardStatus.ReadyOnDevice -> R.string.oru_chip_ready
@@ -687,22 +747,26 @@ private fun OruHomeCard.statusTextRes(): Int = when (status) {
     OruHomeCardStatus.UpdateAvailable -> R.string.oru_state_update_available
     OruHomeCardStatus.Installed,
     OruHomeCardStatus.PatchedElsewhere -> R.string.oru_chip_installed
+    OruHomeCardStatus.ReadyToInstall -> R.string.oru_notification_ready_to_install
 }
 
-private fun OruHomeAction.labelRes(): Int = when (this) {
+/** The label of an action. Expert's shorter label for the saved copy fits one line; Simple keeps the full one. */
+private fun OruHomeAction.labelRes(expert: Boolean): Int = when (this) {
     OruHomeAction.AppInfo -> R.string.oru_action_app_info
     OruHomeAction.CheckAndPatch -> R.string.oru_action_check_and_patch
     OruHomeAction.FindOnApkMirror -> R.string.oru_action_find_apkmirror
     OruHomeAction.UseFile -> R.string.oru_action_use_file
     OruHomeAction.ChooseFile -> R.string.oru_action_choose_file
     OruHomeAction.OpenApkMirrorAgain -> R.string.oru_action_open_apkmirror_again
-    OruHomeAction.PatchFromSaved -> R.string.oru_action_patch_from_saved
+    OruHomeAction.PatchFromSaved ->
+        if (expert) R.string.oru_action_patch_saved_expert else R.string.oru_action_patch_from_saved
     OruHomeAction.UseAnotherFile -> R.string.oru_action_use_another_file
     OruHomeAction.GetIt -> R.string.oru_action_get_it
     OruHomeAction.Patch -> R.string.oru_action_patch
     OruHomeAction.Update -> R.string.oru_action_update
     OruHomeAction.Open -> R.string.oru_action_open
     OruHomeAction.PatchAgain -> R.string.oru_action_patch_again
+    OruHomeAction.Install -> R.string.oru_action_install
 }
 
 // Header spacing: the list adds 12 dp below the header, so 6 dp here makes 18.

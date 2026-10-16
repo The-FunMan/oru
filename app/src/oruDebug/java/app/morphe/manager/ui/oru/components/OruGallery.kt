@@ -92,7 +92,7 @@ fun OruGallery(modifier: Modifier = Modifier) {
                     name = "Video player",
                     source = "Default patches",
                     benefit = "Removes ads and plays in the background",
-                    chips = listOf(OruChipUi("Ready", OruTone.Ok), OruChipUi("21.40.161", mono = true)),
+                    chips = listOf(OruChipUi("Ready", OruTone.Ok), OruChipUi("21.40.161")),
                     hint = null,
                     primary = OruCardButton("Upgrade", OruButtonStyle.Filled),
                     secondary = null,
@@ -124,7 +124,7 @@ fun OruGallery(modifier: Modifier = Modifier) {
                     benefit = "Hides promoted posts and tracking, with a long benefit line that wraps at 1.3 scale",
                     chips = listOf(
                         OruChipUi("Waiting for the APK", OruTone.Warn),
-                        OruChipUi("2024.12.0", mono = true),
+                        OruChipUi("2024.12.0"),
                     ),
                     hint = null,
                     primary = OruCardButton("Choose the file", OruButtonStyle.Filled),
@@ -158,7 +158,7 @@ fun OruGallery(modifier: Modifier = Modifier) {
                 OruChip(text = "Warn", tone = OruTone.Warn)
                 OruChip(text = "Error", tone = OruTone.Error)
             }
-            OruChip(text = "8.33.51, monospace", tone = OruTone.Neutral, mono = true)
+            OruChip(text = "8.33.51, monospace", tone = OruTone.Neutral)
         }
 
         GallerySection("Notices and banner") {

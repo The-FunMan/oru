@@ -187,6 +187,7 @@ fun OruFocusRoute(
     val overrides = rememberOruAppOverrides(home, item?.packageName.orEmpty(), sources)
     val state = OruFocusReducer.reduce(vm.flags(item, hasRun, sources, expert))
     // Simple's way back from a customized app: its own records are cleared, and a held run is built again from the defaults
+    val customized = overrides?.isCustomized() == true
     val onReset: () -> Unit = {
         val plan = overrides?.resetPlan()
         if (item != null && plan != null) {
@@ -199,7 +200,7 @@ fun OruFocusRoute(
     }
     // The install's app info, opened from Simple's Focus: Home shows its dialog once the Focus is left
     val infoPackage = item?.let { it.installedApp?.currentPackageName ?: it.installedPatchedPackage }
-    val onAppInfo: (() -> Unit)? = infoPackage?.takeIf { !expert }?.let { packageName ->
+    val onAppInfo: (() -> Unit)? = infoPackage?.let { packageName ->
         val open: () -> Unit = {
             home.openInstalledAppInfo(packageName)
             onBack()
@@ -245,7 +246,7 @@ fun OruFocusRoute(
                             expert = expert,
                             tint = appTint,
                             onBack = onBack,
-                            customized = overrides?.isCustomized() == true,
+                            customized = customized,
                             onReset = onReset,
                             onAppInfo = onAppInfo,
                         )
@@ -259,6 +260,8 @@ fun OruFocusRoute(
                             home = home,
                             item = it,
                             choosing = state is OruFocusState.Choose,
+                            customized = customized,
+                            onReset = onReset,
                         )
                     }
                     OruSettingsSheet(

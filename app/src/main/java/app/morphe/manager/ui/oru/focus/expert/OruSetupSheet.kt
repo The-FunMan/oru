@@ -8,10 +8,12 @@ package app.morphe.manager.ui.oru.focus.expert
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -19,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -34,6 +37,9 @@ import app.morphe.manager.ui.oru.components.OruRow
 import app.morphe.manager.ui.oru.components.oruSlab
 import app.morphe.manager.ui.oru.focus.OruFocusViewModel
 import app.morphe.manager.ui.oru.focus.customize.oruBrandingTargets
+import app.morphe.manager.ui.oru.focus.oruFocusShowsInstalled
+import app.morphe.manager.ui.oru.home.OruHomePresenter
+import app.morphe.manager.ui.oru.sources.oruVersionGate
 import app.morphe.manager.ui.oru.sources.rememberOruAppSources
 import app.morphe.manager.ui.oru.theme.OruGroupInnerShape
 import app.morphe.manager.ui.oru.theme.OruGroupShape
@@ -70,13 +76,15 @@ internal data class OruSetup(
     val hasBranding: Boolean,
     /** A saved copy of the app is kept, so it can be patched again. */
     val hasSavedCopy: Boolean,
+    /** The app is installed, so [appVersion] is the next patch target, labelled as one. */
+    val appVersionIsNext: Boolean = false,
 )
 
 /** One part of the summary line. A part is left out when its value is not known. */
 internal sealed interface OruSetupPart {
     data class Source(val label: String, val patchVersion: String?) : OruSetupPart
     data class Channel(val summary: OruChannelSummary) : OruSetupPart
-    data class AppVersion(val version: String) : OruSetupPart
+    data class AppVersion(val version: String, val next: Boolean = false) : OruSetupPart
     data class Patches(val selected: Int, val total: Int) : OruSetupPart
     data class Installer(val label: String) : OruSetupPart
 }
@@ -85,7 +93,7 @@ internal sealed interface OruSetupPart {
 internal fun oruSetupParts(setup: OruSetup): List<OruSetupPart> = buildList {
     setup.sourceLabel?.let { add(OruSetupPart.Source(it, setup.patchVersion)) }
     setup.channel?.let { add(OruSetupPart.Channel(it)) }
-    setup.appVersion?.let { add(OruSetupPart.AppVersion(it)) }
+    setup.appVersion?.let { add(OruSetupPart.AppVersion(it, setup.appVersionIsNext)) }
     setup.selectedPatches?.let { add(OruSetupPart.Patches(it, setup.patchTotal)) }
     setup.installer?.let { add(OruSetupPart.Installer(it)) }
 }
@@ -99,10 +107,13 @@ internal fun rememberOruSetup(vm: OruFocusViewModel, home: HomeViewModel, item: 
     val effective = appSources.effective
     val loadedSources by home.patchBundleRepository.sources.collectAsStateWithLifecycle()
     val held = vm.held
-    var hasSavedCopy by remember(packageName) { mutableStateOf(false) }
+    var savedVersion by remember(packageName) { mutableStateOf<String?>(null) }
     LaunchedEffect(packageName) {
-        hasSavedCopy = originals.get(packageName) != null
+        savedVersion = originals.get(packageName)?.version
     }
+    // A saved copy the sources do not patch is not offered to patch again (see oruVersionGate)
+    val hasSavedCopy = savedVersion != null &&
+        oruVersionGate(savedVersion, null, appSources.effectiveVersions).patchable
     val effectiveSource = loadedSources.firstOrNull { it.uid == effective?.uid }
     val channels = oruChannelStates(
         listOfNotNull(effectiveSource).map { source ->
@@ -137,6 +148,9 @@ internal fun rememberOruSetup(vm: OruFocusViewModel, home: HomeViewModel, item: 
         installer = vm.pickedInstaller?.label ?: vm.primaryInstallerLabel,
         hasBranding = branding.isNotEmpty(),
         hasSavedCopy = hasSavedCopy,
+        // Once the app is installed, the version the run would download is the next patch, not the one for this APK
+        appVersionIsNext = held == null &&
+            oruFocusShowsInstalled(OruHomePresenter.statusOf(item, handedOff = false, targets = null)),
     )
 }
 
@@ -165,7 +179,7 @@ private fun oruSetupPartText(part: OruSetupPart): String = when (part) {
         OruChannelSummary.PreRelease -> stringResource(R.string.oru_focus_channel_prerelease)
         is OruChannelSummary.Mixed -> stringResource(R.string.oru_focus_channel_mixed, summary.preRelease, summary.sources)
     }
-    is OruSetupPart.AppVersion -> part.version
+    is OruSetupPart.AppVersion -> if (part.next) stringResource(R.string.oru_focus_next_patch, part.version) else part.version
     is OruSetupPart.Patches -> stringResource(R.string.oru_focus_summary_patches, part.selected, part.total)
     is OruSetupPart.Installer -> part.label
 }
@@ -182,6 +196,8 @@ internal fun ColumnScope.OruSetupContent(
     home: HomeViewModel,
     item: HomeAppItem,
     choosing: Boolean,
+    customized: Boolean,
+    onReset: () -> Unit,
 ) {
     val setup = rememberOruSetup(vm, home, item)
     val scope = rememberCoroutineScope()
@@ -238,6 +254,8 @@ internal fun ColumnScope.OruSetupContent(
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            // The rows stand clear of the subtitle above them
+            .padding(top = 12.dp)
             .padding(horizontal = SheetGutter)
             .oruSlab(
                 shape = OruGroupShape,
@@ -248,7 +266,9 @@ internal fun ColumnScope.OruSetupContent(
     ) {
         OruRow(
             title = stringResource(R.string.oru_focus_version),
-            value = setup.appVersion,
+            value = setup.appVersion?.let {
+                if (setup.appVersionIsNext) stringResource(R.string.oru_focus_next_patch, it) else it
+            },
             onClick = if (choosing) openVersion else null,
             shape = OruGroupInnerShape,
         )
@@ -307,11 +327,20 @@ internal fun ColumnScope.OruSetupContent(
         }
     }
 
-    OruOutlinedButton(
-        text = stringResource(R.string.oru_action_close),
-        onClick = { host.close() },
+    // Reset is the way back to the recommended setup, the one Simple offers. It is off while the app has no changes
+    Row(
         modifier = Modifier.fillMaxWidth().padding(horizontal = SheetGutter, vertical = 12.dp),
-    )
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        TextButton(onClick = onReset, enabled = customized) {
+            Text(stringResource(R.string.oru_simple_reset))
+        }
+        OruOutlinedButton(
+            text = stringResource(R.string.oru_action_close),
+            onClick = { host.close() },
+            modifier = Modifier.weight(1f).padding(start = 8.dp),
+        )
+    }
 
     prereleaseToConfirm?.let { source ->
         ConfirmDialog(

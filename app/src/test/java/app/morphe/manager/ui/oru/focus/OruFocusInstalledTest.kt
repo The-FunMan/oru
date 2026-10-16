@@ -59,14 +59,14 @@ class OruFocusInstalledTest {
     @Test
     fun `an app Oru just installed reads as installed, as Home shows it`() {
         val item = item(installed = patchedByOru())
-        assertEquals(OruHomeCardStatus.Installed, OruHomePresenter.statusOf(item, handedOff = false, supportedVersions = null))
-        assertTrue(oruFocusShowsInstalled(OruHomePresenter.statusOf(item, handedOff = false, supportedVersions = null)))
+        assertEquals(OruHomeCardStatus.Installed, OruHomePresenter.statusOf(item, handedOff = false, targets = null))
+        assertTrue(oruFocusShowsInstalled(OruHomePresenter.statusOf(item, handedOff = false, targets = null)))
     }
 
     @Test
     fun `an app with a newer patch to build is not installed, so the Focus still asks for the file`() {
         val item = item(installed = patchedByOru(), hasUpdate = true)
-        assertEquals(OruHomeCardStatus.UpdateAvailable, OruHomePresenter.statusOf(item, handedOff = false, supportedVersions = null))
-        assertFalse(oruFocusShowsInstalled(OruHomePresenter.statusOf(item, handedOff = false, supportedVersions = null)))
+        assertEquals(OruHomeCardStatus.UpdateAvailable, OruHomePresenter.statusOf(item, handedOff = false, targets = null))
+        assertFalse(oruFocusShowsInstalled(OruHomePresenter.statusOf(item, handedOff = false, targets = null)))
     }
 }

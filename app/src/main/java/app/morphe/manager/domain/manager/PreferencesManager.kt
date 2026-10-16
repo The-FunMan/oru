@@ -145,6 +145,9 @@ class PreferencesManager(
     // ORU: set once the signing key notice has shown on the Done of the first patch, see OruFocusRunRoute
     val oruKeyNoticeShown = booleanPreference("oru_key_notice_shown", false)
 
+    // ORU: set once the first-run tour on Home is done, by Skip, Got it or the first patch on the phone. Not a setting
+    val oruTourDone = booleanPreference("oru_tour_done", false)
+
     // ORU: guards the oru one-time defaults, see OruSettingsMigration
     private val oruUxMigrated = booleanPreference(OruSettingsMigration.FLAG_KEY, false)
     private val oruUxV2Migrated = booleanPreference(OruSettingsMigration.V2_FLAG_KEY, false)

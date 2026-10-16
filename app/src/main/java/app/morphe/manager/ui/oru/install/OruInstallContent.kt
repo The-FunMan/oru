@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,6 +37,7 @@ import app.morphe.manager.ui.oru.components.OruRow
 import app.morphe.manager.ui.oru.components.OruTileSource
 import app.morphe.manager.ui.oru.components.OruTone
 import app.morphe.manager.ui.oru.install.postinstall.OruDoneFacts
+import app.morphe.manager.ui.oru.install.postinstall.OruDoneChanges
 import app.morphe.manager.ui.oru.install.postinstall.OruDoneFactsRow
 import app.morphe.manager.ui.oru.run.OruRunHexagon
 import app.morphe.manager.ui.oru.theme.OruBlobShape
@@ -385,11 +388,12 @@ private fun unavailableActions(
     return list
 }
 
-/** The done facts row, when the run has facts to show. */
+/** The done facts row and the "What changed" list, when the run has facts to show. */
 @Composable
 private fun DoneFacts(facts: OruDoneFacts?) {
     if (facts != null) {
         OruDoneFactsRow(facts = facts)
+        OruDoneChanges(names = facts.patchNames)
     }
 }
 
@@ -461,10 +465,12 @@ private fun InstallScaffold(
     extra: (@Composable ColumnScope.() -> Unit)? = null,
     dock: (@Composable RowScope.() -> Unit)? = null,
 ) {
+    // Scrolls as a whole when the rows are taller than the screen, so the dock stays reachable
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = OruSpacing.ScreenGutter),
+            .padding(horizontal = OruSpacing.ScreenGutter)
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(OruSpacing.Medium),
     ) {

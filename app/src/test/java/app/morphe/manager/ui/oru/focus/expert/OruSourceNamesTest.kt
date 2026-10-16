@@ -74,4 +74,25 @@ class OruSourceNamesTest {
         assertEquals("Community (a/b)", labels[1])
         assertEquals("community (c/d)", labels[2])
     }
+
+    @Test
+    fun `displaySourceName follows a shared name with the repository of the source asked about`() {
+        val morphe = labelFact(1, "Morphe Patches", "Morphe/patches")
+        val fork = labelFact(2, "Morphe Patches", "someone/fork")
+        assertEquals("Morphe Patches (someone/fork)", displaySourceName(fork, listOf(morphe, fork)))
+        assertEquals("Morphe Patches (Morphe/patches)", displaySourceName(morphe, listOf(morphe, fork)))
+    }
+
+    @Test
+    fun `displaySourceName keeps a name no other source shares`() {
+        val only = labelFact(3, "Morphe Patches", "Morphe/patches")
+        assertEquals("Morphe Patches", displaySourceName(only, listOf(only)))
+    }
+
+    @Test
+    fun `displaySourceName adds no path to a shared name without a repository`() {
+        val first = labelFact(1, "Local", null)
+        val second = labelFact(2, "Local", null)
+        assertEquals("Local", displaySourceName(first, listOf(first, second)))
+    }
 }

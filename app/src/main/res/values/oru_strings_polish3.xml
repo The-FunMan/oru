@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copy for the third UX polish pass: the wallpaper colours note below Android 12, and the one line that names why the
+  unavailable installers are unavailable. English only.
+-->
+<resources>
+    <string name="oru_settings_wallpaper_needs_12">Needs Android 12 or later.</string>
+    <string name="oru_installer_needs_root_or_shizuku">Needs root or Shizuku</string>
+</resources>

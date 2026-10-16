@@ -66,6 +66,13 @@ class OruSetupSheetTest {
     }
 
     @Test
+    fun `an installed app's version is the next patch target, not the one for the APK`() {
+        val parts = oruSetupParts(setup(appVersion = "21.20.405").copy(appVersionIsNext = true))
+        assertEquals(listOf(OruSetupPart.AppVersion("21.20.405", next = true)), parts)
+        assertEquals(listOf(OruSetupPart.AppVersion("21.20.405")), oruSetupParts(setup(appVersion = "21.20.405")))
+    }
+
+    @Test
     fun `patches show only while a run is held`() {
         val parts = oruSetupParts(setup(sourceLabel = "Source A", patchTotal = 50))
         assertTrue(parts.none { it is OruSetupPart.Patches })

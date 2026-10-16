@@ -45,6 +45,9 @@ import app.morphe.manager.patcher.split.SplitApkInspector
 import app.morphe.manager.patcher.split.SplitApkPreparer
 import app.morphe.manager.ui.model.*
 import app.morphe.manager.ui.model.navigation.Patcher
+import app.morphe.manager.ui.oru.sources.OruVersionGate
+import app.morphe.manager.ui.oru.sources.oruAppSourcesNow
+import app.morphe.manager.ui.oru.sources.oruVersionGate
 import app.morphe.manager.ui.screen.shared.CopySelectionCandidate
 import app.morphe.manager.util.*
 import app.morphe.manager.util.PatchSelectionUtils.applyAvailability
@@ -181,6 +184,12 @@ class HomeViewModel(
     var showAndroid11Dialog by mutableStateOf(false)
     var showBundleManagementSheet by mutableStateOf(false)
     var showAddSourceDialog by mutableStateOf(false)
+
+    /** Whether the add dialog is reading the addresses it was given, before it closes. */
+    var addSourceChecking by mutableStateOf(false)
+
+    /** Why the addresses in the add dialog were not added, shown in the dialog until the next submit. */
+    var addSourceError by mutableStateOf<String?>(null)
     var bundleToRename by mutableStateOf<PatchBundleSource?>(null)
     var showRenameBundleDialog by mutableStateOf(false)
 
@@ -973,6 +982,28 @@ class HomeViewModel(
     }
 
     /**
+     * Adds the sources of [urls] from the add dialog. The dialog stays open, with a checking state,
+     * until the addresses are read: when one does not serve a patch bundle, nothing is added and the
+     * dialog says so.
+     */
+    fun submitRemoteSources(urls: List<String>, chooseApps: Boolean) = viewModelScope.launch {
+        addSourceError = null
+        addSourceChecking = true
+        val unreachable = try {
+            patchBundleRepository.unreachableRemoteUrls(urls)
+        } finally {
+            addSourceChecking = false
+        }
+        if (unreachable.isNotEmpty()) {
+            addSourceError = app.getString(R.string.sources_management_no_bundle)
+            return@launch
+        }
+        showAddSourceDialog = false
+        showBundleManagementSheet = false
+        createRemoteSources(urls, chooseApps)
+    }
+
+    /**
      * Queues the app list of each of [uids] that has apps to list as its patches load, then hints
      * at the swipe gestures of the source cards.
      *
@@ -1069,7 +1100,13 @@ class HomeViewModel(
     fun confirmDeepLinkBundle(chooseApps: Boolean) {
         val bundle = deepLinkPendingBundle ?: return
         deepLinkPendingBundle = null
-        createRemoteSources(listOf(bundle.url), chooseApps)
+        viewModelScope.launch {
+            if (patchBundleRepository.unreachableRemoteUrls(listOf(bundle.url)).isNotEmpty()) {
+                app.toast(app.getString(R.string.sources_management_no_bundle))
+                return@launch
+            }
+            createRemoteSources(listOf(bundle.url), chooseApps)
+        }
     }
 
     /** User dismissed the deep link confirmation dialog. */
@@ -1918,15 +1955,27 @@ class HomeViewModel(
         // that the APK version is not officially supported.
         // Note: experimental versions are compatible (they pass the version check) but show an
         // additional "Experimental" badge in the warning dialog.
-        val versionMismatch = !hasCompatible && hasIncompatible
+        // Oru answers this with the gate the Home card reads, for the source the app is patched from
+        // (see OruVersionGate). The other flavour keeps the check over every enabled bundle.
+        val oruGate = if (BuildConfig.ORU_UX) {
+            oruVersionGate(
+                selectedApp.version,
+                selectedApp.versionCode,
+                oruAppSourcesNow(this, selectedApp.packageName).effectiveVersions,
+            )
+        } else {
+            null
+        }
+        val versionMismatch = oruGate?.let { it == OruVersionGate.Unsupported } ?: (!hasCompatible && hasIncompatible)
         // Experimental check is independent - a version can be experimental AND compatible
-        val isVersionExperimental = enabledBundles.any { it.isVersionExperimental }
+        val isVersionExperimental = oruGate?.let {
+            it == OruVersionGate.ExperimentalAllowed || it == OruVersionGate.ExperimentalOff
+        } ?: enabledBundles.any { it.isVersionExperimental }
 
         // Check if the user has enabled experimental-version mode for this package's bundle
         val experimentalEnabledUids = prefs.bundleExperimentalVersionsEnabled.getBlocking()
-        val isExperimentalModeEnabled = enabledBundles.any { bundle ->
-            bundle.uid.toString() in experimentalEnabledUids
-        }
+        val isExperimentalModeEnabled = oruGate?.let { it == OruVersionGate.ExperimentalAllowed }
+            ?: enabledBundles.any { bundle -> bundle.uid.toString() in experimentalEnabledUids }
 
         if (versionMismatch && !allowIncompatible) {
             pendingSelectedApp = selectedApp

@@ -51,10 +51,6 @@ class OruAppSources(
     /** The version the effective source recommends for the app. */
     val recommendedVersion: String? get() = effective?.recommendedVersion
 
-    /** The versions of the effective source, as the supported check reads them. */
-    val supportedVersions: Set<String>
-        get() = effectiveVersions.mapNotNullTo(mutableSetOf()) { it.target.version }
-
     companion object {
         val NONE = OruAppSources(emptyList(), emptyMap(), null, emptyList())
     }

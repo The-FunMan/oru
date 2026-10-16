@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copy of the first-run tour on Home: the card that names the three steps of a first patch. English only.
+-->
+<resources>
+    <string name="oru_tour_title">Your first patch</string>
+    <string name="oru_tour_skip">Skip</string>
+    <string name="oru_tour_skip_description">Skip the first patch tour</string>
+    <string name="oru_tour_next">Next</string>
+    <string name="oru_tour_got_it">Got it</string>
+    <string name="oru_tour_step_name_find">Find the APK</string>
+    <string name="oru_tour_step_name_patch">Patch it</string>
+    <string name="oru_tour_step_name_install">Install it</string>
+    <string name="oru_tour_step_find">Oru opens the download page for the exact version it needs. You download the file, then come back.</string>
+    <string name="oru_tour_step_patch">Choose the file and Oru patches it on this phone.</string>
+    <string name="oru_tour_step_install">Android may ask you to confirm the install. Oru never installs behind your back.</string>
+    <string name="oru_tour_step_state">Step %1$d of %2$d</string>
+    <string name="oru_tour_step_state_current">Step %1$d of %2$d, current</string>
+</resources>

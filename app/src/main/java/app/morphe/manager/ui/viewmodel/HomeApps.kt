@@ -26,6 +26,8 @@ import app.morphe.manager.domain.repository.PatchBundleRepository.Companion.DEFA
 import app.morphe.manager.patcher.patch.BundleAppMetadata
 import app.morphe.manager.patcher.patch.PatchBundleInfo
 import app.morphe.manager.ui.model.*
+import app.morphe.manager.ui.oru.focus.expert.asNameFact
+import app.morphe.manager.ui.oru.focus.expert.displaySourceName
 import app.morphe.manager.util.*
 import app.morphe.patcher.patch.AppTarget
 import kotlinx.coroutines.*
@@ -702,6 +704,7 @@ class HomeApps(
         // Keep source sections in repository order. Home sorting should reorder app cards
         // inside each source section, not move source headers around.
         val sourceOrder = sources.keys.mapIndexed { index, uid -> uid to index }.toMap()
+        val nameFacts = sources.values.map { it.asNameFact() }
         return enabledInfo.values
             .sortedWith(
                 compareBy(
@@ -725,7 +728,7 @@ class HomeApps(
                     }
                     val source = sources[info.uid]
                     val avatarUrls = source?.avatarUrls
-                    val sourceName = source?.shownTitle
+                    val sourceName = source?.let { displaySourceName(it.asNameFact(), nameFacts) }
                         ?.takeUnless { it.isBlank() }
                         ?: info.name.takeUnless { it.isBlank() }
                         ?: "#${info.uid}"

@@ -44,10 +44,13 @@ import app.morphe.manager.R
 import app.morphe.manager.ui.oru.components.OruContainerRole
 import app.morphe.manager.ui.oru.components.OruDecisionDialog
 import app.morphe.manager.ui.oru.components.OruDialogAction
+import app.morphe.manager.ui.oru.components.OruDialogActionStyle
 import app.morphe.manager.ui.oru.components.OruFitMinSize
 import app.morphe.manager.ui.oru.components.OruFrostedDock
 import app.morphe.manager.ui.oru.components.OruHero
 import app.morphe.manager.ui.oru.components.OruHeroCounter
+import app.morphe.manager.ui.oru.components.oruAnnouncedPercent
+import app.morphe.manager.ui.oru.components.oruPercent
 import app.morphe.manager.ui.oru.components.OruMorphText
 import app.morphe.manager.ui.oru.components.OruOutlinedButton
 import app.morphe.manager.ui.oru.components.OruProgressHold
@@ -55,6 +58,7 @@ import app.morphe.manager.ui.oru.components.OruRollingCount
 import app.morphe.manager.ui.oru.components.LocalOruAppTint
 import app.morphe.manager.ui.oru.components.OruStageRail
 import app.morphe.manager.ui.oru.components.OruTapGate
+import app.morphe.manager.ui.oru.components.OruTextButton
 import app.morphe.manager.ui.oru.components.OruSwapText
 import app.morphe.manager.ui.oru.components.OruStageUi as ComponentStageUi
 import app.morphe.manager.ui.oru.components.OruTileSource
@@ -86,6 +90,8 @@ import app.morphe.manager.ui.screen.shared.KeepScreenOn
  * @param usage the samples for the readout, see [OruRunUsage.of].
  * @param facts the output size and time of a finished run, null while it works.
  * @param runKey identifies the run. The percentage it shows never goes back, and a new key starts it from zero.
+ * @param onCancel called once the user confirms the cancel.
+ * @param onKeepInBackground leaves the screen and keeps the run going in the background.
  */
 @Composable
 fun OruRunContent(
@@ -97,6 +103,7 @@ fun OruRunContent(
     facts: OruRunFacts?,
     runKey: Any,
     onCancel: () -> Unit,
+    onKeepInBackground: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val working = run.hero == OruHeroState.WORKING
@@ -123,8 +130,15 @@ fun OruRunContent(
     // The percentage of this run never steps back: a retry that starts over holds the figure it had reached
     val hold = remember(runKey) { OruProgressHold() }
     val shownProgress = hold.show(run.progress)
-    // The Cancel button is where the Patch button was, so a second tap of a double tap on Patch lands here as the run
-    // layout appears. Taps are ignored for a moment after the layout is shown (see OruTapGate).
+    // A working run is announced at each step of its percentage, not at each tick, see OruHero's description
+    val announced = if (working) {
+        stringResource(R.string.oru_run_progress_announce, oruAnnouncedPercent(oruPercent(shownProgress)))
+    } else {
+        null
+    }
+    // The dock's first button is where the Patch button was, so a second tap of a double tap on Patch lands on Keep
+    // going, which is harmless, and not on Cancel. Cancel still ignores taps for a moment after the layout is shown
+    // (see OruTapGate).
     val cancelGate = remember(runKey) { OruTapGate().apply { arm() } }
 
     Column(modifier = modifier.fillMaxSize()) {
@@ -144,6 +158,7 @@ fun OruRunContent(
                 shape = shape,
                 progress = { shownProgress },
                 compact = expert,
+                description = announced,
                 counter = counter,
                 applyingPatches = applyingPatches,
                 patchTotal = run.patchesTotal,
@@ -196,11 +211,13 @@ fun OruRunContent(
                 )
             } else {
                 OruStageRail(
+                    // Simple shows no usage and no log lines. Each step keeps its name and, once done, its time
                     stages = oruSimpleSteps(run.stages).map { (step, state) ->
                         ComponentStageUi(
                             id = step.name,
                             name = stringResource(simpleStepLabelRes(step)),
                             state = state,
+                            duration = oruSimpleStepDurationMs(run.stages, step)?.let(OruRunFormat::stageDuration),
                         )
                     },
                     expandedId = null,
@@ -216,11 +233,22 @@ fun OruRunContent(
 
         if (working) {
             OruFrostedDock(frost = OruSurfaceFill.Solid) {
-                OruOutlinedButton(
-                    text = stringResource(R.string.oru_action_cancel),
-                    onClick = { if (cancelGate.accept()) confirmCancel = true },
+                Column(
                     modifier = Modifier.weight(1f),
-                )
+                    verticalArrangement = Arrangement.spacedBy(DockSpacing),
+                ) {
+                    OruOutlinedButton(
+                        text = stringResource(R.string.oru_run_keep_background),
+                        onClick = onKeepInBackground,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    OruTextButton(
+                        text = stringResource(R.string.oru_run_cancel_go),
+                        onClick = { if (cancelGate.accept()) confirmCancel = true },
+                        color = scheme.error,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
             }
         }
     }
@@ -230,15 +258,16 @@ fun OruRunContent(
             title = stringResource(R.string.oru_run_cancel_title),
             body = stringResource(R.string.oru_run_cancel_body),
             primary = OruDialogAction(
+                label = stringResource(R.string.oru_run_keep_patching),
+                onClick = { confirmCancel = false },
+            ),
+            secondary = OruDialogAction(
                 label = stringResource(R.string.oru_run_cancel_go),
                 onClick = {
                     confirmCancel = false
                     onCancel()
                 },
-            ),
-            secondary = OruDialogAction(
-                label = stringResource(R.string.oru_run_keep_patching),
-                onClick = { confirmCancel = false },
+                style = OruDialogActionStyle.Text,
             ),
             tone = OruTone.Error,
             onDismiss = { confirmCancel = false },
@@ -382,6 +411,7 @@ private fun simpleStepLabelRes(step: OruSimpleStep): Int = when (step) {
 }
 
 private const val KbPerSecUnit = "KB/s"
+private val DockSpacing = 4.dp
 private val GutterDp = 16.dp
 private val TopSpacing = 8.dp
 private val SectionSpacing = 16.dp

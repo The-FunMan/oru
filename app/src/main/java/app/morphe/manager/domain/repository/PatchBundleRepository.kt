@@ -29,7 +29,10 @@ import app.morphe.manager.data.room.bundles.Source
 import app.morphe.manager.domain.bundles.*
 import app.morphe.manager.domain.bundles.PatchBundleSource.Extensions.isHeldBack
 import app.morphe.manager.domain.manager.PreferencesManager
+import app.morphe.manager.network.api.MorpheAPI
+import app.morphe.manager.network.dto.MorpheAsset
 import app.morphe.manager.network.utils.APIError
+import app.morphe.manager.network.utils.APIResponse
 import app.morphe.manager.patcher.patch.BundleAppMetadata
 import app.morphe.manager.patcher.patch.PatchBundle
 import app.morphe.manager.patcher.patch.PatchBundleInfo
@@ -67,6 +70,7 @@ class PatchBundleRepository(
     private val prefs: PreferencesManager,
     private val blocklistRepository: BlocklistRepository,
     private val sourceMuteRepository: SourceMuteRepository,
+    private val api: MorpheAPI,
     db: AppDatabase,
 ) {
     private val dao = db.patchBundleDao()
@@ -584,8 +588,13 @@ class PatchBundleRepository(
 
     private fun PatchBundleEntity.load(): PatchBundleSource {
         val dir = directoryOf(uid)
-        val actualName =
-            name.ifEmpty { app.getString(if (uid == 0) R.string.home_app_info_patches_name_default else R.string.home_app_info_patches_name_fallback) }
+        val unnamed = app.getString(R.string.home_app_info_patches_name_fallback)
+        val actualName = name.ifEmpty { app.getString(if (uid == 0) R.string.home_app_info_patches_name_default else R.string.home_app_info_patches_name_fallback) }
+            // A remote source whose bundle was never read is shown by its repository, not as "Unnamed"
+            .let { shown ->
+                val repository = (source as? SourceInfo.Remote)?.url?.toString()?.let { AppSourceChoice.repositoryPathOf(it) }
+                if (shown == unnamed && repository != null) repository else shown
+            }
         val normalizedDisplayName = displayName?.takeUnless { it.isBlank() }
 
         return when (source) {
@@ -1309,6 +1318,23 @@ class PatchBundleRepository(
     }
 
     /**
+     * The [urls] that do not serve a patch bundle manifest, so a source added from them would never
+     * load. Checked before [createRemotes], which saves nothing for them, so a bad address never
+     * becomes a source. Pull requests are left out: their bundle is only built on request.
+     */
+    suspend fun unreachableRemoteUrls(urls: List<String>): List<String> = coroutineScope {
+        urls.map { url ->
+            async(Dispatchers.IO) { url.takeUnless { hasPatchManifest(it) } }
+        }.awaitAll().filterNotNull()
+    }
+
+    private suspend fun hasPatchManifest(url: String): Boolean {
+        val endpoint = runCatching { normalizeRemoteBundleUrl(url) }.getOrNull() ?: return false
+        if (SourceInfo.from(endpoint) is SourceInfo.GitHubPullRequest) return true
+        return api.rawFileRequest<MorpheAsset>(endpoint) is APIResponse.Success
+    }
+
+    /**
      * Checks [url] against the sources there are now, the way [createRemotes] will, so a form can
      * flag it before it is submitted.
      */
@@ -1349,7 +1375,8 @@ class PatchBundleRepository(
 
     /** Saves and loads a new remote source for [endpoint]. Do not use this outside an action. */
     private suspend fun createRemoteEntity(endpoint: String, autoUpdate: Boolean): RemotePatchBundle {
-        val src = createEntity("", SourceInfo.from(endpoint), autoUpdate).load() as RemotePatchBundle
+        // Named by its repository until the bundle is read, so a source that never loads is not shown as unnamed
+        val src = createEntity(AppSourceChoice.repositoryPathOf(endpoint).orEmpty(), SourceInfo.from(endpoint), autoUpdate).load() as RemotePatchBundle
 
         // Auto-enable prerelease if the URL explicitly targets the "dev" branch
         if (src is JsonPatchBundle && src.endpointBranch == "dev") {
@@ -1439,7 +1466,7 @@ class PatchBundleRepository(
     } catch (_: Exception) { null }
 
     fun normalizeRemoteBundleUrl(input: String): String {
-        val trimmed = withHttpsScheme(input)
+        val trimmed = withHttpsScheme(SourceUrl.canonical(input))
         val parsed = try {
             Url(trimmed)
         } catch (e: Exception) {

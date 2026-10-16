@@ -103,9 +103,12 @@ object OruDecisionCopy {
             )
         }
 
+    /**
+     * The one line about the installer. "Android asks you to confirm" is only said when the step is not silent,
+     * because the planner's silent flag means no system prompt follows (see [InstallStep.ShowInstall]).
+     */
     private fun installLine(step: InstallStep.ShowInstall): Int = when {
-        // The system installer can still refuse a silent update, so its line keeps the prompt possible
-        step.silent && step.installer == InstallerChoice.SYSTEM -> R.string.oru_install_with_system_silent
+        step.silent && step.installer == InstallerChoice.SYSTEM -> R.string.oru_done_install_automatic
         step.silent -> R.string.oru_install_with_silent   // "Installs with %1$s, without a prompt."
         step.installer == InstallerChoice.SYSTEM -> R.string.oru_install_with_system
         else -> R.string.oru_install_with_android

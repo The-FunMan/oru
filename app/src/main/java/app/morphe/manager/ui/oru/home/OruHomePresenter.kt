@@ -6,10 +6,12 @@
 package app.morphe.manager.ui.oru.home
 
 import app.morphe.manager.data.room.apps.installed.trackingKey
+import app.morphe.manager.domain.bundles.BundledAppTarget
 import app.morphe.manager.ui.oru.components.OruButtonStyle
 import app.morphe.manager.ui.oru.components.OruTone
 import app.morphe.manager.ui.model.HomeAppItem
 import app.morphe.manager.ui.model.withNameSuffixes
+import app.morphe.manager.ui.oru.sources.oruVersionGate
 
 /**
  * Maps the Home view model state to the Home cards and banner. Pure: no Android or Compose types
@@ -45,9 +47,14 @@ object OruHomePresenter {
      */
     fun card(item: HomeAppItem, input: OruHomeInput): OruHomeCard {
         val handedOff = item.packageName in input.handedOff
-        val status = statusOf(item, handedOff, input.supportedVersions[item.packageName])
+        // A finished run that waits for its install is the newest state of the app, so it outranks the install state
+        val status = if (item.id in input.readyToInstall) {
+            OruHomeCardStatus.ReadyToInstall
+        } else {
+            statusOf(item, handedOff, input.effectiveVersions[item.packageName])
+        }
         val recommended = input.recommendedVersions[item.packageName]
-        val needsFile = status == OruHomeCardStatus.NeedsApk || status == OruHomeCardStatus.Waiting
+        val needsFile = status in NeedsFileStatuses
         val expert = input.expert
 
         return OruHomeCard(
@@ -60,31 +67,38 @@ object OruHomePresenter {
             latestVersion = recommended.takeIf { status == OruHomeCardStatus.UpdateAvailable },
             patchCount = if (expert) input.patchCounts[item.packageName] ?: 0 else 0,
             hint = if (expert) hintFor(status) else null,
-            hintVersion = recommended.takeIf { status == OruHomeCardStatus.NeedsApk },
+            hintVersion = recommended.takeIf { status in NeedsFileStatuses },
             repatchedPackageName = item.installedApp?.trackingKey,
             source = if (expert) input.sourceNames[item.packageName] else null,
             customized = item.packageName in input.customized,
         )
     }
 
-    /** The status of an app. [supportedVersions] are the version names the sources cover for its package. */
+    /**
+     * The status of an app. [targets] are the versions of the source the app is patched from, see [oruVersionGate]: a
+     * saved copy or an app on the phone is ready only when that gate lets its version through.
+     */
     fun statusOf(
         item: HomeAppItem,
         handedOff: Boolean,
-        supportedVersions: Set<String>?,
-    ): OruHomeCardStatus = when {
-        item.isInstallStatePending -> OruHomeCardStatus.Checking
-        item.isInstallStateUnknown -> OruHomeCardStatus.Unverified
-        item.isDeleted && !item.isInstallStateNotPatched ->
-            if (item.hasSavedCopy) OruHomeCardStatus.SavedCopy else needsFile(handedOff)
-        item.isInstallStateNotPatched -> OruHomeCardStatus.UnpatchedInstalled
-        item.showsRebuildBadge -> OruHomeCardStatus.UpdateAvailable
-        item.installedApp != null -> OruHomeCardStatus.Installed
-        item.installedPatchedPackage != null -> OruHomeCardStatus.PatchedElsewhere
-        item.hasSavedCopy -> OruHomeCardStatus.SavedCopy
-        item.isInstalledOnDevice && supportedVersions?.contains(item.version) == true ->
-            OruHomeCardStatus.ReadyOnDevice
-        else -> needsFile(handedOff)
+        targets: List<BundledAppTarget>?,
+    ): OruHomeCardStatus {
+        val patchable = oruVersionGate(item.version, null, targets.orEmpty()).patchable
+        val savedCopy = if (patchable) OruHomeCardStatus.SavedCopy else OruHomeCardStatus.SavedCopyGated
+        return when {
+            item.isInstallStatePending -> OruHomeCardStatus.Checking
+            item.isInstallStateUnknown -> OruHomeCardStatus.Unverified
+            item.isDeleted && !item.isInstallStateNotPatched ->
+                if (item.hasSavedCopy) savedCopy else needsFile(handedOff)
+            item.isInstallStateNotPatched -> OruHomeCardStatus.UnpatchedInstalled
+            item.showsRebuildBadge -> OruHomeCardStatus.UpdateAvailable
+            item.installedApp != null -> OruHomeCardStatus.Installed
+            item.installedPatchedPackage != null -> OruHomeCardStatus.PatchedElsewhere
+            item.hasSavedCopy -> savedCopy
+            // Without version data from the sources there is nothing to patch the app with, so it is not ready
+            item.isInstalledOnDevice && patchable && !targets.isNullOrEmpty() -> OruHomeCardStatus.ReadyOnDevice
+            else -> needsFile(handedOff)
+        }
     }
 
     /**
@@ -92,8 +106,8 @@ object OruHomePresenter {
      * card reads it too, so the step it opens on is the one the card names. A Focus is open for an app only when no
      * hand-off waits on it, so [handedOff] is false here.
      */
-    fun primaryActionOf(item: HomeAppItem, supportedVersions: Set<String>?, expert: Boolean): OruHomeAction =
-        primaryFor(statusOf(item, handedOff = false, supportedVersions = supportedVersions), expert)
+    fun primaryActionOf(item: HomeAppItem, targets: List<BundledAppTarget>?, expert: Boolean): OruHomeAction =
+        primaryFor(statusOf(item, handedOff = false, targets = targets), expert)
 
     private fun needsFile(handedOff: Boolean): OruHomeCardStatus =
         if (handedOff) OruHomeCardStatus.Waiting else OruHomeCardStatus.NeedsApk
@@ -101,7 +115,8 @@ object OruHomePresenter {
     private fun primaryFor(status: OruHomeCardStatus, expert: Boolean): OruHomeAction = when (status) {
         OruHomeCardStatus.Checking -> OruHomeAction.AppInfo
         OruHomeCardStatus.Unverified -> OruHomeAction.CheckAndPatch
-        OruHomeCardStatus.NeedsApk -> if (expert) OruHomeAction.FindOnApkMirror else OruHomeAction.GetIt
+        OruHomeCardStatus.NeedsApk,
+        OruHomeCardStatus.SavedCopyGated -> if (expert) OruHomeAction.FindOnApkMirror else OruHomeAction.GetIt
         OruHomeCardStatus.Waiting -> OruHomeAction.ChooseFile
         OruHomeCardStatus.SavedCopy -> OruHomeAction.PatchFromSaved
         OruHomeCardStatus.ReadyOnDevice,
@@ -109,12 +124,14 @@ object OruHomePresenter {
         OruHomeCardStatus.UpdateAvailable -> OruHomeAction.Update
         OruHomeCardStatus.Installed,
         OruHomeCardStatus.PatchedElsewhere -> OruHomeAction.Open
+        OruHomeCardStatus.ReadyToInstall -> OruHomeAction.Install
     }
 
     private fun secondaryFor(status: OruHomeCardStatus): OruHomeAction? = when (status) {
         OruHomeCardStatus.Checking -> null
         OruHomeCardStatus.Unverified -> OruHomeAction.AppInfo
-        OruHomeCardStatus.NeedsApk -> OruHomeAction.UseFile
+        OruHomeCardStatus.NeedsApk,
+        OruHomeCardStatus.SavedCopyGated -> OruHomeAction.UseFile
         OruHomeCardStatus.Waiting -> OruHomeAction.OpenApkMirrorAgain
         OruHomeCardStatus.SavedCopy -> OruHomeAction.UseAnotherFile
         OruHomeCardStatus.ReadyOnDevice -> OruHomeAction.AppInfo
@@ -122,14 +139,23 @@ object OruHomePresenter {
         OruHomeCardStatus.UpdateAvailable -> OruHomeAction.AppInfo
         OruHomeCardStatus.Installed,
         OruHomeCardStatus.PatchedElsewhere -> OruHomeAction.PatchAgain
+        OruHomeCardStatus.ReadyToInstall -> null
     }
 
     private fun hintFor(status: OruHomeCardStatus): OruHomeHint? = when (status) {
         OruHomeCardStatus.NeedsApk -> OruHomeHint.ApkMirror
         OruHomeCardStatus.Waiting -> OruHomeHint.ReturnDownload
         OruHomeCardStatus.SavedCopy -> OruHomeHint.SavedCopy
+        OruHomeCardStatus.SavedCopyGated -> OruHomeHint.SavedCopyGated
         else -> null
     }
+
+    /** The statuses that need the APK from APKMirror, so the card names the version it has to be. */
+    private val NeedsFileStatuses = setOf(
+        OruHomeCardStatus.NeedsApk,
+        OruHomeCardStatus.Waiting,
+        OruHomeCardStatus.SavedCopyGated,
+    )
 
     private val RecommendedThenName: Comparator<HomeAppItem> =
         compareByDescending<HomeAppItem> { it.isPinnedByDefault }
@@ -141,10 +167,12 @@ fun OruHomeCardStatus.tone(): OruTone = when (this) {
     OruHomeCardStatus.Checking -> OruTone.Neutral
     OruHomeCardStatus.Unverified,
     OruHomeCardStatus.NeedsApk,
+    OruHomeCardStatus.SavedCopyGated,
     OruHomeCardStatus.Waiting,
     OruHomeCardStatus.UnpatchedInstalled -> OruTone.Warn
     OruHomeCardStatus.SavedCopy,
     OruHomeCardStatus.ReadyOnDevice,
+    OruHomeCardStatus.ReadyToInstall,
     OruHomeCardStatus.Installed,
     OruHomeCardStatus.PatchedElsewhere -> OruTone.Ok
     OruHomeCardStatus.UpdateAvailable -> OruTone.Neutral
@@ -155,6 +183,7 @@ fun OruHomeCardStatus.simpleSentence(): OruHomeSentence = when (this) {
     OruHomeCardStatus.Checking -> OruHomeSentence.Checking
     OruHomeCardStatus.Unverified -> OruHomeSentence.NotChecked
     OruHomeCardStatus.NeedsApk -> OruHomeSentence.NeedsApk
+    OruHomeCardStatus.SavedCopyGated -> OruHomeSentence.SavedCopyGated
     OruHomeCardStatus.Waiting -> OruHomeSentence.WaitingApk
     OruHomeCardStatus.SavedCopy,
     OruHomeCardStatus.ReadyOnDevice,
@@ -162,6 +191,7 @@ fun OruHomeCardStatus.simpleSentence(): OruHomeSentence = when (this) {
     OruHomeCardStatus.UpdateAvailable -> OruHomeSentence.UpdateReady
     OruHomeCardStatus.Installed -> OruHomeSentence.UpToDate
     OruHomeCardStatus.PatchedElsewhere -> OruHomeSentence.Patched
+    OruHomeCardStatus.ReadyToInstall -> OruHomeSentence.ReadyToInstall
 }
 
 /** The button look of an action. One filled action per card at most, and it is always the primary one. */
@@ -169,11 +199,13 @@ fun OruHomeAction.style(): OruButtonStyle = when (this) {
     OruHomeAction.CheckAndPatch,
     OruHomeAction.ChooseFile,
     OruHomeAction.PatchFromSaved,
-    OruHomeAction.GetIt,
     OruHomeAction.Patch,
     OruHomeAction.Update,
-    OruHomeAction.Open -> OruButtonStyle.Filled
-    OruHomeAction.FindOnApkMirror -> OruButtonStyle.Tonal
+    OruHomeAction.Open,
+    OruHomeAction.Install -> OruButtonStyle.Filled
+    // A card that still needs its APK leads with the find step, so the ready apps keep the filled buttons
+    OruHomeAction.FindOnApkMirror,
+    OruHomeAction.GetIt -> OruButtonStyle.Tonal
     OruHomeAction.AppInfo,
     OruHomeAction.UseFile,
     OruHomeAction.OpenApkMirrorAgain,

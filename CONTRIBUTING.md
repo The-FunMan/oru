@@ -67,3 +67,5 @@ Everyone taking part is expected to follow the [Code of Conduct](CODE_OF_CONDUCT
 ## Maintainers
 
 The maintainer checklists (setup, releases, chores) are in [docs/maintainers/RUNBOOK.md](docs/maintainers/RUNBOOK.md).
+
+AI coding agents: read [AGENTS.md](AGENTS.md) first. The local checks are `scripts/dev/check.sh`; the knowledge pages are in [docs/knowledge](docs/knowledge/README.md).

@@ -110,11 +110,11 @@
     <string name="oru_focus_dock_patch">Patch %1$s</string>
 
     <!-- Focus: notices -->
-    <string name="oru_notice_experimental_on">Version %1$s is newer than the patches were tested with, so it may not work. Experimental versions are on for %2$s.</string>
+    <string name="oru_notice_experimental_on">Version %1$s is experimental, so it may not work.</string>
     <string name="oru_notice_experimental_off">Version %1$s is newer than the patches were tested with, so it may not work. Experimental versions are off for %2$s.</string>
     <string name="oru_notice_action_pick_version">Pick another version</string>
     <string name="oru_notice_action_show_experimental">Show experimental versions</string>
-    <string name="oru_notice_unsupported">Version %1$s is not supported yet. Oru can patch %2$s instead.</string>
+    <string name="oru_notice_unsupported">Version %1$s is newer than the patches. Find version %2$s to patch.</string>
     <string name="oru_action_patch_version">Patch %1$s</string>
     <string name="oru_action_patch_anyway">Patch %1$s anyway</string>
 
@@ -133,7 +133,7 @@
     <string name="oru_run_title_upgrading">Upgrading</string>
     <string name="oru_run_starting">Starting</string>
     <string name="oru_run_elapsed">elapsed</string>
-    <string name="oru_run_keep_background">Keep going in background</string>
+    <string name="oru_run_keep_background">Keep going in the background</string>
     <string name="oru_run_ready">Ready</string>
     <string name="oru_run_ready_caption">%1$s %2$s, patched with %3$d patches.</string>
     <string name="oru_run_patch_count">Applying patches, %1$d of %2$d</string>
@@ -239,7 +239,7 @@
     <string name="oru_settings_animations">Animations</string>
     <string name="oru_settings_animations_helper">Turn off to switch screens with no motion.</string>
     <string name="oru_settings_wallpaper">Match my wallpaper colors</string>
-    <string name="oru_settings_wallpaper_helper">Needs Android 12 or later. Uses your wallpaper colors instead of Oru blue.</string>
+    <string name="oru_settings_wallpaper_helper">Uses your wallpaper colors instead of Oru blue.</string>
     <string name="oru_settings_language">Language</string>
     <string name="oru_settings_language_phone">Phone language</string>
     <string name="oru_settings_updates">Keep apps up to date</string>
@@ -256,10 +256,10 @@
     <string name="oru_settings_needs_shizuku">Needs Shizuku</string>
     <string name="oru_settings_prerelease_sources">Include pre-releases for patch sources</string>
     <string name="oru_settings_prerelease_sources_helper">Patch sources can offer test builds. You can set this for each source.</string>
-    <string name="oru_settings_manager_prerelease">Manager pre-release</string>
-    <string name="oru_settings_manager_prerelease_helper">Early access to new Oru versions.</string>
+    <string name="oru_settings_manager_prerelease">Oru pre-releases</string>
+    <string name="oru_settings_manager_prerelease_helper">Get early builds of Oru. They may be less stable.</string>
     <string name="oru_settings_other_apps">Let other apps start patching</string>
-    <string name="oru_settings_other_apps_helper">For automation.</string>
+    <string name="oru_settings_other_apps_helper">Allow other apps, such as automation tools, to ask Oru to patch.</string>
     <string name="oru_settings_patch_sources">Patch sources</string>
     <plurals name="oru_settings_patch_sources_count">
         <item quantity="one">%1$d source</item>

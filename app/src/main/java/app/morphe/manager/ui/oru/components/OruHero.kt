@@ -65,7 +65,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.morphe.manager.R
 import app.morphe.manager.ui.oru.nav.oruSharedTile
-import app.morphe.manager.ui.oru.run.OruRunFormat
 import app.morphe.manager.ui.oru.theme.BlobCorners
 import app.morphe.manager.ui.oru.theme.OruBlobShape
 import app.morphe.manager.ui.oru.theme.OruMonoStyle
@@ -88,8 +87,9 @@ data class OruHeroCounter(val done: Int, val total: Int)
  * done: [OruHexagonAssembly], which waits with a sweep until patches apply. The pieces stay on screen when the run is
  * done, settled and with the check, and a failed run keeps them with the failing one outside.
  *
- * [description] is what TalkBack announces for the hero. The caller changes it only on a stage change, so
- * the polite live region does not announce every percentage step. When it is null, the state name is used.
+ * [description] is what TalkBack announces for the hero. The caller changes it only on a stage change or a step of the
+ * percentage (see oruAnnouncedPercent), so the polite live region does not announce every tick. When it is null, the
+ * state name is used.
  *
  * [applyingPatches], [patchTotal] and [failedPatchIndex] describe the patch run, and [patchShare] is the share of the
  * whole run the patch stage fills. The pieces show only when [patchTotal] is at least 1, and the hexagon waits until
@@ -300,7 +300,7 @@ private fun HeroTileGlyph(
  * The percentage of the run, read from [progress] through a derived state so it changes once per step. Nothing is
  * drawn for the percentage when [progress] is null. A [counter], when the run passes one, sits under it. The digits
  * roll to each new value and the unit after them stays put (see [OruRollingCount]). Both lines are single lines, so
- * a large font scale never wraps them, and each reads as one string to a screen reader.
+ * a large font scale never wraps them. Neither has semantics of its own: the hero's description reads the progress.
  */
 @Composable
 private fun HeroPercent(
@@ -323,10 +323,12 @@ private fun HeroPercent(
         fontSize = if (compact) CompactCounterSize else CounterSize,
         lineHeight = if (compact) CompactCounterLine else CounterLine,
     )
+    // The hero's description carries the run's progress in steps, so the digits and the count are left out of its
+    // semantics. Otherwise every tick and every patch would change the live region's text and be read out.
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         if (progress != null) {
             Row(
-                modifier = Modifier.clearAndSetSemantics { contentDescription = OruRunFormat.percent(percent) },
+                modifier = Modifier.clearAndSetSemantics { },
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 OruRollingCount(value = percent, slotDigits = PercentSlotDigits, style = percentStyle, color = color)
@@ -334,9 +336,8 @@ private fun HeroPercent(
             }
         }
         if (counter != null) {
-            val counterDescription = stringResource(R.string.oru_hero_counter, counter.done, counter.total)
             Row(
-                modifier = Modifier.clearAndSetSemantics { contentDescription = counterDescription },
+                modifier = Modifier.clearAndSetSemantics { },
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 OruRollingCount(

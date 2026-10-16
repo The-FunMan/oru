@@ -539,7 +539,14 @@ private fun hasHeading(section: OruSettingsSection): Boolean = when (section) {
 private fun supportingText(row: OruSettingsRowUi): String? {
     val context = LocalContext.current
     return when (val value = row.value) {
-        is OruSettingsValue.Toggle -> helperRes(row.id)?.let { stringResource(it) }
+        is OruSettingsValue.Toggle -> if (row.id == OruSettingsRowId.WALLPAPER_COLORS &&
+            Build.VERSION.SDK_INT < WALLPAPER_COLORS_MIN_SDK
+        ) {
+            // Below Android 12 the wallpaper colours cannot be used, so the helper says why
+            stringResource(R.string.oru_settings_wallpaper_needs_12) + " " + stringResource(R.string.oru_settings_wallpaper_helper)
+        } else {
+            helperRes(row.id)?.let { stringResource(it) }
+        }
         is OruSettingsValue.Text -> when (row.id) {
             OruSettingsRowId.LANGUAGE -> value.text.ifBlank { stringResource(R.string.oru_settings_language_phone) }
             else -> helperRes(row.id)?.let { stringResource(it) }

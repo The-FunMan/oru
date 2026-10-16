@@ -7,6 +7,7 @@ package app.morphe.manager.ui.oru.home
 
 import android.content.pm.PackageInfo
 import androidx.compose.runtime.Immutable
+import app.morphe.manager.domain.bundles.BundledAppTarget
 import app.morphe.manager.ui.oru.components.OruTone
 import app.morphe.manager.ui.model.HomeAppItem
 
@@ -30,6 +31,9 @@ enum class OruHomeCardStatus {
     /** A patched copy from an earlier run is kept on the phone and can be patched again. */
     SavedCopy,
 
+    /** A patched copy is kept on the phone, but the sources do not patch its version, so the APK has to be found again. */
+    SavedCopyGated,
+
     /** The app is on the phone, unpatched by Oru, and the sources cover its version. */
     ReadyOnDevice,
 
@@ -47,6 +51,9 @@ enum class OruHomeCardStatus {
      * installed, with the copy's own icon and version, and can be patched again from the app's stock APK.
      */
     PatchedElsewhere,
+
+    /** A finished run of this app waits for its install, and nothing has started it yet. See [OruHomeInput.readyToInstall]. */
+    ReadyToInstall,
 }
 
 /**
@@ -69,13 +76,16 @@ enum class OruHomeAction {
     Update,
     Open,
     PatchAgain,
+
+    /** Opens the Focus of a finished run, where its install is. */
+    Install,
 }
 
 /** The line under the status chip that says what happens next. */
-enum class OruHomeHint { ApkMirror, ReturnDownload, SavedCopy }
+enum class OruHomeHint { ApkMirror, ReturnDownload, SavedCopy, SavedCopyGated }
 
 /** The one sentence a Simple card says about its app. Expert reads the status as chips instead, see [OruHomeCardStatus]. */
-enum class OruHomeSentence { Checking, NotChecked, NeedsApk, WaitingApk, Ready, UpdateReady, UpToDate, Patched }
+enum class OruHomeSentence { Checking, NotChecked, NeedsApk, WaitingApk, SavedCopyGated, Ready, ReadyToInstall, UpdateReady, UpToDate, Patched }
 
 /** One card on Home, already decided. The composable only turns its parts into strings. */
 @Immutable
@@ -85,7 +95,7 @@ data class OruHomeCard(
     val primary: OruHomeAction,
     val secondary: OruHomeAction?,
     val chipTone: OruTone,
-    /** The version a mono chip shows, or null when there is none to show. Simple reads it for the APK sentence only. */
+    /** The version the card names, or null when there is none to show. Simple reads it for the APK sentence only. */
     val version: String?,
     /** The version the sources recommend, shown as the Latest chip of an app that can be updated. */
     val latestVersion: String? = null,
@@ -147,14 +157,19 @@ data class OruHomeInput(
     val handedOff: Set<String>,
     /** Recommended version name per package, from the source the app is patched from. */
     val recommendedVersions: Map<String, String>,
-    /** Supported version names per package, from the source the app is patched from. */
-    val supportedVersions: Map<String, Set<String>>,
+    /** The versions of the source each app is patched from, read by [oruVersionGate] for the version the card names. */
+    val effectiveVersions: Map<String, List<BundledAppTarget>>,
     /** Patch count per package, from the source the app is patched from. */
     val patchCounts: Map<String, Int>,
     /** Name of the source to show as a chip, per package, for an app more than one source can patch. */
     val sourceNames: Map<String, String> = emptyMap(),
     /** Packages Expert set up differently from the recommended setup, see [oruAppOverrides]. */
     val customized: Set<String> = emptySet(),
+    /**
+     * The ids of the cards whose finished single-app run waits to be installed, see [oruReadyToInstallOf]. Such a card
+     * says so and offers the install. It stops once the install starts or the run is released.
+     */
+    val readyToInstall: Set<String> = emptySet(),
     val banner: OruBannerInput,
     /** No network connection. An empty list with no connection is the network's fault, so the empty state says so. */
     val offline: Boolean = false,
