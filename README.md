@@ -23,9 +23,15 @@ Oru is an Android app. It is not a ROM hack or a game.
 
 <div align="center">
 
-<img src="site/assets/shots/split-start-done.webp" width="880" alt="One Oru phone screen cut in two. The top half shows a run at the start, with an almost empty hexagon, under the words Tap once. The bottom half shows the finished run, a complete green hexagon with a check mark, under the words Signed here, installed here.">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="site/assets/shots/split-start-done-dark.webp">
+  <img src="site/assets/shots/split-start-done-light.webp" width="880" alt="One Oru phone screen that melts from one state into another. The top half shows a run at the start, with an almost empty hexagon, under the words Tap once. The bottom half shows the finished run, a complete green hexagon with a check mark, under the words Signed here, installed here.">
+</picture>
 
-<img src="site/assets/shots/split-progress-key.webp" width="880" alt="One Oru phone screen cut in two. The top half shows a run at 53 percent with the real stages listed, under the words One progress. The bottom half shows the Settings sheet with theme, glass style, animations and wallpaper colors, under the words Make it yours.">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="site/assets/shots/split-progress-key-dark.webp">
+  <img src="site/assets/shots/split-progress-key-light.webp" width="880" alt="One Oru phone screen that melts from one state into another. The top half shows a run in progress with the real stages listed, under the words One progress. The bottom half shows the Settings sheet with theme, glass style, animations and wallpaper colors, under the words Make it yours.">
+</picture>
 
 </div>
 
