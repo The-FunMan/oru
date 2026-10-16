@@ -27,6 +27,7 @@ import com.android.tools.smali.dexlib2.immutable.value.ImmutableStringEncodedVal
 import com.android.tools.smali.dexlib2.immutable.value.ImmutableTypeEncodedValue
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
 internal object MutableEncodedValueTest {
@@ -39,7 +40,7 @@ internal object MutableEncodedValueTest {
         val mutable = original.toMutable()
 
         assertTrue(mutable is MutableStringEncodedValue)
-        assertEquals("test value", (mutable as MutableStringEncodedValue).value)
+        assertEquals("test value", mutable.value)
     }
 
     @Test
@@ -60,7 +61,7 @@ internal object MutableEncodedValueTest {
         val mutable = original.toMutable()
 
         assertTrue(mutable is MutableBooleanEncodedValue)
-        assertEquals(true, (mutable as MutableBooleanEncodedValue).value)
+        assertEquals(true, mutable.value)
     }
 
     @Test
@@ -81,7 +82,7 @@ internal object MutableEncodedValueTest {
         val mutable = original.toMutable()
 
         assertTrue(mutable is MutableIntEncodedValue)
-        assertEquals(42, (mutable as MutableIntEncodedValue).value)
+        assertEquals(42, mutable.value)
     }
 
     @Test
@@ -102,7 +103,7 @@ internal object MutableEncodedValueTest {
         val mutable = original.toMutable()
 
         assertTrue(mutable is MutableLongEncodedValue)
-        assertEquals(9876543210L, (mutable as MutableLongEncodedValue).value)
+        assertEquals(9876543210L, mutable.value)
     }
 
     @Test
@@ -123,7 +124,7 @@ internal object MutableEncodedValueTest {
         val mutable = original.toMutable()
 
         assertTrue(mutable is MutableFloatEncodedValue)
-        assertEquals(3.14f, (mutable as MutableFloatEncodedValue).value)
+        assertEquals(3.14f, mutable.value)
     }
 
     @Test
@@ -144,7 +145,7 @@ internal object MutableEncodedValueTest {
         val mutable = original.toMutable()
 
         assertTrue(mutable is MutableDoubleEncodedValue)
-        assertEquals(3.14159265359, (mutable as MutableDoubleEncodedValue).value)
+        assertEquals(3.14159265359, mutable.value)
     }
 
     @Test
@@ -165,7 +166,7 @@ internal object MutableEncodedValueTest {
         val mutable = original.toMutable()
 
         assertTrue(mutable is MutableByteEncodedValue)
-        assertEquals(127.toByte(), (mutable as MutableByteEncodedValue).value)
+        assertEquals(127.toByte(), mutable.value)
     }
 
     @Test
@@ -186,7 +187,7 @@ internal object MutableEncodedValueTest {
         val mutable = original.toMutable()
 
         assertTrue(mutable is MutableShortEncodedValue)
-        assertEquals(32767.toShort(), (mutable as MutableShortEncodedValue).value)
+        assertEquals(32767.toShort(), mutable.value)
     }
 
     @Test
@@ -207,7 +208,7 @@ internal object MutableEncodedValueTest {
         val mutable = original.toMutable()
 
         assertTrue(mutable is MutableCharEncodedValue)
-        assertEquals('A', (mutable as MutableCharEncodedValue).value)
+        assertEquals('A', mutable.value)
     }
 
     @Test
@@ -235,7 +236,7 @@ internal object MutableEncodedValueTest {
         val mutable = MutableNullEncodedValue()
 
         // NullEncodedValue has no value to test, just ensure it doesn't crash
-        assertTrue(mutable is MutableEncodedValue)
+        assertIs<MutableEncodedValue>(mutable)
     }
 
     // ==================== MutableTypeEncodedValue tests ====================
@@ -246,7 +247,7 @@ internal object MutableEncodedValueTest {
         val mutable = original.toMutable()
 
         assertTrue(mutable is MutableTypeEncodedValue)
-        assertEquals("Ljava/lang/String;", (mutable as MutableTypeEncodedValue).value)
+        assertEquals("Ljava/lang/String;", mutable.value)
     }
 
     @Test
@@ -269,7 +270,7 @@ internal object MutableEncodedValueTest {
         val mutable = original.toMutable()
 
         assertTrue(mutable is MutableEnumEncodedValue)
-        assertEquals("RUNNABLE", (mutable as MutableEnumEncodedValue).value.name)
+        assertEquals("RUNNABLE", mutable.value.name)
     }
 
     // ==================== MutableFieldEncodedValue tests ====================
@@ -282,7 +283,7 @@ internal object MutableEncodedValueTest {
         val mutable = original.toMutable()
 
         assertTrue(mutable is MutableFieldEncodedValue)
-        assertEquals("testField", (mutable as MutableFieldEncodedValue).value.name)
+        assertEquals("testField", mutable.value.name)
     }
 
     // ==================== MutableMethodEncodedValue tests ====================
@@ -295,7 +296,7 @@ internal object MutableEncodedValueTest {
         val mutable = original.toMutable()
 
         assertTrue(mutable is MutableMethodEncodedValue)
-        assertEquals("testMethod", (mutable as MutableMethodEncodedValue).value.name)
+        assertEquals("testMethod", mutable.value.name)
     }
 
     // ==================== MutableArrayEncodedValue tests ====================
@@ -310,7 +311,7 @@ internal object MutableEncodedValueTest {
         val mutable = original.toMutable()
 
         assertTrue(mutable is MutableArrayEncodedValue)
-        assertEquals(2, (mutable as MutableArrayEncodedValue).value.size)
+        assertEquals(2, mutable.value.size)
     }
 
     @Test
@@ -322,7 +323,7 @@ internal object MutableEncodedValueTest {
         val mutable = MutableArrayEncodedValue(original)
 
         val values = mutable.value
-        assertTrue(values is MutableList)
+        assertIs<MutableList<*>>(values)
     }
 
     // ==================== MutableAnnotationEncodedValue tests ====================
@@ -336,7 +337,7 @@ internal object MutableEncodedValueTest {
         val mutable = original.toMutable()
 
         assertTrue(mutable is MutableAnnotationEncodedValue)
-        assertEquals("Ljava/lang/Deprecated;", (mutable as MutableAnnotationEncodedValue).type)
+        assertEquals("Ljava/lang/Deprecated;", mutable.type)
     }
 
     @Test
@@ -348,6 +349,6 @@ internal object MutableEncodedValueTest {
         val mutable = MutableAnnotationEncodedValue(original)
 
         val elements = mutable.elements
-        assertTrue(elements is MutableSet)
+        assertIs<MutableSet<*>>(elements)
     }
 }

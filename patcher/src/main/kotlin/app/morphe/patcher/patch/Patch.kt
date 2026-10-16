@@ -20,6 +20,8 @@ import java.util.jar.JarFile
 typealias PackageName = String
 @Deprecated("Use Compatibility instead")
 typealias VersionName = String
+// Deprecated alias kept for older patch bundles.
+@Suppress("DEPRECATION")
 @Deprecated("Use Compatibility instead")
 typealias Package = Pair<PackageName, Set<VersionName>?>
 
@@ -63,6 +65,8 @@ sealed class Patch<C : PatchContext<*>>(
     val category: String? = null,
 ) {
 
+    // Deprecated constructor kept for older patch bundles.
+    @Suppress("DEPRECATION")
     @Deprecated("Use constructor with Compatibility object")
     constructor(
         name: String?,
@@ -87,6 +91,8 @@ sealed class Patch<C : PatchContext<*>>(
     /**
      * Legacy format. Experimental app targets are not present in this format.
      */
+    // Deprecated property kept for older patch bundles.
+    @Suppress("DEPRECATION")
     @Deprecated("Instead use compatibility")
     val compatiblePackages: Set<Package>? by lazy {
         compatibility?.mapNotNull { it.legacy }?.toSet()
@@ -232,6 +238,8 @@ class BytecodePatch internal constructor(
         finalizeBlock = finalizeBlock
     )
 
+    // Deprecated constructor kept for older patch bundles.
+    @Suppress("DEPRECATION")
     @Deprecated("Use constructor with Compatibility object")
     constructor(
         name: String?,
@@ -310,6 +318,8 @@ class RawResourcePatch internal constructor(
     category,
 ) {
 
+    // Deprecated constructor kept for older patch bundles.
+    @Suppress("DEPRECATION")
     @Deprecated("Use constructor with Compatibility object")
     constructor(
         name: String?,
@@ -379,6 +389,8 @@ class ResourcePatch internal constructor(
     category,
 ) {
 
+    // Deprecated constructor kept for older patch bundles.
+    @Suppress("DEPRECATION")
     @Deprecated("Use constructor with Compatibility object")
     constructor(
         name: String?,
@@ -468,11 +480,15 @@ sealed class PatchBuilder<C : PatchContext<*>>(
      */
     private operator fun String.invoke(versions: Set<String>? = null) = this to versions
 
+    // Deprecated accessor kept for older patch bundles.
+    @Suppress("DEPRECATION")
     @Deprecated("Instead use Compatibility object")
     protected fun getCompatiblePackages(): Set<Package>? {
         return compatibility?.mapNotNull { it.legacy }?.toSet()
     }
 
+    // Deprecated mutator kept for older patch bundles.
+    @Suppress("DEPRECATION")
     @Deprecated("Instead use Compatibility object")
     protected fun setCompatiblePackages(packages: Set<Package>?) {
         compatibility = packages?.map { Compatibility.fromLegacy(it) }?.toMutableList()
@@ -520,6 +536,8 @@ sealed class PatchBuilder<C : PatchContext<*>>(
      *
      * @param packages The packages the patch is compatible with.
      */
+    // Deprecated overload kept for older patch bundles.
+    @Suppress("DEPRECATION")
     @Deprecated("Instead use Compatibility object")
     fun compatibleWith(vararg packages: String) =
         compatibleWith(*packages.map { it() }.toTypedArray())
@@ -645,7 +663,8 @@ class BytecodePatchBuilder internal constructor(
      *
      * @param extension The name of the extension resource.
      */
-    @Suppress("NOTHING_TO_INLINE")
+    // Deprecated setter is called on purpose for compatibility with older CLI versions.
+    @Suppress("NOTHING_TO_INLINE", "DEPRECATION")
     inline fun extendWith(extension: String) = apply {
         val classLoader = object {}.javaClass.classLoader
 

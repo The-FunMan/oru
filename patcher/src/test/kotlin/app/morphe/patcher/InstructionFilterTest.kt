@@ -123,6 +123,8 @@ internal object InstructionFilterTest {
         assertFalse(location.indexIsValidForMatching(0, 2))
     }
 
+    // Exercises deprecated API that older patch bundles still use.
+    @Suppress("DEPRECATION")
     @Test
     fun `MatchAfterAtLeast requires non-negative minimum distance`() {
         assertThrows<IllegalArgumentException> {
@@ -133,6 +135,8 @@ internal object InstructionFilterTest {
         InstructionLocation.MatchAfterAtLeast(10)
     }
 
+    // Exercises deprecated API that older patch bundles still use.
+    @Suppress("DEPRECATION")
     @Test
     fun `MatchAfterAtLeast validates minimum distance`() {
         val location = InstructionLocation.MatchAfterAtLeast(3)
@@ -147,6 +151,8 @@ internal object InstructionFilterTest {
         assertTrue(location.indexIsValidForMatching(0, 100)) // distance 99
     }
 
+    // Exercises deprecated API that older patch bundles still use.
+    @Suppress("DEPRECATION")
     @Test
     fun `MatchAfterRange requires valid range parameters`() {
         assertThrows<IllegalArgumentException> {
@@ -165,6 +171,8 @@ internal object InstructionFilterTest {
         InstructionLocation.MatchAfterRange(3, 3)
     }
 
+    // Exercises deprecated API that older patch bundles still use.
+    @Suppress("DEPRECATION")
     @Test
     fun `MatchAfterRange validates bounded range`() {
         val location = InstructionLocation.MatchAfterRange(2, 5)

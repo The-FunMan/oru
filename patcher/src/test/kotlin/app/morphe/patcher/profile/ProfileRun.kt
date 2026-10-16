@@ -34,7 +34,7 @@ fun main(args: Array<String>) {
 
     val patches = loadPatchesFromJar(setOf(bundle)).filter { patch ->
         patch.default && patch.name != null &&
-            (patch.compatibility == null || patch.compatibility!!.any { it.packageName == TARGET_PACKAGE })
+            (patch.compatibility == null || patch.compatibility.any { it.packageName == TARGET_PACKAGE })
     }.toSet()
 
     val tempDir = work.resolve("patcher").apply { mkdirs() }

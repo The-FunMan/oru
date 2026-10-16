@@ -65,6 +65,8 @@ internal class IdAndSanitizeScanBenchmark {
         }
     }
 
+    // Thread.id is deprecated in newer JDKs; kept because this module targets JVM 11 and the value is the same.
+    @Suppress("DEPRECATION")
     private fun allocatedBy(block: () -> Int): Long {
         val id = Thread.currentThread().id
         val before = threads.getThreadAllocatedBytes(id)

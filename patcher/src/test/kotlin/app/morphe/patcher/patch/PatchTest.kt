@@ -11,6 +11,8 @@ internal object PatchTest {
         assertEquals("Test", patch.name)
     }
 
+    // Exercises deprecated API that older patch bundles still use.
+    @Suppress("DEPRECATION")
     @Test
     fun `can create patch with compatible packages`() {
         val patch = bytecodePatch(name = "Test", default = false) {

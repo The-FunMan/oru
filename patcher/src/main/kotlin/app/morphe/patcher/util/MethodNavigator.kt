@@ -43,6 +43,8 @@ class MethodNavigator internal constructor(
      *
      * @return This [MethodNavigator].
      */
+    // Deprecated class returns itself, kept for older patch bundles.
+    @Suppress("DEPRECATION")
     fun to(vararg index: Int): MethodNavigator {
         index.forEach {
             lastNavigatedMethodReference = lastNavigatedMethodInstructions.getMethodReferenceAt(it)
@@ -57,6 +59,8 @@ class MethodNavigator internal constructor(
      * @param index The index of the method to navigate to.
      * @param predicate The predicate to match.
      */
+    // Deprecated class returns itself, kept for older patch bundles.
+    @Suppress("DEPRECATION")
     fun to(index: Int = 0, predicate: (Instruction) -> Boolean): MethodNavigator {
         lastNavigatedMethodReference = lastNavigatedMethodInstructions.asSequence()
             .filter(predicate).asIterable().getMethodReferenceAt(index)

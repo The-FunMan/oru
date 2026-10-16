@@ -159,6 +159,8 @@ internal class MostCommonCompatibleVersionsTest {
         )
     }
 
+    // Exercises deprecated API that older patch bundles still use.
+    @Suppress("DEPRECATION")
     private fun newPatch(
         packageName: String,
         versions: Set<String>? = null,

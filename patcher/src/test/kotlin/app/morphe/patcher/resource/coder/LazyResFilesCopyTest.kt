@@ -57,6 +57,8 @@ internal class LazyResFilesCopyTest {
     }
 
     /** Bytes the writer path allocates per file on the calling thread, for [count] files of one entry. */
+    // Thread.id is deprecated in newer JDKs; kept because this module targets JVM 11 and the value is the same.
+    @Suppress("DEPRECATION")
     private fun allocatedPerFile(stored: Boolean, count: Int = 2_000): Long {
         val bean = ManagementFactory.getThreadMXBean() as? com.sun.management.ThreadMXBean
         assumeTrue(bean != null && bean.isThreadAllocatedMemorySupported)

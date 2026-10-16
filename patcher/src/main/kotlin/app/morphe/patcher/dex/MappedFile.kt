@@ -149,7 +149,7 @@ private class RandomAccessMappedFile(override val originalFile: File) : MappedFi
                 val unsafeField = Unsafe::class.java.getDeclaredField("theUnsafe")
                 unsafeField.isAccessible = true
                 val unsafe = unsafeField.get(null) as Unsafe
-                unsafe.invokeCleaner(buffer)
+                @Suppress("DEPRECATION") unsafe.invokeCleaner(buffer)
             } catch (e: Exception) {
                 e.printStackTrace()
             }

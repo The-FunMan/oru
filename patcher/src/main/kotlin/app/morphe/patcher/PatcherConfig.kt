@@ -47,6 +47,8 @@ class PatcherConfig(
     val fileWorkspace: File = fileWorkspacePath ?: temporaryFilesPath.resolve("workspace")
 
     init {
+        // The deprecated flag is still honoured for callers that set it.
+        @Suppress("DEPRECATION")
         if (!useArsclib) {
             logger.warning { "apktool support is deprecated. arsclib will be used." }
         }

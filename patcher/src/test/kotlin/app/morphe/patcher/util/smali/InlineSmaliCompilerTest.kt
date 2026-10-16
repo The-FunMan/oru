@@ -27,6 +27,8 @@ internal object InlineSmaliCompilerTest {
         assertInstructionsEqual(want, have)
     }
 
+    // Exercises deprecated API that older patch bundles still use.
+    @Suppress("DEPRECATION")
     @Test
     fun `supports branching with own branches`() {
         val method = createMethod()
@@ -53,6 +55,8 @@ internal object InlineSmaliCompilerTest {
         assertEquals(targetIndex, instruction.target.location.index)
     }
 
+    // Exercises deprecated API that older patch bundles still use.
+    @Suppress("DEPRECATION")
     @Test
     fun `supports branching to outside branches`() {
         val method = createMethod()

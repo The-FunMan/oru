@@ -142,6 +142,8 @@ private object InstructionExtensionsTest {
             }
         }
 
+    // Exercises deprecated API that older patch bundles still use.
+    @Suppress("DEPRECATION")
     @Test
     fun addSmaliInstructionsToMethod() =
         applyToMethod {
