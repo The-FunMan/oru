@@ -67,8 +67,8 @@ class UpdateNotificationManager(private val context: Context) {
         // without any worker having run, for example when every app failed to be prepared
         val patcherChannel = channel(
             CHANNEL_PATCHER,
-            R.string.patching,
-            R.string.notification_channel_patcher_description,
+            R.string.oru_notification_channel_patching,
+            R.string.oru_notification_channel_patching_description,
             NotificationManager.IMPORTANCE_LOW
         )
 
