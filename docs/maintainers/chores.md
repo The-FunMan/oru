@@ -56,9 +56,8 @@ Policy: Oru diverged on purpose. Upstream (`upstream` = `https://github.com/Morp
 ## 5. Translations
 
 - **Source of truth:** `app/src/main/res/values/strings.xml` for the English text of the Morphe build, and `app/src/oru/res/values/strings.xml` for the Oru overrides. New user-visible text goes into the English file (`PULL_REQUEST_TEMPLATE.md`, `CONTRIBUTING.md`).
-- **Translated files:** `values-*/strings.xml` folders. `app/build.gradle.kts` says Crowdin writes them, and it derives the list of languages from the folder names. Oru-only overrides for the translated languages are under `app/src/oru/res/values-*/strings.xml`.
-- **Who:** the owner. Corrections go through pull requests to the `values-*` folders (`CONTRIBUTING.md`).
-- **Regenerating overlays:** not set up in the repo. There is no Crowdin configuration, no script, and no workflow for the sync. Open item.
+- **Translated files:** `values-*/strings.xml` folders. `app/build.gradle.kts` derives the list of languages from the folder names. Oru-only overrides for the translated languages are under `app/src/oru/res/values-*/strings.xml`.
+- **Who:** anyone, through a pull request to the `values-*` folders (`CONTRIBUTING.md`).
 - **Verify:** `./gradlew :app:lint` (the lint config disables `MissingTranslation` and warns about `ExtraTranslation`) and a build of the Oru flavour.
 
 ## 6. Rotating the GitHub token

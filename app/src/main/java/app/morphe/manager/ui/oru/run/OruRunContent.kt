@@ -122,7 +122,8 @@ fun OruRunContent(
         else -> stringResource(R.string.oru_run_title_patching)
     }
     val applyingPatches = run.currentStageLabelRes == R.string.oru_stage_execute_patches
-    val counter = if (working && applyingPatches && run.patchesTotal > 0) {
+    // Simple draws no numbers: the hexagon filling is its progress. Expert keeps the percentage and the patch count.
+    val counter = if (expert && working && applyingPatches && run.patchesTotal > 0) {
         OruHeroCounter(done = run.patchesDone, total = run.patchesTotal)
     } else {
         null
@@ -156,7 +157,7 @@ fun OruRunContent(
                 state = run.hero.toComponent(),
                 tile = tile,
                 shape = shape,
-                progress = { shownProgress },
+                progress = if (expert) ({ shownProgress }) else null,
                 compact = expert,
                 description = announced,
                 counter = counter,
@@ -187,7 +188,7 @@ fun OruRunContent(
                     )
                 } else {
                     OruRunStageLine(
-                        parts = oruRunLineParts(run),
+                        parts = oruRunLineParts(run).forMode(expert),
                         style = MaterialTheme.typography.bodyMedium,
                         color = scheme.onSurfaceVariant,
                     )

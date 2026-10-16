@@ -1176,6 +1176,8 @@ internal object PatcherTest {
         }
     }
 
+    // Exercises deprecated API that older patch bundles still use.
+    @Suppress("DEPRECATION")
     @Test
     fun `Instruction location match after`() {
         with(patcher.context.bytecodeContext) {

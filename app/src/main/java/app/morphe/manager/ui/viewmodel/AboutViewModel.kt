@@ -9,7 +9,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Article
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Public
-import androidx.compose.material.icons.outlined.Translate
 import androidx.lifecycle.ViewModel
 import app.morphe.manager.BuildConfig
 import app.morphe.manager.util.MORPHE_WEBSITE_URL
@@ -26,7 +25,7 @@ data class SocialLink(
 
 class AboutViewModel : ViewModel() {
     companion object {
-        // ORU: the website, GitHub, Reddit and Crowdin entries are Morphe's own accounts and are
+        // ORU: the website, GitHub and Reddit entries are Morphe's own accounts and are
         // left out of the oru flavour. The changelog link also points at Morphe's website and is left out.
         val socials: List<SocialLink> = buildList {
             if (!BuildConfig.ORU_UX) {
@@ -59,12 +58,6 @@ class AboutViewModel : ViewModel() {
                         url = "https://reddit.com/r/MorpheApp"
                     )
                 )
-                add(
-                    SocialLink(
-                        name = "Crowdin",
-                        url = "$MORPHE_WEBSITE_URL/translate"
-                    )
-                )
             }
         }
 
@@ -73,7 +66,6 @@ class AboutViewModel : ViewModel() {
             "GitHub" to FontAwesomeIcons.Brands.Github,
             "Changelog" to Icons.AutoMirrored.Outlined.Article,
             "Reddit" to FontAwesomeIcons.Brands.RedditAlien,
-            "Crowdin" to Icons.Outlined.Translate,
         )
 
         fun getSocialIcon(name: String) = socialIcons[name] ?: Icons.Outlined.Language

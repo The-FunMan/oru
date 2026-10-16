@@ -74,7 +74,8 @@ fun OruDecisionDialog(
         // The window itself is transparent and its bars are drawn over the scrim rather than in a white band.
         val dialogWindow = (LocalView.current.parent as? DialogWindowProvider)?.window
         SideEffect {
-            dialogWindow?.run {
+            // The bar colours are ignored on Android 15+ and still apply on older releases.
+            @Suppress("DEPRECATION") dialogWindow?.run {
                 setDimAmount(0f)
                 setBackgroundDrawableResource(android.R.color.transparent)
                 statusBarColor = android.graphics.Color.TRANSPARENT

@@ -3,6 +3,9 @@
  * https://github.com/revanced/revanced-library/tree/06733072045c8016a75f232dec76505c0ba2e1cd
  */
 
+// Deprecated typealiases and APIs are kept for older patch bundles.
+@file:Suppress("DEPRECATION", "TYPEALIAS_EXPANSION_DEPRECATION")
+
 package app.morphe.patcher.patch
 
 import java.util.logging.Logger

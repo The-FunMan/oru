@@ -40,6 +40,8 @@ internal constructor(
     /**
      * The name.
      */
+    // Deprecated key is the source of the name, kept for older patch bundles.
+    @Suppress("DEPRECATION")
     val name = key
 
     /**
@@ -56,6 +58,8 @@ internal constructor(
      *
      * @constructor Create a new [Option].
      */
+    // Delegates to the deprecated key constructor, kept for older patch bundles.
+    @Suppress("DEPRECATION")
     @PublishedApi
     internal constructor(
         name: String,
@@ -813,6 +817,8 @@ fun PatchBuilder<*>.longsOption(
  *
  * @see Option
  */
+// Builds the option through the deprecated key constructor, kept for older patch bundles.
+@Suppress("DEPRECATION")
 inline fun <reified T> option(
     key: String,
     default: T? = null,

@@ -32,7 +32,7 @@ The checklists for running this repository: setting it up, cutting releases, and
 | `ci.yml` | CI | pull requests and pushes to `dev` and `main`, manual, and `workflow_call` | tests, lint, the APK check, the patcher and the patch API guard, the native crates |
 | `release-dev.yml` | Dev prerelease | pushes to `dev`, manual on `dev` | dev prerelease |
 | `release-stable.yml` | Stable release | tag push `v*.*.*`, manual with a `tag` | stable release |
-| `cut-stable.yml` | Cut stable release | manual, on `dev` | merges `dev` into `main`, tags and starts the stable release |
+| `cut-stable.yml` | Cut stable release | manual, on `dev` (choose `dev` under "Use workflow from"; the default is `main`, where the run fails with a message) | merges `dev` into `main`, tags and starts the stable release |
 | `yank-release.yml` | Yank release | manual | marks a release as a pre-release, or deletes one (never tags) |
 | `housekeeping.yml` | Housekeeping | weekly and manual | deletes runs, artifacts and caches older than 5 days |
 

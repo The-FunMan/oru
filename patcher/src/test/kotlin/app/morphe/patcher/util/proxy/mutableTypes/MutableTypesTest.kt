@@ -23,9 +23,9 @@ import com.android.tools.smali.dexlib2.immutable.value.ImmutableStringEncodedVal
 import com.android.tools.smali.dexlib2.AnnotationVisibility
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
-import kotlin.test.assertTrue
 
 internal object MutableClassTest {
 
@@ -117,7 +117,7 @@ internal object MutableClassTest {
         val interfaces = mutableClass.interfaces
 
         assertEquals(1, interfaces.size)
-        assertTrue(interfaces is MutableList)
+        assertIs<MutableList<*>>(interfaces)
 
         interfaces.add("Ljava/lang/Cloneable;")
         assertEquals(2, mutableClass.interfaces.size)
@@ -141,7 +141,7 @@ internal object MutableClassTest {
         val annotations = mutableClass.annotations
 
         assertEquals(1, annotations.size)
-        assertTrue(annotations is MutableSet)
+        assertIs<MutableSet<*>>(annotations)
     }
 
     @Test
@@ -164,7 +164,7 @@ internal object MutableClassTest {
         val methods = mutableClass.methods
 
         assertEquals(1, methods.size)
-        assertTrue(methods is MutableSet)
+        assertIs<MutableSet<*>>(methods)
     }
 
     @Test
@@ -187,7 +187,7 @@ internal object MutableClassTest {
         val fields = mutableClass.fields
 
         assertEquals(1, fields.size)
-        assertTrue(fields is MutableSet)
+        assertIs<MutableSet<*>>(fields)
     }
 
     @Test
@@ -342,7 +342,7 @@ internal object MutableMethodTest {
         val parameters = mutableMethod.parameters
 
         assertEquals(1, parameters.size)
-        assertTrue(parameters is MutableList)
+        assertIs<MutableList<*>>(parameters)
     }
 
     @Test
@@ -358,7 +358,7 @@ internal object MutableMethodTest {
         val parameterTypes = mutableMethod.parameterTypes
 
         assertEquals(1, parameterTypes.size)
-        assertTrue(parameterTypes is MutableList)
+        assertIs<MutableList<*>>(parameterTypes)
     }
 
     @Test
@@ -408,7 +408,7 @@ internal object MutableMethodTest {
         val annotations = mutableMethod.annotations
 
         assertEquals(1, annotations.size)
-        assertTrue(annotations is MutableSet)
+        assertIs<MutableSet<*>>(annotations)
     }
 }
 
@@ -508,7 +508,7 @@ internal object MutableFieldTest {
         val annotations = mutableField.annotations
 
         assertEquals(1, annotations.size)
-        assertTrue(annotations is MutableSet)
+        assertIs<MutableSet<*>>(annotations)
     }
 }
 
@@ -582,7 +582,7 @@ internal object MutableMethodParameterTest {
         val annotations = mutableParameter.annotations
 
         assertEquals(1, annotations.size)
-        assertTrue(annotations is MutableSet)
+        assertIs<MutableSet<*>>(annotations)
     }
 }
 
@@ -617,7 +617,7 @@ internal object MutableAnnotationTest {
         val elements = mutableAnnotation.elements
 
         assertEquals(1, elements.size)
-        assertTrue(elements is MutableSet)
+        assertIs<MutableSet<*>>(elements)
     }
 
     @Test

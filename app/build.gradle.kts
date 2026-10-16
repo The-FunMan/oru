@@ -129,7 +129,7 @@ dependencies {
 
 /**
  * Languages Morphe is translated into as language and region pairs, read from the resource folders
- * Crowdin writes, so a new language needs no change anywhere else.
+ * translators add, so a new language needs no change anywhere else.
  */
 val translations = project.file("src/main/res").listFiles().orEmpty()
     .mapNotNull { Regex("values-([a-z]{2,3})(?:-r([A-Z]{2}))?").matchEntire(it.name) }
@@ -339,7 +339,7 @@ android {
 
     lint {
         disable += setOf("MissingTranslation")
-        // Crowdin drops a removed string from the translations only on its next sync
+        // A string removed from the English file stays in a translation until someone removes it there
         warning += setOf("ExtraTranslation")
         baseline = file("lint-baseline.xml")
     }

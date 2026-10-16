@@ -45,3 +45,10 @@ internal fun oruFactFontSp(baseSp: Float, minSp: Float, measuredPx: Int, availab
 }
 
 private const val FactFitMargin = 0.98f
+
+/**
+ * The parts to draw in the given mode. Expert shows the patch count, which rolls on every patch. Simple keeps only
+ * the stage's name: the hexagon filling is its progress, and a ticking number is the kind of detail Simple leaves out.
+ */
+fun OruRunLineParts.forMode(expert: Boolean): OruRunLineParts =
+    if (expert) this else copy(patchesDone = null, patchesTotal = null)

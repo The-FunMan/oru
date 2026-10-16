@@ -149,6 +149,8 @@ fun interface InstructionLocation {
         val maximumDistanceFromLastInstruction: Int
     ) : InstructionLocation {
 
+        // Deprecated distance matcher kept for older patch bundles.
+        @Suppress("DEPRECATION")
         private val minMatcher = MatchAfterAtLeast(minimumDistanceFromLastInstruction)
         private val maxMatcher = MatchAfterWithin(maximumDistanceFromLastInstruction)
 

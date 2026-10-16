@@ -551,7 +551,7 @@ private fun supportingText(row: OruSettingsRowUi): String? {
             OruSettingsRowId.LANGUAGE -> value.text.ifBlank { stringResource(R.string.oru_settings_language_phone) }
             else -> helperRes(row.id)?.let { stringResource(it) }
         }
-        is OruSettingsValue.Bytes -> if (value.bytes > 0L) {
+        is OruSettingsValue.Bytes -> if (value.removable) {
             stringResource(R.string.oru_settings_free_space_value, context.formatBytes(value.bytes))
         } else {
             stringResource(R.string.oru_settings_free_space_none)

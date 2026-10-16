@@ -139,4 +139,18 @@ class OruRunLinePartsTest {
     fun `an unmeasured fact keeps its size`() {
         assertEquals(20f, oruFactFontSp(baseSp = 20f, minSp = 10f, measuredPx = 0, availablePx = 100))
     }
+
+    @Test
+    fun `simple keeps the stage name and drops the count`() {
+        val parts = OruRunLineParts(R.string.oru_stage_execute_patches, 66, 96)
+
+        assertEquals(OruRunLineParts(R.string.oru_stage_execute_patches), parts.forMode(expert = false))
+    }
+
+    @Test
+    fun `expert keeps the count`() {
+        val parts = OruRunLineParts(R.string.oru_stage_execute_patches, 66, 96)
+
+        assertEquals(parts, parts.forMode(expert = true))
+    }
 }

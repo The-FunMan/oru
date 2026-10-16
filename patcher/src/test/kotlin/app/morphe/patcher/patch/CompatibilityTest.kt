@@ -83,6 +83,8 @@ internal object CompatibilityTest {
         }
     }
 
+    // Exercises deprecated API that older patch bundles still use.
+    @Suppress("DEPRECATION")
     @Test
     fun `legacy usage`() {
         val patch = bytecodePatch(name = "Test") {
@@ -95,6 +97,8 @@ internal object CompatibilityTest {
         assertEquals("compatible.package", patch.compatiblePackages!!.first().first)
     }
 
+    // Exercises deprecated API that older patch bundles still use.
+    @Suppress("DEPRECATION")
     @Test
     fun `legacy to Compatibility`() {
         var patch = bytecodePatch(name = "Test") {

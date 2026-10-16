@@ -26,12 +26,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
@@ -153,7 +153,7 @@ fun OruFocusRoute(
             home.onStartQuickPatch = previous
             home.oruFocusMounted = previouslyMounted
             // A rotation or theme change disposes this screen too, and it does not leave the Focus
-            vm.onLeave(leaving = activity?.isChangingConfigurations != true)
+            vm.onLeave(leaving = activity.isChangingConfigurations != true)
         }
     }
 

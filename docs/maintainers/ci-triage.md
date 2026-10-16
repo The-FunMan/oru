@@ -28,6 +28,7 @@ gh api repos/The-FunMan/oru/check-runs/<job id>/annotations --jq '.[].message'
 | "tag vX.Y.Z already exists: bump the version" (Dev prerelease) | `version` equals a stable tag | Bump `version` in `app/gradle.properties` to the next minor |
 | `sdkmanager could not install the SDK packages` | A package name changed | Compare with `sdkmanager --list`; update `.github/actions/setup-oru/action.yml` and `scripts/dev/setup-linux.sh` together |
 | Dependabot PR fails verification | `verification-metadata.xml` not updated | Run the build with `--write-verification-metadata sha256` and commit both files |
+| "Dependency verification failed" on a `*.gradle.plugin-*.pom` for a Kotlin plugin, only on some runs | The plugin portal and Maven Central serve different bytes for the same marker POM | Add the other repository's checksum as `<also-trust value="..."/>` inside that artifact's `<sha256>` in both `verification-metadata.xml` files. Fetch `https://plugins.gradle.org/m2/<path>` and `https://repo.maven.apache.org/maven2/<path>` and hash both. |
 | CI says `pending` for a long time with no jobs | The run waits for approval (first-time contributor) or for a queued runner | Approve it in the Actions tab, or wait |
 | A required approval is waiting | The `release` environment needs the owner | Approve it from the Actions tab or the phone |
 
@@ -45,3 +46,16 @@ gh api repos/The-FunMan/oru/check-runs/<job id>/annotations --jq '.[].message'
 - Do not mark a test skipped, delete a check or loosen a gate to pass.
 - Do not use the owner's approval to cover a run you did not read.
 - Do not change repository or environment settings to make a run pass without telling the owner what changed.
+
+## Why a run should mean the same thing every time
+
+Anything that reaches the network or follows a moving target is a way for a run to fail for no reason in the repository. These are the rules the pipeline follows:
+
+- **Pinned inputs.** The patch API guard that blocks a merge runs against one bundle named in `tools/parity/pinned-bundle.env` by release tag and SHA-256. The newest upstream releases are checked in a separate advisory step that cannot turn the run red. To move the pin, check the new bundle with `tools/parity/patch_api_guard.py`, then change the tag, asset name and checksum in one commit.
+- **Retries for network steps.** SDK packages, Rust targets and bundle downloads go through `.github/scripts/retry.sh`. Gradle repository downloads retry through the properties at the end of `gradle.properties`. A checksum mismatch is never retried.
+- **Each repository answers for its own groups.** JitPack is asked only for `com.github.*` and GitHub Packages only for `app.morphe`. Central and Google serve everything else, so an outage at a host we only need for a few libraries does not touch the rest.
+- **Both copies of a Kotlin plugin marker POM are trusted** (see the table above).
+- **The patcher jobs build the patcher alone.** They run from `patcher/`. From the repository root Gradle also configures the app, and its Android plugin then tries to download the NDK, which those jobs do not install.
+- **Pinned actions and the runner image label.** Actions are pinned by commit. The runner label is `ubuntu-24.04`, not `latest`.
+
+Not pinned on purpose: the Rust toolchain on the runner (`cargo test` only, no lint gate) and the Gradle and Kotlin versions, which are pinned in the repository already.

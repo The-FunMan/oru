@@ -34,8 +34,17 @@ sealed interface OruSettingsValue {
     /** Plain text, such as the phone language or the Oru version. */
     data class Text(val text: String) : OruSettingsValue
 
-    /** Bytes that Free up space can remove. Zero means nothing to remove. */
-    data class Bytes(val bytes: Long) : OruSettingsValue
+    /**
+     * Bytes that Free up space can remove. A few leftover bytes are not worth a clean-up, so anything under
+     * [MIN_REMOVABLE_BYTES] counts as nothing to remove.
+     */
+    data class Bytes(val bytes: Long) : OruSettingsValue {
+        val removable: Boolean get() = bytes >= MIN_REMOVABLE_BYTES
+
+        companion object {
+            const val MIN_REMOVABLE_BYTES = 1024L
+        }
+    }
 
     /** The theme segments: Follow the phone, Light or Dark. */
     data class Theme(val mode: OruThemeMode) : OruSettingsValue
