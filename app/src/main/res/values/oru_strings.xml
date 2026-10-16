@@ -256,10 +256,10 @@
     <string name="oru_settings_needs_shizuku">Needs Shizuku</string>
     <string name="oru_settings_prerelease_sources">Include pre-releases for patch sources</string>
     <string name="oru_settings_prerelease_sources_helper">Patch sources can offer test builds. You can set this for each source.</string>
-    <string name="oru_settings_manager_prerelease">Manager pre-release</string>
-    <string name="oru_settings_manager_prerelease_helper">Early access to new Oru versions.</string>
+    <string name="oru_settings_manager_prerelease">Oru pre-releases</string>
+    <string name="oru_settings_manager_prerelease_helper">Get early builds of Oru. They may be less stable.</string>
     <string name="oru_settings_other_apps">Let other apps start patching</string>
-    <string name="oru_settings_other_apps_helper">For automation.</string>
+    <string name="oru_settings_other_apps_helper">Allow other apps, such as automation tools, to ask Oru to patch.</string>
     <string name="oru_settings_patch_sources">Patch sources</string>
     <plurals name="oru_settings_patch_sources_count">
         <item quantity="one">%1$d source</item>
