@@ -8,10 +8,12 @@ package app.morphe.manager.ui.oru.focus.expert
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -19,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -193,6 +196,8 @@ internal fun ColumnScope.OruSetupContent(
     home: HomeViewModel,
     item: HomeAppItem,
     choosing: Boolean,
+    customized: Boolean,
+    onReset: () -> Unit,
 ) {
     val setup = rememberOruSetup(vm, home, item)
     val scope = rememberCoroutineScope()
@@ -322,11 +327,20 @@ internal fun ColumnScope.OruSetupContent(
         }
     }
 
-    OruOutlinedButton(
-        text = stringResource(R.string.oru_action_close),
-        onClick = { host.close() },
+    // Reset is the way back to the recommended setup, the one Simple offers. It is off while the app has no changes
+    Row(
         modifier = Modifier.fillMaxWidth().padding(horizontal = SheetGutter, vertical = 12.dp),
-    )
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        TextButton(onClick = onReset, enabled = customized) {
+            Text(stringResource(R.string.oru_simple_reset))
+        }
+        OruOutlinedButton(
+            text = stringResource(R.string.oru_action_close),
+            onClick = { host.close() },
+            modifier = Modifier.weight(1f).padding(start = 8.dp),
+        )
+    }
 
     prereleaseToConfirm?.let { source ->
         ConfirmDialog(

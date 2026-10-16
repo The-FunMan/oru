@@ -641,12 +641,17 @@ private fun OruHomeCard.sentenceText(): String = when (status.simpleSentence()) 
 
 @Composable
 private fun OruHomeCard.simpleChips(): List<OruChipUi> = buildList {
-    if (customized) add(OruChipUi(text = stringResource(R.string.oru_simple_customized), tone = OruTone.Neutral))
+    if (customized) add(customizedChip())
 }
+
+/** The badge of an app Expert set up differently from the recommended setup. Both modes show it. */
+@Composable
+private fun customizedChip(): OruChipUi = OruChipUi(text = stringResource(R.string.oru_simple_customized), tone = OruTone.Neutral)
 
 @Composable
 private fun OruHomeCard.expertChips(): List<OruChipUi> = buildList {
     add(OruChipUi(text = stringResource(statusTextRes()), tone = chipTone))
+    if (customized) add(customizedChip())
     // An app that can be updated shows the patched copy beside the newest version the sources support
     if (status == OruHomeCardStatus.UpdateAvailable) {
         version?.let { add(OruChipUi(text = stringResource(R.string.oru_chip_patched_version, it), tone = OruTone.Neutral, mono = true)) }

@@ -103,7 +103,7 @@ internal fun OruFocusShell(
     /** Whether Expert changed the app. Simple shows the badge and the reset for it. */
     customized: Boolean,
     onReset: () -> Unit,
-    /** Opens the app's info. Simple has no App info button on the card, so the Focus offers it here. Null in Expert. */
+    /** Opens the app's info. The Focus offers it in both modes, since the card has no visible way to it. Null without an install. */
     onAppInfo: (() -> Unit)?,
     modifier: Modifier = Modifier,
 ) {
@@ -188,6 +188,10 @@ internal fun OruFocusShell(
                                 color = scheme.onSurface,
                                 modifier = Modifier.oruSharedText(oruTitleSharedKey(item.id)),
                             )
+                            // Expert names its mode under the app name, so the mode is never in doubt. App info keeps its place
+                            if (expert) {
+                                OruChip(text = stringResource(R.string.oru_mode_expert), tone = OruTone.Neutral)
+                            }
                             OruSwapText(
                                 text = line,
                                 style = MaterialTheme.typography.bodyMedium,
@@ -245,17 +249,7 @@ internal fun OruFocusShell(
                     )
                 }
             }
-            // Expert screens name their mode in the top bar, so the mode is never in doubt
-            if (expert) {
-                OruChip(
-                    text = stringResource(R.string.oru_mode_expert),
-                    tone = OruTone.Neutral,
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(end = 4.dp, top = 12.dp),
-                )
-            }
-            // Simple's App info: the card's long press opens the same dialog, this is the way from the Focus
+            // App info: the card's long press opens the same dialog, this is the way from the Focus
             onAppInfo?.let { open ->
                 OruGlassSurface(
                     shape = oruGlassShape(OruGlassForm.Pill),
