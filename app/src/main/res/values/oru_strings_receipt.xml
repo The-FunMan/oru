@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copy of the done receipt. English only. Plain active voice, no dashes used as punctuation.
+-->
+<resources>
+
+    <!-- Done receipt: the patching fact, the time the patch run took -->
+    <string name="oru_done_patching">Patching</string>
+
+</resources>

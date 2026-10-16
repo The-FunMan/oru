@@ -29,8 +29,8 @@ import app.morphe.manager.ui.oru.components.oruSlab
 import app.morphe.manager.ui.oru.theme.OruMonoStyle
 
 /**
- * The three done facts in a row of tinted cells: output size, time and peak heap. A fact the phone did not
- * measure reads as "Not available" rather than a zero.
+ * The two done facts in a row of tinted cells: output size and patching time. A fact the phone did not measure
+ * reads as "Not available" rather than a zero.
  */
 @Composable
 internal fun OruDoneFactsRow(
@@ -41,8 +41,7 @@ internal fun OruDoneFactsRow(
     val notAvailable = stringResource(R.string.oru_run_not_available)
     val cells = listOf(
         (facts.outputSize ?: notAvailable) to R.string.oru_done_output,
-        (facts.elapsed ?: notAvailable) to R.string.oru_done_time,
-        (facts.peakHeap ?: notAvailable) to R.string.oru_done_peak_heap,
+        (facts.elapsed ?: notAvailable) to R.string.oru_done_patching,
     )
     Row(
         modifier = modifier.fillMaxWidth(),

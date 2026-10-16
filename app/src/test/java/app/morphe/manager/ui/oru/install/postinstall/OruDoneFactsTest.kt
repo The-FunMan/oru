@@ -14,49 +14,41 @@ class OruDoneFactsTest {
 
     @Test
     fun `measured figures are formatted with the run format units`() {
-        val facts = OruDoneFacts.of(outputBytes = 1_572_864L, elapsedMs = 12_050L, peakHeapMb = 336)
+        val facts = OruDoneFacts.of(outputBytes = 1_572_864L, elapsedMs = 12_050L)
 
         assertEquals("1.5 MB", facts.outputSize)
         assertEquals("0:12", facts.elapsed)
-        assertEquals("336 MB", facts.peakHeap)
     }
 
     @Test
     fun `an output under a megabyte is shown in kilobytes`() {
-        assertEquals("512 KB", OruDoneFacts.of(524_288L, 1_000L, 1).outputSize)
+        assertEquals("512 KB", OruDoneFacts.of(524_288L, 1_000L).outputSize)
     }
 
     @Test
     fun `minutes roll over past a minute`() {
-        assertEquals("12:05", OruDoneFacts.of(0L, 725_000L, 1).elapsed)
+        assertEquals("12:05", OruDoneFacts.of(0L, 725_000L).elapsed)
     }
 
     @Test
     fun `a zero elapsed time is a real value, not an unknown one`() {
-        assertEquals("0:00", OruDoneFacts.of(0L, 0L, 1).elapsed)
+        assertEquals("0:00", OruDoneFacts.of(0L, 0L).elapsed)
     }
 
     @Test
     fun `unknown figures stay null so the screen can say not available`() {
-        val facts = OruDoneFacts.of(outputBytes = null, elapsedMs = null, peakHeapMb = null)
+        val facts = OruDoneFacts.of(outputBytes = null, elapsedMs = null)
 
         assertNull(facts.outputSize)
         assertNull(facts.elapsed)
-        assertNull(facts.peakHeap)
     }
 
     @Test
     fun `negative sizes and times count as unknown`() {
-        val facts = OruDoneFacts.of(outputBytes = -1L, elapsedMs = -5L, peakHeapMb = 336)
+        val facts = OruDoneFacts.of(outputBytes = -1L, elapsedMs = -5L)
 
         assertNull(facts.outputSize)
         assertNull(facts.elapsed)
-        assertEquals("336 MB", facts.peakHeap)
-    }
-
-    @Test
-    fun `a peak of zero megabytes means no heap sample was taken`() {
-        assertNull(OruDoneFacts.of(1L, 1L, peakHeapMb = 0).peakHeap)
     }
 
     @Test
