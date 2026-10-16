@@ -5,6 +5,13 @@
 
 package app.morphe.manager.ui.oru.home
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -35,10 +42,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -92,7 +101,9 @@ import app.morphe.manager.ui.oru.nav.oruLeaveDrop
 import app.morphe.manager.ui.oru.nav.oruLeaveParting
 import app.morphe.manager.ui.oru.nav.oruTileSharedKey
 import app.morphe.manager.ui.oru.theme.OruBlobShape
+import app.morphe.manager.ui.oru.theme.OruMotion
 import app.morphe.manager.ui.oru.theme.OruSpacing
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**
@@ -124,6 +135,9 @@ fun OruHomeContent(
     onSecondary: (OruHomeCard) -> Unit,
     onCheckUpdates: () -> Unit,
     onAddSource: () -> Unit,
+    // The first-run tour: whether it is done for good, and the call that marks it done (see OruTourCard)
+    tourDone: Boolean,
+    onTourDone: () -> Unit,
     // The settings sheet, drawn in the backdrop host so its glass blurs the Home content
     overlay: @Composable BoxScope.() -> Unit = {},
     modifier: Modifier = Modifier,
@@ -182,6 +196,24 @@ fun OruHomeContent(
     var tappedId by remember { mutableStateOf<String?>(null) }
     val tappedIndex = state.cards.indexOfFirst { it.id == tappedId }.takeIf { it >= 0 }
 
+    // The first-run tour. Its step moves forward with the progress of Home and never back on its own. It goes once it is
+    // done, dismissed, or Home shows a patched app (see oruTourVisible)
+    var tour by rememberSaveable(stateSaver = OruTourStateSaver) { mutableStateOf(OruTourState()) }
+    val tourInput = oruTourInputOf(state, runActive = run != null)
+    val tourVisible = oruTourVisible(done = tourDone, state = tour, input = tourInput)
+    val tourStep = oruTourDerivedStep(tourInput)
+    LaunchedEffect(tourStep) { tour = tour.advanceTo(tourStep) }
+    // The tour's item stays in the list while the card leaves, then goes, so the list keeps no gap where it was
+    var tourMounted by remember { mutableStateOf(tourVisible) }
+    LaunchedEffect(tourVisible) {
+        if (tourVisible) {
+            tourMounted = true
+        } else {
+            delay(if (reduced) 0L else OruMotion.MaxDurationMillis.toLong())
+            tourMounted = false
+        }
+    }
+
     OruBackdropHost(
         // The glow is drawn before the status bar padding so it also covers the status bar area
         modifier = modifier.fillMaxSize().oruAmbient(MaterialTheme.colorScheme.primary).statusBarsPadding(),
@@ -235,6 +267,34 @@ fun OruHomeContent(
                             state.banner?.let { banner ->
                                 item(key = "banner") {
                                     HomeBanner(banner = banner, onAction = { onBannerAction(banner) })
+                                }
+                            }
+
+                            if (tourMounted) {
+                                item(key = "tour") {
+                                    AnimatedVisibility(
+                                        visible = tourVisible,
+                                        enter = if (reduced) {
+                                            EnterTransition.None
+                                        } else {
+                                            fadeIn(OruMotion.fade(reduced)) + expandVertically(OruMotion.expand(reduced))
+                                        },
+                                        exit = if (reduced) {
+                                            ExitTransition.None
+                                        } else {
+                                            fadeOut(OruMotion.fade(reduced)) + shrinkVertically(OruMotion.expand(reduced))
+                                        },
+                                    ) {
+                                        OruTourCard(
+                                            state = tour,
+                                            onPick = { picked -> tour = tour.goTo(picked) },
+                                            onNext = { tour = tour.next() },
+                                            onDismiss = {
+                                                tour = tour.dismiss()
+                                                onTourDone()
+                                            },
+                                        )
+                                    }
                                 }
                             }
 
